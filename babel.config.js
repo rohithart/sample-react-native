@@ -1,27 +1,25 @@
 module.exports = function (api) {
   api.cache(true);
+
   return {
-    presets: ['babel-preset-expo'],
+    presets: [
+      ["babel-preset-expo", { jsxImportSource: "nativewind" }],
+      "nativewind/babel",
+    ],
+
     plugins: [
-      'react-native-reanimated/plugin',
       [
         'module-resolver',
         {
+          root: ['./'],
+
           alias: {
-            '@components': './src/components',
-            '@screens': './src/screens',
-            '@services': './src/services',
-            '@hooks': './src/hooks',
-            '@store': './src/store',
-            '@utils': './src/utils',
-            '@constants': './src/constants',
-            '@context': './src/context',
-            '@types': './src/types',
-            '@firebase': './src/firebase',
-            '@': './src',
+            '@': './',
+            'tailwind.config': './tailwind.config.js',
           },
         },
       ],
+      'react-native-worklets/plugin',
     ],
   };
 };
