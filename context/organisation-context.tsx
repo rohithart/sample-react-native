@@ -23,6 +23,8 @@ type OrganisationContextType = {
   canAccessAdmin: boolean;
   /** Helper: returns true if the user is an ADMIN. Use to hide admin-only UI. */
   isAdmin: boolean;
+  /** Hydrate context from an orgId (for deep links). Fetches org + access + role. */
+  hydrateFromOrgId: (orgId: string) => Promise<void>;
 };
 
 const OrganisationContext = createContext<OrganisationContextType | undefined>(undefined);
@@ -60,6 +62,30 @@ export function OrganisationProvider({ children }: { children: ReactNode }) {
     setUserRole(null);
   }, []);
 
+  const hydrateFromOrgId = useCallback(async (orgId: string) => {
+    // Skip if already loaded for this org
+    if (organisation?.id === orgId) return;
+    setOrgAccess(null);
+    setUserRole(null);
+    setIsLoadingAccess(true);
+    try {
+      const [org, access, roleData] = await Promise.all([
+        api.get<Organisation>(`/organisation/${orgId}`),
+        api.get<OrgAccess>(`/organisation/access/${orgId}`),
+        api.get<{ role: string }>(`/user/role/${orgId}`),
+      ]);
+      setOrganisation(org);
+      setOrgAccess(access);
+      setUserRole((roleData.role as UserRole) ?? 'VIEWER');
+    } catch {
+      setOrganisation(null);
+      setOrgAccess(null);
+      setUserRole(null);
+    } finally {
+      setIsLoadingAccess(false);
+    }
+  }, [organisation?.id]);
+
   const hasAccess = useCallback(
     (module: keyof OrgAccess) => {
       // If access hasn't loaded yet or failed, allow access by default
@@ -73,8 +99,8 @@ export function OrganisationProvider({ children }: { children: ReactNode }) {
   const isAdmin = userRole === 'ADMIN';
 
   const value = useMemo(
-    () => ({ organisation, orgAccess, userRole, isLoadingAccess, selectOrganisation, clearOrganisation, hasAccess, canAccessAdmin, isAdmin }),
-    [organisation, orgAccess, userRole, isLoadingAccess, selectOrganisation, clearOrganisation, hasAccess, canAccessAdmin, isAdmin],
+    () => ({ organisation, orgAccess, userRole, isLoadingAccess, selectOrganisation, clearOrganisation, hasAccess, canAccessAdmin, isAdmin, hydrateFromOrgId }),
+    [organisation, orgAccess, userRole, isLoadingAccess, selectOrganisation, clearOrganisation, hasAccess, canAccessAdmin, isAdmin, hydrateFromOrgId],
   );
 
   return <OrganisationContext.Provider value={value}>{children}</OrganisationContext.Provider>;
