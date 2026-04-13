@@ -4,8 +4,9 @@ import { FormField } from '@/components/ui/form-field';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { Trash2 } from 'lucide-react-native';
 import React, { useState } from 'react';
-import { ScrollView, SafeAreaView, Text, Pressable, Alert } from 'react-native';
+import { ScrollView, Text, Pressable, Alert } from 'react-native';
 import { useOrganisationContext } from '@/context/organisation-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function EditWorkflowScreen() {
   const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
@@ -94,7 +95,6 @@ export default function EditWorkflowScreen() {
 
         {isAdmin && (
 
-
         <Pressable
           onPress={handleDelete}
           disabled={isSubmitting}
@@ -116,7 +116,6 @@ export default function EditWorkflowScreen() {
             Delete Workflow
           </Text>
         </Pressable>
-
 
         )}
       </ScrollView>

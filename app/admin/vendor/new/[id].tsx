@@ -3,7 +3,8 @@ import { PageHeader } from '@/components/ui/page-header';
 import { FormField } from '@/components/ui/form-field';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { ScrollView, SafeAreaView, Text, Pressable, Alert } from 'react-native';
+import { ScrollView, Text, Pressable, Alert } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function AddVendorScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
