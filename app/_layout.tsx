@@ -1,37 +1,46 @@
-import '../global.css';
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { DarkTheme, DefaultTheme, ThemeProvider as NavThemeProvider } from '@react-navigation/native';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import '../global.css';
 
-import { useColorScheme } from '@/hooks/use-color-scheme';
-import { AuthProvider } from '@/context/auth-context';
-import { GluestackUIProvider } from '@/components/ui/gluestack-ui-provider';
 import { ErrorBoundary } from '@/components/error-boundary';
+import { GluestackUIProvider } from '@/components/ui/gluestack-ui-provider';
+import { AuthProvider } from '@/context/auth-context';
+import { ThemeProvider, useTheme } from '@/context/theme-context';
 
 const queryClient = new QueryClient();
 
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
+function RootLayoutContent() {
+  const { isDark } = useTheme();
 
+  return (
+    <NavThemeProvider value={isDark ? DarkTheme : DefaultTheme}>
+      <Stack>
+        <Stack.Screen name="index" options={{ headerShown: false }} />
+        <Stack.Screen name="terms-and-conditions" options={{ headerShown: false }} />
+        <Stack.Screen name="home" options={{ headerShown: false }} />
+        <Stack.Screen name="settings" options={{ headerShown: false }} />
+        <Stack.Screen name="view/[id]" options={{ headerShown: false }} />
+        <Stack.Screen name="admin/[id]" options={{ headerShown: false }} />
+      </Stack>
+      <StatusBar style="auto" />
+    </NavThemeProvider>
+  );
+}
+
+export default function RootLayout() {
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
-        <GluestackUIProvider mode="system">
-          <AuthProvider>
-            <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-              <Stack>
-                <Stack.Screen name="(pages)" options={{ headerShown: false }} />
-                {/* <Stack.Screen name="(tabs)" options={{ headerShown: false }} /> */}
-                <Stack.Screen name="protected" options={{ headerShown: false }} />
-                <Stack.Screen name="login" options={{ headerShown: false }} />
-                <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-              </Stack>
-              <StatusBar style="auto" />
-            </ThemeProvider>
-          </AuthProvider>
-        </GluestackUIProvider>
+        <ThemeProvider>
+          <GluestackUIProvider mode="system">
+            <AuthProvider>
+              <RootLayoutContent />
+            </AuthProvider>
+          </GluestackUIProvider>
+        </ThemeProvider>
       </QueryClientProvider>
     </ErrorBoundary>
   );
