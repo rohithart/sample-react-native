@@ -1,14 +1,17 @@
 import { useOrganisationContext } from '@/context/organisation-context';
+import { useToast } from '@/context/toast-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { Redirect, Stack, useGlobalSearchParams } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Text, View } from 'react-native';
 
 export default function ViewLayout() {
   const params = useGlobalSearchParams<{ orgId?: string; id?: string }>();
   const { organisation, userRole, isLoadingAccess, hydrateFromOrgId } = useOrganisationContext();
+  const { showToast } = useToast();
   const colors = useThemeColors();
   const [hydrationAttempted, setHydrationAttempted] = useState(false);
+  const toastShown = useRef(false);
 
   const orgId = params.orgId || params.id;
 
@@ -35,8 +38,12 @@ export default function ViewLayout() {
     );
   }
 
-  // Hydration failed or no orgId — redirect to home
+  // Hydration failed or no orgId — show toast and redirect to org list
   if (!organisation) {
+    if (!toastShown.current) {
+      toastShown.current = true;
+      showToast({ type: 'error', title: 'Organisation not found', message: 'Could not load the organisation. You may not have access.' });
+    }
     return <Redirect href="/" />;
   }
 

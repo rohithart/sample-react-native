@@ -8,8 +8,9 @@ import '../global.css';
 import { ErrorBoundary } from '@/components/error-boundary';
 import { GluestackUIProvider } from '@/components/ui/gluestack-ui-provider';
 import { AuthProvider } from '@/context/auth-context';
-import { ThemeProvider, useTheme } from '@/context/theme-context';
 import { OrganisationProvider } from '@/context/organisation-context';
+import { ThemeProvider, useTheme } from '@/context/theme-context';
+import { ToastProvider } from '@/context/toast-context';
 
 const queryClient = new QueryClient();
 
@@ -17,17 +18,19 @@ function RootLayoutContent() {
   const { isDark } = useTheme();
 
   return (
-    <NavThemeProvider value={isDark ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="index" options={{ headerShown: false }} />
-        <Stack.Screen name="terms-and-conditions" options={{ headerShown: false }} />
-        <Stack.Screen name="home" options={{ headerShown: false }} />
-        <Stack.Screen name="settings" options={{ headerShown: false }} />
-        <Stack.Screen name="view/[id]" options={{ headerShown: false }} />
-        <Stack.Screen name="admin/[id]" options={{ headerShown: false }} />
-      </Stack>
-      <StatusBar style="auto" />
-    </NavThemeProvider>
+    <ToastProvider isDark={isDark}>
+      <NavThemeProvider value={isDark ? DarkTheme : DefaultTheme}>
+        <Stack>
+          <Stack.Screen name="index" options={{ headerShown: false }} />
+          <Stack.Screen name="terms-and-conditions" options={{ headerShown: false }} />
+          <Stack.Screen name="home" options={{ headerShown: false }} />
+          <Stack.Screen name="settings" options={{ headerShown: false }} />
+          <Stack.Screen name="view/[id]" options={{ headerShown: false }} />
+          <Stack.Screen name="admin/[id]" options={{ headerShown: false }} />
+        </Stack>
+        <StatusBar style="auto" />
+      </NavThemeProvider>
+    </ToastProvider>
   );
 }
 
