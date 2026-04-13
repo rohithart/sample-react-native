@@ -1,0 +1,87 @@
+import { api } from '@/services/api-client';
+import type { OrgAccess, Organisation } from '@/types';
+import React, { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react';
+
+type UserRole = 'ADMIN' | 'USER' | 'VIEWER';
+
+type OrganisationContextType = {
+  /** Currently selected organisation (null when on the org list). */
+  organisation: Organisation | null;
+  /** Module-access flags for the selected org (null until fetched). */
+  orgAccess: OrgAccess | null;
+  /** The current user's role within the selected org. */
+  userRole: UserRole | null;
+  /** Whether we're currently fetching the org access / role. */
+  isLoadingAccess: boolean;
+  /** Select an org — stores it and fetches its access data + user role. */
+  selectOrganisation: (org: Organisation) => Promise<void>;
+  /** Clear selection — call when navigating back to the org list. */
+  clearOrganisation: () => void;
+  /** Helper: returns true if the selected org has access to a given module. */
+  hasAccess: (module: keyof OrgAccess) => boolean;
+  /** Helper: returns true if the user can access /admin routes (ADMIN or USER). */
+  canAccessAdmin: boolean;
+  /** Helper: returns true if the user is an ADMIN. Use to hide admin-only UI. */
+  isAdmin: boolean;
+};
+
+const OrganisationContext = createContext<OrganisationContextType | undefined>(undefined);
+
+export function OrganisationProvider({ children }: { children: ReactNode }) {
+  const [organisation, setOrganisation] = useState<Organisation | null>(null);
+  const [orgAccess, setOrgAccess] = useState<OrgAccess | null>(null);
+  const [userRole, setUserRole] = useState<UserRole | null>(null);
+  const [isLoadingAccess, setIsLoadingAccess] = useState(false);
+
+  const selectOrganisation = useCallback(async (org: Organisation) => {
+    setOrganisation(org);
+    setOrgAccess(null);
+    setUserRole(null);
+    setIsLoadingAccess(true);
+    try {
+      const [access, roleData] = await Promise.all([
+        api.get<OrgAccess>(`/organisation/access/${org.id}`),
+        api.get<{ role: string }>(`/user/role/${org.id}`),
+      ]);
+      setOrgAccess(access);
+      setUserRole((roleData.role as UserRole) ?? 'VIEWER');
+    } catch {
+      // If calls fail, default to safe fallbacks
+      setOrgAccess(null);
+      setUserRole('VIEWER');
+    } finally {
+      setIsLoadingAccess(false);
+    }
+  }, []);
+
+  const clearOrganisation = useCallback(() => {
+    setOrganisation(null);
+    setOrgAccess(null);
+    setUserRole(null);
+  }, []);
+
+  const hasAccess = useCallback(
+    (module: keyof OrgAccess) => {
+      // If access hasn't loaded yet or failed, allow access by default
+      if (!orgAccess) return true;
+      return !!orgAccess[module];
+    },
+    [orgAccess],
+  );
+
+  const canAccessAdmin = userRole === 'ADMIN' || userRole === 'USER';
+  const isAdmin = userRole === 'ADMIN';
+
+  const value = useMemo(
+    () => ({ organisation, orgAccess, userRole, isLoadingAccess, selectOrganisation, clearOrganisation, hasAccess, canAccessAdmin, isAdmin }),
+    [organisation, orgAccess, userRole, isLoadingAccess, selectOrganisation, clearOrganisation, hasAccess, canAccessAdmin, isAdmin],
+  );
+
+  return <OrganisationContext.Provider value={value}>{children}</OrganisationContext.Provider>;
+}
+
+export function useOrganisationContext() {
+  const context = useContext(OrganisationContext);
+  if (!context) throw new Error('useOrganisationContext must be used within an OrganisationProvider');
+  return context;
+}

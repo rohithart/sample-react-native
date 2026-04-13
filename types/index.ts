@@ -30,7 +30,7 @@ export type { Invoice } from './invoice';
 export type { Meeting } from './meeting';
 export type { Message } from './message';
 export type { Notification } from './notification';
-export type { Organisation } from './organisation';
+export type { OrgAccess, Organisation } from './organisation';
 export type { PdfBlob } from './pdf';
 export type { Quote } from './quote';
 export type { Reminder } from './reminder';

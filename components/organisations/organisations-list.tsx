@@ -1,4 +1,5 @@
 import { LoadingList } from '@/components/skeleton';
+import { useOrganisationContext } from '@/context/organisation-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useOrganisations } from '@/services/organisations';
 import type { Organisation } from '@/types';
@@ -9,6 +10,7 @@ import { Image, Pressable, ScrollView, Text, View } from 'react-native';
 export function OrganisationsList() {
   const colors = useThemeColors();
   const { data: organisations, isPending, isError } = useOrganisations();
+  const { selectOrganisation } = useOrganisationContext();
   const router = useRouter();
 
   if (isPending) {
@@ -50,7 +52,10 @@ export function OrganisationsList() {
           key={org.id}
           org={org}
           colors={colors}
-          onPress={() => router.push(`/view/${org.id}` as any)}
+          onPress={async () => {
+            await selectOrganisation(org);
+            router.push(`/view/${org.id}` as any);
+          }}
         />
       ))}
     </ScrollView>

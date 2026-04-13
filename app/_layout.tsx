@@ -9,6 +9,7 @@ import { ErrorBoundary } from '@/components/error-boundary';
 import { GluestackUIProvider } from '@/components/ui/gluestack-ui-provider';
 import { AuthProvider } from '@/context/auth-context';
 import { ThemeProvider, useTheme } from '@/context/theme-context';
+import { OrganisationProvider } from '@/context/organisation-context';
 
 const queryClient = new QueryClient();
 
@@ -37,7 +38,9 @@ export default function RootLayout() {
         <ThemeProvider>
           <GluestackUIProvider mode="system">
             <AuthProvider>
-              <RootLayoutContent />
+              <OrganisationProvider>
+                <RootLayoutContent />
+              </OrganisationProvider>
             </AuthProvider>
           </GluestackUIProvider>
         </ThemeProvider>
