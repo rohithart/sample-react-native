@@ -38,7 +38,7 @@ export default function AdminLayout() {
 
     if (!organisation) {
       showToast({ type: 'error', title: 'Organisation not found', message: 'Could not load the organisation. You may not have access.' });
-      setRedirectTo('/');
+      setRedirectTo('/home');
     } else if (!canAccessAdmin) {
       showToast({ type: 'warning', title: 'Access denied', message: 'You do not have admin access to this organisation.' });
       setRedirectTo(`/view/${organisation.id}`);

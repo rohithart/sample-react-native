@@ -34,7 +34,7 @@ export default function ViewLayout() {
 
     if (!organisation) {
       showToast({ type: 'error', title: 'Organisation not found', message: 'Could not load the organisation. You may not have access.' });
-      setRedirectTo('/');
+      setRedirectTo('/home');
     }
   }, [hydrationAttempted, isLoadingAccess, organisation, showToast]);
 

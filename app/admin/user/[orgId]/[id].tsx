@@ -3,7 +3,7 @@ import { PageHeader } from '@/components/ui/page-header';
 import { StatusBadge } from '@/components/ui/status-badge';
 import { MetadataCard } from '@/components/ui/metadata-card';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-import { MoreVertical, Edit, ArchiveRestore, Share2, Trash2 } from 'lucide-react-native';
+import { MoreVertical, Edit, ArchiveRestore, Share2, Trash2, ImageIcon, Clock } from 'lucide-react-native';
 import React, { useState } from 'react';
 import { ScrollView, Text, View, Pressable, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -11,6 +11,8 @@ import { ActionBottomSheet, ActionItem } from '@/components/sheets/action-bottom
 import { ConfirmationDialog } from '@/components/dialogs/confirmation-dialog';
 import { generateDummyItemWithDetails } from '@/utils/dummy-data';
 import { useOrganisationContext } from '@/context/organisation-context';
+import { EntityImages } from '@/components/entity/entity-images';
+import { EntityTimeline } from '@/components/entity/entity-timeline';
 
 export default function UserDetailScreen() {
   const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
@@ -20,6 +22,8 @@ export default function UserDetailScreen() {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [confirmationType, setConfirmationType] = useState<'delete' | 'archive' | 'unarchive' | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [showImages, setShowImages] = useState(false);
+  const [showTimeline, setShowTimeline] = useState(false);
 
   const item = generateDummyItemWithDetails(id || '1');
 
@@ -68,6 +72,8 @@ export default function UserDetailScreen() {
       onPress: () => setConfirmationType('archive'),
       color: 'warning' as const,
     }] : []),
+    { id: 'images', label: 'Images', icon: <ImageIcon size={24} color={colors.primary} />, onPress: () => setShowImages(true), color: 'primary' as const },
+    { id: 'timeline', label: 'Timeline', icon: <Clock size={24} color={colors.secondary} />, onPress: () => setShowTimeline(true), color: 'primary' as const },
     {
       id: 'share',
       label: 'Share',
@@ -172,6 +178,8 @@ export default function UserDetailScreen() {
         type="archive"
         isLoading={isLoading}
       />
+      <EntityImages isVisible={showImages} onClose={() => setShowImages(false)} entity={'user'} entityId={id || ''} orgId={orgId || ''} />
+      <EntityTimeline isVisible={showTimeline} onClose={() => setShowTimeline(false)} entity={'user'} entityId={id || ''} />
     </SafeAreaView>
   );
 }

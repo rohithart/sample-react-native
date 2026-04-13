@@ -3,7 +3,7 @@ import { PageHeader } from '@/components/ui/page-header';
 import { StatusBadge } from '@/components/ui/status-badge';
 import { MetadataCard } from '@/components/ui/metadata-card';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-import { MoreVertical, Edit, ArchiveRestore, Share2, Trash2 } from 'lucide-react-native';
+import { MoreVertical, Edit, ArchiveRestore, Share2, Trash2, Paperclip, MessageSquare, FileDown } from 'lucide-react-native';
 import React, { useState } from 'react';
 import { ScrollView, Text, View, Pressable, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -11,6 +11,9 @@ import { ActionBottomSheet, ActionItem } from '@/components/sheets/action-bottom
 import { ConfirmationDialog } from '@/components/dialogs/confirmation-dialog';
 import { generateDummyItemWithDetails } from '@/utils/dummy-data';
 import { useOrganisationContext } from '@/context/organisation-context';
+import { EntityAttachments } from '@/components/entity/entity-attachments';
+import { EntityComments } from '@/components/entity/entity-comments';
+import { downloadAndSharePdf } from '@/utils/pdf-download';
 
 export default function MeetingDetailScreen() {
   const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
@@ -20,6 +23,8 @@ export default function MeetingDetailScreen() {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [confirmationType, setConfirmationType] = useState<'delete' | 'archive' | 'unarchive' | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [showAttachments, setShowAttachments] = useState(false);
+  const [showComments, setShowComments] = useState(false);
 
   const item = generateDummyItemWithDetails(id || '1');
 
@@ -68,6 +73,9 @@ export default function MeetingDetailScreen() {
       onPress: () => setConfirmationType('archive'),
       color: 'warning' as const,
     }] : []),
+    { id: 'attachments', label: 'Attachments', icon: <Paperclip size={24} color={colors.primary} />, onPress: () => setShowAttachments(true), color: 'primary' as const },
+    { id: 'comments', label: 'Comments', icon: <MessageSquare size={24} color={colors.primary} />, onPress: () => setShowComments(true), color: 'primary' as const },
+    { id: 'pdf', label: 'Download PDF', icon: <FileDown size={24} color={colors.success} />, onPress: () => downloadAndSharePdf('meeting', id || ''), color: 'success' as const },
     {
       id: 'share',
       label: 'Share',
@@ -172,6 +180,8 @@ export default function MeetingDetailScreen() {
         type="archive"
         isLoading={isLoading}
       />
+      <EntityAttachments isVisible={showAttachments} onClose={() => setShowAttachments(false)} entity={'meeting'} entityId={id || ''} orgId={orgId || ''} />
+      <EntityComments isVisible={showComments} onClose={() => setShowComments(false)} entity={'meeting'} entityId={id || ''} orgId={orgId || ''} />
     </SafeAreaView>
   );
 }
