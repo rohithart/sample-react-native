@@ -54,27 +54,27 @@ export default function AnnouncementDetailScreen() {
       label: 'Unarchive',
       icon: <ArchiveRestore size={24} color={colors.success} />,
       onPress: () => setConfirmationType('unarchive'),
-      color: 'success',
+      color: 'success' as const,
     } : {
       id: 'archive',
       label: 'Archive',
       icon: <ArchiveRestore size={24} color={colors.warning} />,
       onPress: () => setConfirmationType('archive'),
-      color: 'warning',
+      color: 'warning' as const,
     }] : []),
     {
       id: 'share',
       label: 'Share',
       icon: <Share2 size={24} color={colors.success} />,
       onPress: () => Alert.alert('Share', 'Share functionality coming soon'),
-      color: 'success',
+      color: 'success' as const,
     },
     ...(isAdmin ? [{
       id: 'delete',
       label: 'Delete',
       icon: <Trash2 size={24} color={colors.danger} />,
       onPress: () => setConfirmationType('delete'),
-      color: 'danger',
+      color: 'danger' as const,
     }] : []),
   ];
 

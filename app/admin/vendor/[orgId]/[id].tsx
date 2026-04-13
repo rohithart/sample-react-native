@@ -53,20 +53,20 @@ export default function VendorDetailScreen() {
       label: 'Edit',
       icon: <Edit size={24} color={colors.primary} />,
       onPress: () => router.push(`/admin/vendor/${orgId}/${id}/edit`),
-      color: 'primary',
+      color: 'primary' as const,
     }] : []),
     ...(isAdmin ? [item.status === 'archived' ? {
       id: 'unarchive',
       label: 'Unarchive',
       icon: <ArchiveRestore size={24} color={colors.success} />,
       onPress: () => setConfirmationType('unarchive'),
-      color: 'success',
+      color: 'success' as const,
     } : {
       id: 'archive',
       label: 'Archive',
       icon: <ArchiveRestore size={24} color={colors.warning} />,
       onPress: () => setConfirmationType('archive'),
-      color: 'warning',
+      color: 'warning' as const,
     }] : []),
     {
       id: 'share',
@@ -80,7 +80,7 @@ export default function VendorDetailScreen() {
       label: 'Delete',
       icon: <Trash2 size={24} color={colors.danger} />,
       onPress: () => setConfirmationType('delete'),
-      color: 'danger',
+      color: 'danger' as const,
     }] : []),
   ];
 
