@@ -33,6 +33,7 @@ export function UserNavigationDrawer({
   orgId,
 }: UserNavigationDrawerProps) {
   const { primary: c } = useThemeColors();
+  const router = useRouter();
 
   const go = (url: string) => { onClose(); router.push(url as any); };
 
