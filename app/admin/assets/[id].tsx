@@ -39,10 +39,10 @@ export default function AssetsListScreen() {
             title={item.name}
             description={item.description}
             status={item.status}
-            onPress={() => router.push(`/admin/asset/${id}/${item.id}`)}
+            onPress={() => router.push(`/admin/asset/${id}/${item._id}`)}
           />
         )}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item._id}
         contentContainerStyle={{ paddingBottom: 12 }}
         scrollIndicatorInsets={{ right: 1 }}
       />

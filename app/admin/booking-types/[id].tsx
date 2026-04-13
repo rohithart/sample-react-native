@@ -39,10 +39,10 @@ export default function BookingTypesListScreen() {
             title={item.name}
             description={item.description}
             status={item.status}
-            onPress={() => router.push(`/admin/booking-type/${id}/${item.id}`)}
+            onPress={() => router.push(`/admin/booking-type/${id}/${item._id}`)}
           />
         )}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item._id}
         contentContainerStyle={{ paddingBottom: 12 }}
         scrollIndicatorInsets={{ right: 1 }}
       />

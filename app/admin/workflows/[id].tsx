@@ -39,10 +39,10 @@ export default function WorkflowsListScreen() {
             title={item.name}
             description={item.description}
             status={item.status}
-            onPress={() => router.push(`/admin/workflow/${id}/${item.id}`)}
+            onPress={() => router.push(`/admin/workflow/${id}/${item._id}`)}
           />
         )}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item._id}
         contentContainerStyle={{ paddingBottom: 12 }}
         scrollIndicatorInsets={{ right: 1 }}
       />

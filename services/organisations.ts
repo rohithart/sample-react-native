@@ -11,58 +11,9 @@ export const organisationKeys = {
   access: (id: string) => ['organisations', 'access', id] as const,
 };
 
-// ---------------------------------------------------------------------------
-// Sample data — remove when real API is wired up
-// ---------------------------------------------------------------------------
-const SAMPLE_ORGANISATIONS: Organisation[] = [
-  {
-    id: '1',
-    name: 'Rebel Alliance',
-    description: 'Fighting for freedom and justice across the galaxy.',
-    memberCount: 4200,
-    createdAt: '2024-01-15T08:00:00.000Z',
-  },
-  {
-    id: '2',
-    name: 'Galactic Empire',
-    description: 'Maintaining order through strength and discipline.',
-    memberCount: 1200000,
-    createdAt: '2024-02-20T10:30:00.000Z',
-  },
-  {
-    id: '3',
-    name: 'Jedi Order',
-    description: 'Guardians of peace and justice, keepers of the Force.',
-    memberCount: 10000,
-    createdAt: '2024-03-05T14:00:00.000Z',
-  },
-  {
-    id: '4',
-    name: 'Mandalorian Clan',
-    description: 'This is the way. A brotherhood bound by honour and creed.',
-    memberCount: 350,
-    createdAt: '2024-04-11T09:15:00.000Z',
-  },
-  {
-    id: '5',
-    name: 'Hutt Cartel',
-    description: 'Controlling trade routes and black markets across the Outer Rim.',
-    memberCount: 8700,
-    createdAt: '2024-05-01T12:00:00.000Z',
-  },
-];
-
-// ---------------------------------------------------------------------------
-// API functions
-// ---------------------------------------------------------------------------
 const organisationApi = {
   getAll: async (): Promise<Organisation[]> => {
-    // TODO: uncomment when real API is ready
-    // return api.get<Organisation[]>('/organisation');
-
-    // Dummy data with simulated delay
-    await new Promise((resolve) => setTimeout(resolve, 3000));
-    return SAMPLE_ORGANISATIONS;
+    return api.get<Organisation[]>('/organisation');
   },
   get: (id: string) => api.get<Organisation>(`/organisation/${id}`),
   getAccess: (id: string) => api.get<any>(`/organisation/access/${id}`),

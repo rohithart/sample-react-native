@@ -65,7 +65,7 @@ export function EntityTimeline({ isVisible, onClose, entity, entityId }: EntityT
         ) : (
           <FlatList
             data={entries}
-            keyExtractor={(i) => i.id}
+            keyExtractor={(i) => i._id}
             renderItem={renderItem}
             contentContainerStyle={{ padding: 16, paddingBottom: bottom + 16 }}
             showsVerticalScrollIndicator={false}

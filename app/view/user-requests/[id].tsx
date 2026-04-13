@@ -39,10 +39,10 @@ export default function MyRequestsListScreen() {
             title={item.name}
             description={item.description}
             status={item.status}
-            onPress={() => router.push(`/view/user-request/${id}/${item.id}`)}
+            onPress={() => router.push(`/view/user-request/${id}/${item._id}`)}
           />
         )}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item._id}
         contentContainerStyle={{ paddingBottom: 12 }}
         scrollIndicatorInsets={{ right: 1 }}
       />

@@ -36,14 +36,14 @@ export function GenericDetailPage({
 
   const handleEdit = () => {
     if (onEdit) {
-      onEdit(item.id);
+      onEdit(item._id);
     }
   };
 
   const handleDeleteConfirm = async () => {
     if (onDelete) {
       setIsDeleting(true);
-      await onDelete(item.id);
+      await onDelete(item._id);
       setIsDeleting(false);
       setConfirmationType(null);
     }
@@ -52,7 +52,7 @@ export function GenericDetailPage({
   const handleArchiveConfirm = async () => {
     if (onArchive) {
       setIsDeleting(true);
-      await onArchive(item.id);
+      await onArchive(item._id);
       setIsDeleting(false);
       setConfirmationType(null);
     }
@@ -60,7 +60,7 @@ export function GenericDetailPage({
 
   const handleShare = () => {
     if (onShare) {
-      onShare(item.id);
+      onShare(item._id);
     }
   };
 

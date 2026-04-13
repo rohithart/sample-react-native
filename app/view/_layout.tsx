@@ -13,7 +13,7 @@ export default function ViewLayout() {
   const [hydrationAttempted, setHydrationAttempted] = useState(!!organisation);
   const [redirectTo, setRedirectTo] = useState<string | null>(null);
 
-  const orgId = params.orgId || params.id;
+  const orgId = params.orgId || params._id;
 
   useEffect(() => {
     if (organisation) return;

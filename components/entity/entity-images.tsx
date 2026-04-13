@@ -46,7 +46,7 @@ export function EntityImages({ isVisible, onClose, entity, entityId, orgId }: En
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10 }}>
         <Text style={{ color: colors.sub, fontSize: 11 }}>{new Date(item.createdAt).toLocaleDateString()}</Text>
         {isAdmin && (
-          <Pressable onPress={() => deleteMutation.mutate(item.id)} style={{ padding: 4 }} disabled={deleteMutation.isPending}>
+          <Pressable onPress={() => deleteMutation.mutate(item._id)} style={{ padding: 4 }} disabled={deleteMutation.isPending}>
             {deleteMutation.isPending ? <ActivityIndicator size="small" color={colors.danger} /> : <Trash2 size={14} color={colors.danger} />}
           </Pressable>
         )}
@@ -104,7 +104,7 @@ export function EntityImages({ isVisible, onClose, entity, entityId, orgId }: En
         ) : (
           <FlatList
             data={images}
-            keyExtractor={(i) => i.id}
+            keyExtractor={(i) => i._id}
             renderItem={renderItem}
             contentContainerStyle={{ padding: 16, gap: 12, paddingBottom: bottom + 16 }}
             showsVerticalScrollIndicator={false}

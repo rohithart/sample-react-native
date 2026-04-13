@@ -60,7 +60,7 @@ export function GenericListPage({
         <FlatList
           data={items}
           renderItem={({ item }) => renderItem(item)}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item._id}
           contentContainerStyle={{ padding: 12, gap: 8 }}
           scrollIndicatorInsets={{ right: 1 }}
         />

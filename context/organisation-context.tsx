@@ -42,8 +42,8 @@ export function OrganisationProvider({ children }: { children: ReactNode }) {
     setIsLoadingAccess(true);
     try {
       const [access, roleData] = await Promise.all([
-        api.get<OrgAccess>(`/organisation/access/${org.id}`),
-        api.get<{ role: string }>(`/user/role/${org.id}`),
+        api.get<OrgAccess>(`/organisation/access/${org._id}`),
+        api.get<{ role: string }>(`/user/role/${org._id}`),
       ]);
       setOrgAccess(access);
       setUserRole((roleData.role as UserRole) ?? 'VIEWER');
@@ -64,7 +64,7 @@ export function OrganisationProvider({ children }: { children: ReactNode }) {
 
   const hydrateFromOrgId = useCallback(async (orgId: string) => {
     // Skip if already loaded for this org
-    if (organisation?.id === orgId) return;
+    if (organisation?._id === orgId) return;
     setOrgAccess(null);
     setUserRole(null);
     setIsLoadingAccess(true);
@@ -84,7 +84,7 @@ export function OrganisationProvider({ children }: { children: ReactNode }) {
     } finally {
       setIsLoadingAccess(false);
     }
-  }, [organisation?.id]);
+  }, [organisation?._id]);
 
   const hasAccess = useCallback(
     (module: keyof OrgAccess) => {

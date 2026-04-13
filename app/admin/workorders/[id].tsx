@@ -39,10 +39,10 @@ export default function WorkOrdersListScreen() {
             title={item.name}
             description={item.description}
             status={item.status}
-            onPress={() => router.push(`/admin/workorder/${id}/${item.id}`)}
+            onPress={() => router.push(`/admin/workorder/${id}/${item._id}`)}
           />
         )}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item._id}
         contentContainerStyle={{ paddingBottom: 12 }}
         scrollIndicatorInsets={{ right: 1 }}
       />

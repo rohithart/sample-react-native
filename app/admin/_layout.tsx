@@ -41,7 +41,7 @@ export default function AdminLayout() {
       setRedirectTo('/home');
     } else if (!canAccessAdmin) {
       showToast({ type: 'warning', title: 'Access denied', message: 'You do not have admin access to this organisation.' });
-      setRedirectTo(`/view/${organisation.id}`);
+      setRedirectTo(`/view/${organisation._id}`);
     }
   }, [hydrationAttempted, isLoadingAccess, organisation, canAccessAdmin, showToast]);
 

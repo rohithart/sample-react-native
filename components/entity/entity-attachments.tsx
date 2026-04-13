@@ -45,7 +45,7 @@ export function EntityAttachments({ isVisible, onClose, entity, entityId, orgId 
         <Text style={{ color: colors.sub, fontSize: 11, marginTop: 2 }}>{new Date(item.createdAt).toLocaleDateString()}</Text>
       </View>
       {isAdmin && (
-        <Pressable onPress={() => deleteMutation.mutate(item.id)} style={{ padding: 6 }} disabled={deleteMutation.isPending}>
+        <Pressable onPress={() => deleteMutation.mutate(item._id)} style={{ padding: 6 }} disabled={deleteMutation.isPending}>
           {deleteMutation.isPending ? <ActivityIndicator size="small" color={colors.danger} /> : <Trash2 size={16} color={colors.danger} />}
         </Pressable>
       )}
@@ -102,7 +102,7 @@ export function EntityAttachments({ isVisible, onClose, entity, entityId, orgId 
         ) : (
           <FlatList
             data={attachments}
-            keyExtractor={(i) => i.id}
+            keyExtractor={(i) => i._id}
             renderItem={renderItem}
             contentContainerStyle={{ padding: 16, gap: 10, paddingBottom: bottom + 16 }}
             showsVerticalScrollIndicator={false}

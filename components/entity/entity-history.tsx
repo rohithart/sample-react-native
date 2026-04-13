@@ -71,7 +71,7 @@ export function EntityHistory({ isVisible, onClose, entity, entityId }: EntityHi
         ) : (
           <FlatList
             data={entries}
-            keyExtractor={(i) => i.id}
+            keyExtractor={(i) => i._id}
             renderItem={renderItem}
             contentContainerStyle={{ padding: 16, gap: 10, paddingBottom: bottom + 16 }}
             showsVerticalScrollIndicator={false}

@@ -49,12 +49,12 @@ export function OrganisationsList() {
     >
       {organisations.map((org) => (
         <OrganisationCard
-          key={org.id}
+          key={org._id}
           org={org}
           colors={colors}
           onPress={async () => {
             await selectOrganisation(org);
-            router.push(`/view/${org.id}` as any);
+            router.push(`/view/${org._id}` as any);
           }}
         />
       ))}
