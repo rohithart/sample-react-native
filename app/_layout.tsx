@@ -27,6 +27,7 @@ function RootLayoutContent() {
           <Stack.Screen name="settings" options={{ headerShown: false }} />
           <Stack.Screen name="admin" options={{ headerShown: false }} />
           <Stack.Screen name="view" options={{ headerShown: false }} />
+          <Stack.Screen name="+not-found" options={{ headerShown: false }} />
         </Stack>
         <StatusBar style="auto" />
       </NavThemeProvider>
