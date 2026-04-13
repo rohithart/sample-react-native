@@ -2,16 +2,16 @@ import { useOrganisationContext } from '@/context/organisation-context';
 import { useToast } from '@/context/toast-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { Redirect, Stack, useGlobalSearchParams } from 'expo-router';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ActivityIndicator, Text, View } from 'react-native';
 
 export default function ViewLayout() {
   const params = useGlobalSearchParams<{ orgId?: string; id?: string }>();
-  const { organisation, userRole, isLoadingAccess, hydrateFromOrgId } = useOrganisationContext();
+  const { organisation, isLoadingAccess, hydrateFromOrgId } = useOrganisationContext();
   const { showToast } = useToast();
   const colors = useThemeColors();
-  const [hydrationAttempted, setHydrationAttempted] = useState(false);
-  const toastShown = useRef(false);
+  const [hydrationAttempted, setHydrationAttempted] = useState(!!organisation);
+  const [redirectTo, setRedirectTo] = useState<string | null>(null);
 
   const orgId = params.orgId || params.id;
 
@@ -28,6 +28,21 @@ export default function ViewLayout() {
     }
   }, [organisation, orgId, isLoadingAccess, hydrationAttempted, hydrateFromOrgId]);
 
+  // Show toast + set redirect after hydration completes
+  useEffect(() => {
+    if (isLoadingAccess || !hydrationAttempted) return;
+
+    if (!organisation) {
+      showToast({ type: 'error', title: 'Organisation not found', message: 'Could not load the organisation. You may not have access.' });
+      setRedirectTo('/');
+    }
+  }, [hydrationAttempted, isLoadingAccess, organisation, showToast]);
+
+  // Redirect if needed
+  if (redirectTo) {
+    return <Redirect href={redirectTo as any} />;
+  }
+
   // Still loading
   if (isLoadingAccess || (!organisation && !hydrationAttempted)) {
     return (
@@ -38,16 +53,15 @@ export default function ViewLayout() {
     );
   }
 
-  // Hydration failed or no orgId — show toast and redirect to org list
+  // Waiting for redirect effect to fire
   if (!organisation) {
-    if (!toastShown.current) {
-      toastShown.current = true;
-      showToast({ type: 'error', title: 'Organisation not found', message: 'Could not load the organisation. You may not have access.' });
-    }
-    return <Redirect href="/" />;
+    return (
+      <View style={{ flex: 1, backgroundColor: colors.bg, alignItems: 'center', justifyContent: 'center', gap: 12 }}>
+        <ActivityIndicator size="large" color={colors.primary} />
+      </View>
+    );
   }
 
-  // All roles (ADMIN, USER, VIEWER) can access /view — no role check needed
-  // But if userRole is null (hydration failed for role), still allow since org loaded
+  // All roles (ADMIN, USER, VIEWER) can access /view
   return <Stack screenOptions={{ headerShown: false }} />;
 }

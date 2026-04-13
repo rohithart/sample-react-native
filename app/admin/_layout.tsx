@@ -1,8 +1,8 @@
 import { useOrganisationContext } from '@/context/organisation-context';
 import { useToast } from '@/context/toast-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
-import { Redirect, Stack, useGlobalSearchParams, useRouter } from 'expo-router';
-import { useEffect, useRef, useState } from 'react';
+import { Redirect, Stack, useGlobalSearchParams } from 'expo-router';
+import { useEffect, useState } from 'react';
 import { ActivityIndicator, Text, View } from 'react-native';
 
 export default function AdminLayout() {
@@ -10,9 +10,8 @@ export default function AdminLayout() {
   const { organisation, isLoadingAccess, canAccessAdmin, hydrateFromOrgId } = useOrganisationContext();
   const { showToast } = useToast();
   const colors = useThemeColors();
-  const router = useRouter();
-  const [hydrationAttempted, setHydrationAttempted] = useState(false);
-  const toastShown = useRef(false);
+  const [hydrationAttempted, setHydrationAttempted] = useState(!!organisation);
+  const [redirectTo, setRedirectTo] = useState<string | null>(null);
 
   // orgId can come from [orgId] param (detail/edit pages) or [id] param (list/new pages)
   const orgId = params.orgId || params.id;
@@ -33,6 +32,24 @@ export default function AdminLayout() {
     }
   }, [organisation, orgId, isLoadingAccess, hydrationAttempted, hydrateFromOrgId]);
 
+  // Show toast + set redirect after hydration completes
+  useEffect(() => {
+    if (isLoadingAccess || !hydrationAttempted) return;
+
+    if (!organisation) {
+      showToast({ type: 'error', title: 'Organisation not found', message: 'Could not load the organisation. You may not have access.' });
+      setRedirectTo('/');
+    } else if (!canAccessAdmin) {
+      showToast({ type: 'warning', title: 'Access denied', message: 'You do not have admin access to this organisation.' });
+      setRedirectTo(`/view/${organisation.id}`);
+    }
+  }, [hydrationAttempted, isLoadingAccess, organisation, canAccessAdmin, showToast]);
+
+  // Redirect if needed
+  if (redirectTo) {
+    return <Redirect href={redirectTo as any} />;
+  }
+
   // Still loading — show spinner
   if (isLoadingAccess || (!organisation && !hydrationAttempted)) {
     return (
@@ -43,22 +60,13 @@ export default function AdminLayout() {
     );
   }
 
-  // Hydration failed or no orgId — show toast and redirect to org list
-  if (!organisation) {
-    if (!toastShown.current) {
-      toastShown.current = true;
-      showToast({ type: 'error', title: 'Organisation not found', message: 'Could not load the organisation. You may not have access.' });
-    }
-    return <Redirect href="/" />;
-  }
-
-  // User is VIEWER only — no admin access, redirect to view
-  if (!canAccessAdmin) {
-    if (!toastShown.current) {
-      toastShown.current = true;
-      showToast({ type: 'warning', title: 'Access denied', message: 'You do not have admin access to this organisation.' });
-    }
-    return <Redirect href={`/view/${organisation.id}` as any} />;
+  // Waiting for redirect effect to fire
+  if (!organisation || !canAccessAdmin) {
+    return (
+      <View style={{ flex: 1, backgroundColor: colors.bg, alignItems: 'center', justifyContent: 'center', gap: 12 }}>
+        <ActivityIndicator size="large" color={colors.primary} />
+      </View>
+    );
   }
 
   return <Stack screenOptions={{ headerShown: false }} />;

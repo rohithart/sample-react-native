@@ -25,8 +25,8 @@ function RootLayoutContent() {
           <Stack.Screen name="terms-and-conditions" options={{ headerShown: false }} />
           <Stack.Screen name="home" options={{ headerShown: false }} />
           <Stack.Screen name="settings" options={{ headerShown: false }} />
-          <Stack.Screen name="view/[id]" options={{ headerShown: false }} />
-          <Stack.Screen name="admin/[id]" options={{ headerShown: false }} />
+          <Stack.Screen name="admin" options={{ headerShown: false }} />
+          <Stack.Screen name="view" options={{ headerShown: false }} />
         </Stack>
         <StatusBar style="auto" />
       </NavThemeProvider>
