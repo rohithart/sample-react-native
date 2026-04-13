@@ -2,10 +2,12 @@ import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useOrganisationContext } from '@/context/organisation-context';
 
 export default function Screen() {
   const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
   const colors = useThemeColors();
+  const { isAdmin } = useOrganisationContext();
   const router = useRouter();
 
   return (

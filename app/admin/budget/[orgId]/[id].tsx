@@ -10,13 +10,15 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { ActionBottomSheet, ActionItem } from '@/components/sheets/action-bottom-sheet';
 import { ConfirmationDialog } from '@/components/dialogs/confirmation-dialog';
 import { generateDummyItemWithDetails } from '@/utils/dummy-data';
+import { useOrganisationContext } from '@/context/organisation-context';
 
 export default function BudgetDetailScreen() {
   const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
   const router = useRouter();
   const colors = useThemeColors();
+  const { isAdmin } = useOrganisationContext();
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
-  const [confirmationType, setConfirmationType] = useState<'delete' | 'archive' | null>(null);
+  const [confirmationType, setConfirmationType] = useState<'delete' | 'archive' | 'unarchive' | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const item = generateDummyItemWithDetails(id || '1');
@@ -37,15 +39,29 @@ export default function BudgetDetailScreen() {
     Alert.alert('Success', 'Budget archived successfully');
   };
 
+  const handleUnarchive = async () => {
+    setIsLoading(true);
+    await new Promise((resolve) => setTimeout(resolve, 800));
+    setIsLoading(false);
+    setConfirmationType(null);
+    Alert.alert('Success', 'Budget unarchived successfully');
+  };
+
   const actions: ActionItem[] = [
 
-    {
+    ...(isAdmin ? [item.status === 'archived' ? {
+      id: 'unarchive',
+      label: 'Unarchive',
+      icon: <ArchiveRestore size={24} color={colors.success} />,
+      onPress: () => setConfirmationType('unarchive'),
+      color: 'success',
+    } : {
       id: 'archive',
       label: 'Archive',
       icon: <ArchiveRestore size={24} color={colors.warning} />,
       onPress: () => setConfirmationType('archive'),
       color: 'warning',
-    },
+    }] : []),
     {
       id: 'share',
       label: 'Share',
@@ -53,13 +69,13 @@ export default function BudgetDetailScreen() {
       onPress: () => Alert.alert('Share', 'Share functionality coming soon'),
       color: 'success',
     },
-    {
+    ...(isAdmin ? [{
       id: 'delete',
       label: 'Delete',
       icon: <Trash2 size={24} color={colors.danger} />,
       onPress: () => setConfirmationType('delete'),
       color: 'danger',
-    },
+    }] : []),
   ];
 
   return (
@@ -140,6 +156,13 @@ export default function BudgetDetailScreen() {
         isOpen={confirmationType === 'archive'}
         onClose={() => setConfirmationType(null)}
         onConfirm={handleArchive}
+        type="archive"
+        isLoading={isLoading}
+      />
+      <ConfirmationDialog
+        isOpen={confirmationType === 'unarchive'}
+        onClose={() => setConfirmationType(null)}
+        onConfirm={handleUnarchive}
         type="archive"
         isLoading={isLoading}
       />

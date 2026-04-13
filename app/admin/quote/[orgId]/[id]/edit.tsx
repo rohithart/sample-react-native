@@ -5,11 +5,13 @@ import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { Trash2 } from 'lucide-react-native';
 import React, { useState } from 'react';
 import { ScrollView, SafeAreaView, Text, Pressable, Alert } from 'react-native';
+import { useOrganisationContext } from '@/context/organisation-context';
 
 export default function EditQuoteScreen() {
   const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
   const router = useRouter();
   const colors = useThemeColors();
+  const { isAdmin } = useOrganisationContext();
   const [name, setName] = useState('Sample Quote');
   const [description, setDescription] = useState('This is a sample quote description.');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -90,6 +92,9 @@ export default function EditQuoteScreen() {
           </Text>
         </Pressable>
 
+        {isAdmin && (
+
+
         <Pressable
           onPress={handleDelete}
           disabled={isSubmitting}
@@ -111,6 +116,9 @@ export default function EditQuoteScreen() {
             Delete Quote
           </Text>
         </Pressable>
+
+
+        )}
       </ScrollView>
     </SafeAreaView>
   );
