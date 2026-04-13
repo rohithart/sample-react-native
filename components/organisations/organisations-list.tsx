@@ -1,7 +1,7 @@
 import { LoadingList } from '@/components/skeleton';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useOrganisations } from '@/services/organisations';
-import type { Organisation } from '@/types/organisation';
+import type { Organisation } from '@/types';
 import { useRouter } from 'expo-router';
 import { Building2, Calendar, ChevronRight, Users } from 'lucide-react-native';
 import { Image, Pressable, ScrollView, Text, View } from 'react-native';

@@ -1,5 +1,6 @@
-import type { Organisation } from '@/types/organisation';
+import type { Organisation } from '@/types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { api } from './api-client';
 
 // ---------------------------------------------------------------------------
 // Query keys
@@ -7,6 +8,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 export const organisationKeys = {
   all: ['organisations'] as const,
   detail: (id: string) => ['organisations', id] as const,
+  access: (id: string) => ['organisations', 'access', id] as const,
 };
 
 // ---------------------------------------------------------------------------
@@ -51,54 +53,61 @@ const SAMPLE_ORGANISATIONS: Organisation[] = [
 ];
 
 // ---------------------------------------------------------------------------
-// API functions — replace with real endpoints when ready
+// API functions
 // ---------------------------------------------------------------------------
-async function fetchOrganisations(): Promise<Organisation[]> {
-  // TODO: replace with real API call, e.g.:
-  // const res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/organisations`);
-  // if (!res.ok) throw new Error('Failed to fetch organisations');
-  // return res.json();
+const organisationApi = {
+  getAll: async (): Promise<Organisation[]> => {
+    // TODO: uncomment when real API is ready
+    // return api.get<Organisation[]>('/organisation');
 
-  // Simulated network delay — remove when using a real API
-  await new Promise((resolve) => setTimeout(resolve, 3000));
-  return SAMPLE_ORGANISATIONS;
-}
-
-async function createOrganisation(
-  payload: Omit<Organisation, 'id' | 'createdAt' | 'memberCount'>
-): Promise<Organisation> {
-  // TODO: replace with real API call, e.g.:
-  // const res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/organisations`, {
-  //   method: 'POST',
-  //   headers: { 'Content-Type': 'application/json' },
-  //   body: JSON.stringify(payload),
-  // });
-  // if (!res.ok) throw new Error('Failed to create organisation');
-  // return res.json();
-  return {
-    id: Date.now().toString(),
-    memberCount: 1,
-    createdAt: new Date().toISOString(),
-    ...payload,
-  };
-}
+    // Dummy data with simulated delay
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+    return SAMPLE_ORGANISATIONS;
+  },
+  get: (id: string) => api.get<Organisation>(`/organisation/${id}`),
+  getAccess: (id: string) => api.get<any>(`/organisation/access/${id}`),
+  create: (data: Partial<Organisation>) => api.post<any>('/organisation', data),
+  update: (id: string, data: Partial<Organisation>) => api.put<Organisation>(`/organisation/${id}`, data),
+  startOnboarding: (id: string) => api.patch<Organisation>(`/organisation/start-onboarding/${id}`, {}),
+  stopOnboarding: (id: string) => api.patch<Organisation>(`/organisation/stop-onboarding/${id}`, {}),
+};
 
 // ---------------------------------------------------------------------------
-// Hooks
+// Query hooks
 // ---------------------------------------------------------------------------
 export function useOrganisations() {
   return useQuery({
     queryKey: organisationKeys.all,
-    queryFn: fetchOrganisations,
+    queryFn: organisationApi.getAll,
   });
 }
 
+export function useOrganisation(id: string) {
+  return useQuery({
+    queryKey: organisationKeys.detail(id),
+    queryFn: () => organisationApi.get(id),
+    enabled: !!id,
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Mutation hooks
+// ---------------------------------------------------------------------------
 export function useCreateOrganisation() {
-  const queryClient = useQueryClient();
+  const qc = useQueryClient();
   return useMutation({
-    mutationFn: createOrganisation,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: organisationKeys.all });
+    mutationFn: (data: Partial<Organisation>) => organisationApi.create(data),
+    onSuccess: () => qc.invalidateQueries({ queryKey: organisationKeys.all }),
+  });
+}
+
+export function useUpdateOrganisation() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string; data: Partial<Organisation> }) => organisationApi.update(id, data),
+    onSuccess: (_, { id }) => {
+      qc.invalidateQueries({ queryKey: organisationKeys.all });
+      qc.invalidateQueries({ queryKey: organisationKeys.detail(id) });
     },
   });
 }
