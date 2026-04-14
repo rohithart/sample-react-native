@@ -1,0 +1,11 @@
+export enum BusinessModule {
+  GENERAL = 'GENERAL',
+  USER = 'USER',
+  WORKFLOW = 'WORKFLOW',
+  VENDOR = 'VENDOR',
+  COMMUNICATION = 'COMMUNICATION',
+  ASSET = 'ASSET',
+  ANALYTICS = 'ANALYTICS',
+  AI = 'AI',
+  FINANCE = 'FINANCE',
+}

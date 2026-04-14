@@ -1,0 +1,49 @@
+export enum EvidenceStatus {
+  PENDING = 'PENDING',
+  VERIFIED = 'VERIFIED',
+  APPROVED = 'APPROVED',
+  REJECTED = 'REJECTED',
+}
+
+export enum InvoiceStatus {
+  DRAFT = 'DRAFT',
+  REQUESTED = 'REQUESTED',
+  UPLOADED = 'UPLOADED',
+  PAID = 'PAID',
+  CANCELLED = 'CANCELLED',
+}
+
+export enum WorkorderStatus {
+  OPEN = 'OPEN',
+  PROGRESS = 'PROGRESS',
+  REQUESTED = 'REQUESTED',
+  COMPLETE = 'COMPLETE',
+  CANCELLED = 'CANCELLED',
+}
+
+export enum QuoteStatus {
+  DRAFT = 'DRAFT',
+  REQUESTED = 'REQUESTED',
+  RECEIVED = 'RECEIVED',
+  APPROVED = 'APPROVED',
+  REJECTED = 'REJECTED',
+  EXPIRED = 'EXPIRED',
+}
+
+export enum TaskStatus {
+  DRAFT = 'DRAFT',
+  PROGRESS = 'PROGRESS',
+  BLOCKED = 'BLOCKED',
+  REVIEW = 'REVIEW',
+  COMPLETE = 'COMPLETE',
+  REJECTED = 'REJECTED',
+}
+
+export enum WorkflowStatus {
+  DRAFT = 'DRAFT',
+  PROGRESS = 'PROGRESS',
+  BLOCKED = 'BLOCKED',
+  REVIEW = 'REVIEW',
+  COMPLETE = 'COMPLETE',
+  REJECTED = 'REJECTED',
+}
