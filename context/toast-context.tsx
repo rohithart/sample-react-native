@@ -1,19 +1,9 @@
+import { registerToastHandler, unregisterToastHandler } from '@/services/api-client';
+import { ToastConfig, ToastType } from '@/types/toast';
 import { AlertCircle, CheckCircle2, Info, TriangleAlert, X } from 'lucide-react-native';
-import React, { createContext, useCallback, useContext, useMemo, useRef, useState, type ReactNode } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Animated, Pressable, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-
-// ---------------------------------------------------------------------------
-// Types
-// ---------------------------------------------------------------------------
-type ToastType = 'success' | 'error' | 'warning' | 'info';
-
-type ToastConfig = {
-  type: ToastType;
-  title: string;
-  message?: string;
-  duration?: number;
-};
 
 type ToastContextType = {
   showToast: (config: ToastConfig) => void;
@@ -56,7 +46,7 @@ export function ToastProvider({ children, isDark = false }: { children: ReactNod
   const [toast, setToast] = useState<(ToastConfig & { id: number }) | null>(null);
   const translateY = useRef(new Animated.Value(-100)).current;
   const opacity = useRef(new Animated.Value(0)).current;
-  const hideTimeout = useRef<ReturnType<typeof setTimeout>>();
+  const hideTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const idCounter = useRef(0);
 
   const dismiss = useCallback(() => {
@@ -86,6 +76,12 @@ export function ToastProvider({ children, isDark = false }: { children: ReactNod
     },
     [translateY, opacity, dismiss],
   );
+
+  // Register showToast so the API client can display toasts
+  useEffect(() => {
+    registerToastHandler(showToast);
+    return unregisterToastHandler;
+  }, [showToast]);
 
   const value = useMemo(() => ({ showToast }), [showToast]);
 

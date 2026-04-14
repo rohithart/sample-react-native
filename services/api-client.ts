@@ -1,7 +1,33 @@
-import * as SecureStore from 'expo-secure-store';
+import { ToastConfig } from '@/types/toast';
 import { Platform } from 'react-native';
 
 const BASE_URL = process.env.EXPO_PUBLIC_API_URL ?? '';
+
+let toastHandler: ((payload: ToastConfig) => void) | null = null;
+export function registerToastHandler(fn: (payload: ToastConfig) => void) { toastHandler = fn; }
+export function unregisterToastHandler() { toastHandler = null; }
+
+function showApiToast(status: number, message: string) {
+  if (!toastHandler) return;
+
+  let title: string;
+
+  switch (status) {
+    case 400: title = 'Bad Request'; break;
+    case 401: title = 'Unauthorised'; break;
+    case 403: title = 'Access Denied'; break;
+    case 404: title = 'Not Found'; break;
+    case 409: title = 'Conflict'; break;
+    case 422: title = 'Validation Error'; break;
+    case 429: title = 'Too Many Requests'; break;
+    case 500: title = 'Server Error'; break;
+    case 502: title = 'Bad Gateway'; break;
+    case 503: title = 'Service Unavailable'; break;
+    default: title = status >= 500 ? 'Server Error' : 'Request Failed'; break;
+  }
+
+  toastHandler({ type: 'error', title, message, duration: 4500 });
+}
 
 async function getToken(): Promise<string | null> {
   if (Platform.OS === 'web') return null;
@@ -45,7 +71,16 @@ async function request<T>(
 
   if (!res.ok) {
     const body = await res.text().catch(() => '');
-    throw new ApiError(res.status, body || `Request failed with status ${res.status}`);
+    let message = `Request failed with status ${res.status}`;
+    try {
+      const json = JSON.parse(body);
+      message = json.message || json.error || message;
+    } catch {
+      if (body) message = body;
+    }
+    const error = new ApiError(res.status, message);
+    showApiToast(res.status, message);
+    throw error;
   }
 
   // 204 No Content
