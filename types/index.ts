@@ -15,7 +15,7 @@ export { DocumentStore } from '@propordo/models/dist/ui';
 export { Event } from '@propordo/models/dist/ui';
 export { EventType } from '@propordo/models/dist/ui';
 export { Evidence } from '@propordo/models/dist/ui';
-export { File } from '@propordo/models/dist/ui';
+export { File as Attachment } from '@propordo/models/dist/ui';
 export { FinancialYear } from '@propordo/models/dist/ui';
 export { Folder } from '@propordo/models/dist/ui';
 export { Group } from '@propordo/models/dist/ui';
