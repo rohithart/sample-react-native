@@ -1,6 +1,7 @@
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { PageHeader } from '@/components/ui/page-header';
-import { ListItemCard } from '@/components/ui/list-item-card';
+import { EntityCard } from '@/components/cards/entity-card';
+import { VIEW_CONFIGS } from '@/components/cards/card-configs';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import React from 'react';
 import { ActivityIndicator, FlatList, Pressable, Text, View } from 'react-native';
@@ -29,11 +30,10 @@ export default function InformationListScreen() {
         <FlatList
           data={items ?? []}
           renderItem={({ item }) => (
-            <ListItemCard
-              title={item.name || item.title || 'Untitled'}
-              description={item.description}
-              status={item.status}
-              onPress={() => router.push(`/view/information/${id}/${item._id}`)}
+            <EntityCard
+              item={item}
+              config={VIEW_CONFIGS.information}
+              orgId={id}
             />
           )}
           keyExtractor={(item) => item._id}

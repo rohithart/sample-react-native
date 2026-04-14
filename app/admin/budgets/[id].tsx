@@ -1,6 +1,7 @@
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { PageHeader } from '@/components/ui/page-header';
-import { ListItemCard } from '@/components/ui/list-item-card';
+import { EntityCard } from '@/components/cards/entity-card';
+import { ADMIN_CONFIGS } from '@/components/cards/card-configs';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { Plus } from 'lucide-react-native';
 import React from 'react';
@@ -44,11 +45,10 @@ export default function BudgetsListScreen() {
         <FlatList
           data={items ?? []}
           renderItem={({ item }) => (
-            <ListItemCard
-              title={item.name || item.title || 'Untitled'}
-              description={item.description}
-              status={item.status}
-              onPress={() => router.push(`/admin/budget/${id}/${item._id}`)}
+            <EntityCard
+              item={item}
+              config={ADMIN_CONFIGS.budget}
+              orgId={id}
             />
           )}
           keyExtractor={(item) => item._id}
