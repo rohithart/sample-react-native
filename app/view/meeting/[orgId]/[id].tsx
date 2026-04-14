@@ -1,64 +1,35 @@
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { PageHeader } from '@/components/ui/page-header';
-import { StatusBadge } from '@/components/ui/status-badge';
-import { MetadataCard } from '@/components/ui/metadata-card';
+import { DetailField, DetailSection, HtmlContent, AuditInfo } from '@/components/details';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-import { MoreVertical, ArchiveRestore, Share2, Trash2 } from 'lucide-react-native';
+import { MoreVertical, Share2, Info } from 'lucide-react-native';
 import React, { useState } from 'react';
-import { ScrollView, Text, View, Pressable, Alert } from 'react-native';
+import { ActivityIndicator, ScrollView, Text, View, Pressable, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ActionBottomSheet, ActionItem } from '@/components/sheets/action-bottom-sheet';
-import { ConfirmationDialog } from '@/components/dialogs/confirmation-dialog';
-import { generateDummyItemWithDetails } from '@/utils/dummy-data';
+import { useMeeting } from '@/services/meeting';
+import { useRefreshControl } from '@/hooks/use-refresh-control';
+
+function fmt(d: string | Date | undefined | null) { if (!d) return '—'; return new Date(d).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }); }
 
 export default function MeetingDetailScreen() {
   const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
   const router = useRouter();
   const colors = useThemeColors();
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
-  const [confirmationType, setConfirmationType] = useState<'delete' | 'archive' | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [showAudit, setShowAudit] = useState(false);
 
-  const item = generateDummyItemWithDetails(id || '1');
-
-  const handleDelete = async () => {
-    setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    setIsLoading(false);
-    setConfirmationType(null);
-    router.push(`/view/meetings/${orgId}`);
-  };
-
-  const handleArchive = async () => {
-    setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    setIsLoading(false);
-    setConfirmationType(null);
-    Alert.alert('Success', 'Meeting archived successfully');
-  };
+  const { data: item, isLoading: isLoadingItem, refetch, isRefetching } = useMeeting(id || '');
+  const refreshControl = useRefreshControl(refetch, isRefetching);
 
   const actions: ActionItem[] = [
-
-    {
-      id: 'archive',
-      label: 'Archive',
-      icon: <ArchiveRestore size={24} color={colors.warning} />,
-      onPress: () => setConfirmationType('archive'),
-      color: 'warning',
-    },
+    { id: 'audit', label: 'Audit Info', icon: <Info size={24} color={colors.secondary} />, onPress: () => setShowAudit(true), color: 'primary' as const },
     {
       id: 'share',
       label: 'Share',
       icon: <Share2 size={24} color={colors.success} />,
       onPress: () => Alert.alert('Share', 'Share functionality coming soon'),
-      color: 'success',
-    },
-    {
-      id: 'delete',
-      label: 'Delete',
-      icon: <Trash2 size={24} color={colors.danger} />,
-      onPress: () => setConfirmationType('delete'),
-      color: 'danger',
+      color: 'success' as const,
     },
   ];
 
@@ -66,7 +37,7 @@ export default function MeetingDetailScreen() {
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
       <Stack.Screen options={{ headerShown: false }} />
       <PageHeader
-        title={item.name}
+        title={item?.title || 'Loading...'}
         rightAction={
           <Pressable onPress={() => setIsBottomSheetOpen(true)} style={{ padding: 8 }}>
             <MoreVertical size={20} color={colors.primary} />
@@ -74,75 +45,34 @@ export default function MeetingDetailScreen() {
         }
       />
 
+      {isLoadingItem || !item ? (
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <ActivityIndicator size="large" color={colors.primary} />
+          <Text style={{ color: colors.sub, fontSize: 14, marginTop: 10 }}>Loading...</Text>
+        </View>
+      ) : (
       <ScrollView
-        contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 16, gap: 16 }}
+        refreshControl={refreshControl}
+        contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 8, paddingBottom: 24, gap: 14 }}
         showsVerticalScrollIndicator={false}
       >
-        <StatusBadge status={item.status} />
-
-        <View style={{ gap: 8 }}>
-          <Text style={{ fontSize: 14, fontWeight: '600', color: colors.text }}>Description</Text>
-          <Text style={{ fontSize: 14, color: colors.sub, lineHeight: 20 }}>{item.description}</Text>
-        </View>
-
-        <MetadataCard
-          rows={[
-            { label: 'Owner', value: item.metadata?.owner || 'N/A' },
-            { label: 'Priority', value: item.metadata?.priority || 'N/A' },
-            { label: 'Created', value: new Date(item.createdAt).toLocaleDateString() },
-            { label: 'Updated', value: new Date(item.updatedAt).toLocaleDateString() },
-          ]}
-        />
-
-        {item.attachments && item.attachments.length > 0 && (
-          <View style={{ gap: 8 }}>
-            <Text style={{ fontSize: 14, fontWeight: '600', color: colors.text }}>
-              Attachments ({item.attachments.length})
-            </Text>
-            {item.attachments.map((attachment: any, idx: number) => (
-              <View
-                key={idx}
-                style={{
-                  backgroundColor: colors.card,
-                  borderWidth: 1,
-                  borderColor: colors.border,
-                  borderRadius: 8,
-                  padding: 10,
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}
-              >
-                <View>
-                  <Text style={{ color: colors.text, fontWeight: '500' }}>{attachment.name}</Text>
-                  <Text style={{ color: colors.sub, fontSize: 12, marginTop: 2 }}>{attachment.size}</Text>
-                </View>
-                <Text style={{ color: colors.primary, fontWeight: '600' }}>↓</Text>
-              </View>
-            ))}
-          </View>
-        )}
+        {item.agenda ? <HtmlContent label="Agenda" html={item.agenda} /> : null}
+        {item.details ? <HtmlContent label="Details" html={item.details} /> : null}
+        {item.mom ? <HtmlContent label="Minutes of Meeting" html={item.mom} /> : null}
+        <DetailSection title="Schedule">
+          <DetailField label="Date" value={fmt(item.meetingDate)} />
+          <DetailField label="Time" value={fmt(item.meetingTime)} />
+          <DetailField label="Duration" value={item.duration ? item.duration + ' min' : null} />
+        </DetailSection>
+        <DetailSection title="Links">
+          <DetailField label="Teams Link" value={item.teamsLink} />
+          <DetailField label="Meet Link" value={item.meetLink} />
+        </DetailSection>
       </ScrollView>
+      )}
 
-      <ActionBottomSheet
-        isVisible={isBottomSheetOpen}
-        onClose={() => setIsBottomSheetOpen(false)}
-        actions={actions}
-      />
-      <ConfirmationDialog
-        isOpen={confirmationType === 'delete'}
-        onClose={() => setConfirmationType(null)}
-        onConfirm={handleDelete}
-        type="delete"
-        isLoading={isLoading}
-      />
-      <ConfirmationDialog
-        isOpen={confirmationType === 'archive'}
-        onClose={() => setConfirmationType(null)}
-        onConfirm={handleArchive}
-        type="archive"
-        isLoading={isLoading}
-      />
+      <ActionBottomSheet isVisible={isBottomSheetOpen} onClose={() => setIsBottomSheetOpen(false)} actions={actions} />
+      <AuditInfo isVisible={showAudit} onClose={() => setShowAudit(false)} createdBy={item?.createdBy} updatedBy={item?.updatedBy} createdAt={item?.createdAt} updatedAt={item?.updatedAt} />
     </SafeAreaView>
   );
 }

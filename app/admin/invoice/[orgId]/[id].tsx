@@ -1,9 +1,9 @@
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { PageHeader } from '@/components/ui/page-header';
 import { StatusBadge } from '@/components/ui/status-badge';
-import { MetadataCard } from '@/components/ui/metadata-card';
+import { DetailField, DetailSection, LinkedField, HtmlContent, AuditInfo } from '@/components/details';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-import { MoreVertical, Edit, ArchiveRestore, Share2, Trash2, Paperclip, MessageSquare, ImageIcon, FileDown, Clock, History } from 'lucide-react-native';
+import { MoreVertical, Edit, ArchiveRestore, Share2, Trash2, Info, Paperclip, MessageSquare, ImageIcon, FileDown, Clock, History } from 'lucide-react-native';
 import React, { useState } from 'react';
 import { ActivityIndicator, ScrollView, Text, View, Pressable, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -19,14 +19,17 @@ import { EntityHistory } from '@/components/entity/entity-history';
 import { useInvoice } from '@/services/invoice';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
 
+function fmt(d: string | Date | undefined | null) { if (!d) return '—'; return new Date(d).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }); }
+
 export default function InvoiceDetailScreen() {
   const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
   const router = useRouter();
   const colors = useThemeColors();
   const { isAdmin } = useOrganisationContext();
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
-  const [confirmationType, setConfirmationType] = useState<'delete' | 'archive' | 'unarchive' | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [confirmationType, setConfirmationType] = useState<'delete' | 'archive' | null>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [showAudit, setShowAudit] = useState(false);
   const [showAttachments, setShowAttachments] = useState(false);
   const [showComments, setShowComments] = useState(false);
   const [showImages, setShowImages] = useState(false);
@@ -37,27 +40,19 @@ export default function InvoiceDetailScreen() {
   const refreshControl = useRefreshControl(refetch, isRefetching);
 
   const handleDelete = async () => {
-    setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    setIsLoading(false);
+    setIsProcessing(true);
+    await new Promise((r) => setTimeout(r, 800));
+    setIsProcessing(false);
     setConfirmationType(null);
     router.push(`/admin/invoices/${orgId}`);
   };
 
   const handleArchive = async () => {
-    setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    setIsLoading(false);
+    setIsProcessing(true);
+    await new Promise((r) => setTimeout(r, 800));
+    setIsProcessing(false);
     setConfirmationType(null);
     Alert.alert('Success', 'Invoice archived successfully');
-  };
-
-  const handleUnarchive = async () => {
-    setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    setIsLoading(false);
-    setConfirmationType(null);
-    Alert.alert('Success', 'Invoice unarchived successfully');
   };
 
   const actions: ActionItem[] = [
@@ -68,13 +63,7 @@ export default function InvoiceDetailScreen() {
       onPress: () => router.push(`/admin/invoice/${orgId}/${id}/edit`),
       color: 'primary' as const,
     }] : []),
-    ...(isAdmin ? [item?.status === 'archived' ? {
-      id: 'unarchive',
-      label: 'Unarchive',
-      icon: <ArchiveRestore size={24} color={colors.success} />,
-      onPress: () => setConfirmationType('unarchive'),
-      color: 'success' as const,
-    } : {
+    ...(isAdmin ? [{
       id: 'archive',
       label: 'Archive',
       icon: <ArchiveRestore size={24} color={colors.warning} />,
@@ -87,12 +76,13 @@ export default function InvoiceDetailScreen() {
     { id: 'pdf', label: 'Download PDF', icon: <FileDown size={24} color={colors.success} />, onPress: () => downloadAndSharePdf('invoice', id || ''), color: 'success' as const },
     { id: 'timeline', label: 'Timeline', icon: <Clock size={24} color={colors.secondary} />, onPress: () => setShowTimeline(true), color: 'primary' as const },
     { id: 'history', label: 'History', icon: <History size={24} color={colors.secondary} />, onPress: () => setShowHistory(true), color: 'primary' as const },
+    { id: 'audit', label: 'Audit Info', icon: <Info size={24} color={colors.secondary} />, onPress: () => setShowAudit(true), color: 'primary' as const },
     {
       id: 'share',
       label: 'Share',
       icon: <Share2 size={24} color={colors.success} />,
       onPress: () => Alert.alert('Share', 'Share functionality coming soon'),
-      color: 'success',
+      color: 'success' as const,
     },
     ...(isAdmin ? [{
       id: 'delete',
@@ -107,14 +97,13 @@ export default function InvoiceDetailScreen() {
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
       <Stack.Screen options={{ headerShown: false }} />
       <PageHeader
-        title={item?.name || 'Loading...'}
+        title={item?.title || item?.title || item?.name || 'Loading...'}
         rightAction={
           <Pressable onPress={() => setIsBottomSheetOpen(true)} style={{ padding: 8 }}>
             <MoreVertical size={20} color={colors.primary} />
           </Pressable>
         }
       />
-
 
       {isLoadingItem || !item ? (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -124,54 +113,36 @@ export default function InvoiceDetailScreen() {
       ) : (
       <ScrollView
         refreshControl={refreshControl}
-        contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 16, gap: 16 }}
+        contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 8, paddingBottom: 24, gap: 14 }}
         showsVerticalScrollIndicator={false}
       >
         <StatusBadge status={item.status} />
-
-        <View style={{ gap: 8 }}>
-          <Text style={{ fontSize: 14, fontWeight: '600', color: colors.text }}>Description</Text>
-          <Text style={{ fontSize: 14, color: colors.sub, lineHeight: 20 }}>{item.description}</Text>
-        </View>
-
-        <MetadataCard
-          rows={[
-            { label: 'Owner', value: item.metadata?.owner || 'N/A' },
-            { label: 'Priority', value: item.metadata?.priority || 'N/A' },
-            { label: 'Created', value: new Date(item.createdAt).toLocaleDateString() },
-            { label: 'Updated', value: new Date(item.updatedAt).toLocaleDateString() },
-          ]}
-        />
-
+        {item.description ? <HtmlContent label="Description" html={item.description} /> : null}
+        <DetailSection title="Financial">
+          <DetailField label="Total Amount" value={item.totalAmount != null ? '$' + Number(item.totalAmount).toLocaleString() : null} />
+          <DetailField label="Is Expense" value={item.isExpense ? 'Yes' : 'No'} />
+          <DetailField label="Due Date" value={fmt(item.dueDate)} />
+          <DetailField label="Paid At" value={fmt(item.paidAt)} />
+          <DetailField label="Link" value={item.link} />
+        </DetailSection>
+        <DetailSection title="Details">
+          <DetailField label="Archived" value={item.archived ? 'Yes' : 'No'} />
+          <DetailField label="Flagged" value={item.isFlagged ? 'Yes' : 'No'} />
+        </DetailSection>
+        <DetailSection title="Relationships">
+          <LinkedField label="Vendor" icon="vendor" value={item.vendor?.name} route={`/admin/vendor/${orgId}/${item.vendor?._id}`} />
+          <LinkedField label="Quote" icon="quote" value={item.quote?.title} route={`/admin/quote/${orgId}/${item.quote?._id}`} />
+          <LinkedField label="Work Order" icon="workorder" value={item.workorder?.title} route={`/admin/workorder/${orgId}/${item.workorder?._id}`} />
+          <LinkedField label="Workflow" icon="workflow" value={item.workflow?.title} route={`/admin/workflow/${orgId}/${item.workflow?._id}`} />
+          <LinkedField label="Transaction" icon="financialYear" value={item.transaction?.description}  />
+        </DetailSection>
       </ScrollView>
       )}
 
-      <ActionBottomSheet
-        isVisible={isBottomSheetOpen}
-        onClose={() => setIsBottomSheetOpen(false)}
-        actions={actions}
-      />
-      <ConfirmationDialog
-        isOpen={confirmationType === 'delete'}
-        onClose={() => setConfirmationType(null)}
-        onConfirm={handleDelete}
-        type="delete"
-        isLoading={isLoading}
-      />
-      <ConfirmationDialog
-        isOpen={confirmationType === 'archive'}
-        onClose={() => setConfirmationType(null)}
-        onConfirm={handleArchive}
-        type="archive"
-        isLoading={isLoading}
-      />
-      <ConfirmationDialog
-        isOpen={confirmationType === 'unarchive'}
-        onClose={() => setConfirmationType(null)}
-        onConfirm={handleUnarchive}
-        type="archive"
-        isLoading={isLoading}
-      />
+      <ActionBottomSheet isVisible={isBottomSheetOpen} onClose={() => setIsBottomSheetOpen(false)} actions={actions} />
+      <ConfirmationDialog isOpen={confirmationType === 'delete'} onClose={() => setConfirmationType(null)} onConfirm={handleDelete} type="delete" isLoading={isProcessing} />
+      <ConfirmationDialog isOpen={confirmationType === 'archive'} onClose={() => setConfirmationType(null)} onConfirm={handleArchive} type="archive" isLoading={isProcessing} />
+      <AuditInfo isVisible={showAudit} onClose={() => setShowAudit(false)} createdBy={item?.createdBy} updatedBy={item?.updatedBy} createdAt={item?.createdAt} updatedAt={item?.updatedAt} />
       <EntityAttachments isVisible={showAttachments} onClose={() => setShowAttachments(false)} entity={'invoice'} entityId={id || ''} orgId={orgId || ''} />
       <EntityComments isVisible={showComments} onClose={() => setShowComments(false)} entity={'invoice'} entityId={id || ''} orgId={orgId || ''} />
       <EntityImages isVisible={showImages} onClose={() => setShowImages(false)} entity={'invoice'} entityId={id || ''} orgId={orgId || ''} />

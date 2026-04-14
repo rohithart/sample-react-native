@@ -1,17 +1,19 @@
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { PageHeader } from '@/components/ui/page-header';
-import { StatusBadge } from '@/components/ui/status-badge';
-import { MetadataCard } from '@/components/ui/metadata-card';
+import { DetailField, DetailSection, LinkedField, AuditInfo } from '@/components/details';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-import { MoreVertical, ArchiveRestore, Share2, Trash2 } from 'lucide-react-native';
+import { MoreVertical, Edit, ArchiveRestore, Share2, Trash2, Info } from 'lucide-react-native';
 import React, { useState } from 'react';
 import { ActivityIndicator, ScrollView, Text, View, Pressable, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ActionBottomSheet, ActionItem } from '@/components/sheets/action-bottom-sheet';
 import { ConfirmationDialog } from '@/components/dialogs/confirmation-dialog';
 import { useOrganisationContext } from '@/context/organisation-context';
+
 import { useBudget } from '@/services/budget';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
+
+function fmt(d: string | Date | undefined | null) { if (!d) return '—'; return new Date(d).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }); }
 
 export default function BudgetDetailScreen() {
   const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
@@ -19,57 +21,53 @@ export default function BudgetDetailScreen() {
   const colors = useThemeColors();
   const { isAdmin } = useOrganisationContext();
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
-  const [confirmationType, setConfirmationType] = useState<'delete' | 'archive' | 'unarchive' | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [confirmationType, setConfirmationType] = useState<'delete' | 'archive' | null>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [showAudit, setShowAudit] = useState(false);
+
 
   const { data: item, isLoading: isLoadingItem, refetch, isRefetching } = useBudget(id || '');
   const refreshControl = useRefreshControl(refetch, isRefetching);
 
   const handleDelete = async () => {
-    setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    setIsLoading(false);
+    setIsProcessing(true);
+    await new Promise((r) => setTimeout(r, 800));
+    setIsProcessing(false);
     setConfirmationType(null);
     router.push(`/admin/budgets/${orgId}`);
   };
 
   const handleArchive = async () => {
-    setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    setIsLoading(false);
+    setIsProcessing(true);
+    await new Promise((r) => setTimeout(r, 800));
+    setIsProcessing(false);
     setConfirmationType(null);
     Alert.alert('Success', 'Budget archived successfully');
   };
 
-  const handleUnarchive = async () => {
-    setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    setIsLoading(false);
-    setConfirmationType(null);
-    Alert.alert('Success', 'Budget unarchived successfully');
-  };
-
   const actions: ActionItem[] = [
-
-    ...(isAdmin ? [item?.status === 'archived' ? {
-      id: 'unarchive',
-      label: 'Unarchive',
-      icon: <ArchiveRestore size={24} color={colors.success} />,
-      onPress: () => setConfirmationType('unarchive'),
-      color: 'success' as const,
-    } : {
+    ...(isAdmin ? [{
+      id: 'edit',
+      label: 'Edit',
+      icon: <Edit size={24} color={colors.primary} />,
+      onPress: () => router.push(`/admin/budget/${orgId}/${id}/edit`),
+      color: 'primary' as const,
+    }] : []),
+    ...(isAdmin ? [{
       id: 'archive',
       label: 'Archive',
       icon: <ArchiveRestore size={24} color={colors.warning} />,
       onPress: () => setConfirmationType('archive'),
       color: 'warning' as const,
     }] : []),
+
+    { id: 'audit', label: 'Audit Info', icon: <Info size={24} color={colors.secondary} />, onPress: () => setShowAudit(true), color: 'primary' as const },
     {
       id: 'share',
       label: 'Share',
       icon: <Share2 size={24} color={colors.success} />,
       onPress: () => Alert.alert('Share', 'Share functionality coming soon'),
-      color: 'success',
+      color: 'success' as const,
     },
     ...(isAdmin ? [{
       id: 'delete',
@@ -84,14 +82,13 @@ export default function BudgetDetailScreen() {
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
       <Stack.Screen options={{ headerShown: false }} />
       <PageHeader
-        title={item?.name || 'Loading...'}
+        title={item?.title || item?.title || item?.name || 'Loading...'}
         rightAction={
           <Pressable onPress={() => setIsBottomSheetOpen(true)} style={{ padding: 8 }}>
             <MoreVertical size={20} color={colors.primary} />
           </Pressable>
         }
       />
-
 
       {isLoadingItem || !item ? (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -101,54 +98,25 @@ export default function BudgetDetailScreen() {
       ) : (
       <ScrollView
         refreshControl={refreshControl}
-        contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 16, gap: 16 }}
+        contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 8, paddingBottom: 24, gap: 14 }}
         showsVerticalScrollIndicator={false}
       >
-        <StatusBadge status={item.status} />
-
-        <View style={{ gap: 8 }}>
-          <Text style={{ fontSize: 14, fontWeight: '600', color: colors.text }}>Description</Text>
-          <Text style={{ fontSize: 14, color: colors.sub, lineHeight: 20 }}>{item.description}</Text>
-        </View>
-
-        <MetadataCard
-          rows={[
-            { label: 'Owner', value: item.metadata?.owner || 'N/A' },
-            { label: 'Priority', value: item.metadata?.priority || 'N/A' },
-            { label: 'Created', value: new Date(item.createdAt).toLocaleDateString() },
-            { label: 'Updated', value: new Date(item.updatedAt).toLocaleDateString() },
-          ]}
-        />
-
+        <DetailSection title="Financial">
+          <DetailField label="Amount" value={item.amount != null ? '$' + Number(item.amount).toLocaleString() : null} />
+          <DetailField label="Approved" value={item.isApproved ? 'Yes' : 'No'} />
+        </DetailSection>
+        <DetailSection title="Relationships">
+          <LinkedField label="Chart of Account" icon="chartOfAccount" value={item.chartOfAccount?.title} route={`/admin/coa/${orgId}/${item.chartOfAccount?._id}`} />
+          <LinkedField label="Financial Year" icon="financialYear" value={item.financialYear ? fmt(item.financialYear.from) + ' – ' + fmt(item.financialYear.to) : null} route={`/admin/fy/${orgId}/${item.financialYear?._id}`} />
+        </DetailSection>
       </ScrollView>
       )}
 
-      <ActionBottomSheet
-        isVisible={isBottomSheetOpen}
-        onClose={() => setIsBottomSheetOpen(false)}
-        actions={actions}
-      />
-      <ConfirmationDialog
-        isOpen={confirmationType === 'delete'}
-        onClose={() => setConfirmationType(null)}
-        onConfirm={handleDelete}
-        type="delete"
-        isLoading={isLoading}
-      />
-      <ConfirmationDialog
-        isOpen={confirmationType === 'archive'}
-        onClose={() => setConfirmationType(null)}
-        onConfirm={handleArchive}
-        type="archive"
-        isLoading={isLoading}
-      />
-      <ConfirmationDialog
-        isOpen={confirmationType === 'unarchive'}
-        onClose={() => setConfirmationType(null)}
-        onConfirm={handleUnarchive}
-        type="archive"
-        isLoading={isLoading}
-      />
+      <ActionBottomSheet isVisible={isBottomSheetOpen} onClose={() => setIsBottomSheetOpen(false)} actions={actions} />
+      <ConfirmationDialog isOpen={confirmationType === 'delete'} onClose={() => setConfirmationType(null)} onConfirm={handleDelete} type="delete" isLoading={isProcessing} />
+      <ConfirmationDialog isOpen={confirmationType === 'archive'} onClose={() => setConfirmationType(null)} onConfirm={handleArchive} type="archive" isLoading={isProcessing} />
+      <AuditInfo isVisible={showAudit} onClose={() => setShowAudit(false)} createdBy={item?.createdBy} updatedBy={item?.updatedBy} createdAt={item?.createdAt} updatedAt={item?.updatedAt} />
+
     </SafeAreaView>
   );
 }

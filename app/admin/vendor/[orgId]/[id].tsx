@@ -1,9 +1,8 @@
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { PageHeader } from '@/components/ui/page-header';
-import { StatusBadge } from '@/components/ui/status-badge';
-import { MetadataCard } from '@/components/ui/metadata-card';
+import { DetailField, DetailSection, AuditInfo } from '@/components/details';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-import { MoreVertical, Edit, ArchiveRestore, Share2, Trash2, MessageSquare, Clock } from 'lucide-react-native';
+import { MoreVertical, Edit, ArchiveRestore, Share2, Trash2, Info, MessageSquare, Clock } from 'lucide-react-native';
 import React, { useState } from 'react';
 import { ActivityIndicator, ScrollView, Text, View, Pressable, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -21,8 +20,9 @@ export default function VendorDetailScreen() {
   const colors = useThemeColors();
   const { isAdmin } = useOrganisationContext();
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
-  const [confirmationType, setConfirmationType] = useState<'delete' | 'archive' | 'unarchive' | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [confirmationType, setConfirmationType] = useState<'delete' | 'archive' | null>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [showAudit, setShowAudit] = useState(false);
   const [showComments, setShowComments] = useState(false);
   const [showTimeline, setShowTimeline] = useState(false);
 
@@ -30,27 +30,19 @@ export default function VendorDetailScreen() {
   const refreshControl = useRefreshControl(refetch, isRefetching);
 
   const handleDelete = async () => {
-    setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    setIsLoading(false);
+    setIsProcessing(true);
+    await new Promise((r) => setTimeout(r, 800));
+    setIsProcessing(false);
     setConfirmationType(null);
     router.push(`/admin/vendors/${orgId}`);
   };
 
   const handleArchive = async () => {
-    setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    setIsLoading(false);
+    setIsProcessing(true);
+    await new Promise((r) => setTimeout(r, 800));
+    setIsProcessing(false);
     setConfirmationType(null);
     Alert.alert('Success', 'Vendor archived successfully');
-  };
-
-  const handleUnarchive = async () => {
-    setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    setIsLoading(false);
-    setConfirmationType(null);
-    Alert.alert('Success', 'Vendor unarchived successfully');
   };
 
   const actions: ActionItem[] = [
@@ -61,13 +53,7 @@ export default function VendorDetailScreen() {
       onPress: () => router.push(`/admin/vendor/${orgId}/${id}/edit`),
       color: 'primary' as const,
     }] : []),
-    ...(isAdmin ? [item?.status === 'archived' ? {
-      id: 'unarchive',
-      label: 'Unarchive',
-      icon: <ArchiveRestore size={24} color={colors.success} />,
-      onPress: () => setConfirmationType('unarchive'),
-      color: 'success' as const,
-    } : {
+    ...(isAdmin ? [{
       id: 'archive',
       label: 'Archive',
       icon: <ArchiveRestore size={24} color={colors.warning} />,
@@ -76,12 +62,13 @@ export default function VendorDetailScreen() {
     }] : []),
     { id: 'comments', label: 'Comments', icon: <MessageSquare size={24} color={colors.primary} />, onPress: () => setShowComments(true), color: 'primary' as const },
     { id: 'timeline', label: 'Timeline', icon: <Clock size={24} color={colors.secondary} />, onPress: () => setShowTimeline(true), color: 'primary' as const },
+    { id: 'audit', label: 'Audit Info', icon: <Info size={24} color={colors.secondary} />, onPress: () => setShowAudit(true), color: 'primary' as const },
     {
       id: 'share',
       label: 'Share',
       icon: <Share2 size={24} color={colors.success} />,
       onPress: () => Alert.alert('Share', 'Share functionality coming soon'),
-      color: 'success',
+      color: 'success' as const,
     },
     ...(isAdmin ? [{
       id: 'delete',
@@ -96,14 +83,13 @@ export default function VendorDetailScreen() {
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
       <Stack.Screen options={{ headerShown: false }} />
       <PageHeader
-        title={item?.name || 'Loading...'}
+        title={item?.name || item?.title || item?.name || 'Loading...'}
         rightAction={
           <Pressable onPress={() => setIsBottomSheetOpen(true)} style={{ padding: 8 }}>
             <MoreVertical size={20} color={colors.primary} />
           </Pressable>
         }
       />
-
 
       {isLoadingItem || !item ? (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -113,54 +99,27 @@ export default function VendorDetailScreen() {
       ) : (
       <ScrollView
         refreshControl={refreshControl}
-        contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 16, gap: 16 }}
+        contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 8, paddingBottom: 24, gap: 14 }}
         showsVerticalScrollIndicator={false}
       >
-        <StatusBadge status={item.status} />
-
-        <View style={{ gap: 8 }}>
-          <Text style={{ fontSize: 14, fontWeight: '600', color: colors.text }}>Description</Text>
-          <Text style={{ fontSize: 14, color: colors.sub, lineHeight: 20 }}>{item.description}</Text>
-        </View>
-
-        <MetadataCard
-          rows={[
-            { label: 'Owner', value: item.metadata?.owner || 'N/A' },
-            { label: 'Priority', value: item.metadata?.priority || 'N/A' },
-            { label: 'Created', value: new Date(item.createdAt).toLocaleDateString() },
-            { label: 'Updated', value: new Date(item.updatedAt).toLocaleDateString() },
-          ]}
-        />
-
+        <DetailSection title="Contact">
+          <DetailField label="Email" value={item.email} />
+          <DetailField label="Contact Person" value={item.contactPerson} />
+          <DetailField label="Contact Number" value={item.contactNumber} />
+          <DetailField label="Address" value={item.address} />
+        </DetailSection>
+        <DetailSection title="Business">
+          <DetailField label="Tax Number" value={item.tax} />
+          <DetailField label="Reference" value={item.ref} />
+          <DetailField label="Archived" value={item.archived ? 'Yes' : 'No'} />
+        </DetailSection>
       </ScrollView>
       )}
 
-      <ActionBottomSheet
-        isVisible={isBottomSheetOpen}
-        onClose={() => setIsBottomSheetOpen(false)}
-        actions={actions}
-      />
-      <ConfirmationDialog
-        isOpen={confirmationType === 'delete'}
-        onClose={() => setConfirmationType(null)}
-        onConfirm={handleDelete}
-        type="delete"
-        isLoading={isLoading}
-      />
-      <ConfirmationDialog
-        isOpen={confirmationType === 'archive'}
-        onClose={() => setConfirmationType(null)}
-        onConfirm={handleArchive}
-        type="archive"
-        isLoading={isLoading}
-      />
-      <ConfirmationDialog
-        isOpen={confirmationType === 'unarchive'}
-        onClose={() => setConfirmationType(null)}
-        onConfirm={handleUnarchive}
-        type="archive"
-        isLoading={isLoading}
-      />
+      <ActionBottomSheet isVisible={isBottomSheetOpen} onClose={() => setIsBottomSheetOpen(false)} actions={actions} />
+      <ConfirmationDialog isOpen={confirmationType === 'delete'} onClose={() => setConfirmationType(null)} onConfirm={handleDelete} type="delete" isLoading={isProcessing} />
+      <ConfirmationDialog isOpen={confirmationType === 'archive'} onClose={() => setConfirmationType(null)} onConfirm={handleArchive} type="archive" isLoading={isProcessing} />
+      <AuditInfo isVisible={showAudit} onClose={() => setShowAudit(false)} createdBy={item?.createdBy} updatedBy={item?.updatedBy} createdAt={item?.createdAt} updatedAt={item?.updatedAt} />
       <EntityComments isVisible={showComments} onClose={() => setShowComments(false)} entity={'vendor'} entityId={id || ''} orgId={orgId || ''} />
       <EntityTimeline isVisible={showTimeline} onClose={() => setShowTimeline(false)} entity={'vendor'} entityId={id || ''} />
     </SafeAreaView>
