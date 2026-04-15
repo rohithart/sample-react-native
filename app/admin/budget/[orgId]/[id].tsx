@@ -12,6 +12,7 @@ import { useOrganisationContext } from '@/context/organisation-context';
 
 import { useBudget } from '@/services/budget';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
+import { resolveId, isPopulated } from '@/utils/resolve-ref';
 
 function fmt(d: string | Date | undefined | null) { if (!d) return '—'; return new Date(d).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }); }
 
@@ -106,8 +107,8 @@ export default function BudgetDetailScreen() {
           <DetailField label="Approved" value={item.isApproved ? 'Yes' : 'No'} />
         </DetailSection>
         <DetailSection title="Relationships">
-          <LinkedField label="Chart of Account" icon="chartOfAccount" value={item.chartOfAccount?.title} route={`/admin/coa/${orgId}/${item.chartOfAccount?._id}`} />
-          <LinkedField label="Financial Year" icon="financialYear" value={item.financialYear ? fmt(item.financialYear.from) + ' – ' + fmt(item.financialYear.to) : null} route={`/admin/fy/${orgId}/${item.financialYear?._id}`} />
+          <LinkedField label="Chart of Account" icon="chartOfAccount" value={item.chartOfAccount?.title} route={`/admin/coa/${orgId}/${resolveId(item.chartOfAccount)}`} />
+          <LinkedField label="Financial Year" icon="financialYear" value={isPopulated(item.financialYear) ? fmt(item.financialYear.from) + ' – ' + fmt(item.financialYear.to) : null} route={`/admin/fy/${orgId}/${resolveId(item.financialYear)}`} />
         </DetailSection>
       </ScrollView>
       )}

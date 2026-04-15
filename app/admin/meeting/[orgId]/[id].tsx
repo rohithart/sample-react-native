@@ -14,6 +14,7 @@ import { EntityComments } from '@/components/entity/entity-comments';
 import { downloadAndSharePdf } from '@/utils/pdf-download';
 import { useMeeting } from '@/services/meeting';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
+import { resolveId } from '@/utils/resolve-ref';
 
 function fmt(d: string | Date | undefined | null) { if (!d) return '—'; return new Date(d).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }); }
 
@@ -123,7 +124,7 @@ export default function MeetingDetailScreen() {
           <DetailField label="Archived" value={item.archived ? 'Yes' : 'No'} />
         </DetailSection>
         <DetailSection title="Relationships">
-          <LinkedField label="Group" icon="group" value={item.group?.title} route={`/admin/group/${orgId}/${item.group?._id}`} />
+          <LinkedField label="Group" icon="group" value={item.group?.title} route={`/admin/group/${orgId}/${resolveId(item.group)}`} />
         </DetailSection>
       </ScrollView>
       )}

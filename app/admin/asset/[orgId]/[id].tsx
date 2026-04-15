@@ -16,6 +16,7 @@ import { downloadAndSharePdf } from '@/utils/pdf-download';
 import { EntityTimeline } from '@/components/entity/entity-timeline';
 import { useAsset } from '@/services/asset';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
+import { resolveId } from '@/utils/resolve-ref';
 
 function fmt(d: string | Date | undefined | null) { if (!d) return '—'; return new Date(d).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }); }
 
@@ -128,7 +129,7 @@ export default function AssetDetailScreen() {
           <DetailField label="Flagged" value={item.isFlagged ? 'Yes' : 'No'} />
         </DetailSection>
         <DetailSection title="Relationships">
-          <LinkedField label="Asset Type" icon="assetType" value={item.assetType?.title} route={`/admin/asset-type/${orgId}/${item.assetType?._id}`} />
+          <LinkedField label="Asset Type" icon="assetType" value={item.assetType?.title} route={`/admin/asset-type/${orgId}/${resolveId(item.assetType)}`} />
         </DetailSection>
       </ScrollView>
       )}

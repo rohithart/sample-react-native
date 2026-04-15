@@ -12,6 +12,7 @@ import { useOrganisationContext } from '@/context/organisation-context';
 
 import { useEvent } from '@/services/event';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
+import { resolveId } from '@/utils/resolve-ref';
 
 function fmt(d: string | Date | undefined | null) { if (!d) return '—'; return new Date(d).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }); }
 
@@ -115,7 +116,7 @@ export default function EventDetailScreen() {
           <DetailField label="Interval" value={item.interval ? String(item.interval) : null} />
         </DetailSection>
         <DetailSection title="Relationships">
-          <LinkedField label="Event Type" icon="eventType" value={item.eventType?.title} route={`/admin/event-type/${orgId}/${item.eventType?._id}`} />
+          <LinkedField label="Event Type" icon="eventType" value={item.eventType?.title} route={`/admin/event-type/${orgId}/${resolveId(item.eventType)}`} />
         </DetailSection>
       </ScrollView>
       )}

@@ -7,8 +7,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 interface AuditInfoProps {
   isVisible: boolean;
   onClose: () => void;
-  createdBy?: string;
-  updatedBy?: string;
+  createdBy?: unknown;
+  updatedBy?: unknown;
   createdAt?: string | Date;
   updatedAt?: string | Date;
 }
@@ -25,6 +25,18 @@ function formatDate(d?: string | Date): string {
   });
 }
 
+/** Safely resolve a user ref that may be a string name, a User object, or nullish */
+function resolveUserName(ref: unknown): string {
+  if (!ref) return '—';
+  if (typeof ref === 'string') return ref;
+  if (typeof ref === 'object' && ref !== null) {
+    const obj = ref as Record<string, unknown>;
+    if (typeof obj.name === 'string' && obj.name) return obj.name;
+    if (typeof obj.email === 'string' && obj.email) return obj.email;
+  }
+  return '—';
+}
+
 export function AuditInfo({ isVisible, onClose, createdBy, updatedBy, createdAt, updatedAt }: AuditInfoProps) {
   const { bg, card, text, sub, border, primary, secondary } = useThemeColors();
   const { top, bottom } = useSafeAreaInsets();
@@ -32,9 +44,9 @@ export function AuditInfo({ isVisible, onClose, createdBy, updatedBy, createdAt,
   if (!isVisible) return null;
 
   const rows: { icon: React.ReactNode; label: string; value: string }[] = [
-    { icon: <User size={16} color={primary} />, label: 'Created by', value: createdBy || '—' },
+    { icon: <User size={16} color={primary} />, label: 'Created by', value: resolveUserName(createdBy) },
     { icon: <Calendar size={16} color={primary} />, label: 'Created at', value: formatDate(createdAt) },
-    { icon: <User size={16} color={secondary} />, label: 'Updated by', value: updatedBy || '—' },
+    { icon: <User size={16} color={secondary} />, label: 'Updated by', value: resolveUserName(updatedBy) },
     { icon: <RefreshCw size={16} color={secondary} />, label: 'Updated at', value: formatDate(updatedAt) },
   ];
 

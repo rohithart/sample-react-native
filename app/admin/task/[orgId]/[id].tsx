@@ -18,6 +18,7 @@ import { EntityTimeline } from '@/components/entity/entity-timeline';
 import { EntityHistory } from '@/components/entity/entity-history';
 import { useTask } from '@/services/task';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
+import { resolveId } from '@/utils/resolve-ref';
 
 export default function TaskDetailScreen() {
   const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
@@ -121,8 +122,8 @@ export default function TaskDetailScreen() {
           <DetailField label="Flagged" value={item.isFlagged ? 'Yes' : 'No'} />
         </DetailSection>
         <DetailSection title="Relationships">
-          <LinkedField label="Assigned User" icon="user" value={item.user?.user?.name || item.user?.user?.email} route={`/admin/user/${orgId}/${item.user?._id}`} />
-          <LinkedField label="Workflow" icon="workflow" value={item.workflow?.title} route={`/admin/workflow/${orgId}/${item.workflow?._id}`} />
+          <LinkedField label="Assigned User" icon="user" value={item.user?.user?.name || item.user?.user?.email} route={`/admin/user/${orgId}/${resolveId(item.user)}`} />
+          <LinkedField label="Workflow" icon="workflow" value={item.workflow?.title} route={`/admin/workflow/${orgId}/${resolveId(item.workflow)}`} />
         </DetailSection>
       </ScrollView>
       )}

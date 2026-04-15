@@ -18,6 +18,7 @@ import { EntityTimeline } from '@/components/entity/entity-timeline';
 import { EntityHistory } from '@/components/entity/entity-history';
 import { useInvoice } from '@/services/invoice';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
+import { resolveId } from '@/utils/resolve-ref';
 
 function fmt(d: string | Date | undefined | null) { if (!d) return '—'; return new Date(d).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }); }
 
@@ -130,10 +131,10 @@ export default function InvoiceDetailScreen() {
           <DetailField label="Flagged" value={item.isFlagged ? 'Yes' : 'No'} />
         </DetailSection>
         <DetailSection title="Relationships">
-          <LinkedField label="Vendor" icon="vendor" value={item.vendor?.name} route={`/admin/vendor/${orgId}/${item.vendor?._id}`} />
-          <LinkedField label="Quote" icon="quote" value={item.quote?.title} route={`/admin/quote/${orgId}/${item.quote?._id}`} />
-          <LinkedField label="Work Order" icon="workorder" value={item.workorder?.title} route={`/admin/workorder/${orgId}/${item.workorder?._id}`} />
-          <LinkedField label="Workflow" icon="workflow" value={item.workflow?.title} route={`/admin/workflow/${orgId}/${item.workflow?._id}`} />
+          <LinkedField label="Vendor" icon="vendor" value={item.vendor?.name} route={`/admin/vendor/${orgId}/${resolveId(item.vendor)}`} />
+          <LinkedField label="Quote" icon="quote" value={item.quote?.title} route={`/admin/quote/${orgId}/${resolveId(item.quote)}`} />
+          <LinkedField label="Work Order" icon="workorder" value={item.workorder?.title} route={`/admin/workorder/${orgId}/${resolveId(item.workorder)}`} />
+          <LinkedField label="Workflow" icon="workflow" value={item.workflow?.title} route={`/admin/workflow/${orgId}/${resolveId(item.workflow)}`} />
           <LinkedField label="Transaction" icon="financialYear" value={item.transaction?.description}  />
         </DetailSection>
       </ScrollView>

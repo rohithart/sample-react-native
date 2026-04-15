@@ -12,6 +12,7 @@ import { useOrganisationContext } from '@/context/organisation-context';
 import { EntityTimeline } from '@/components/entity/entity-timeline';
 import { useVote } from '@/services/vote';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
+import { resolveId } from '@/utils/resolve-ref';
 
 function fmt(d: string | Date | undefined | null) { if (!d) return '—'; return new Date(d).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }); }
 
@@ -108,8 +109,8 @@ export default function VoteDetailScreen() {
           <DetailField label="End Date" value={fmt(item.endDate)} />
         </DetailSection>
         <DetailSection title="Relationships">
-          <LinkedField label="Group" icon="group" value={item.group?.title} route={`/admin/group/${orgId}/${item.group?._id}`} />
-          <LinkedField label="Workflow" icon="workflow" value={item.workflow?.title} route={`/admin/workflow/${orgId}/${item.workflow?._id}`} />
+          <LinkedField label="Group" icon="group" value={item.group?.title} route={`/admin/group/${orgId}/${resolveId(item.group)}`} />
+          <LinkedField label="Workflow" icon="workflow" value={item.workflow?.title} route={`/admin/workflow/${orgId}/${resolveId(item.workflow)}`} />
         </DetailSection>
       </ScrollView>
       )}

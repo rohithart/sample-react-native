@@ -18,6 +18,7 @@ import { EntityTimeline } from '@/components/entity/entity-timeline';
 import { EntityHistory } from '@/components/entity/entity-history';
 import { useEvidence } from '@/services/evidence';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
+import { resolveId } from '@/utils/resolve-ref';
 
 export default function EvidenceDetailScreen() {
   const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
@@ -122,8 +123,8 @@ export default function EvidenceDetailScreen() {
           <DetailField label="Flagged" value={item.isFlagged ? 'Yes' : 'No'} />
         </DetailSection>
         <DetailSection title="Relationships">
-          <LinkedField label="Vendor" icon="vendor" value={item.vendor?.name} route={`/admin/vendor/${orgId}/${item.vendor?._id}`} />
-          <LinkedField label="Workflow" icon="workflow" value={item.workflow?.title} route={`/admin/workflow/${orgId}/${item.workflow?._id}`} />
+          <LinkedField label="Vendor" icon="vendor" value={item.vendor?.name} route={`/admin/vendor/${orgId}/${resolveId(item.vendor)}`} />
+          <LinkedField label="Workflow" icon="workflow" value={item.workflow?.title} route={`/admin/workflow/${orgId}/${resolveId(item.workflow)}`} />
         </DetailSection>
       </ScrollView>
       )}

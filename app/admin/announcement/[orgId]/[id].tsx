@@ -12,6 +12,7 @@ import { useOrganisationContext } from '@/context/organisation-context';
 
 import { useAnnouncement } from '@/services/announcement';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
+import { resolveId } from '@/utils/resolve-ref';
 
 export default function AnnouncementDetailScreen() {
   const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
@@ -104,7 +105,7 @@ export default function AnnouncementDetailScreen() {
           <DetailField label="All Users" value={item.allUsers ? 'Yes' : 'No'} />
         </DetailSection>
         <DetailSection title="Relationships">
-          <LinkedField label="Group" icon="group" value={item.group?.title} route={`/admin/group/${orgId}/${item.group?._id}`} />
+          <LinkedField label="Group" icon="group" value={item.group?.title} route={`/admin/group/${orgId}/${resolveId(item.group)}`} />
         </DetailSection>
       </ScrollView>
       )}

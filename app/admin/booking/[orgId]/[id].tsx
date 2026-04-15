@@ -12,6 +12,7 @@ import { useOrganisationContext } from '@/context/organisation-context';
 
 import { useBooking } from '@/services/booking';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
+import { resolveId } from '@/utils/resolve-ref';
 
 function fmt(d: string | Date | undefined | null) { if (!d) return '—'; return new Date(d).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }); }
 
@@ -116,7 +117,7 @@ export default function BookingDetailScreen() {
           <DetailField label="Rejected By" value={item.rejectedBy} />
         </DetailSection>
         <DetailSection title="Relationships">
-          <LinkedField label="Booking Type" icon="bookingType" value={item.bookingType?.title} route={`/admin/booking-type/${orgId}/${item.bookingType?._id}`} />
+          <LinkedField label="Booking Type" icon="bookingType" value={item.bookingType?.title} route={`/admin/booking-type/${orgId}/${resolveId(item.bookingType)}`} />
         </DetailSection>
       </ScrollView>
       )}
