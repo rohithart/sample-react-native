@@ -2,9 +2,9 @@ import { useOrganisationContext } from '@/context/organisation-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useAttachments, useCreateAttachment, useDeleteAttachment } from '@/services/attachment';
 import type { Attachment } from '@/types';
-import { FileText, Plus, Trash2, X } from 'lucide-react-native';
-import React, { useState } from 'react';
-import { ActivityIndicator, FlatList, Modal, Pressable, Text, TextInput, View } from 'react-native';
+import { Download, File, FileImage, FileSpreadsheet, FileText, FileVideo, Plus, Trash2, X } from 'lucide-react-native';
+import React, { useCallback, useState } from 'react';
+import { ActivityIndicator, Alert, FlatList, Linking, Modal, Pressable, Text, TextInput, View } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type AttachmentEntity = 'organisation' | 'workflow' | 'task' | 'quote' | 'invoice' | 'workorder' | 'evidence' | 'meeting' | 'document' | 'asset' | 'information' | 'transaction';
@@ -15,6 +15,29 @@ interface EntityAttachmentsProps {
   entity: AttachmentEntity;
   entityId: string;
   orgId: string;
+}
+
+function getFileIcon(name?: string) {
+  if (!name) return File;
+  const ext = name.split('.').pop()?.toLowerCase();
+  if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp'].includes(ext ?? '')) return FileImage;
+  if (['mp4', 'mov', 'avi', 'mkv', 'webm'].includes(ext ?? '')) return FileVideo;
+  if (['xls', 'xlsx', 'csv'].includes(ext ?? '')) return FileSpreadsheet;
+  if (['pdf', 'doc', 'docx', 'txt', 'rtf'].includes(ext ?? '')) return FileText;
+  return File;
+}
+
+function formatSize(bytes: string | number | undefined): string | null {
+  if (bytes == null) return null;
+  const n = typeof bytes === 'string' ? parseInt(bytes, 10) : bytes;
+  if (isNaN(n)) return null;
+  if (n < 1024) return `${n} B`;
+  if (n < 1024 * 1024) return `${(n / 1024).toFixed(1)} KB`;
+  return `${(n / (1024 * 1024)).toFixed(1)} MB`;
+}
+
+function fmtDate(d: string) {
+  return new Date(d).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
 export function EntityAttachments({ isVisible, onClose, entity, entityId, orgId }: EntityAttachmentsProps) {
@@ -34,23 +57,88 @@ export function EntityAttachments({ isVisible, onClose, entity, entityId, orgId 
     });
   };
 
-  const renderItem = ({ item }: { item: Attachment }) => (
-    <View style={{ backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border, borderRadius: 10, padding: 12, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-      <View style={{ width: 36, height: 36, borderRadius: 8, backgroundColor: colors.primary + '15', alignItems: 'center', justifyContent: 'center' }}>
-        <FileText size={18} color={colors.primary} />
+  const handleDownload = useCallback(async (item: Attachment) => {
+    const url = (item as any).location || (item as any).url || (item as any).key;
+    if (!url) {
+      Alert.alert('No URL', 'This attachment does not have a download URL.');
+      return;
+    }
+    try {
+      const supported = await Linking.canOpenURL(url);
+      if (supported) {
+        await Linking.openURL(url);
+      } else {
+        Alert.alert('Cannot open', 'Unable to open this file.');
+      }
+    } catch {
+      Alert.alert('Error', 'Failed to open the file.');
+    }
+  }, []);
+
+  const handleDelete = useCallback((id: string) => {
+    Alert.alert('Delete Attachment', 'Are you sure you want to delete this attachment?', [
+      { text: 'Cancel', style: 'cancel' },
+      { text: 'Delete', style: 'destructive', onPress: () => deleteMutation.mutate(id) },
+    ]);
+  }, [deleteMutation]);
+
+  const renderItem = ({ item }: { item: Attachment }) => {
+    const Icon = getFileIcon(item.name);
+    const size = formatSize((item as any).size);
+    const uploader = (item as any).user?.name || (item as any).user?.user?.name;
+
+    return (
+      <View style={{ backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border, borderRadius: 12, padding: 12, gap: 10 }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+          <View style={{ width: 40, height: 40, borderRadius: 10, backgroundColor: colors.primary + '15', alignItems: 'center', justifyContent: 'center' }}>
+            <Icon size={20} color={colors.primary} />
+          </View>
+          <View style={{ flex: 1 }}>
+            <Text style={{ color: colors.text, fontWeight: '600', fontSize: 14 }} numberOfLines={2}>{item.name}</Text>
+            <View style={{ flexDirection: 'row', gap: 8, marginTop: 3, flexWrap: 'wrap' }}>
+              {size && (
+                <View style={{ backgroundColor: colors.primary + '12', borderRadius: 6, paddingHorizontal: 8, paddingVertical: 2 }}>
+                  <Text style={{ fontSize: 11, color: colors.primary, fontWeight: '500' }}>{size}</Text>
+                </View>
+              )}
+              <Text style={{ fontSize: 11, color: colors.sub }}>{fmtDate(item.createdAt)}</Text>
+            </View>
+          </View>
+        </View>
+
+        {uploader && (
+          <Text style={{ fontSize: 11, color: colors.sub }}>Uploaded by {uploader}</Text>
+        )}
+
+        {/* Action row */}
+        <View style={{ flexDirection: 'row', gap: 8, borderTopWidth: 1, borderTopColor: colors.border, paddingTop: 10 }}>
+          <Pressable
+            onPress={() => handleDownload(item)}
+            style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, backgroundColor: colors.primary + '12', borderRadius: 8, paddingVertical: 8 }}
+          >
+            <Download size={16} color={colors.primary} />
+            <Text style={{ color: colors.primary, fontSize: 13, fontWeight: '600' }}>Download</Text>
+          </Pressable>
+          {isAdmin && (
+            <Pressable
+              onPress={() => handleDelete(item._id)}
+              disabled={deleteMutation.isPending}
+              style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, backgroundColor: colors.dangerBg, borderRadius: 8, paddingVertical: 8, paddingHorizontal: 16 }}
+            >
+              {deleteMutation.isPending ? (
+                <ActivityIndicator size="small" color={colors.danger} />
+              ) : (
+                <>
+                  <Trash2 size={14} color={colors.danger} />
+                  <Text style={{ color: colors.danger, fontSize: 13, fontWeight: '600' }}>Delete</Text>
+                </>
+              )}
+            </Pressable>
+          )}
+        </View>
       </View>
-      <View style={{ flex: 1 }}>
-        <Text style={{ color: colors.text, fontWeight: '500', fontSize: 14 }} numberOfLines={1}>{item.name}</Text>
-        {item.size != null && <Text style={{ color: colors.sub, fontSize: 12, marginTop: 2 }}>{formatSize(item.size)}</Text>}
-        <Text style={{ color: colors.sub, fontSize: 11, marginTop: 2 }}>{new Date(item.createdAt).toLocaleDateString()}</Text>
-      </View>
-      {isAdmin && (
-        <Pressable onPress={() => deleteMutation.mutate(item._id)} style={{ padding: 6 }} disabled={deleteMutation.isPending}>
-          {deleteMutation.isPending ? <ActivityIndicator size="small" color={colors.danger} /> : <Trash2 size={16} color={colors.danger} />}
-        </Pressable>
-      )}
-    </View>
-  );
+    );
+  };
 
   if (!isVisible) return null;
 
@@ -104,17 +192,11 @@ export function EntityAttachments({ isVisible, onClose, entity, entityId, orgId 
             data={attachments}
             keyExtractor={(i) => i._id}
             renderItem={renderItem}
-            contentContainerStyle={{ padding: 16, gap: 10, paddingBottom: bottom + 16 }}
+            contentContainerStyle={{ padding: 16, gap: 12, paddingBottom: bottom + 16 }}
             showsVerticalScrollIndicator={false}
           />
         )}
       </SafeAreaView>
     </Modal>
   );
-}
-
-function formatSize(bytes: number): string {
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }

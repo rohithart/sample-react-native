@@ -2,9 +2,9 @@ import { useOrganisationContext } from '@/context/organisation-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useCreateImage, useDeleteImage, useImages } from '@/services/image';
 import type { AppImage } from '@/types';
-import { ImageIcon, Plus, Trash2, X } from 'lucide-react-native';
-import React, { useState } from 'react';
-import { ActivityIndicator, FlatList, Image, Modal, Pressable, Text, TextInput, View } from 'react-native';
+import { ChevronLeft, ChevronRight, ImageIcon, Plus, Trash2, X } from 'lucide-react-native';
+import React, { useCallback, useState } from 'react';
+import { ActivityIndicator, Alert, Dimensions, FlatList, Image, Modal, Pressable, Text, TextInput, View } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type ImageEntity = 'organisation' | 'user' | 'workflow' | 'task' | 'quote' | 'invoice' | 'workorder' | 'evidence' | 'document' | 'asset';
@@ -17,6 +17,11 @@ interface EntityImagesProps {
   orgId: string;
 }
 
+const SCREEN_WIDTH = Dimensions.get('window').width;
+const GAP = 8;
+const PADDING = 16;
+const THUMB_SIZE = (SCREEN_WIDTH - PADDING * 2 - GAP * 2) / 3;
+
 export function EntityImages({ isVisible, onClose, entity, entityId, orgId }: EntityImagesProps) {
   const colors = useThemeColors();
   const { bottom } = useSafeAreaInsets();
@@ -26,6 +31,7 @@ export function EntityImages({ isVisible, onClose, entity, entityId, orgId }: En
   const deleteMutation = useDeleteImage(entity, entityId);
   const [showAdd, setShowAdd] = useState(false);
   const [url, setUrl] = useState('');
+  const [viewerIndex, setViewerIndex] = useState<number | null>(null);
 
   const handleAdd = () => {
     if (!url.trim()) return;
@@ -34,24 +40,30 @@ export function EntityImages({ isVisible, onClose, entity, entityId, orgId }: En
     });
   };
 
-  const renderItem = ({ item }: { item: AppImage }) => (
-    <View style={{ backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border, borderRadius: 10, overflow: 'hidden' }}>
+  const handleDelete = useCallback((id: string) => {
+    Alert.alert('Delete Image', 'Are you sure you want to delete this image?', [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Delete', style: 'destructive', onPress: () => {
+          deleteMutation.mutate(id);
+          setViewerIndex(null);
+        },
+      },
+    ]);
+  }, [deleteMutation]);
+
+  const viewerImage = viewerIndex !== null && images ? images[viewerIndex] : null;
+
+  const renderThumb = ({ item, index }: { item: AppImage; index: number }) => (
+    <Pressable onPress={() => setViewerIndex(index)} style={{ width: THUMB_SIZE, height: THUMB_SIZE, borderRadius: 10, overflow: 'hidden', backgroundColor: colors.shimmer }}>
       {item.url ? (
-        <Image source={{ uri: item.url }} style={{ width: '100%', height: 180 }} resizeMode="cover" />
+        <Image source={{ uri: item.url }} style={{ width: '100%', height: '100%' }} resizeMode="cover" />
       ) : (
-        <View style={{ width: '100%', height: 180, backgroundColor: colors.shimmer, alignItems: 'center', justifyContent: 'center' }}>
-          <ImageIcon size={36} color={colors.sub} />
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <ImageIcon size={24} color={colors.sub} />
         </View>
       )}
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10 }}>
-        <Text style={{ color: colors.sub, fontSize: 11 }}>{new Date(item.createdAt).toLocaleDateString()}</Text>
-        {isAdmin && (
-          <Pressable onPress={() => deleteMutation.mutate(item._id)} style={{ padding: 4 }} disabled={deleteMutation.isPending}>
-            {deleteMutation.isPending ? <ActivityIndicator size="small" color={colors.danger} /> : <Trash2 size={14} color={colors.danger} />}
-          </Pressable>
-        )}
-      </View>
-    </View>
+    </Pressable>
   );
 
   if (!isVisible) return null;
@@ -90,7 +102,7 @@ export function EntityImages({ isVisible, onClose, entity, entityId, orgId }: En
           </View>
         )}
 
-        {/* Content */}
+        {/* Thumbnail grid */}
         {isLoading ? (
           <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <ActivityIndicator size="large" color={colors.primary} />
@@ -105,12 +117,72 @@ export function EntityImages({ isVisible, onClose, entity, entityId, orgId }: En
           <FlatList
             data={images}
             keyExtractor={(i) => i._id}
-            renderItem={renderItem}
-            contentContainerStyle={{ padding: 16, gap: 12, paddingBottom: bottom + 16 }}
+            renderItem={renderThumb}
+            numColumns={3}
+            contentContainerStyle={{ padding: PADDING, gap: GAP, paddingBottom: bottom + 16 }}
+            columnWrapperStyle={{ gap: GAP }}
             showsVerticalScrollIndicator={false}
           />
         )}
       </SafeAreaView>
+
+      {/* Fullscreen viewer */}
+      {viewerImage && (
+        <Modal transparent animationType="fade" visible={!!viewerImage} onRequestClose={() => setViewerIndex(null)}>
+          <View style={{ flex: 1, backgroundColor: '#000' }}>
+            <SafeAreaView style={{ flex: 1 }}>
+              {/* Viewer header */}
+              <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, paddingVertical: 10 }}>
+                <Text style={{ color: '#fff', fontSize: 14, fontWeight: '600' }}>
+                  {(viewerIndex ?? 0) + 1} / {images?.length ?? 0}
+                </Text>
+                <View style={{ flexDirection: 'row', gap: 16, alignItems: 'center' }}>
+                  {isAdmin && (
+                    <Pressable onPress={() => handleDelete(viewerImage._id)} style={{ padding: 6 }}>
+                      <Trash2 size={20} color="#ef4444" />
+                    </Pressable>
+                  )}
+                  <Pressable onPress={() => setViewerIndex(null)} style={{ padding: 6 }}>
+                    <X size={22} color="#fff" />
+                  </Pressable>
+                </View>
+              </View>
+
+              {/* Image */}
+              <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                {viewerImage.url ? (
+                  <Image source={{ uri: viewerImage.url }} style={{ width: SCREEN_WIDTH, height: SCREEN_WIDTH }} resizeMode="contain" />
+                ) : (
+                  <ImageIcon size={64} color="#666" />
+                )}
+              </View>
+
+              {/* Navigation arrows */}
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 16, paddingBottom: 20 }}>
+                <Pressable
+                  onPress={() => setViewerIndex(Math.max(0, (viewerIndex ?? 0) - 1))}
+                  disabled={(viewerIndex ?? 0) === 0}
+                  style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: 'rgba(255,255,255,0.15)', alignItems: 'center', justifyContent: 'center', opacity: (viewerIndex ?? 0) === 0 ? 0.3 : 1 }}
+                >
+                  <ChevronLeft size={24} color="#fff" />
+                </Pressable>
+                <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                  <Text style={{ color: 'rgba(255,255,255,0.6)', fontSize: 11 }}>
+                    {new Date(viewerImage.createdAt).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' })}
+                  </Text>
+                </View>
+                <Pressable
+                  onPress={() => setViewerIndex(Math.min((images?.length ?? 1) - 1, (viewerIndex ?? 0) + 1))}
+                  disabled={(viewerIndex ?? 0) >= (images?.length ?? 1) - 1}
+                  style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: 'rgba(255,255,255,0.15)', alignItems: 'center', justifyContent: 'center', opacity: (viewerIndex ?? 0) >= (images?.length ?? 1) - 1 ? 0.3 : 1 }}
+                >
+                  <ChevronRight size={24} color="#fff" />
+                </Pressable>
+              </View>
+            </SafeAreaView>
+          </View>
+        </Modal>
+      )}
     </Modal>
   );
 }
