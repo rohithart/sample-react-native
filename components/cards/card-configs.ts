@@ -17,6 +17,7 @@ function cfg(
 // ---------------------------------------------------------------------------
 export const ADMIN_CONFIGS = {
   workflow: cfg('workflow', (o, i) => `/admin/workflow/${o}/${i}`, {
+    titleField: (item: any) => item.category?.name || '-',
     statusField: 'status',
   }),
   task: cfg('task', (o, i) => `/admin/task/${o}/${i}`, {
@@ -65,7 +66,7 @@ export const ADMIN_CONFIGS = {
   information: cfg('information', (o, i) => `/admin/information/${o}/${i}`),
   group: cfg('group', (o, i) => `/admin/group/${o}/${i}`),
   user: cfg('user', (o, i) => `/admin/user/${o}/${i}`, {
-    titleField: (item: any) => item.user?.name || item.user?.email || 'Unknown User',
+    titleField: (item: any) => item.user?.name || item.user?.email || '-',
     subtitleField: 'role',
     imageField: (item: any) => item.user?.image,
   }),
