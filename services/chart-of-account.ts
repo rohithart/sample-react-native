@@ -10,14 +10,14 @@ export const coaKeys = {
 };
 
 const coaApi = {
-  getAll: (orgId: string) => api.get<ChartOfAccount[]>(`/chart-of-account/org/${orgId}`),
-  get: (id: string) => api.get<ChartOfAccount>(`/chart-of-account/${id}`),
-  create: (orgId: string, data: Partial<ChartOfAccount>) => api.post<ChartOfAccount>(`/chart-of-account/${orgId}`, data),
-  update: (id: string, data: Partial<ChartOfAccount>) => api.put<ChartOfAccount>(`/chart-of-account/${id}`, data),
-  delete: (id: string) => api.delete<boolean>(`/chart-of-account/${id}`),
-  getByFinancialYear: (fyId: string, orgId: string) => api.get<ChartOfAccount[]>(`/chart-of-account/financial-year/${fyId}/${orgId}`),
-  getSeed: (orgId: string) => api.get<any>(`/chart-of-account/seed/${orgId}`),
-  setSeed: (orgId: string, data: any) => api.post<any>(`/chart-of-account/seed/${orgId}`, data),
+  getAll: (orgId: string) => api.get<ChartOfAccount[]>(`/api/chart-of-account/org/${orgId}`),
+  get: (id: string) => api.get<ChartOfAccount>(`/api/chart-of-account/${id}`),
+  create: (orgId: string, data: Partial<ChartOfAccount>) => api.post<ChartOfAccount>(`/api/chart-of-account/${orgId}`, data),
+  update: (id: string, data: Partial<ChartOfAccount>) => api.put<ChartOfAccount>(`/api/chart-of-account/${id}`, data),
+  delete: (id: string) => api.delete<boolean>(`/api/chart-of-account/${id}`),
+  getByFinancialYear: (fyId: string, orgId: string) => api.get<ChartOfAccount[]>(`/api/chart-of-account/financial-year/${fyId}/${orgId}`),
+  getSeed: (orgId: string) => api.get<any>(`/api/chart-of-account/seed/${orgId}`),
+  setSeed: (orgId: string, data: any) => api.post<any>(`/api/chart-of-account/seed/${orgId}`, data),
 };
 
 export function useChartOfAccounts(orgId: string) {

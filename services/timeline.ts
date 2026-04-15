@@ -9,7 +9,7 @@ export const timelineKeys = {
 type Entity = 'user' | 'workflow' | 'task' | 'quote' | 'invoice' | 'workorder' | 'evidence' | 'vote' | 'vendor' | 'document' | 'asset' | 'financial-year';
 
 const timelineApi = {
-  get: (entity: Entity, id: string) => api.get<Timeline[]>(`/timeline/${entity}/${id}`),
+  get: (entity: Entity, id: string) => api.get<Timeline[]>(`/api/timeline/${entity}/${id}`),
 };
 
 export function useTimeline(entity: Entity, id: string) {

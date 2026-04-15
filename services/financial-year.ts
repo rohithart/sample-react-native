@@ -9,13 +9,13 @@ export const fyKeys = {
 };
 
 const fyApi = {
-  getAll: (orgId: string) => api.get<FinancialYear[]>(`/financial-year/org/${orgId}`),
-  getCurrent: (orgId: string) => api.get<FinancialYear>(`/financial-year/current/${orgId}`),
-  get: (id: string) => api.get<FinancialYear>(`/financial-year/${id}`),
-  getDetails: (id: string) => api.get<any>(`/financial-year/details/${id}`),
-  create: (orgId: string, data: Partial<FinancialYear>) => api.post<FinancialYear>(`/financial-year/${orgId}`, data),
-  setCurrent: (id: string) => api.put<FinancialYear>(`/financial-year/${id}`, {}),
-  delete: (id: string) => api.delete<boolean>(`/financial-year/${id}`),
+  getAll: (orgId: string) => api.get<FinancialYear[]>(`/api/financial-year/org/${orgId}`),
+  getCurrent: (orgId: string) => api.get<FinancialYear>(`/api/financial-year/current/${orgId}`),
+  get: (id: string) => api.get<FinancialYear>(`/api/financial-year/${id}`),
+  getDetails: (id: string) => api.get<any>(`/api/financial-year/details/${id}`),
+  create: (orgId: string, data: Partial<FinancialYear>) => api.post<FinancialYear>(`/api/financial-year/${orgId}`, data),
+  setCurrent: (id: string) => api.put<FinancialYear>(`/api/financial-year/${id}`, {}),
+  delete: (id: string) => api.delete<boolean>(`/api/financial-year/${id}`),
 };
 
 export function useFinancialYears(orgId: string) {

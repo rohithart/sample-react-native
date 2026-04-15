@@ -8,11 +8,11 @@ export const categoryKeys = {
 };
 
 const categoryApi = {
-  getAll: (orgId: string) => api.get<Category[]>(`/category/org/${orgId}`),
-  get: (id: string) => api.get<Category>(`/category/${id}`),
-  create: (orgId: string, data: Partial<Category>) => api.post<Category>(`/category/${orgId}`, data),
-  update: (id: string, data: Partial<Category>) => api.put<Category>(`/category/${id}`, data),
-  delete: (id: string) => api.delete<boolean>(`/category/${id}`),
+  getAll: (orgId: string) => api.get<Category[]>(`/api/category/org/${orgId}`),
+  get: (id: string) => api.get<Category>(`/api/category/${id}`),
+  create: (orgId: string, data: Partial<Category>) => api.post<Category>(`/api/category/${orgId}`, data),
+  update: (id: string, data: Partial<Category>) => api.put<Category>(`/api/category/${id}`, data),
+  delete: (id: string) => api.delete<boolean>(`/api/category/${id}`),
 };
 
 export function useCategorys(orgId: string) {

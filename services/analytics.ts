@@ -8,11 +8,11 @@ export const analyticsKeys = {
 };
 
 const analyticsApi = {
-  getForYear: (orgId: string) => api.get<AnalyticsData>(`/analytics/current/${orgId}`),
-  getForFinancialYear: (orgId: string) => api.get<AnalyticsData>(`/analytics/financial/${orgId}`),
-  getForRange: (orgId: string, data: any) => api.patch<AnalyticsData>(`/analytics/range/${orgId}`, data),
-  getFinancialStatement: (orgId: string, data: any) => api.patch<AnalyticsData>(`/analytics/income-expense/${orgId}`, data),
-  getBalanceSheet: (orgId: string, data: any) => api.patch<AnalyticsData>(`/analytics/balance-sheet/${orgId}`, data),
+  getForYear: (orgId: string) => api.get<AnalyticsData>(`/api/analytics/current/${orgId}`),
+  getForFinancialYear: (orgId: string) => api.get<AnalyticsData>(`/api/analytics/financial/${orgId}`),
+  getForRange: (orgId: string, data: any) => api.patch<AnalyticsData>(`/api/analytics/range/${orgId}`, data),
+  getFinancialStatement: (orgId: string, data: any) => api.patch<AnalyticsData>(`/api/analytics/income-expense/${orgId}`, data),
+  getBalanceSheet: (orgId: string, data: any) => api.patch<AnalyticsData>(`/api/analytics/balance-sheet/${orgId}`, data),
 };
 
 export function useAnalyticsForYear(orgId: string) {

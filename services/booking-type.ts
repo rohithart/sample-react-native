@@ -8,11 +8,11 @@ export const bookingTypeKeys = {
 };
 
 const bookingTypeApi = {
-  getAll: (orgId: string) => api.get<BookingType[]>(`/booking-type/org/${orgId}`),
-  get: (id: string) => api.get<BookingType>(`/booking-type/${id}`),
-  create: (orgId: string, data: Partial<BookingType>) => api.post<BookingType>(`/booking-type/${orgId}`, data),
-  update: (id: string, data: Partial<BookingType>) => api.put<BookingType>(`/booking-type/${id}`, data),
-  delete: (id: string) => api.delete<boolean>(`/booking-type/${id}`),
+  getAll: (orgId: string) => api.get<BookingType[]>(`/api/booking-type/org/${orgId}`),
+  get: (id: string) => api.get<BookingType>(`/api/booking-type/${id}`),
+  create: (orgId: string, data: Partial<BookingType>) => api.post<BookingType>(`/api/booking-type/${orgId}`, data),
+  update: (id: string, data: Partial<BookingType>) => api.put<BookingType>(`/api/booking-type/${id}`, data),
+  delete: (id: string) => api.delete<boolean>(`/api/booking-type/${id}`),
 };
 
 export function useBookingTypes(orgId: string) {

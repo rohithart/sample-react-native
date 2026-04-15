@@ -10,19 +10,19 @@ export const documentKeys = {
 };
 
 const documentApi = {
-  getAll: (orgId: string) => api.get<Document[]>(`/document/org/${orgId}`),
-  get: (id: string) => api.get<Document>(`/document/${id}`),
-  create: (orgId: string, data: Partial<Document>) => api.post<Document>(`/document/${orgId}`, data),
-  update: (id: string, data: Partial<Document>) => api.put<Document>(`/document/${id}`, data),
-  delete: (id: string) => api.delete<boolean>(`/document/${id}`),
-  getAllArchived: (orgId: string) => api.get<Document[]>(`/document/org/archived/${orgId}`),
-  archive: (id: string) => api.patch<Document>(`/document/archive/${id}`, {}),
-  unarchive: (id: string) => api.patch<Document>(`/document/unarchive/${id}`, {}),
-  flag: (id: string, data: { reason: string }) => api.patch<Document>(`/document/flag/${id}`, data),
-  unflag: (id: string) => api.patch<Document>(`/document/unflag/${id}`, {}),
-  getAllFolder: (folderId: string) => api.get<Document[]>(`/document/folder/${folderId}`),
-  getAllArchivedFolder: (folderId: string) => api.get<Document[]>(`/document/folder/archived/${folderId}`),
-  move: (id: string, data: { folderId: string }) => api.patch<Document>(`/document/move/${id}`, data),
+  getAll: (orgId: string) => api.get<Document[]>(`/api/document/org/${orgId}`),
+  get: (id: string) => api.get<Document>(`/api/document/${id}`),
+  create: (orgId: string, data: Partial<Document>) => api.post<Document>(`/api/document/${orgId}`, data),
+  update: (id: string, data: Partial<Document>) => api.put<Document>(`/api/document/${id}`, data),
+  delete: (id: string) => api.delete<boolean>(`/api/document/${id}`),
+  getAllArchived: (orgId: string) => api.get<Document[]>(`/api/document/org/archived/${orgId}`),
+  archive: (id: string) => api.patch<Document>(`/api/document/archive/${id}`, {}),
+  unarchive: (id: string) => api.patch<Document>(`/api/document/unarchive/${id}`, {}),
+  flag: (id: string, data: { reason: string }) => api.patch<Document>(`/api/document/flag/${id}`, data),
+  unflag: (id: string) => api.patch<Document>(`/api/document/unflag/${id}`, {}),
+  getAllFolder: (folderId: string) => api.get<Document[]>(`/api/document/folder/${folderId}`),
+  getAllArchivedFolder: (folderId: string) => api.get<Document[]>(`/api/document/folder/archived/${folderId}`),
+  move: (id: string, data: { folderId: string }) => api.patch<Document>(`/api/document/move/${id}`, data),
 };
 
 export function useDocuments(orgId: string) {

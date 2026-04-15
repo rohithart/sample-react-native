@@ -9,13 +9,13 @@ export const folderKeys = {
 };
 
 const folderApi = {
-  getAll: (orgId: string) => api.get<Folder[]>(`/folder/org/${orgId}`),
-  getAllRecursive: (orgId: string) => api.get<Folder[]>(`/folder/org/recursive/${orgId}`),
-  get: (id: string) => api.get<Folder>(`/folder/${id}`),
-  getAllSubfolder: (orgId: string) => api.get<Folder[]>(`/folder/subfolder/${orgId}`),
-  move: (id: string, data: { parentId: string }) => api.patch<Folder>(`/folder/move/${id}`, data),
-  create: (orgId: string, data: Partial<Folder>) => api.post<Folder>(`/folder/${orgId}`, data),
-  delete: (id: string) => api.delete<boolean>(`/folder/${id}`),
+  getAll: (orgId: string) => api.get<Folder[]>(`/api/folder/org/${orgId}`),
+  getAllRecursive: (orgId: string) => api.get<Folder[]>(`/api/folder/org/recursive/${orgId}`),
+  get: (id: string) => api.get<Folder>(`/api/folder/${id}`),
+  getAllSubfolder: (orgId: string) => api.get<Folder[]>(`/api/folder/subfolder/${orgId}`),
+  move: (id: string, data: { parentId: string }) => api.patch<Folder>(`/api/folder/move/${id}`, data),
+  create: (orgId: string, data: Partial<Folder>) => api.post<Folder>(`/api/folder/${orgId}`, data),
+  delete: (id: string) => api.delete<boolean>(`/api/folder/${id}`),
 };
 
 export function useFolders(orgId: string) {

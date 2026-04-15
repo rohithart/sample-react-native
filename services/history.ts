@@ -9,8 +9,8 @@ export const historyKeys = {
 type Entity = 'workflow' | 'task' | 'quote' | 'invoice' | 'workorder' | 'evidence';
 
 const historyApi = {
-  get: (entity: Entity, id: string) => api.get<History[]>(`/history/${entity}/${id}`),
-  delete: (entity: Entity, id: string) => api.delete<boolean>(`/history/${entity}/${id}`),
+  get: (entity: Entity, id: string) => api.get<History[]>(`/api/history/${entity}/${id}`),
+  delete: (entity: Entity, id: string) => api.delete<boolean>(`/api/history/${entity}/${id}`),
 };
 
 export function useHistory(entity: Entity, id: string) {

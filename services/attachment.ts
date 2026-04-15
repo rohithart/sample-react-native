@@ -10,10 +10,10 @@ export const attachmentKeys = {
 type Entity = 'organisation' | 'workflow' | 'task' | 'quote' | 'invoice' | 'workorder' | 'evidence' | 'meeting' | 'document' | 'asset' | 'information' | 'transaction';
 
 const attachmentApi = {
-  getAll: (orgId: string) => api.get<Attachment[]>(`/attachment/org/${orgId}`),
-  getForEntity: (entity: Entity, id: string) => api.get<Attachment[]>(`/attachment/${entity}/${id}`),
-  create: (orgId: string, entityId: string, entity: Entity, data: any) => api.post<Attachment>(`/attachment/${orgId}/${entityId}/${entity}`, data),
-  delete: (id: string) => api.delete<boolean>(`/attachment/${id}`),
+  getAll: (orgId: string) => api.get<Attachment[]>(`/api/attachment/org/${orgId}`),
+  getForEntity: (entity: Entity, id: string) => api.get<Attachment[]>(`/api/attachment/${entity}/${id}`),
+  create: (orgId: string, entityId: string, entity: Entity, data: any) => api.post<Attachment>(`/api/attachment/${orgId}/${entityId}/${entity}`, data),
+  delete: (id: string) => api.delete<boolean>(`/api/attachment/${id}`),
 };
 
 export function useAttachments(entity: Entity, id: string) {

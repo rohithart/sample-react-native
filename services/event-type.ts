@@ -8,11 +8,11 @@ export const eventTypeKeys = {
 };
 
 const eventTypeApi = {
-  getAll: (orgId: string) => api.get<EventType[]>(`/event-type/org/${orgId}`),
-  get: (id: string) => api.get<EventType>(`/event-type/${id}`),
-  create: (orgId: string, data: Partial<EventType>) => api.post<EventType>(`/event-type/${orgId}`, data),
-  update: (id: string, data: Partial<EventType>) => api.put<EventType>(`/event-type/${id}`, data),
-  delete: (id: string) => api.delete<boolean>(`/event-type/${id}`),
+  getAll: (orgId: string) => api.get<EventType[]>(`/api/event-type/org/${orgId}`),
+  get: (id: string) => api.get<EventType>(`/api/event-type/${id}`),
+  create: (orgId: string, data: Partial<EventType>) => api.post<EventType>(`/api/event-type/${orgId}`, data),
+  update: (id: string, data: Partial<EventType>) => api.put<EventType>(`/api/event-type/${id}`, data),
+  delete: (id: string) => api.delete<boolean>(`/api/event-type/${id}`),
 };
 
 export function useEventTypes(orgId: string) {

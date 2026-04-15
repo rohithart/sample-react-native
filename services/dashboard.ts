@@ -8,8 +8,8 @@ export const dashboardKeys = {
 };
 
 const dashboardApi = {
-  getAdmin: (orgId: string) => api.get<DashboardData>(`/dashboard/org/${orgId}`),
-  getUser: (orgId: string) => api.get<DashboardData>(`/dashboard/user/${orgId}`),
+  getAdmin: (orgId: string) => api.get<DashboardData>(`/api/dashboard/org/${orgId}`),
+  getUser: (orgId: string) => api.get<DashboardData>(`/api/dashboard/user/${orgId}`),
 };
 
 export function useAdminDashboard(orgId: string) {

@@ -11,22 +11,22 @@ export const quoteKeys = {
 };
 
 const quoteApi = {
-  getAll: (orgId: string) => api.get<Quote[]>(`/quote/org/${orgId}`),
-  get: (id: string) => api.get<Quote>(`/quote/${id}`),
-  create: (orgId: string, data: Partial<Quote>) => api.post<Quote>(`/quote/${orgId}`, data),
-  update: (id: string, data: Partial<Quote>) => api.put<Quote>(`/quote/${id}`, data),
-  delete: (id: string) => api.delete<boolean>(`/quote/${id}`),
-  getAllArchived: (orgId: string) => api.get<Quote[]>(`/quote/org/archived/${orgId}`),
-  archive: (id: string) => api.patch<Quote>(`/quote/archive/${id}`, {}),
-  unarchive: (id: string) => api.patch<Quote>(`/quote/unarchive/${id}`, {}),
-  flag: (id: string, data: { reason: string }) => api.patch<Quote>(`/quote/flag/${id}`, data),
-  unflag: (id: string) => api.patch<Quote>(`/quote/unflag/${id}`, {}),
-  updateStatus: (id: string, data: { status: string }) => api.patch<Quote>(`/quote/status/${id}`, data),
-  getAllForWorkflow: (wId: string) => api.get<Quote[]>(`/quote/workflow/${wId}`),
-  getAllForVendor: (vId: string) => api.get<Quote[]>(`/quote/vendor/${vId}`),
-  extend: (id: string) => api.patch<Quote>(`/quote/extend/${id}`, {}),
-  remind: (id: string) => api.patch<Quote>(`/quote/remind/${id}`, {}),
-  submit: (id: string) => api.patch<Quote>(`/quote/submit/${id}`, {}),
+  getAll: (orgId: string) => api.get<Quote[]>(`/api/quote/org/${orgId}`),
+  get: (id: string) => api.get<Quote>(`/api/quote/${id}`),
+  create: (orgId: string, data: Partial<Quote>) => api.post<Quote>(`/api/quote/${orgId}`, data),
+  update: (id: string, data: Partial<Quote>) => api.put<Quote>(`/api/quote/${id}`, data),
+  delete: (id: string) => api.delete<boolean>(`/api/quote/${id}`),
+  getAllArchived: (orgId: string) => api.get<Quote[]>(`/api/quote/org/archived/${orgId}`),
+  archive: (id: string) => api.patch<Quote>(`/api/quote/archive/${id}`, {}),
+  unarchive: (id: string) => api.patch<Quote>(`/api/quote/unarchive/${id}`, {}),
+  flag: (id: string, data: { reason: string }) => api.patch<Quote>(`/api/quote/flag/${id}`, data),
+  unflag: (id: string) => api.patch<Quote>(`/api/quote/unflag/${id}`, {}),
+  updateStatus: (id: string, data: { status: string }) => api.patch<Quote>(`/api/quote/status/${id}`, data),
+  getAllForWorkflow: (wId: string) => api.get<Quote[]>(`/api/quote/workflow/${wId}`),
+  getAllForVendor: (vId: string) => api.get<Quote[]>(`/api/quote/vendor/${vId}`),
+  extend: (id: string) => api.patch<Quote>(`/api/quote/extend/${id}`, {}),
+  remind: (id: string) => api.patch<Quote>(`/api/quote/remind/${id}`, {}),
+  submit: (id: string) => api.patch<Quote>(`/api/quote/submit/${id}`, {}),
 };
 
 export function useQuotes(orgId: string) {

@@ -5,9 +5,9 @@ import { api } from './api-client';
 export const alertKeys = { android: ['alerts'] as const, ios: ['alerts'] as const };
 
 export function useAlertsAndroid() {
-  return useQuery({ queryKey: alertKeys.android, queryFn: () => api.get<Alert[]>('/alert/android') });
+  return useQuery({ queryKey: alertKeys.android, queryFn: () => api.get<Alert[]>('/api/alert/android') });
 }
 
 export function useAlertsiOS() {
-  return useQuery({ queryKey: alertKeys.ios, queryFn: () => api.get<Alert[]>('/alert/ios') });
+  return useQuery({ queryKey: alertKeys.ios, queryFn: () => api.get<Alert[]>('/api/alert/ios') });
 }

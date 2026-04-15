@@ -7,11 +7,11 @@ export const notificationKeys = {
 };
 
 const notificationApi = {
-  getAll: (orgId: string) => api.get<Notification[]>(`/notification/${orgId}`),
-  markRead: (id: string) => api.patch<Notification>(`/notification/read/${id}`, {}),
-  markReadAll: (orgId: string) => api.patch<void>(`/notification/readAll/${orgId}`, {}),
-  delete: (id: string) => api.delete<boolean>(`/notification/${id}`),
-  deleteAll: (orgId: string) => api.delete<boolean>(`/notification/all/${orgId}`),
+  getAll: (orgId: string) => api.get<Notification[]>(`/api/notification/${orgId}`),
+  markRead: (id: string) => api.patch<Notification>(`/api/notification/read/${id}`, {}),
+  markReadAll: (orgId: string) => api.patch<void>(`/api/notification/readAll/${orgId}`, {}),
+  delete: (id: string) => api.delete<boolean>(`/api/notification/${id}`),
+  deleteAll: (orgId: string) => api.delete<boolean>(`/api/notification/all/${orgId}`),
 };
 
 export function useNotifications(orgId: string) {

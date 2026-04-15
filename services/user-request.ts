@@ -9,15 +9,15 @@ export const userRequestKeys = {
 };
 
 const userRequestApi = {
-  getAll: (orgId: string) => api.get<UserRequest[]>(`/user-request/org/${orgId}`),
-  getAllForUser: (orgId: string) => api.get<UserRequest[]>(`/user-request/user/${orgId}`),
-  getForUser: (id: string) => api.get<UserRequest>(`/user-request/view/${id}`),
-  get: (id: string) => api.get<UserRequest>(`/user-request/${id}`),
-  create: (orgId: string, data: Partial<UserRequest>) => api.post<UserRequest>(`/user-request/${orgId}`, data),
-  update: (id: string, data: Partial<UserRequest>) => api.put<UserRequest>(`/user-request/${id}`, data),
-  delete: (id: string) => api.delete<boolean>(`/user-request/${id}`),
-  approve: (id: string) => api.patch<UserRequest>(`/user-request/approve/${id}`, {}),
-  reject: (id: string) => api.patch<UserRequest>(`/user-request/reject/${id}`, {}),
+  getAll: (orgId: string) => api.get<UserRequest[]>(`/api/user-request/org/${orgId}`),
+  getAllForUser: (orgId: string) => api.get<UserRequest[]>(`/api/user-request/user/${orgId}`),
+  getForUser: (id: string) => api.get<UserRequest>(`/api/user-request/view/${id}`),
+  get: (id: string) => api.get<UserRequest>(`/api/user-request/${id}`),
+  create: (orgId: string, data: Partial<UserRequest>) => api.post<UserRequest>(`/api/user-request/${orgId}`, data),
+  update: (id: string, data: Partial<UserRequest>) => api.put<UserRequest>(`/api/user-request/${id}`, data),
+  delete: (id: string) => api.delete<boolean>(`/api/user-request/${id}`),
+  approve: (id: string) => api.patch<UserRequest>(`/api/user-request/approve/${id}`, {}),
+  reject: (id: string) => api.patch<UserRequest>(`/api/user-request/reject/${id}`, {}),
 };
 
 export function useUserRequests(orgId: string) {

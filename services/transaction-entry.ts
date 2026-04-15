@@ -8,10 +8,10 @@ export const txEntryKeys = {
 };
 
 const txEntryApi = {
-  getByFinancialYear: (fyId: string) => api.get<TransactionEntry[]>(`/transaction-entry/financial-year/${fyId}`),
-  get: (id: string) => api.get<TransactionEntry>(`/transaction-entry/${id}`),
-  getRange: (orgId: string, data: any) => api.patch<TransactionEntry[]>(`/transaction-entry/range/${orgId}`, data),
-  create: (transactionId: string, data: Partial<TransactionEntry>) => api.post<TransactionEntry>(`/transaction-entry/${transactionId}`, data),
+  getByFinancialYear: (fyId: string) => api.get<TransactionEntry[]>(`/api/transaction-entry/financial-year/${fyId}`),
+  get: (id: string) => api.get<TransactionEntry>(`/api/transaction-entry/${id}`),
+  getRange: (orgId: string, data: any) => api.patch<TransactionEntry[]>(`/api/transaction-entry/range/${orgId}`, data),
+  create: (transactionId: string, data: Partial<TransactionEntry>) => api.post<TransactionEntry>(`/api/transaction-entry/${transactionId}`, data),
 };
 
 export function useTransactionEntries(fyId: string) {

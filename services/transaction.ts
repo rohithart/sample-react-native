@@ -9,15 +9,15 @@ export const transactionKeys = {
 };
 
 const transactionApi = {
-  getByFinancialYear: (fyId: string) => api.get<Transaction[]>(`/transaction/financial-year/${fyId}`),
-  getByFinancialYearArchived: (fyId: string) => api.get<Transaction[]>(`/transaction/financial-year/archived/${fyId}`),
-  getForRange: (orgId: string, data: any) => api.patch<Transaction[]>(`/transaction/range/${orgId}`, data),
-  getForRangeArchived: (orgId: string, data: any) => api.patch<Transaction[]>(`/transaction/range/archived/${orgId}`, data),
-  get: (id: string) => api.get<Transaction>(`/transaction/${id}`),
-  create: (orgId: string, data: Partial<Transaction>) => api.post<Transaction>(`/transaction/${orgId}`, data),
-  update: (id: string, data: Partial<Transaction>) => api.put<Transaction>(`/transaction/${id}`, data),
-  archive: (id: string) => api.patch<Transaction>(`/transaction/archive/${id}`, {}),
-  delete: (id: string) => api.delete<boolean>(`/transaction/${id}`),
+  getByFinancialYear: (fyId: string) => api.get<Transaction[]>(`/api/transaction/financial-year/${fyId}`),
+  getByFinancialYearArchived: (fyId: string) => api.get<Transaction[]>(`/api/transaction/financial-year/archived/${fyId}`),
+  getForRange: (orgId: string, data: any) => api.patch<Transaction[]>(`/api/transaction/range/${orgId}`, data),
+  getForRangeArchived: (orgId: string, data: any) => api.patch<Transaction[]>(`/api/transaction/range/archived/${orgId}`, data),
+  get: (id: string) => api.get<Transaction>(`/api/transaction/${id}`),
+  create: (orgId: string, data: Partial<Transaction>) => api.post<Transaction>(`/api/transaction/${orgId}`, data),
+  update: (id: string, data: Partial<Transaction>) => api.put<Transaction>(`/api/transaction/${id}`, data),
+  archive: (id: string) => api.patch<Transaction>(`/api/transaction/archive/${id}`, {}),
+  delete: (id: string) => api.delete<boolean>(`/api/transaction/${id}`),
 };
 
 export function useTransactions(fyId: string) {

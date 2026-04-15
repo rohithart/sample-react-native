@@ -10,16 +10,16 @@ export const bookingKeys = {
 };
 
 const bookingApi = {
-  getAll: (orgId: string) => api.get<Booking[]>(`/booking/org/${orgId}`),
-  getAllForUser: (orgId: string) => api.get<Booking[]>(`/booking/user/${orgId}`),
-  getForUser: (id: string) => api.get<Booking>(`/booking/view/${id}`),
-  get: (id: string) => api.get<Booking>(`/booking/${id}`),
-  getAllForBookingType: (typeId: string) => api.get<Booking[]>(`/booking/type/${typeId}`),
-  create: (orgId: string, data: Partial<Booking>) => api.post<Booking>(`/booking/${orgId}`, data),
-  update: (id: string, data: Partial<Booking>) => api.put<Booking>(`/booking/${id}`, data),
-  delete: (id: string) => api.delete<boolean>(`/booking/${id}`),
-  approve: (id: string) => api.patch<Booking>(`/booking/approve/${id}`, {}),
-  reject: (id: string) => api.patch<Booking>(`/booking/reject/${id}`, {}),
+  getAll: (orgId: string) => api.get<Booking[]>(`/api/booking/org/${orgId}`),
+  getAllForUser: (orgId: string) => api.get<Booking[]>(`/api/booking/user/${orgId}`),
+  getForUser: (id: string) => api.get<Booking>(`/api/booking/view/${id}`),
+  get: (id: string) => api.get<Booking>(`/api/booking/${id}`),
+  getAllForBookingType: (typeId: string) => api.get<Booking[]>(`/api/booking/type/${typeId}`),
+  create: (orgId: string, data: Partial<Booking>) => api.post<Booking>(`/api/booking/${orgId}`, data),
+  update: (id: string, data: Partial<Booking>) => api.put<Booking>(`/api/booking/${id}`, data),
+  delete: (id: string) => api.delete<boolean>(`/api/booking/${id}`),
+  approve: (id: string) => api.patch<Booking>(`/api/booking/approve/${id}`, {}),
+  reject: (id: string) => api.patch<Booking>(`/api/booking/reject/${id}`, {}),
 };
 
 export function useBookings(orgId: string) {

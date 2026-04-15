@@ -8,11 +8,11 @@ export const assetTypeKeys = {
 };
 
 const assetTypeApi = {
-  getAll: (orgId: string) => api.get<AssetType[]>(`/asset-type/org/${orgId}`),
-  get: (id: string) => api.get<AssetType>(`/asset-type/${id}`),
-  create: (orgId: string, data: Partial<AssetType>) => api.post<AssetType>(`/asset-type/${orgId}`, data),
-  update: (id: string, data: Partial<AssetType>) => api.put<AssetType>(`/asset-type/${id}`, data),
-  delete: (id: string) => api.delete<boolean>(`/asset-type/${id}`),
+  getAll: (orgId: string) => api.get<AssetType[]>(`/api/asset-type/org/${orgId}`),
+  get: (id: string) => api.get<AssetType>(`/api/asset-type/${id}`),
+  create: (orgId: string, data: Partial<AssetType>) => api.post<AssetType>(`/api/asset-type/${orgId}`, data),
+  update: (id: string, data: Partial<AssetType>) => api.put<AssetType>(`/api/asset-type/${id}`, data),
+  delete: (id: string) => api.delete<boolean>(`/api/asset-type/${id}`),
 };
 
 export function useAssetTypes(orgId: string) {

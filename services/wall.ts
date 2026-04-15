@@ -7,12 +7,12 @@ export const wallKeys = {
 };
 
 const wallApi = {
-  getAll: (orgId: string) => api.get<WallPost[]>(`/wall/org/${orgId}`),
-  getAllForUser: (orgId: string, userId: string) => api.get<WallPost[]>(`/wall/org/${orgId}/user/${userId}`),
-  create: (orgId: string, data: Partial<WallPost>) => api.post<WallPost>(`/wall/${orgId}`, data),
-  delete: (id: string) => api.delete<boolean>(`/wall/${id}`),
-  like: (orgId: string, id: string) => api.patch<WallPost>(`/wall/like/${orgId}/${id}`, {}),
-  unlike: (orgId: string, id: string) => api.patch<WallPost>(`/wall/unlike/${orgId}/${id}`, {}),
+  getAll: (orgId: string) => api.get<WallPost[]>(`/api/wall/org/${orgId}`),
+  getAllForUser: (orgId: string, userId: string) => api.get<WallPost[]>(`/api/wall/org/${orgId}/user/${userId}`),
+  create: (orgId: string, data: Partial<WallPost>) => api.post<WallPost>(`/api/wall/${orgId}`, data),
+  delete: (id: string) => api.delete<boolean>(`/api/wall/${id}`),
+  like: (orgId: string, id: string) => api.patch<WallPost>(`/api/wall/like/${orgId}/${id}`, {}),
+  unlike: (orgId: string, id: string) => api.patch<WallPost>(`/api/wall/unlike/${orgId}/${id}`, {}),
 };
 
 export function useWallPosts(orgId: string) {

@@ -9,14 +9,14 @@ export const reminderKeys = {
 };
 
 const reminderApi = {
-  getAll: (orgId: string) => api.get<Reminder[]>(`/reminder/organisation/${orgId}`),
-  get: (id: string) => api.get<Reminder>(`/reminder/${id}`),
-  getUpcoming: (orgId: string) => api.get<Reminder[]>(`/reminder/upcoming/${orgId}`),
-  create: (orgId: string, data: Partial<Reminder>) => api.post<Reminder>(`/reminder/${orgId}`, data),
-  update: (id: string, data: Partial<Reminder>) => api.put<Reminder>(`/reminder/${id}`, data),
-  delete: (id: string) => api.delete<boolean>(`/reminder/${id}`),
-  enable: (id: string) => api.patch<Reminder>(`/reminder/enable/${id}`, {}),
-  disable: (id: string) => api.patch<Reminder>(`/reminder/disable/${id}`, {}),
+  getAll: (orgId: string) => api.get<Reminder[]>(`/api/reminder/organisation/${orgId}`),
+  get: (id: string) => api.get<Reminder>(`/api/reminder/${id}`),
+  getUpcoming: (orgId: string) => api.get<Reminder[]>(`/api/reminder/upcoming/${orgId}`),
+  create: (orgId: string, data: Partial<Reminder>) => api.post<Reminder>(`/api/reminder/${orgId}`, data),
+  update: (id: string, data: Partial<Reminder>) => api.put<Reminder>(`/api/reminder/${id}`, data),
+  delete: (id: string) => api.delete<boolean>(`/api/reminder/${id}`),
+  enable: (id: string) => api.patch<Reminder>(`/api/reminder/enable/${id}`, {}),
+  disable: (id: string) => api.patch<Reminder>(`/api/reminder/disable/${id}`, {}),
 };
 
 export function useReminders(orgId: string) {

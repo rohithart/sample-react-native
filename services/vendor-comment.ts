@@ -10,10 +10,10 @@ export const vendorCommentKeys = {
 type Entity = 'quote' | 'invoice' | 'workorder' | 'evidence';
 
 const vendorCommentApi = {
-  getAll: (id: string) => api.get<VendorComment[]>(`/vendor-comment/${id}`),
-  getForEntity: (entity: Entity, id: string) => api.get<VendorComment[]>(`/vendor-comment/${entity}/${id}`),
-  create: (orgId: string, data: Partial<VendorComment>) => api.post<VendorComment>(`/vendor-comment/${orgId}`, data),
-  delete: (id: string) => api.delete<boolean>(`/vendor-comment/${id}`),
+  getAll: (id: string) => api.get<VendorComment[]>(`/api/vendor-comment/${id}`),
+  getForEntity: (entity: Entity, id: string) => api.get<VendorComment[]>(`/api/vendor-comment/${entity}/${id}`),
+  create: (orgId: string, data: Partial<VendorComment>) => api.post<VendorComment>(`/api/vendor-comment/${orgId}`, data),
+  delete: (id: string) => api.delete<boolean>(`/api/vendor-comment/${id}`),
 };
 
 export function useVendorComments(id: string) {

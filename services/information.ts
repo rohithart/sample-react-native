@@ -8,11 +8,11 @@ export const informationKeys = {
 };
 
 const informationApi = {
-  getAll: (orgId: string) => api.get<Information[]>(`/information/org/${orgId}`),
-  get: (id: string) => api.get<Information>(`/information/${id}`),
-  create: (orgId: string, data: Partial<Information>) => api.post<Information>(`/information/${orgId}`, data),
-  update: (id: string, data: Partial<Information>) => api.put<Information>(`/information/${id}`, data),
-  delete: (id: string) => api.delete<boolean>(`/information/${id}`),
+  getAll: (orgId: string) => api.get<Information[]>(`/api/information/org/${orgId}`),
+  get: (id: string) => api.get<Information>(`/api/information/${id}`),
+  create: (orgId: string, data: Partial<Information>) => api.post<Information>(`/api/information/${orgId}`, data),
+  update: (id: string, data: Partial<Information>) => api.put<Information>(`/api/information/${id}`, data),
+  delete: (id: string) => api.delete<boolean>(`/api/information/${id}`),
 };
 
 export function useInformations(orgId: string) {

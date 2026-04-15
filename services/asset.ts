@@ -10,17 +10,17 @@ export const assetKeys = {
 };
 
 const assetApi = {
-  getAll: (orgId: string) => api.get<Asset[]>(`/asset/org/${orgId}`),
-  get: (id: string) => api.get<Asset>(`/asset/${id}`),
-  create: (orgId: string, data: Partial<Asset>) => api.post<Asset>(`/asset/${orgId}`, data),
-  update: (id: string, data: Partial<Asset>) => api.put<Asset>(`/asset/${id}`, data),
-  delete: (id: string) => api.delete<boolean>(`/asset/${id}`),
-  getAllArchived: (orgId: string) => api.get<Asset[]>(`/asset/org/archived/${orgId}`),
-  archive: (id: string) => api.patch<Asset>(`/asset/archive/${id}`, {}),
-  unarchive: (id: string) => api.patch<Asset>(`/asset/unarchive/${id}`, {}),
-  flag: (id: string, data: { reason: string }) => api.patch<Asset>(`/asset/flag/${id}`, data),
-  unflag: (id: string) => api.patch<Asset>(`/asset/unflag/${id}`, {}),
-  getAllForAssetType: (typeId: string) => api.get<Asset[]>(`/asset/type/${typeId}`),
+  getAll: (orgId: string) => api.get<Asset[]>(`/api/asset/org/${orgId}`),
+  get: (id: string) => api.get<Asset>(`/api/asset/${id}`),
+  create: (orgId: string, data: Partial<Asset>) => api.post<Asset>(`/api/asset/${orgId}`, data),
+  update: (id: string, data: Partial<Asset>) => api.put<Asset>(`/api/asset/${id}`, data),
+  delete: (id: string) => api.delete<boolean>(`/api/asset/${id}`),
+  getAllArchived: (orgId: string) => api.get<Asset[]>(`/api/asset/org/archived/${orgId}`),
+  archive: (id: string) => api.patch<Asset>(`/api/asset/archive/${id}`, {}),
+  unarchive: (id: string) => api.patch<Asset>(`/api/asset/unarchive/${id}`, {}),
+  flag: (id: string, data: { reason: string }) => api.patch<Asset>(`/api/asset/flag/${id}`, data),
+  unflag: (id: string) => api.patch<Asset>(`/api/asset/unflag/${id}`, {}),
+  getAllForAssetType: (typeId: string) => api.get<Asset[]>(`/api/asset/type/${typeId}`),
 };
 
 export function useAssets(orgId: string) {

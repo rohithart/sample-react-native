@@ -8,12 +8,12 @@ export const budgetKeys = {
 };
 
 const budgetApi = {
-  getByFinancialYear: (fyId: string) => api.get<Budget[]>(`/budget/financial-year/${fyId}`),
-  getOther: (id: string) => api.get<Budget[]>(`/budget/other/${id}`),
-  get: (id: string) => api.get<Budget>(`/budget/${id}`),
-  create: (orgId: string, data: Partial<Budget>) => api.post<Budget>(`/budget/${orgId}`, data),
-  approve: (id: string, data: any) => api.put<Budget>(`/budget/approve/${id}`, data),
-  delete: (id: string) => api.delete<boolean>(`/budget/${id}`),
+  getByFinancialYear: (fyId: string) => api.get<Budget[]>(`/api/budget/financial-year/${fyId}`),
+  getOther: (id: string) => api.get<Budget[]>(`/api/budget/other/${id}`),
+  get: (id: string) => api.get<Budget>(`/api/budget/${id}`),
+  create: (orgId: string, data: Partial<Budget>) => api.post<Budget>(`/api/budget/${orgId}`, data),
+  approve: (id: string, data: any) => api.put<Budget>(`/api/budget/approve/${id}`, data),
+  delete: (id: string) => api.delete<boolean>(`/api/budget/${id}`),
 };
 
 export function useBudgets(fyId: string) {

@@ -9,12 +9,12 @@ export const contentKeys = {
 };
 
 const contentApi = {
-  get: (id: string) => api.get<Content>(`/content/${id}`),
-  getAllBlogs: () => api.get<Content[]>('/content/blogs/all'),
-  getAllNews: () => api.get<Content[]>('/content/news/all'),
-  create: (data: Partial<Content>) => api.post<Content>('/content', data),
-  update: (id: string, data: Partial<Content>) => api.put<Content>(`/content/${id}`, data),
-  delete: (id: string) => api.delete<boolean>(`/content/${id}`),
+  get: (id: string) => api.get<Content>(`/api/content/${id}`),
+  getAllBlogs: () => api.get<Content[]>('/api/content/blogs/all'),
+  getAllNews: () => api.get<Content[]>('/api/content/news/all'),
+  create: (data: Partial<Content>) => api.post<Content>('/api/content', data),
+  update: (id: string, data: Partial<Content>) => api.put<Content>(`/api/content/${id}`, data),
+  delete: (id: string) => api.delete<boolean>(`/api/content/${id}`),
 };
 
 export function useBlogs() {

@@ -5,9 +5,9 @@ import { api } from './api-client';
 export const tokenKeys = { all: ['tokens'] as const };
 
 const tokenApi = {
-  get: () => api.get<ApiToken[]>('/token'),
-  create: (data: Partial<ApiToken>) => api.post<ApiToken>('/token', data),
-  delete: (id: string) => api.delete<boolean>(`/token/${id}`),
+  get: () => api.get<ApiToken[]>('/api/token'),
+  create: (data: Partial<ApiToken>) => api.post<ApiToken>('/api/token', data),
+  delete: (id: string) => api.delete<boolean>(`/api/token/${id}`),
 };
 
 export function useTokens() {

@@ -12,46 +12,46 @@ export const taskKeys = {
 
 const taskApi = {
   getAll: (orgId: string) =>
-    api.get<Task[]>(`/task/org/${orgId}`),
+    api.get<Task[]>(`/api/task/org/${orgId}`),
 
   getAllForUser: (orgId: string, userId: string) =>
-    api.get<Task[]>(`/task/org/${orgId}/user/${userId}`),
+    api.get<Task[]>(`/api/task/org/${orgId}/user/${userId}`),
 
   getAllArchived: (orgId: string) =>
-    api.get<Task[]>(`/task/org/archived/${orgId}`),
+    api.get<Task[]>(`/api/task/org/archived/${orgId}`),
 
   getAllForWorkflow: (workflowId: string) =>
-    api.get<Task[]>(`/task/workflow/${workflowId}`),
+    api.get<Task[]>(`/api/task/workflow/${workflowId}`),
 
   get: (id: string) =>
-    api.get<Task>(`/task/${id}`),
+    api.get<Task>(`/api/task/${id}`),
 
   create: (orgId: string, data: Partial<Task>) =>
-    api.post<Task>(`/task/${orgId}`, data),
+    api.post<Task>(`/api/task/${orgId}`, data),
 
   update: (id: string, data: Partial<Task>) =>
-    api.put<Task>(`/task/${id}`, data),
+    api.put<Task>(`/api/task/${id}`, data),
 
   delete: (id: string) =>
-    api.delete<boolean>(`/task/${id}`),
+    api.delete<boolean>(`/api/task/${id}`),
 
   updateStatus: (id: string, data: { status: string }) =>
-    api.patch<Task>(`/task/status/${id}`, data),
+    api.patch<Task>(`/api/task/status/${id}`, data),
 
   updateUser: (id: string, data: { userId: string }) =>
-    api.patch<Task>(`/task/user/${id}`, data),
+    api.patch<Task>(`/api/task/user/${id}`, data),
 
   archive: (id: string) =>
-    api.patch<Task>(`/task/archive/${id}`, {}),
+    api.patch<Task>(`/api/task/archive/${id}`, {}),
 
   unarchive: (id: string) =>
-    api.patch<Task>(`/task/unarchive/${id}`, {}),
+    api.patch<Task>(`/api/task/unarchive/${id}`, {}),
 
   flag: (id: string, data: { reason: string }) =>
-    api.patch<Task>(`/task/flag/${id}`, data),
+    api.patch<Task>(`/api/task/flag/${id}`, data),
 
   unflag: (id: string) =>
-    api.patch<Task>(`/task/unflag/${id}`, {}),
+    api.patch<Task>(`/api/task/unflag/${id}`, {}),
 };
 
 export function useTasks(orgId: string) {

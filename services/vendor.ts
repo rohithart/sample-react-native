@@ -9,14 +9,14 @@ export const vendorKeys = {
 };
 
 const vendorApi = {
-  getAll: (orgId: string) => api.get<Vendor[]>(`/vendor/org/${orgId}`),
-  get: (id: string) => api.get<Vendor>(`/vendor/${id}`),
-  create: (orgId: string, data: Partial<Vendor>) => api.post<Vendor>(`/vendor/${orgId}`, data),
-  update: (id: string, data: Partial<Vendor>) => api.put<Vendor>(`/vendor/${id}`, data),
-  delete: (id: string) => api.delete<boolean>(`/vendor/${id}`),
-  getAllArchived: (orgId: string) => api.get<Vendor[]>(`/vendor/org/archived/${orgId}`),
-  archive: (id: string) => api.patch<Vendor>(`/vendor/archive/${id}`, {}),
-  unarchive: (id: string) => api.patch<Vendor>(`/vendor/unarchive/${id}`, {}),
+  getAll: (orgId: string) => api.get<Vendor[]>(`/api/vendor/org/${orgId}`),
+  get: (id: string) => api.get<Vendor>(`/api/vendor/${id}`),
+  create: (orgId: string, data: Partial<Vendor>) => api.post<Vendor>(`/api/vendor/${orgId}`, data),
+  update: (id: string, data: Partial<Vendor>) => api.put<Vendor>(`/api/vendor/${id}`, data),
+  delete: (id: string) => api.delete<boolean>(`/api/vendor/${id}`),
+  getAllArchived: (orgId: string) => api.get<Vendor[]>(`/api/vendor/org/archived/${orgId}`),
+  archive: (id: string) => api.patch<Vendor>(`/api/vendor/archive/${id}`, {}),
+  unarchive: (id: string) => api.patch<Vendor>(`/api/vendor/unarchive/${id}`, {}),
 };
 
 export function useVendors(orgId: string) {

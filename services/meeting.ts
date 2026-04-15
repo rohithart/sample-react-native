@@ -11,19 +11,19 @@ export const meetingKeys = {
 };
 
 const meetingApi = {
-  getAll: (orgId: string) => api.get<Meeting[]>(`/meeting/org/${orgId}`),
-  get: (id: string) => api.get<Meeting>(`/meeting/${id}`),
-  create: (orgId: string, data: Partial<Meeting>) => api.post<Meeting>(`/meeting/${orgId}`, data),
-  update: (id: string, data: Partial<Meeting>) => api.put<Meeting>(`/meeting/${id}`, data),
-  delete: (id: string) => api.delete<boolean>(`/meeting/${id}`),
-  getAllArchived: (orgId: string) => api.get<Meeting[]>(`/meeting/org/archived/${orgId}`),
-  archive: (id: string) => api.patch<Meeting>(`/meeting/archive/${id}`, {}),
-  unarchive: (id: string) => api.patch<Meeting>(`/meeting/unarchive/${id}`, {}),
-  getAllForGroup: (orgId: string, groupId: string) => api.get<Meeting[]>(`/meeting/org/${orgId}/group/${groupId}`),
-  getAllForUser: (orgId: string) => api.get<Meeting[]>(`/meeting/user/${orgId}`),
-  getForUser: (orgId: string, id: string) => api.get<Meeting>(`/meeting/view/${orgId}/${id}`),
-  sendGoogleInvite: (id: string) => api.patch<Meeting>(`/meeting/google-invite/${id}`, {}),
-  remind: (id: string) => api.patch<Meeting>(`/meeting/remind/${id}`, {}),
+  getAll: (orgId: string) => api.get<Meeting[]>(`/api/meeting/org/${orgId}`),
+  get: (id: string) => api.get<Meeting>(`/api/meeting/${id}`),
+  create: (orgId: string, data: Partial<Meeting>) => api.post<Meeting>(`/api/meeting/${orgId}`, data),
+  update: (id: string, data: Partial<Meeting>) => api.put<Meeting>(`/api/meeting/${id}`, data),
+  delete: (id: string) => api.delete<boolean>(`/api/meeting/${id}`),
+  getAllArchived: (orgId: string) => api.get<Meeting[]>(`/api/meeting/org/archived/${orgId}`),
+  archive: (id: string) => api.patch<Meeting>(`/api/meeting/archive/${id}`, {}),
+  unarchive: (id: string) => api.patch<Meeting>(`/api/meeting/unarchive/${id}`, {}),
+  getAllForGroup: (orgId: string, groupId: string) => api.get<Meeting[]>(`/api/meeting/org/${orgId}/group/${groupId}`),
+  getAllForUser: (orgId: string) => api.get<Meeting[]>(`/api/meeting/user/${orgId}`),
+  getForUser: (orgId: string, id: string) => api.get<Meeting>(`/api/meeting/view/${orgId}/${id}`),
+  sendGoogleInvite: (id: string) => api.patch<Meeting>(`/api/meeting/google-invite/${id}`, {}),
+  remind: (id: string) => api.patch<Meeting>(`/api/meeting/remind/${id}`, {}),
 };
 
 export function useMeetings(orgId: string) {

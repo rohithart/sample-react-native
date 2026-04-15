@@ -8,8 +8,8 @@ export const statusKeys = {
 };
 
 const statusApi = {
-  getWorkflowStatuses: (id: string) => api.get<StatusConfig[]>(`/status/workflow/${id}`),
-  getVendorStatuses: (id: string) => api.get<StatusConfig[]>(`/status/vendor/${id}`),
+  getWorkflowStatuses: (id: string) => api.get<StatusConfig[]>(`/api/status/workflow/${id}`),
+  getVendorStatuses: (id: string) => api.get<StatusConfig[]>(`/api/status/vendor/${id}`),
 };
 
 export function useWorkflowStatuses(id: string) {

@@ -10,10 +10,10 @@ export const imageKeys = {
 type Entity = 'organisation' | 'user' | 'workflow' | 'task' | 'quote' | 'invoice' | 'workorder' | 'evidence' | 'document' | 'asset';
 
 const imageApi = {
-  getAll: (orgId: string) => api.get<AppImage[]>(`/image/org/${orgId}`),
-  getForEntity: (entity: Entity, id: string) => api.get<AppImage[]>(`/image/${entity}/${id}`),
-  create: (orgId: string, entityId: string, entity: Entity, data: any) => api.post<AppImage>(`/image/${orgId}/${entityId}/${entity}`, data),
-  delete: (id: string) => api.delete<boolean>(`/image/${id}`),
+  getAll: (orgId: string) => api.get<AppImage[]>(`/api/image/org/${orgId}`),
+  getForEntity: (entity: Entity, id: string) => api.get<AppImage[]>(`/api/image/${entity}/${id}`),
+  create: (orgId: string, entityId: string, entity: Entity, data: any) => api.post<AppImage>(`/api/image/${orgId}/${entityId}/${entity}`, data),
+  delete: (id: string) => api.delete<boolean>(`/api/image/${id}`),
 };
 
 export function useImages(entity: Entity, id: string) {

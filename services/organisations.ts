@@ -10,14 +10,14 @@ export const organisationKeys = {
 
 const organisationApi = {
   getAll: async (): Promise<Organisation[]> => {
-    return api.get<Organisation[]>('/organisation');
+    return api.get<Organisation[]>('/api/organisation');
   },
-  get: (id: string) => api.get<Organisation>(`/organisation/${id}`),
-  getAccess: (id: string) => api.get<any>(`/organisation/access/${id}`),
-  create: (data: Partial<Organisation>) => api.post<any>('/organisation', data),
-  update: (id: string, data: Partial<Organisation>) => api.put<Organisation>(`/organisation/${id}`, data),
-  startOnboarding: (id: string) => api.patch<Organisation>(`/organisation/start-onboarding/${id}`, {}),
-  stopOnboarding: (id: string) => api.patch<Organisation>(`/organisation/stop-onboarding/${id}`, {}),
+  get: (id: string) => api.get<Organisation>(`/api/organisation/${id}`),
+  getAccess: (id: string) => api.get<any>(`/api/organisation/access/${id}`),
+  create: (data: Partial<Organisation>) => api.post<any>('/api/organisation', data),
+  update: (id: string, data: Partial<Organisation>) => api.put<Organisation>(`/api/organisation/${id}`, data),
+  startOnboarding: (id: string) => api.patch<Organisation>(`/api/organisation/start-onboarding/${id}`, {}),
+  stopOnboarding: (id: string) => api.patch<Organisation>(`/api/organisation/stop-onboarding/${id}`, {}),
 };
 
 export function useOrganisations() {

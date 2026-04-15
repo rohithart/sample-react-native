@@ -12,20 +12,20 @@ export const voteKeys = {
 };
 
 const voteApi = {
-  getAll: (orgId: string) => api.get<Vote[]>(`/vote/org/${orgId}`),
-  getAllForGroup: (orgId: string, groupId: string) => api.get<Vote[]>(`/vote/org/${orgId}/group/${groupId}`),
-  getAllArchived: (orgId: string) => api.get<Vote[]>(`/vote/org/archived/${orgId}`),
-  getAllForUser: (orgId: string) => api.get<Vote[]>(`/vote/user/${orgId}`),
-  getForUser: (orgId: string, id: string) => api.get<Vote>(`/vote/view/${orgId}/${id}`),
-  getAllForWorkflow: (wId: string) => api.get<Vote[]>(`/vote/workflow/${wId}`),
-  get: (id: string) => api.get<Vote>(`/vote/${id}`),
-  getAllCasted: (id: string) => api.get<VoteCast[]>(`/vote/all-casted/${id}`),
-  getCasted: (orgId: string, id: string) => api.get<VoteCast>(`/vote/casted/${orgId}/${id}`),
-  create: (orgId: string, data: Partial<Vote>) => api.post<Vote>(`/vote/${orgId}`, data),
-  complete: (id: string) => api.patch<Vote>(`/vote/finish/${id}`, {}),
-  remind: (id: string) => api.patch<Vote>(`/vote/remind/${id}`, {}),
-  cast: (orgId: string, id: string, data: any) => api.patch<Vote>(`/vote/cast/${orgId}/${id}`, data),
-  delete: (id: string) => api.delete<boolean>(`/vote/${id}`),
+  getAll: (orgId: string) => api.get<Vote[]>(`/api/vote/org/${orgId}`),
+  getAllForGroup: (orgId: string, groupId: string) => api.get<Vote[]>(`/api/vote/org/${orgId}/group/${groupId}`),
+  getAllArchived: (orgId: string) => api.get<Vote[]>(`/api/vote/org/archived/${orgId}`),
+  getAllForUser: (orgId: string) => api.get<Vote[]>(`/api/vote/user/${orgId}`),
+  getForUser: (orgId: string, id: string) => api.get<Vote>(`/api/vote/view/${orgId}/${id}`),
+  getAllForWorkflow: (wId: string) => api.get<Vote[]>(`/api/vote/workflow/${wId}`),
+  get: (id: string) => api.get<Vote>(`/api/vote/${id}`),
+  getAllCasted: (id: string) => api.get<VoteCast[]>(`/api/vote/all-casted/${id}`),
+  getCasted: (orgId: string, id: string) => api.get<VoteCast>(`/api/vote/casted/${orgId}/${id}`),
+  create: (orgId: string, data: Partial<Vote>) => api.post<Vote>(`/api/vote/${orgId}`, data),
+  complete: (id: string) => api.patch<Vote>(`/api/vote/finish/${id}`, {}),
+  remind: (id: string) => api.patch<Vote>(`/api/vote/remind/${id}`, {}),
+  cast: (orgId: string, id: string, data: any) => api.patch<Vote>(`/api/vote/cast/${orgId}/${id}`, data),
+  delete: (id: string) => api.delete<boolean>(`/api/vote/${id}`),
 };
 
 export function useVotes(orgId: string) {

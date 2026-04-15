@@ -10,14 +10,14 @@ export const announcementKeys = {
 };
 
 const announcementApi = {
-  getAll: (orgId: string) => api.get<Announcement[]>(`/announcement/org/${orgId}`),
-  getAllForGroup: (orgId: string, groupId: string) => api.get<Announcement[]>(`/announcement/org/${orgId}/group/${groupId}`),
-  getAllForUser: (orgId: string) => api.get<Announcement[]>(`/announcement/user/${orgId}`),
-  getLatest: (orgId: string) => api.get<Announcement[]>(`/announcement/latest/${orgId}`),
-  getForUser: (orgId: string, id: string) => api.get<Announcement>(`/announcement/view/${orgId}/${id}`),
-  get: (id: string) => api.get<Announcement>(`/announcement/${id}`),
-  create: (orgId: string, data: Partial<Announcement>) => api.post<Announcement>(`/announcement/${orgId}`, data),
-  delete: (id: string) => api.delete<boolean>(`/announcement/${id}`),
+  getAll: (orgId: string) => api.get<Announcement[]>(`/api/announcement/org/${orgId}`),
+  getAllForGroup: (orgId: string, groupId: string) => api.get<Announcement[]>(`/api/announcement/org/${orgId}/group/${groupId}`),
+  getAllForUser: (orgId: string) => api.get<Announcement[]>(`/api/announcement/user/${orgId}`),
+  getLatest: (orgId: string) => api.get<Announcement[]>(`/api/announcement/latest/${orgId}`),
+  getForUser: (orgId: string, id: string) => api.get<Announcement>(`/api/announcement/view/${orgId}/${id}`),
+  get: (id: string) => api.get<Announcement>(`/api/announcement/${id}`),
+  create: (orgId: string, data: Partial<Announcement>) => api.post<Announcement>(`/api/announcement/${orgId}`, data),
+  delete: (id: string) => api.delete<boolean>(`/api/announcement/${id}`),
 };
 
 export function useAnnouncements(orgId: string) {

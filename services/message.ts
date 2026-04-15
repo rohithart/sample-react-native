@@ -8,12 +8,12 @@ export const messageKeys = {
 };
 
 const messageApi = {
-  getForConversation: (conversationId: string, limit = 50, skip = 0) => api.get<Message[]>(`/message/conversation/${conversationId}?limit=${limit}&skip=${skip}`),
-  get: (id: string) => api.get<Message>(`/message/${id}`),
-  send: (conversationId: string, data: { content: string }) => api.post<Message>(`/message/send/${conversationId}`, data),
-  markRead: (orgId: string, conversationId: string) => api.put<void>(`/message/read/${orgId}/${conversationId}`, {}),
-  toggleReaction: (messageId: string, data: any) => api.put<Message>(`/message/react/${messageId}`, data),
-  delete: (id: string) => api.delete<boolean>(`/message/${id}`),
+  getForConversation: (conversationId: string, limit = 50, skip = 0) => api.get<Message[]>(`/api/message/conversation/${conversationId}?limit=${limit}&skip=${skip}`),
+  get: (id: string) => api.get<Message>(`/api/message/${id}`),
+  send: (conversationId: string, data: { content: string }) => api.post<Message>(`/api/message/send/${conversationId}`, data),
+  markRead: (orgId: string, conversationId: string) => api.put<void>(`/api/message/read/${orgId}/${conversationId}`, {}),
+  toggleReaction: (messageId: string, data: any) => api.put<Message>(`/api/message/react/${messageId}`, data),
+  delete: (id: string) => api.delete<boolean>(`/api/message/${id}`),
 };
 
 export function useMessages(conversationId: string) {

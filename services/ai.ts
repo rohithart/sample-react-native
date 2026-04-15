@@ -11,10 +11,10 @@ export const aiKeys = {
 type Entity = 'workflow' | 'task' | 'quote' | 'invoice' | 'workorder' | 'evidence' | 'meeting' | 'document' | 'asset';
 
 const aiApi = {
-  getYearlyTokens: (orgId: string) => api.get<AITokenDetails>(`/ai/token/year/${orgId}`),
-  getMonthlyTokens: (orgId: string) => api.get<AITokenDetails>(`/ai/token/month/${orgId}`),
-  get: (entity: Entity, id: string) => api.get<AIContent>(`/ai/${entity}/${id}`),
-  create: (entity: Entity, id: string) => api.post<AIContent>(`/ai/${entity}/${id}`, {}),
+  getYearlyTokens: (orgId: string) => api.get<AITokenDetails>(`/api/ai/token/year/${orgId}`),
+  getMonthlyTokens: (orgId: string) => api.get<AITokenDetails>(`/api/ai/token/month/${orgId}`),
+  get: (entity: Entity, id: string) => api.get<AIContent>(`/api/ai/${entity}/${id}`),
+  create: (entity: Entity, id: string) => api.post<AIContent>(`/api/ai/${entity}/${id}`, {}),
 };
 
 export function useAIContent(entity: Entity, id: string) {

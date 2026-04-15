@@ -8,9 +8,9 @@ export const conversationKeys = {
 };
 
 const conversationApi = {
-  getForGroup: (groupId: string, orgId: string) => api.get<Conversation>(`/conversation/group/${groupId}/${orgId}`),
-  get: (id: string) => api.get<Conversation>(`/conversation/${id}`),
-  create: (id: string, data: Partial<Conversation>) => api.post<Conversation>(`/conversation/${id}`, data),
+  getForGroup: (groupId: string, orgId: string) => api.get<Conversation>(`/api/conversation/group/${groupId}/${orgId}`),
+  get: (id: string) => api.get<Conversation>(`/api/conversation/${id}`),
+  create: (id: string, data: Partial<Conversation>) => api.post<Conversation>(`/api/conversation/${id}`, data),
 };
 
 export function useConversation(id: string) {

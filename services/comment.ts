@@ -9,11 +9,11 @@ export const commentKeys = {
 type Entity = 'workflow' | 'task' | 'quote' | 'invoice' | 'workorder' | 'evidence' | 'vendor' | 'document' | 'asset' | 'booking' | 'request' | 'meeting' | 'transaction' | 'financial-year';
 
 const commentApi = {
-  getForEntity: (entity: Entity, id: string) => api.get<Comment[]>(`/comment/${entity}/${id}`),
-  create: (orgId: string, data: Partial<Comment>) => api.post<Comment>(`/comment/${orgId}`, data),
-  createUserComment: (orgId: string, data: Partial<Comment>) => api.post<Comment>(`/comment/user/${orgId}`, data),
-  createWallComment: (orgId: string, data: Partial<Comment>) => api.post<Comment>(`/comment/wall/${orgId}`, data),
-  delete: (id: string) => api.delete<boolean>(`/comment/${id}`),
+  getForEntity: (entity: Entity, id: string) => api.get<Comment[]>(`/api/comment/${entity}/${id}`),
+  create: (orgId: string, data: Partial<Comment>) => api.post<Comment>(`/api/comment/${orgId}`, data),
+  createUserComment: (orgId: string, data: Partial<Comment>) => api.post<Comment>(`/api/comment/user/${orgId}`, data),
+  createWallComment: (orgId: string, data: Partial<Comment>) => api.post<Comment>(`/api/comment/wall/${orgId}`, data),
+  delete: (id: string) => api.delete<boolean>(`/api/comment/${id}`),
 };
 
 export function useComments(entity: Entity, id: string) {

@@ -8,8 +8,8 @@ export const chartKeys = {
 };
 
 const chartApi = {
-  getAdmin: (orgId: string) => api.get<ChartData>(`/chart/org/${orgId}`),
-  getUser: (orgId: string) => api.get<ChartData>(`/chart/user/${orgId}`),
+  getAdmin: (orgId: string) => api.get<ChartData>(`/api/chart/org/${orgId}`),
+  getUser: (orgId: string) => api.get<ChartData>(`/api/chart/user/${orgId}`),
 };
 
 export function useAdminChart(orgId: string) {
