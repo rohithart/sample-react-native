@@ -50,23 +50,29 @@ export function EntityCard({ item, config, orgId, onPress }: EntityCardProps) {
   const status = resolveField(item, config.statusField);
 
   return (
-    <Pressable
-      onPress={onPress ?? (() => router.push(config.detailRoute(orgId, item._id) as any))}
-      style={({ pressed: isPressed }) => ({
-        padding: 14,
+    <View
+      style={{
         marginTop: 10,
         marginHorizontal: 14,
-        backgroundColor: isPressed ? pressed : card,
         borderRadius: 12,
-        borderWidth: 1,
-        borderColor: border,
         shadowColor: text,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: isDark ? 0.15 : 0.06,
         shadowRadius: 4,
         elevation: 2,
-      })}
+      }}
     >
+      <Pressable
+        onPress={onPress ?? (() => router.push(config.detailRoute(orgId, item._id) as any))}
+        style={({ pressed: isPressed }) => ({
+          padding: 14,
+          backgroundColor: isPressed ? pressed : card,
+          borderRadius: 12,
+          borderWidth: 1,
+          borderColor: border,
+          overflow: 'hidden',
+        })}
+      >
       <HStack space="md" className="items-stretch">
         {/* Avatar — image or icon fallback */}
         {image ? (
@@ -109,5 +115,6 @@ export function EntityCard({ item, config, orgId, onPress }: EntityCardProps) {
         <ChevronRight size={18} color={sub} />
       </HStack>
     </Pressable>
+    </View>
   );
 }
