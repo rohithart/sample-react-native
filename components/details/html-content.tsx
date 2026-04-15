@@ -1,7 +1,8 @@
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import React, { useState } from 'react';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { Pressable, ScrollView, Text, View, useWindowDimensions } from 'react-native';
+import RenderHtml from 'react-native-render-html';
 
 const COLLAPSED_HEIGHT = 160;
 
@@ -17,25 +18,13 @@ export function HtmlContent({ label, html, maxHeight = COLLAPSED_HEIGHT }: HtmlC
   const [contentHeight, setContentHeight] = useState(0);
   const I = ENTITY_ICONS;
 
-  const plainText = html
-    .replace(/<br\s*\/?>/gi, '\n')
-    .replace(/<\/p>/gi, '\n\n')
-    .replace(/<\/li>/gi, '\n')
-    .replace(/<li>/gi, '  • ')
-    .replace(/<[^>]+>/g, '')
-    .replace(/&nbsp;/g, ' ')
-    .replace(/&amp;/g, '&')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
-    .replace(/\n{3,}/g, '\n\n')
-    .trim();
 
-  if (!plainText) return null;
+  if (!html) return null;
 
   const isOverflow = contentHeight > maxHeight;
   const showScroll = isOverflow && !expanded;
+
+  const { width } = useWindowDimensions();
 
   return (
     <View
@@ -60,12 +49,15 @@ export function HtmlContent({ label, html, maxHeight = COLLAPSED_HEIGHT }: HtmlC
           showsVerticalScrollIndicator={showScroll}
           nestedScrollEnabled
         >
-          <Text
-            style={{ fontSize: 14, color: text, lineHeight: 22 }}
+          <View
             onLayout={(e) => setContentHeight(e.nativeEvent.layout.height)}
           >
-            {plainText}
-          </Text>
+            <RenderHtml
+              contentWidth={width - 28}
+              source={{ html }}
+              baseStyle={{ color: text, fontSize: 14, lineHeight: 22 }}
+            />
+          </View>
         </ScrollView>
       </View>
 
