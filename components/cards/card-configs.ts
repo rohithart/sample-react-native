@@ -110,7 +110,7 @@ export const ADMIN_CONFIGS = {
 export const ORGANISATION_CONFIG: EntityCardConfig = {
   icon: 'organisation',
   titleField: 'name',
-  subtitleField: (item: any) => item.slug || item.description,
+  subtitleField: 'address',
   imageField: 'image',
   statusField: (item: any) => (item.isActive ? 'ACTIVE' : 'INACTIVE'),
   detailRoute: (_orgId: string, itemId: string) => `/view/${itemId}`,

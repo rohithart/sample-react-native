@@ -59,7 +59,6 @@ export function EntityCard({ item, config, orgId, onPress }: EntityCardProps) {
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: isDark ? 0.15 : 0.06,
         shadowRadius: 4,
-        elevation: 2,
       }}
     >
       <Pressable
@@ -112,7 +111,9 @@ export function EntityCard({ item, config, orgId, onPress }: EntityCardProps) {
         </VStack>
 
         {/* Chevron */}
-        <ChevronRight size={18} color={sub} />
+        <HStack space="md" className='items-center'>
+          <ChevronRight size={18} color={sub} />
+        </HStack>
       </HStack>
     </Pressable>
     </View>
