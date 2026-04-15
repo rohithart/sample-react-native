@@ -1,15 +1,14 @@
+import { Role } from '@/enums/user-role';
 import { api } from '@/services/api-client';
-import type { OrgAccess, Organisation } from '@/types';
+import type { OrgAccess, Organisation, UserRole } from '@/types';
 import React, { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react';
-
-type UserRole = 'ADMIN' | 'USER' | 'VIEWER';
 
 type OrganisationContextType = {
   /** Currently selected organisation (null when on the org list). */
   organisation: Organisation | null;
   /** Module-access flags for the selected org (null until fetched). */
   orgAccess: OrgAccess | null;
-  /** The current user's role within the selected org. */
+  /** The full UserRole object (includes user, description, reference, etc.) */
   userRole: UserRole | null;
   /** Whether we're currently fetching the org access / role. */
   isLoadingAccess: boolean;
@@ -44,15 +43,15 @@ export function OrganisationProvider({ children }: { children: ReactNode }) {
       const [org, access, roleData] = await Promise.all([
         api.get<Organisation>(`/organisation/${id}`),
         api.get<OrgAccess>(`/organisation/access/${id}`),
-        api.get<{ role: string }>(`/user/role/${id}`),
+        api.get<UserRole>(`/user/role/${id}`),
       ]);
       setOrganisation(org);
       setOrgAccess(access);
-      setUserRole((roleData.role as UserRole) ?? 'VIEWER');
+      setUserRole(roleData);
     } catch {
       // If calls fail, default to safe fallbacks
       setOrgAccess(null);
-      setUserRole('VIEWER');
+      setUserRole(null);
     } finally {
       setIsLoadingAccess(false);
     }
@@ -74,11 +73,11 @@ export function OrganisationProvider({ children }: { children: ReactNode }) {
       const [org, access, roleData] = await Promise.all([
         api.get<Organisation>(`/organisation/${orgId}`),
         api.get<OrgAccess>(`/organisation/access/${orgId}`),
-        api.get<{ role: string }>(`/user/role/${orgId}`),
+        api.get<UserRole>(`/user/role/${orgId}`),
       ]);
       setOrganisation(org);
       setOrgAccess(access);
-      setUserRole((roleData.role as UserRole) ?? 'VIEWER');
+      setUserRole(roleData);
     } catch {
       setOrganisation(null);
       setOrgAccess(null);
@@ -97,8 +96,8 @@ export function OrganisationProvider({ children }: { children: ReactNode }) {
     [orgAccess],
   );
 
-  const canAccessAdmin = userRole === 'ADMIN' || userRole === 'USER';
-  const isAdmin = userRole === 'ADMIN';
+  const canAccessAdmin = userRole?.role === Role.ADMIN || userRole?.role === Role.USER;
+  const isAdmin = userRole?.role === Role.ADMIN;
 
   const value = useMemo(
     () => ({ organisation, orgAccess, userRole, isLoadingAccess, selectOrganisation, clearOrganisation, hasAccess, canAccessAdmin, isAdmin, hydrateFromOrgId }),
