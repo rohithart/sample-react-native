@@ -17,10 +17,17 @@ function cfg(
 // ---------------------------------------------------------------------------
 export const ADMIN_CONFIGS = {
   workflow: cfg('workflow', (o, i) => `/admin/workflow/${o}/${i}`, {
-    titleField: (item: any) => item.category?.name || '-',
+    subtitleField: (item: any) => {
+      const u = typeof item.user === 'object' ? item.user?.user : undefined;
+      return typeof u === 'object' ? (u?.name || u?.email || 'Unassigned') : 'Unassigned';
+    },
     statusField: 'status',
   }),
   task: cfg('task', (o, i) => `/admin/task/${o}/${i}`, {
+    subtitleField: (item: any) => {
+      const u = typeof item.user === 'object' ? item.user?.user : undefined;
+      return typeof u === 'object' ? (u?.name || u?.email || 'Unassigned') : 'Unassigned';
+    },
     statusField: 'status',
   }),
   evidence: cfg('evidence', (o, i) => `/admin/evidence/${o}/${i}`, {
@@ -32,12 +39,18 @@ export const ADMIN_CONFIGS = {
     subtitleField: (item: any) => item.contactPerson || item.email,
   }),
   quote: cfg('quote', (o, i) => `/admin/quote/${o}/${i}`, {
+    subtitleField: (item: any) =>
+      typeof item.vendor === 'object' ? item.vendor?.name : undefined,
     statusField: 'status',
   }),
   workorder: cfg('workorder', (o, i) => `/admin/workorder/${o}/${i}`, {
+    subtitleField: (item: any) =>
+      typeof item.vendor === 'object' ? item.vendor?.name : undefined,
     statusField: 'status',
   }),
   invoice: cfg('invoice', (o, i) => `/admin/invoice/${o}/${i}`, {
+    subtitleField: (item: any) =>
+      typeof item.vendor === 'object' ? item.vendor?.name : undefined,
     statusField: 'status',
   }),
   announcement: cfg('announcement', (o, i) => `/admin/announcement/${o}/${i}`),
