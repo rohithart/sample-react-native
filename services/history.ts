@@ -1,4 +1,4 @@
-import type { HistoryEntry } from '@/types';
+import type { History } from '@/types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from './api-client';
 
@@ -9,7 +9,7 @@ export const historyKeys = {
 type Entity = 'workflow' | 'task' | 'quote' | 'invoice' | 'workorder' | 'evidence';
 
 const historyApi = {
-  get: (entity: Entity, id: string) => api.get<HistoryEntry[]>(`/history/${entity}/${id}`),
+  get: (entity: Entity, id: string) => api.get<History[]>(`/history/${entity}/${id}`),
   delete: (entity: Entity, id: string) => api.delete<boolean>(`/history/${entity}/${id}`),
 };
 

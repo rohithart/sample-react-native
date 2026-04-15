@@ -1,6 +1,6 @@
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useHistory } from '@/services/history';
-import type { HistoryEntry } from '@/types';
+import type { HistoryChanges, History as HistoryType } from '@/types';
 import { History, X } from 'lucide-react-native';
 import React from 'react';
 import { ActivityIndicator, FlatList, Modal, Pressable, Text, View } from 'react-native';
@@ -20,27 +20,37 @@ export function EntityHistory({ isVisible, onClose, entity, entityId }: EntityHi
   const { bottom } = useSafeAreaInsets();
   const { data: entries, isLoading } = useHistory(entity, entityId);
 
-  const renderItem = ({ item }: { item: HistoryEntry }) => (
-    <View style={{ backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border, borderRadius: 10, padding: 12, gap: 6 }}>
-      <Text style={{ color: colors.text, fontSize: 14, fontWeight: '500' }}>{item.action}</Text>
-      {(item.previousValue != null || item.newValue != null) && (
-        <View style={{ flexDirection: 'row', gap: 8, flexWrap: 'wrap' }}>
-          {item.previousValue != null && (
-            <View style={{ backgroundColor: colors.dangerBg, borderRadius: 6, paddingHorizontal: 8, paddingVertical: 3 }}>
-              <Text style={{ color: colors.danger, fontSize: 12 }}>{String(item.previousValue)}</Text>
-            </View>
-          )}
-          {item.previousValue != null && item.newValue != null && (
-            <Text style={{ color: colors.sub, fontSize: 12, alignSelf: 'center' }}>→</Text>
-          )}
-          {item.newValue != null && (
-            <View style={{ backgroundColor: colors.primary + '15', borderRadius: 6, paddingHorizontal: 8, paddingVertical: 3 }}>
-              <Text style={{ color: colors.primary, fontSize: 12 }}>{String(item.newValue)}</Text>
-            </View>
-          )}
+  const renderChange = (change: HistoryChanges, idx: number) => (
+    <View key={idx} style={{ flexDirection: 'row', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+      <Text style={{ fontSize: 12, fontWeight: '500', color: colors.text }}>{change.field}</Text>
+      {change.previousValue != null && (
+        <View style={{ backgroundColor: colors.dangerBg, borderRadius: 6, paddingHorizontal: 8, paddingVertical: 3 }}>
+          <Text style={{ color: colors.danger, fontSize: 11 }}>{String(change.previousValue)}</Text>
         </View>
       )}
-      <Text style={{ color: colors.sub, fontSize: 11 }}>{new Date(item.createdAt).toLocaleString()}</Text>
+      {change.previousValue != null && change.newValue != null && (
+        <Text style={{ color: colors.sub, fontSize: 12 }}>→</Text>
+      )}
+      {change.newValue != null && (
+        <View style={{ backgroundColor: colors.primary + '15', borderRadius: 6, paddingHorizontal: 8, paddingVertical: 3 }}>
+          <Text style={{ color: colors.primary, fontSize: 11 }}>{String(change.newValue)}</Text>
+        </View>
+      )}
+    </View>
+  );
+
+  const renderItem = ({ item }: { item: HistoryType }) => (
+    <View style={{ backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border, borderRadius: 10, padding: 12, gap: 8 }}>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Text style={{ color: colors.text, fontSize: 14, fontWeight: '600' }}>{item.action}</Text>
+      </View>
+      <Text style={{ color: colors.sub, fontSize: 11 }}>by {item.updatedBy}</Text>
+      {item.changes?.length > 0 && (
+        <View style={{ gap: 6, paddingTop: 4, borderTopWidth: 1, borderTopColor: colors.border }}>
+          {item.changes.map(renderChange)}
+        </View>
+      )}
+      <Text style={{ color: colors.sub, fontSize: 10 }}>{new Date(item.createdAt).toLocaleString()}</Text>
     </View>
   );
 

@@ -1,6 +1,6 @@
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useTimeline } from '@/services/timeline';
-import type { TimelineEntry } from '@/types';
+import type { Timeline } from '@/types';
 import { Clock, X } from 'lucide-react-native';
 import React from 'react';
 import { ActivityIndicator, FlatList, Modal, Pressable, Text, View } from 'react-native';
@@ -15,28 +15,98 @@ interface EntityTimelineProps {
   entityId: string;
 }
 
+const DOT_SIZE = 12;
+const LINE_WIDTH = 2;
+
+function fmtDate(d: string) {
+  return new Date(d).toLocaleDateString('en-AU', { day: 'numeric', month: 'short' });
+}
+function fmtTime(d: string) {
+  return new Date(d).toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit' });
+}
+
 export function EntityTimeline({ isVisible, onClose, entity, entityId }: EntityTimelineProps) {
   const colors = useThemeColors();
   const { bottom } = useSafeAreaInsets();
   const { data: entries, isLoading } = useTimeline(entity, entityId);
 
-  const renderItem = ({ item, index }: { item: TimelineEntry; index: number }) => (
-    <View style={{ flexDirection: 'row', gap: 12 }}>
-      {/* Timeline line + dot */}
-      <View style={{ alignItems: 'center', width: 20 }}>
-        <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: index === 0 ? colors.primary : colors.border, marginTop: 4 }} />
-        {index < (entries?.length ?? 0) - 1 && (
-          <View style={{ width: 2, flex: 1, backgroundColor: colors.border, marginTop: 2 }} />
-        )}
+  const renderItem = ({ item, index }: { item: Timeline; index: number }) => {
+    const isLeft = !!item.secondaryId;
+    const isLast = index === (entries?.length ?? 0) - 1;
+    const isFirst = index === 0;
+
+    const card = (
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: colors.card,
+          borderWidth: 1,
+          borderColor: colors.border,
+          borderRadius: 10,
+          padding: 10,
+          gap: 4,
+        }}
+      >
+        <Text style={{ fontSize: 13, fontWeight: '600', color: colors.text }} numberOfLines={3}>
+          {item.message}
+        </Text>
+        <Text style={{ fontSize: 11, color: colors.sub }}>{item.category}</Text>
+        <Text style={{ fontSize: 10, color: colors.sub }}>{item.createdBy}</Text>
       </View>
-      {/* Content */}
-      <View style={{ flex: 1, paddingBottom: 16 }}>
-        <Text style={{ color: colors.text, fontSize: 14, fontWeight: '500' }}>{item.action}</Text>
-        {item.details && <Text style={{ color: colors.sub, fontSize: 13, marginTop: 2, lineHeight: 18 }}>{item.details}</Text>}
-        <Text style={{ color: colors.sub, fontSize: 11, marginTop: 4 }}>{new Date(item.createdAt).toLocaleString()}</Text>
+    );
+
+    return (
+      <View style={{ flexDirection: 'row', alignItems: 'flex-start', minHeight: 72 }}>
+        {/* Left content */}
+        <View style={{ flex: 1, paddingRight: 10, alignItems: 'flex-end' }}>
+          {isLeft ? card : null}
+        </View>
+
+        {/* Center line + dot + date */}
+        <View style={{ alignItems: 'center', width: 48 }}>
+          {/* Connecting line above dot */}
+          {!isFirst && (
+            <View style={{ width: LINE_WIDTH, height: 8, backgroundColor: colors.border }} />
+          )}
+          {/* Dot */}
+          <View
+            style={{
+              width: DOT_SIZE,
+              height: DOT_SIZE,
+              borderRadius: DOT_SIZE / 2,
+              backgroundColor: isFirst ? colors.primary : colors.secondary,
+              zIndex: 1,
+            }}
+          />
+          {/* Date label on the line */}
+          <View
+            style={{
+              backgroundColor: colors.bg,
+              paddingHorizontal: 2,
+              paddingVertical: 1,
+              marginTop: 2,
+            }}
+          >
+            <Text style={{ fontSize: 9, fontWeight: '600', color: colors.sub, textAlign: 'center' }}>
+              {fmtDate(item.createdAt)}
+            </Text>
+            <Text style={{ fontSize: 8, color: colors.sub, textAlign: 'center' }}>
+              {fmtTime(item.createdAt)}
+            </Text>
+          </View>
+          {/* Connecting line below */}
+          {!isLast && (
+            <View style={{ width: LINE_WIDTH, flex: 1, backgroundColor: colors.border, minHeight: 12 }} />
+          )}
+        </View>
+
+        {/* Right content */}
+        <View style={{ flex: 1, paddingLeft: 10, alignItems: 'flex-start' }}>
+          {!isLeft ? card : null}
+        </View>
       </View>
-    </View>
-  );
+    );
+  };
 
   if (!isVisible) return null;
 
@@ -67,7 +137,7 @@ export function EntityTimeline({ isVisible, onClose, entity, entityId }: EntityT
             data={entries}
             keyExtractor={(i) => i._id}
             renderItem={renderItem}
-            contentContainerStyle={{ padding: 16, paddingBottom: bottom + 16 }}
+            contentContainerStyle={{ paddingHorizontal: 8, paddingTop: 16, paddingBottom: bottom + 16 }}
             showsVerticalScrollIndicator={false}
           />
         )}
