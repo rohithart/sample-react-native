@@ -3,10 +3,10 @@ import { useToast } from '@/context/toast-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useAlertsAndroid, useAlertsiOS } from '@/services/alert';
 import { useHealth } from '@/services/health';
+import Constants from 'expo-constants';
 import { Stack, useRouter } from 'expo-router';
 import { useEffect, useRef } from 'react';
 import { Animated, BackHandler, Easing, Platform, Text as RNText, ScrollView, View } from 'react-native';
-import Constants from 'expo-constants';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 
@@ -98,8 +98,20 @@ export default function SplashScreen() {
     }
   }, [alertsQuery.data, showToast]);
 
-  // Health minVersion check
+  // Health minVersion check and error handling
   useEffect(() => {
+    if (healthQuery.isError || (healthQuery.data && healthQuery.data.status !== 'Ok')) {
+      showToast({
+        type: 'error',
+        title: 'Server Error',
+        message: 'Unable to connect to the server. The app will now close.',
+        duration: 5000,
+      });
+      setTimeout(() => {
+        BackHandler.exitApp();
+      }, 2000);
+      throw new Error('Health check failed');
+    }
     if (healthQuery.data) {
       const minVersion = healthQuery.data?.minVersion;
       let currentVersion = '1.0.0';
@@ -118,7 +130,7 @@ export default function SplashScreen() {
         }, 2000);
       }
     }
-  }, [healthQuery.data, showToast]);
+  }, [healthQuery.data, healthQuery.isError, showToast]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
