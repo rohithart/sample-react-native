@@ -1,4 +1,4 @@
-import type { User } from '@/types';
+import type { User, UserRole } from '@/types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from './api-client';
 
@@ -11,24 +11,28 @@ export const userKeys = {
 };
 
 const userApi = {
-  getAll: (orgId: string) => api.get<User[]>(`/user/org/${orgId}`),
-  getAllAdmins: (orgId: string) => api.get<User[]>(`/user/admins/${orgId}`),
-  get: (id: string) => api.get<User>(`/user/${id}`),
+  getAll: (orgId: string) => api.get<UserRole[]>(`/user/org/${orgId}`),
+  getAllAdmins: (orgId: string) => api.get<UserRole[]>(`/user/admins/${orgId}`),
+  get: (id: string) => api.get<UserRole>(`/user/${id}`),
   getCurrentUser: () => api.get<User>('/user/user/current'),
-  getUserRole: (orgId: string) => api.get<{ role: string }>(`/user/role/${orgId}`),
-  getAllAssignable: (orgId: string) => api.get<User[]>(`/user/assign/${orgId}`),
+  getUserRole: (orgId: string) => api.get<UserRole>(`/user/role/${orgId}`),
+  getAllAssignable: (orgId: string) => api.get<UserRole[]>(`/user/assign/${orgId}`),
   create: (orgId: string, data: Partial<User>) => api.post<User>(`/user/${orgId}`, data),
   onboard: (orgCode: string, data: Partial<User>) => api.post<User>(`/user/onboard/${orgCode}`, data),
   delete: (id: string) => api.delete<boolean>(`/user/${id}`),
-  archive: (id: string) => api.patch<User>(`/user/archive/${id}`, {}),
-  unarchive: (id: string) => api.patch<User>(`/user/unarchive/${id}`, {}),
-  updateStatus: (id: string, data: { status: string }) => api.patch<User>(`/user/status/${id}`, data),
-  updateProfile: (id: string, data: Partial<User>) => api.patch<User>(`/user/profile/${id}`, data),
-  updateRoleProfile: (id: string, data: any) => api.patch<User>(`/user/role-profile/${id}`, data),
+  archive: (id: string) => api.patch<UserRole>(`/user/archive/${id}`, {}),
+  unarchive: (id: string) => api.patch<UserRole>(`/user/unarchive/${id}`, {}),
+  updateStatus: (id: string, data: { status: string }) => api.patch<UserRole>(`/user/status/${id}`, data),
+  updateProfile: (id: string, data: Partial<User>) => api.patch<UserRole>(`/user/profile/${id}`, data),
+  updateRoleProfile: (id: string, data: any) => api.patch<UserRole>(`/user/role-profile/${id}`, data),
 };
 
 export function useUsers(orgId: string) {
   return useQuery({ queryKey: userKeys.all(orgId), queryFn: () => userApi.getAll(orgId), enabled: !!orgId });
+}
+
+export function useAssignableUsers(orgId: string) {
+  return useQuery({ queryKey: userKeys.assignable(orgId), queryFn: () => userApi.getAllAssignable(orgId), enabled: !!orgId });
 }
 
 export function useUser(id: string) {

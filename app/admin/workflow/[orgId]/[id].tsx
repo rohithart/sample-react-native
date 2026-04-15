@@ -1,4 +1,4 @@
-import { AuditInfo, DetailField, DetailSection, GroupRelationship, HtmlContent, LinkedField, UserRelationship } from '@/components/details';
+import { AuditInfo, DetailField, DetailSection, GroupSelect, HtmlContent, LinkedField, UserSelect } from '@/components/details';
 import { ConfirmationDialog } from '@/components/dialogs/confirmation-dialog';
 import { EntityAttachments } from '@/components/entity/entity-attachments';
 import { EntityComments } from '@/components/entity/entity-comments';
@@ -11,7 +11,9 @@ import { StatusBadge } from '@/components/ui/status-badge';
 import { useOrganisationContext } from '@/context/organisation-context';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
 import { useThemeColors } from '@/hooks/use-theme-colors';
-import { useWorkflow } from '@/services/workflow';
+import { useGroups } from '@/services/group';
+import { useAssignableUsers } from '@/services/user';
+import { useUpdateWorkflowGroup, useUpdateWorkflowUser, useWorkflow } from '@/services/workflow';
 import { downloadAndSharePdf } from '@/utils/pdf-download';
 import { resolveId } from '@/utils/resolve-ref';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
@@ -36,6 +38,10 @@ export default function WorkflowDetailScreen() {
   const [showHistory, setShowHistory] = useState(false);
 
   const { data: item, isLoading: isLoadingItem, refetch, isRefetching } = useWorkflow(id || '');
+  const { data: assignableUsers = [], isLoading: isLoadingUsers } = useAssignableUsers(orgId || '');
+  const { data: groups = [], isLoading: isLoadingGroups } = useGroups(orgId || '');
+  const updateUser = useUpdateWorkflowUser(orgId || '');
+  const updateGroup = useUpdateWorkflowGroup(orgId || '');
   const refreshControl = useRefreshControl(refetch, isRefetching);
 
   const handleDelete = async () => {
@@ -124,8 +130,20 @@ export default function WorkflowDetailScreen() {
         </DetailSection>
         <DetailSection title="Relationships">
           <LinkedField label="Category" icon="category" value={item.category?.title} route={`/admin/category/${orgId}/${resolveId(item.category)}`} />
-          <UserRelationship orgId={orgId || ''} item={item} />
-          <GroupRelationship orgId={orgId || ''} item={item} />
+          <UserSelect
+            users={assignableUsers}
+            selectedId={resolveId(item.user)}
+            onSelect={(userId) => updateUser.mutate({ id: id!, userId })}
+            isLoading={isLoadingUsers}
+            disabled={!isAdmin}
+          />
+          <GroupSelect
+            groups={groups}
+            selectedId={resolveId(item.group)}
+            onSelect={(groupId) => updateGroup.mutate({ id: id!, groupId })}
+            isLoading={isLoadingGroups}
+            disabled={!isAdmin}
+          />
         </DetailSection>
       </ScrollView>
       )}

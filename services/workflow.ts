@@ -87,3 +87,13 @@ export function useUnarchiveWorkflow(orgId: string) {
   const qc = useQueryClient();
   return useMutation({ mutationFn: (id: string) => workflowApi.unarchive(id), onSuccess: () => { qc.invalidateQueries({ queryKey: workflowKeys.all(orgId) }); qc.invalidateQueries({ queryKey: workflowKeys.archived(orgId) }); } });
 }
+
+export function useUpdateWorkflowUser(orgId: string) {
+  const qc = useQueryClient();
+  return useMutation({ mutationFn: ({ id, userId }: { id: string; userId: string }) => workflowApi.updateUser(id, { userId }), onSuccess: (_, { id }) => { qc.invalidateQueries({ queryKey: workflowKeys.all(orgId) }); qc.invalidateQueries({ queryKey: workflowKeys.detail(id) }); } });
+}
+
+export function useUpdateWorkflowGroup(orgId: string) {
+  const qc = useQueryClient();
+  return useMutation({ mutationFn: ({ id, groupId }: { id: string; groupId: string }) => workflowApi.updateGroup(id, { groupId }), onSuccess: (_, { id }) => { qc.invalidateQueries({ queryKey: workflowKeys.all(orgId) }); qc.invalidateQueries({ queryKey: workflowKeys.detail(id) }); } });
+}

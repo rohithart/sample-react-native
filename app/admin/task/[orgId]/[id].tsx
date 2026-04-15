@@ -1,4 +1,4 @@
-import { AuditInfo, DetailField, DetailSection, HtmlContent, LinkedField, UserRelationship } from '@/components/details';
+import { AuditInfo, DetailField, DetailSection, HtmlContent, LinkedField, UserSelect } from '@/components/details';
 import { ConfirmationDialog } from '@/components/dialogs/confirmation-dialog';
 import { EntityAttachments } from '@/components/entity/entity-attachments';
 import { EntityComments } from '@/components/entity/entity-comments';
@@ -11,7 +11,8 @@ import { StatusBadge } from '@/components/ui/status-badge';
 import { useOrganisationContext } from '@/context/organisation-context';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
 import { useThemeColors } from '@/hooks/use-theme-colors';
-import { useTask } from '@/services/task';
+import { useAssignTaskUser, useTask } from '@/services/task';
+import { useAssignableUsers } from '@/services/user';
 import { downloadAndSharePdf } from '@/utils/pdf-download';
 import { resolveId } from '@/utils/resolve-ref';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
@@ -36,6 +37,8 @@ export default function TaskDetailScreen() {
   const [showHistory, setShowHistory] = useState(false);
 
   const { data: item, isLoading: isLoadingItem, refetch, isRefetching } = useTask(id || '');
+  const { data: assignableUsers = [], isLoading: isLoadingUsers } = useAssignableUsers(orgId || '');
+  const assignUser = useAssignTaskUser(orgId || '');
   const refreshControl = useRefreshControl(refetch, isRefetching);
 
   const handleDelete = async () => {
@@ -122,7 +125,13 @@ export default function TaskDetailScreen() {
           <DetailField label="Flagged" value={item.isFlagged ? 'Yes' : 'No'} />
         </DetailSection>
         <DetailSection title="Relationships">
-          <UserRelationship orgId={orgId || ''} item={item} />
+          <UserSelect
+            users={assignableUsers}
+            selectedId={resolveId(item.user)}
+            onSelect={(userId) => assignUser.mutate({ id: id!, userId })}
+            isLoading={isLoadingUsers}
+            disabled={!isAdmin}
+          />
           <LinkedField label="Workflow" icon="workflow" value={item.workflow?.title} route={`/admin/workflow/${orgId}/${resolveId(item.workflow)}`} />
         </DetailSection>
       </ScrollView>
