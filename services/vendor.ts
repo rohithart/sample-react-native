@@ -2,18 +2,12 @@ import type { Vendor } from '@/types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from './api-client';
 
-// ---------------------------------------------------------------------------
-// Query keys
-// ---------------------------------------------------------------------------
 export const vendorKeys = {
   all: (orgId: string) => ['vendor', orgId] as const,
   detail: (id: string) => ['vendor', 'detail', id] as const,
   archived: (orgId: string) => ['vendor', orgId, 'archived'] as const,
 };
 
-// ---------------------------------------------------------------------------
-// API functions
-// ---------------------------------------------------------------------------
 const vendorApi = {
   getAll: (orgId: string) => api.get<Vendor[]>(`/vendor/org/${orgId}`),
   get: (id: string) => api.get<Vendor>(`/vendor/${id}`),
@@ -25,9 +19,6 @@ const vendorApi = {
   unarchive: (id: string) => api.patch<Vendor>(`/vendor/unarchive/${id}`, {}),
 };
 
-// ---------------------------------------------------------------------------
-// Query hooks
-// ---------------------------------------------------------------------------
 export function useVendors(orgId: string) {
   return useQuery({ queryKey: vendorKeys.all(orgId), queryFn: () => vendorApi.getAll(orgId), enabled: !!orgId });
 }
@@ -36,9 +27,6 @@ export function useVendor(id: string) {
   return useQuery({ queryKey: vendorKeys.detail(id), queryFn: () => vendorApi.get(id), enabled: !!id });
 }
 
-// ---------------------------------------------------------------------------
-// Mutation hooks
-// ---------------------------------------------------------------------------
 export function useCreateVendor(orgId: string) {
   const qc = useQueryClient();
   return useMutation({ mutationFn: (data: Partial<Vendor>) => vendorApi.create(orgId, data), onSuccess: () => qc.invalidateQueries({ queryKey: vendorKeys.all(orgId) }) });

@@ -2,9 +2,6 @@ import type { Meeting } from '@/types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from './api-client';
 
-// ---------------------------------------------------------------------------
-// Query keys
-// ---------------------------------------------------------------------------
 export const meetingKeys = {
   all: (orgId: string) => ['meeting', orgId] as const,
   detail: (id: string) => ['meeting', 'detail', id] as const,
@@ -13,9 +10,6 @@ export const meetingKeys = {
   forGroup: (orgId: string, groupId: string) => ['meeting', orgId, 'group', groupId] as const,
 };
 
-// ---------------------------------------------------------------------------
-// API functions
-// ---------------------------------------------------------------------------
 const meetingApi = {
   getAll: (orgId: string) => api.get<Meeting[]>(`/meeting/org/${orgId}`),
   get: (id: string) => api.get<Meeting>(`/meeting/${id}`),
@@ -32,9 +26,6 @@ const meetingApi = {
   remind: (id: string) => api.patch<Meeting>(`/meeting/remind/${id}`, {}),
 };
 
-// ---------------------------------------------------------------------------
-// Query hooks
-// ---------------------------------------------------------------------------
 export function useMeetings(orgId: string) {
   return useQuery({ queryKey: meetingKeys.all(orgId), queryFn: () => meetingApi.getAll(orgId), enabled: !!orgId });
 }
@@ -43,9 +34,6 @@ export function useMeeting(id: string) {
   return useQuery({ queryKey: meetingKeys.detail(id), queryFn: () => meetingApi.get(id), enabled: !!id });
 }
 
-// ---------------------------------------------------------------------------
-// Mutation hooks
-// ---------------------------------------------------------------------------
 export function useCreateMeeting(orgId: string) {
   const qc = useQueryClient();
   return useMutation({ mutationFn: (data: Partial<Meeting>) => meetingApi.create(orgId, data), onSuccess: () => qc.invalidateQueries({ queryKey: meetingKeys.all(orgId) }) });

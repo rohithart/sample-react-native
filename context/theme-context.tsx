@@ -19,7 +19,6 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setThemeState] = useState<ThemeMode>('system');
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // Load theme preference on mount
   useEffect(() => {
     loadTheme();
   }, []);

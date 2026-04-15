@@ -12,7 +12,6 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, info: React.ErrorInfo) {
-    // Replace with your error reporting service (Sentry, Bugsnag, etc.)
     console.error('[ErrorBoundary]', error, info.componentStack);
   }
 

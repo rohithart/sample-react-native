@@ -10,7 +10,6 @@ export default function SplashScreen() {
   const router = useRouter();
   const I = ENTITY_ICONS;
 
-  // Multiple animations for staggered effects
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(30)).current;
   const logoScale = useRef(new Animated.Value(0.8)).current;
@@ -22,14 +21,12 @@ export default function SplashScreen() {
   const { bg, card, text, sub: textSecondary, primary, secondary } = colors;
 
   useEffect(() => {
-    // Main fade and slide in
     Animated.timing(fadeAnim, {
       toValue: 1,
       duration: 600,
       useNativeDriver: true,
     }).start();
 
-    // Logo scale
     Animated.sequence([
       Animated.delay(200),
       Animated.timing(logoScale, {
@@ -40,7 +37,6 @@ export default function SplashScreen() {
       }),
     ]).start();
 
-    // Slide content up
     Animated.timing(slideAnim, {
       toValue: 0,
       duration: 800,
@@ -48,7 +44,6 @@ export default function SplashScreen() {
       useNativeDriver: true,
     }).start();
 
-    // Feature items stagger
     Animated.stagger(150, [
       Animated.timing(featureAnim1, {
         toValue: 0,
@@ -67,7 +62,6 @@ export default function SplashScreen() {
       }),
     ]).start();
 
-    // Floating animation (continuous)
     Animated.loop(
       Animated.sequence([
         Animated.timing(floatAnim, {
@@ -83,7 +77,6 @@ export default function SplashScreen() {
       ])
     ).start();
 
-    // Redirect after 3 seconds
     const timer = setTimeout(() => {
       router.replace('/terms-and-conditions');
     }, 3000);
@@ -107,9 +100,7 @@ export default function SplashScreen() {
           }}
         >
           <View style={{ flex: 1, paddingHorizontal: 24, paddingVertical: 32, justifyContent: 'space-between' }}>
-            {/* Hero Section */}
             <View style={{ alignItems: 'center', marginTop: 20 }}>
-              {/* Animated Logo Container */}
               <Animated.View
                 style={{
                   marginBottom: 32,
@@ -149,7 +140,6 @@ export default function SplashScreen() {
                 </View>
               </Animated.View>
 
-              {/* Branding */}
               <RNText
                 style={{
                   fontSize: 48,
@@ -176,9 +166,7 @@ export default function SplashScreen() {
               </RNText>
             </View>
 
-            {/* Features Container */}
             <View style={{ gap: 12, marginVertical: 32 }}>
-              {/* Feature 1 */}
               <Animated.View
                 style={{
                   opacity: featureAnim1.interpolate({
@@ -197,7 +185,6 @@ export default function SplashScreen() {
                 />
               </Animated.View>
 
-              {/* Feature 2 */}
               <Animated.View
                 style={{
                   opacity: featureAnim2.interpolate({
@@ -216,7 +203,6 @@ export default function SplashScreen() {
                 />
               </Animated.View>
 
-              {/* Feature 3 */}
               <Animated.View
                 style={{
                   opacity: featureAnim3.interpolate({

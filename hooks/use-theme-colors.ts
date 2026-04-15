@@ -1,7 +1,5 @@
 import { useTheme } from '@/context/theme-context';
 
-// ── Palette ─────────────────────────────────────────────────────────
-// Slate scale (dark backgrounds & borders)
 const SLATE_950 = '#0f172a';
 const SLATE_800 = '#1e293b';
 const SLATE_700 = '#334155';
@@ -13,14 +11,12 @@ const SLATE_200 = '#e5e7eb';
 const SLATE_100 = '#f1f5f9';
 const SLATE_50 = '#f8fafc';
 
-// Gray scale (icons, inactive, switch)
 const GRAY_700 = '#1f2937';
 const GRAY_500 = '#6b7280';
 const GRAY_400 = '#9ca3af';
 const GRAY_300 = '#d1d5db';
 const GRAY_200 = '#e5e7eb';
 
-// Neutral scale (skeleton/shimmer)
 const NEUTRAL_850 = '#1c1c1c';
 const NEUTRAL_800 = '#2a2a2a';
 const NEUTRAL_750 = '#2a3648';
@@ -28,7 +24,6 @@ const NEUTRAL_200 = '#e2e2e2';
 const NEUTRAL_100 = '#f0f4f8';
 const NEUTRAL_50 = '#f5f5f5';
 
-// Brand
 const PURPLE_400 = '#b279d8';
 const PURPLE_700 = '#673ab7';
 const PURPLE_200 = '#e9d5ff';
@@ -44,12 +39,10 @@ const RED_50 = '#fef2f2';
 const ORANGE_500 = '#f97316';
 const GREEN_500 = '#10b981';
 
-// Static
 const WHITE = '#ffffff';
 const PRESSED_ALPHA_LIGHT = 'rgba(0, 0, 0, 0.05)';
 const PRESSED_ALPHA_DARK = 'rgba(255, 255, 255, 0.1)';
 
-// ── Resolved palettes ───────────────────────────────────────────────
 const DARK: Omit<ThemeColors, 'isDark'> = {
   bg: SLATE_950,
   card: SLATE_800,
@@ -106,7 +99,6 @@ const LIGHT: Omit<ThemeColors, 'isDark'> = {
   cardSecondaryBg: TEAL_50_LIGHT,
 };
 
-// ── Interface ───────────────────────────────────────────────────────
 export interface ThemeColors {
   isDark: boolean;
   bg: string;
@@ -149,7 +141,6 @@ export interface ThemeColors {
   cardSecondaryBg: string;
 }
 
-// ── Hook ────────────────────────────────────────────────────────────
 export function useThemeColors(): ThemeColors {
   const { isDark } = useTheme();
   return { isDark, ...(isDark ? DARK : LIGHT) };

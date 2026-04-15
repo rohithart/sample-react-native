@@ -2,9 +2,6 @@ import type { Evidence } from '@/types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from './api-client';
 
-// ---------------------------------------------------------------------------
-// Query keys
-// ---------------------------------------------------------------------------
 export const evidenceKeys = {
   all: (orgId: string) => ['evidence', orgId] as const,
   detail: (id: string) => ['evidence', 'detail', id] as const,
@@ -13,9 +10,6 @@ export const evidenceKeys = {
   forVendor: (vId: string) => ['evidence', 'vendor', vId] as const,
 };
 
-// ---------------------------------------------------------------------------
-// API functions
-// ---------------------------------------------------------------------------
 const evidenceApi = {
   getAll: (orgId: string) => api.get<Evidence[]>(`/evidence/org/${orgId}`),
   get: (id: string) => api.get<Evidence>(`/evidence/${id}`),
@@ -36,9 +30,6 @@ const evidenceApi = {
   submit: (id: string) => api.patch<Evidence>(`/evidence/submit/${id}`, {}),
 };
 
-// ---------------------------------------------------------------------------
-// Query hooks
-// ---------------------------------------------------------------------------
 export function useEvidences(orgId: string) {
   return useQuery({ queryKey: evidenceKeys.all(orgId), queryFn: () => evidenceApi.getAll(orgId), enabled: !!orgId });
 }
@@ -47,9 +38,6 @@ export function useEvidence(id: string) {
   return useQuery({ queryKey: evidenceKeys.detail(id), queryFn: () => evidenceApi.get(id), enabled: !!id });
 }
 
-// ---------------------------------------------------------------------------
-// Mutation hooks
-// ---------------------------------------------------------------------------
 export function useCreateEvidence(orgId: string) {
   const qc = useQueryClient();
   return useMutation({ mutationFn: (data: Partial<Evidence>) => evidenceApi.create(orgId, data), onSuccess: () => qc.invalidateQueries({ queryKey: evidenceKeys.all(orgId) }) });

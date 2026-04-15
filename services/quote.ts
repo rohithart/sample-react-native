@@ -2,9 +2,6 @@ import type { Quote } from '@/types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from './api-client';
 
-// ---------------------------------------------------------------------------
-// Query keys
-// ---------------------------------------------------------------------------
 export const quoteKeys = {
   all: (orgId: string) => ['quote', orgId] as const,
   detail: (id: string) => ['quote', 'detail', id] as const,
@@ -13,9 +10,6 @@ export const quoteKeys = {
   forVendor: (vId: string) => ['quote', 'vendor', vId] as const,
 };
 
-// ---------------------------------------------------------------------------
-// API functions
-// ---------------------------------------------------------------------------
 const quoteApi = {
   getAll: (orgId: string) => api.get<Quote[]>(`/quote/org/${orgId}`),
   get: (id: string) => api.get<Quote>(`/quote/${id}`),
@@ -35,9 +29,6 @@ const quoteApi = {
   submit: (id: string) => api.patch<Quote>(`/quote/submit/${id}`, {}),
 };
 
-// ---------------------------------------------------------------------------
-// Query hooks
-// ---------------------------------------------------------------------------
 export function useQuotes(orgId: string) {
   return useQuery({ queryKey: quoteKeys.all(orgId), queryFn: () => quoteApi.getAll(orgId), enabled: !!orgId });
 }
@@ -46,9 +37,6 @@ export function useQuote(id: string) {
   return useQuery({ queryKey: quoteKeys.detail(id), queryFn: () => quoteApi.get(id), enabled: !!id });
 }
 
-// ---------------------------------------------------------------------------
-// Mutation hooks
-// ---------------------------------------------------------------------------
 export function useCreateQuote(orgId: string) {
   const qc = useQueryClient();
   return useMutation({ mutationFn: (data: Partial<Quote>) => quoteApi.create(orgId, data), onSuccess: () => qc.invalidateQueries({ queryKey: quoteKeys.all(orgId) }) });

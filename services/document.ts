@@ -2,9 +2,6 @@ import type { Document } from '@/types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from './api-client';
 
-// ---------------------------------------------------------------------------
-// Query keys
-// ---------------------------------------------------------------------------
 export const documentKeys = {
   all: (orgId: string) => ['document', orgId] as const,
   detail: (id: string) => ['document', 'detail', id] as const,
@@ -12,9 +9,6 @@ export const documentKeys = {
   forFolder: (folderId: string) => ['document', 'folder', folderId] as const,
 };
 
-// ---------------------------------------------------------------------------
-// API functions
-// ---------------------------------------------------------------------------
 const documentApi = {
   getAll: (orgId: string) => api.get<Document[]>(`/document/org/${orgId}`),
   get: (id: string) => api.get<Document>(`/document/${id}`),
@@ -31,9 +25,6 @@ const documentApi = {
   move: (id: string, data: { folderId: string }) => api.patch<Document>(`/document/move/${id}`, data),
 };
 
-// ---------------------------------------------------------------------------
-// Query hooks
-// ---------------------------------------------------------------------------
 export function useDocuments(orgId: string) {
   return useQuery({ queryKey: documentKeys.all(orgId), queryFn: () => documentApi.getAll(orgId), enabled: !!orgId });
 }
@@ -42,9 +33,6 @@ export function useDocument(id: string) {
   return useQuery({ queryKey: documentKeys.detail(id), queryFn: () => documentApi.get(id), enabled: !!id });
 }
 
-// ---------------------------------------------------------------------------
-// Mutation hooks
-// ---------------------------------------------------------------------------
 export function useCreateDocument(orgId: string) {
   const qc = useQueryClient();
   return useMutation({ mutationFn: (data: Partial<Document>) => documentApi.create(orgId, data), onSuccess: () => qc.invalidateQueries({ queryKey: documentKeys.all(orgId) }) });

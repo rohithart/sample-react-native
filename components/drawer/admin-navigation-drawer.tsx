@@ -38,19 +38,16 @@ export function AdminNavigationDrawer({
       drawerAnim={drawerAnim}
       topInset={topInset}
     >
-      {/* GENERAL — always visible */}
       <DrawerSectionHeading title="Organisations" />
       <DrawerItem icon={<I.organisation size={16} color={c} />} label="All organisations" onPress={() => go('/home')} />
       <DrawerItem icon={<I.plus size={16} color={c} />} label="New organisation" onPress={() => go('/home')} />
 
-      {/* GENERAL */}
       <DrawerDivider />
       <DrawerSectionHeading title={orgName} />
       <DrawerItem icon={<I.dashboard size={16} color={c} />} label="Dashboard" onPress={() => go(`/admin/${orgId}`)} />
       <DrawerItem icon={<I.mySpace size={16} color={c} />} label="My space" onPress={() => go(`/admin/me/${orgId}`)} />
       <DrawerItem icon={<I.wall size={16} color={c} />} label="Discussions" onPress={() => go(`/admin/wall/${orgId}`)} />
 
-      {/* WORKFLOW module */}
       {hasAccess('workflow') && (
         <>
           <DrawerDivider />
@@ -62,7 +59,6 @@ export function AdminNavigationDrawer({
         </>
       )}
 
-      {/* VENDOR module */}
       {hasAccess('vendor') && (
         <>
           <DrawerDivider />
@@ -74,7 +70,6 @@ export function AdminNavigationDrawer({
         </>
       )}
 
-      {/* COMMUNICATION module */}
       {hasAccess('communication') && (
         <>
           <DrawerDivider />
@@ -89,7 +84,6 @@ export function AdminNavigationDrawer({
         </>
       )}
 
-      {/* ASSET module */}
       {hasAccess('asset') && (
         <>
           <DrawerDivider />
@@ -100,7 +94,6 @@ export function AdminNavigationDrawer({
         </>
       )}
 
-      {/* FINANCE module */}
       {hasAccess('finance') && (
         <>
           <DrawerDivider />
@@ -113,7 +106,6 @@ export function AdminNavigationDrawer({
         </>
       )}
 
-      {/* ANALYTICS module */}
       {hasAccess('analytics') && (
         <>
           <DrawerDivider />
@@ -124,13 +116,11 @@ export function AdminNavigationDrawer({
         </>
       )}
 
-      {/* GENERAL — always visible */}
       <DrawerDivider />
       <DrawerSectionHeading title="Attachments" />
       <DrawerItem icon={<I.gallery size={16} color={c} />} label="All images" onPress={() => go(`/admin/images/${orgId}`)} />
       <DrawerItem icon={<I.attachment size={16} color={c} />} label="All attachments" onPress={() => go(`/admin/attachments/${orgId}`)} />
 
-      {/* USER module */}
       {hasAccess('user') && (
         <>
           <DrawerDivider />
@@ -140,7 +130,6 @@ export function AdminNavigationDrawer({
         </>
       )}
 
-      {/* GENERAL — always visible */}
       <DrawerDivider />
       <DrawerSectionHeading title="General" />
       <DrawerItem icon={<I.event size={16} color={c} />} label="All events" onPress={() => go(`/admin/events/${orgId}`)} />

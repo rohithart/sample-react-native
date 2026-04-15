@@ -115,7 +115,6 @@ export function EntityAttachments({ isVisible, onClose, entity, entityId, orgId 
           <Text style={{ fontSize: 11, color: colors.sub }}>Uploaded by {uploader}</Text>
         )}
 
-        {/* Action row */}
         <HStack space="sm" style={{ borderTopWidth: 1, borderTopColor: colors.border, paddingTop: 10 }}>
           <Pressable
             onPress={() => handleDownload(item)}
@@ -154,7 +153,6 @@ export function EntityAttachments({ isVisible, onClose, entity, entityId, orgId 
   return (
     <Modal transparent animationType="slide" visible={isVisible} onRequestClose={onClose}>
       <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
-        {/* Header */}
         <HStack className="items-center justify-between" style={{ paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: colors.border }}>
           <Text style={{ fontSize: 17, fontWeight: '700', color: colors.text }}>Attachments</Text>
           <HStack space="md" className="items-center">
@@ -169,7 +167,6 @@ export function EntityAttachments({ isVisible, onClose, entity, entityId, orgId 
           </HStack>
         </HStack>
 
-        {/* Add form */}
         {showAdd && (
           <HStack space="sm" style={{ paddingHorizontal: 16, paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: colors.border }}>
             <TextInput
@@ -185,7 +182,6 @@ export function EntityAttachments({ isVisible, onClose, entity, entityId, orgId 
           </HStack>
         )}
 
-        {/* Content */}
         {isLoading ? (
           <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <ActivityIndicator size="large" color={colors.primary} />

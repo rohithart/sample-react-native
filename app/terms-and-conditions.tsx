@@ -33,7 +33,6 @@ export default function TermsAndConditionsScreen() {
         contentContainerStyle={{ paddingHorizontal: 24, paddingVertical: 24, paddingBottom: 120 }}
         showsVerticalScrollIndicator={false}
       >
-        {/* Header */}
         <View style={{ alignItems: 'center', marginBottom: 32 }}>
           <RNText
             style={{
@@ -58,7 +57,6 @@ export default function TermsAndConditionsScreen() {
           </RNText>
         </View>
 
-        {/* Terms Content */}
         <View style={{ gap: 16, marginBottom: 32 }}>
           <TermSection
             title="1. Usage License"
@@ -107,7 +105,6 @@ export default function TermsAndConditionsScreen() {
           />
         </View>
 
-        {/* Checkbox Agreement */}
         <Pressable
           onPress={() => setIsAgreed(!isAgreed)}
           style={{
@@ -157,7 +154,6 @@ export default function TermsAndConditionsScreen() {
         </Pressable>
       </ScrollView>
 
-      {/* Footer Buttons */}
       <View
         style={{
           position: 'absolute',

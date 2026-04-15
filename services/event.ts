@@ -2,18 +2,12 @@ import type { Event } from '@/types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from './api-client';
 
-// ---------------------------------------------------------------------------
-// Query keys
-// ---------------------------------------------------------------------------
 export const eventKeys = {
   all: (orgId: string) => ['event', orgId] as const,
   detail: (id: string) => ['event', 'detail', id] as const,
   forType: (typeId: string) => ['event', 'type', typeId] as const,
 };
 
-// ---------------------------------------------------------------------------
-// API functions
-// ---------------------------------------------------------------------------
 const eventApi = {
   getAll: (orgId: string) => api.get<Event[]>(`/event/org/${orgId}`),
   get: (id: string) => api.get<Event>(`/event/${id}`),
@@ -23,9 +17,6 @@ const eventApi = {
   getAllForEventType: (typeId: string) => api.get<Event[]>(`/event/type/${typeId}`),
 };
 
-// ---------------------------------------------------------------------------
-// Query hooks
-// ---------------------------------------------------------------------------
 export function useEvents(orgId: string) {
   return useQuery({ queryKey: eventKeys.all(orgId), queryFn: () => eventApi.getAll(orgId), enabled: !!orgId });
 }
@@ -34,9 +25,6 @@ export function useEvent(id: string) {
   return useQuery({ queryKey: eventKeys.detail(id), queryFn: () => eventApi.get(id), enabled: !!id });
 }
 
-// ---------------------------------------------------------------------------
-// Mutation hooks
-// ---------------------------------------------------------------------------
 export function useCreateEvent(orgId: string) {
   const qc = useQueryClient();
   return useMutation({ mutationFn: (data: Partial<Event>) => eventApi.create(orgId, data), onSuccess: () => qc.invalidateQueries({ queryKey: eventKeys.all(orgId) }) });

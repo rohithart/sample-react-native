@@ -32,14 +32,12 @@ export function LoadingPage() {
       showsVerticalScrollIndicator={false}
       scrollEnabled={false}
     >
-      {/* Banner image */}
       <Shimmer
         style={{ width: '100%', height: 220 }}
         borderRadius={0}
       />
 
       <VStack space="xl" style={{ padding: 20 }}>
-        {/* Avatar + title block */}
         <HStack space="md" className="items-center">
           <LoadingImage size={64} />
           <VStack space="sm" className="flex-1">
@@ -48,10 +46,8 @@ export function LoadingPage() {
           </VStack>
         </HStack>
 
-        {/* Divider */}
         <View style={{ height: 1, backgroundColor: dividerColor }} />
 
-        {/* Body text lines — decreasing widths for a natural paragraph look */}
         <VStack space="sm">
           {[1, 0.95, 0.88, 0.78, 0.6].map((pct, i) => (
             <Shimmer
@@ -61,17 +57,14 @@ export function LoadingPage() {
           ))}
         </VStack>
 
-        {/* Divider */}
         <View style={{ height: 1, backgroundColor: dividerColor }} />
 
-        {/* Tag chip row */}
         <HStack space="sm">
           <Shimmer style={{ height: 28, width: 72, borderRadius: 14 }} />
           <Shimmer style={{ height: 28, width: 56, borderRadius: 14 }} />
           <Shimmer style={{ height: 28, width: 88, borderRadius: 14 }} />
         </HStack>
 
-        {/* Two equal action buttons */}
         <HStack space="md" style={{ marginTop: 4 }}>
           <Shimmer style={{ flex: 1, height: 46, borderRadius: 10 }} />
           <Shimmer style={{ flex: 1, height: 46, borderRadius: 10 }} />

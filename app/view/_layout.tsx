@@ -28,7 +28,6 @@ export default function ViewLayout() {
     }
   }, [organisation, orgId, isLoadingAccess, hydrationAttempted, hydrateFromOrgId]);
 
-  // Show toast + set redirect after hydration completes
   useEffect(() => {
     if (isLoadingAccess || !hydrationAttempted) return;
 
@@ -38,12 +37,10 @@ export default function ViewLayout() {
     }
   }, [hydrationAttempted, isLoadingAccess, organisation, showToast]);
 
-  // Redirect if needed
   if (redirectTo) {
     return <Redirect href={redirectTo as any} />;
   }
 
-  // Still loading
   if (isLoadingAccess || (!organisation && !hydrationAttempted)) {
     return (
       <View style={{ flex: 1, backgroundColor: colors.bg, alignItems: 'center', justifyContent: 'center', gap: 12 }}>
@@ -53,7 +50,6 @@ export default function ViewLayout() {
     );
   }
 
-  // Waiting for redirect effect to fire
   if (!organisation) {
     return (
       <View style={{ flex: 1, backgroundColor: colors.bg, alignItems: 'center', justifyContent: 'center', gap: 12 }}>
@@ -62,6 +58,5 @@ export default function ViewLayout() {
     );
   }
 
-  // All roles (ADMIN, USER, VIEWER) can access /view
   return <Stack screenOptions={{ headerShown: false }} />;
 }

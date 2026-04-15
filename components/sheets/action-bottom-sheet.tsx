@@ -45,7 +45,6 @@ export function ActionBottomSheet({
     }
   }, [isVisible, slideAnim]);
 
-  // Split actions into rows of 3
   const rows: ActionItem[][] = [];
   for (let i = 0; i < actions.length; i += 3) {
     rows.push(actions.slice(i, i + 3));
@@ -85,7 +84,6 @@ export function ActionBottomSheet({
                 paddingHorizontal: 8,
               }}
             >
-              {/* Handle Bar */}
               <View style={{ alignItems: 'center', marginBottom: 16 }}>
                 <View
                   style={{
@@ -97,7 +95,6 @@ export function ActionBottomSheet({
                 />
               </View>
 
-              {/* Actions Grid - 3 items per row */}
               {rows.map((row, rowIndex) => (
                 <HStack
                   key={rowIndex}
@@ -132,7 +129,6 @@ export function ActionBottomSheet({
                 </HStack>
               ))}
 
-              {/* Spacer */}
               <View style={{ height: bottom + 16 }} />
             </SafeAreaView>
           </Pressable>

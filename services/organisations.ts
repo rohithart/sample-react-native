@@ -2,9 +2,6 @@ import type { Organisation } from '@/types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from './api-client';
 
-// ---------------------------------------------------------------------------
-// Query keys
-// ---------------------------------------------------------------------------
 export const organisationKeys = {
   all: ['organisations'] as const,
   detail: (id: string) => ['organisations', id] as const,
@@ -23,9 +20,6 @@ const organisationApi = {
   stopOnboarding: (id: string) => api.patch<Organisation>(`/organisation/stop-onboarding/${id}`, {}),
 };
 
-// ---------------------------------------------------------------------------
-// Query hooks
-// ---------------------------------------------------------------------------
 export function useOrganisations() {
   return useQuery({
     queryKey: organisationKeys.all,
@@ -41,9 +35,6 @@ export function useOrganisation(id: string) {
   });
 }
 
-// ---------------------------------------------------------------------------
-// Mutation hooks
-// ---------------------------------------------------------------------------
 export function useCreateOrganisation() {
   const qc = useQueryClient();
   return useMutation({

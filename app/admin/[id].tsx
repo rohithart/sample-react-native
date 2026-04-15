@@ -119,7 +119,6 @@ export default function AdminDashboard() {
     },
   ];
 
-  // Filter sections by org access
   const visibleSections = sections.filter((s) => {
     if (!s.module || !orgAccess) return true;
     return (orgAccess as any)[s.module] !== false;
@@ -190,9 +189,7 @@ export default function AdminDashboard() {
           showsVerticalScrollIndicator={false}
           scrollEnabled={!isDrawerOpen}
         >
-          {/* Organisation card */}
           <View style={{ borderRadius: 16, backgroundColor: cardBg, borderWidth: 1, borderColor: border, overflow: 'hidden' }}>
-            {/* Top banner */}
             <View style={{ height: 8, backgroundColor: primary }} />
             <View style={{ padding: 16, gap: 12 }}>
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
@@ -211,7 +208,6 @@ export default function AdminDashboard() {
                     <RNText style={{ fontSize: 12, color: secondaryText, marginTop: 2 }}>@{org.slug}</RNText>
                   ) : null}
                 </View>
-                {/* Status */}
                 <View style={{
                   paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8,
                   backgroundColor: org?.isActive ? success + '15' : danger + '15',
@@ -244,7 +240,6 @@ export default function AdminDashboard() {
 
               {org?.description ? <HtmlContent label="Description" html={org.description} /> : null}
 
-              {/* Details row */}
               <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12 }}>
                 {org?.address ? (
                   <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
@@ -268,7 +263,6 @@ export default function AdminDashboard() {
             </View>
           </View>
 
-          {/* I.user profile card */}
           {userRole?.user && (
             <View style={{ borderRadius: 14, backgroundColor: cardBg, borderWidth: 1, borderColor: border, padding: 14, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
               {userRole.user.image ? (
@@ -301,7 +295,6 @@ export default function AdminDashboard() {
             </View>
           )}
 
-          {/* Module access badges */}
           {orgAccess && (
             <View style={{ gap: 8 }}>
               <RNText style={{ fontSize: 12, fontWeight: '600', letterSpacing: 0.6, textTransform: 'uppercase', color: secondaryText }}>
@@ -329,7 +322,6 @@ export default function AdminDashboard() {
             </View>
           )}
 
-          {/* Quick links sections */}
           {visibleSections.map((section) => (
             <View key={section.title} style={{ gap: 10 }}>
               <RNText style={{ fontSize: 12, fontWeight: '600', letterSpacing: 0.6, textTransform: 'uppercase', color: secondaryText }}>
@@ -337,7 +329,6 @@ export default function AdminDashboard() {
               </RNText>
               <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
                 {section.links.map(renderQuickLink)}
-                {/* Pad with empty views to maintain grid when < 3 items */}
                 {section.links.length % 3 !== 0 && Array.from({ length: 3 - (section.links.length % 3) }).map((_, i) => (
                   <View key={`pad-${i}`} style={{ flex: 1, minWidth: '30%' }} />
                 ))}

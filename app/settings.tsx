@@ -29,16 +29,13 @@ export default function SettingsScreen() {
   const router = useRouter();
   const I = ENTITY_ICONS;
 
-  // Display settings only
   const [showCompleted, setShowCompleted] = useState(DEFAULT_DISPLAY_SETTINGS.showCompleted);
   const [showArchived, setShowArchived] = useState(DEFAULT_DISPLAY_SETTINGS.showArchived);
 
-  // Load settings on mount
   useEffect(() => {
     loadSettings();
   }, []);
 
-  // Save display settings whenever they change
   useEffect(() => {
     saveSettings();
   }, [showCompleted, showArchived]);
@@ -138,7 +135,6 @@ export default function SettingsScreen() {
         contentContainerStyle={{ paddingHorizontal: 24, paddingVertical: 24 }}
         showsVerticalScrollIndicator={false}
       >
-        {/* Reset Settings Button */}
         <View style={{ marginBottom: 24, alignItems: 'flex-end' }}>
           <Pressable
             onPress={resetSettings}
@@ -152,7 +148,6 @@ export default function SettingsScreen() {
           </Pressable>
         </View>
 
-        {/* Display Section */}
         <View style={{ marginBottom: 32 }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 16 }}>
             <I.eye size={20} color={colors.primary} />
@@ -161,7 +156,6 @@ export default function SettingsScreen() {
             </RNText>
           </View>
 
-          {/* Show Completed Toggle */}
           <SettingItem
             icon={<I.eye size={18} color={colors.secondary} />}
             label="Show Completed"
@@ -171,7 +165,6 @@ export default function SettingsScreen() {
             colors={colors}
           />
 
-          {/* Show Archived Toggle */}
           <SettingItem
             icon={<I.archive size={18} color={colors.secondary} />}
             label="Show Archived Only"
@@ -182,7 +175,6 @@ export default function SettingsScreen() {
           />
         </View>
 
-        {/* App Section */}
         <View>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 16 }}>
             {isDark ? (
@@ -195,7 +187,6 @@ export default function SettingsScreen() {
             </RNText>
           </View>
 
-          {/* Dark Mode Toggle */}
           <SettingItem
             icon={
               isDark ? (
@@ -212,7 +203,6 @@ export default function SettingsScreen() {
           />
         </View>
 
-        {/* Settings Info */}
         <View
           style={{
             marginTop: 48,

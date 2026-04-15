@@ -49,7 +49,6 @@ export function OrganisationProvider({ children }: { children: ReactNode }) {
       setOrgAccess(access);
       setUserRole(roleData);
     } catch {
-      // If calls fail, default to safe fallbacks
       setOrgAccess(null);
       setUserRole(null);
     } finally {
@@ -64,7 +63,6 @@ export function OrganisationProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const hydrateFromOrgId = useCallback(async (orgId: string) => {
-    // Skip if already loaded for this org
     if (organisation?._id === orgId) return;
     setOrgAccess(null);
     setUserRole(null);
@@ -89,7 +87,6 @@ export function OrganisationProvider({ children }: { children: ReactNode }) {
 
   const hasAccess = useCallback(
     (module: keyof OrgAccess) => {
-      // If access hasn't loaded yet or failed, allow access by default
       if (!orgAccess) return true;
       return !!orgAccess[module];
     },

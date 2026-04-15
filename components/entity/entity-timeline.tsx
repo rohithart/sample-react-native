@@ -62,18 +62,14 @@ export function EntityTimeline({ isVisible, onClose, entity, entityId }: EntityT
 
     return (
       <HStack className="items-start" style={{ minHeight: 72 }}>
-        {/* Left content */}
         <View style={{ flex: 1, paddingRight: 10, alignItems: 'flex-end' }}>
           {isLeft ? card : null}
         </View>
 
-        {/* Center line + dot + date */}
         <View style={{ alignItems: 'center', width: 48 }}>
-          {/* Connecting line above dot */}
           {!isFirst && (
             <View style={{ width: LINE_WIDTH, height: 8, backgroundColor: colors.border }} />
           )}
-          {/* Dot */}
           <View
             style={{
               width: DOT_SIZE,
@@ -83,7 +79,6 @@ export function EntityTimeline({ isVisible, onClose, entity, entityId }: EntityT
               zIndex: 1,
             }}
           />
-          {/* Date label on the line */}
           <View
             style={{
               backgroundColor: colors.bg,
@@ -99,13 +94,11 @@ export function EntityTimeline({ isVisible, onClose, entity, entityId }: EntityT
               {fmtTime(item.createdAt)}
             </Text>
           </View>
-          {/* Connecting line below */}
           {!isLast && (
             <View style={{ width: LINE_WIDTH, flex: 1, backgroundColor: colors.border, minHeight: 12 }} />
           )}
         </View>
 
-        {/* Right content */}
         <View style={{ flex: 1, paddingLeft: 10, alignItems: 'flex-start' }}>
           {!isLeft ? card : null}
         </View>
@@ -118,7 +111,6 @@ export function EntityTimeline({ isVisible, onClose, entity, entityId }: EntityT
   return (
     <Modal transparent animationType="slide" visible={isVisible} onRequestClose={onClose}>
       <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
-        {/* Header */}
         <HStack className="items-center justify-between" style={{ paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: colors.border }}>
           <Text style={{ fontSize: 17, fontWeight: '700', color: colors.text }}>Timeline</Text>
           <Pressable onPress={onClose} style={{ padding: 4 }}>
@@ -126,7 +118,6 @@ export function EntityTimeline({ isVisible, onClose, entity, entityId }: EntityT
           </Pressable>
         </HStack>
 
-        {/* Content */}
         {isLoading ? (
           <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <ActivityIndicator size="large" color={colors.primary} />

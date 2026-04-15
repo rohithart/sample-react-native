@@ -69,7 +69,6 @@ export function AuditInfo({ isVisible, onClose, createdBy, updatedBy, createdAt,
             overflow: 'hidden',
           }}
         >
-          {/* Header */}
           <HStack
             className="items-center justify-between"
             style={{
@@ -84,7 +83,6 @@ export function AuditInfo({ isVisible, onClose, createdBy, updatedBy, createdAt,
             </Pressable>
           </HStack>
 
-          {/* Body */}
           <VStack space="md" style={{ padding: 16 }}>
             {rows.map((row, idx) => (
               <HStack

@@ -10,9 +10,6 @@ import { Image, Pressable, Text, View } from 'react-native';
 
 const I = ENTITY_ICONS;
 
-// ---------------------------------------------------------------------------
-// Types
-// ---------------------------------------------------------------------------
 export interface EntityCardConfig {
   icon: EntityIconKey;
   titleField: string | ((item: any) => string);
@@ -29,18 +26,12 @@ interface EntityCardProps {
   onPress?: () => void;
 }
 
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
 function resolveField(item: any, field: string | ((item: any) => any) | undefined): any {
   if (field == null) return undefined;
   if (typeof field === 'function') return field(item);
   return item[field];
 }
 
-// ---------------------------------------------------------------------------
-// Component
-// ---------------------------------------------------------------------------
 export function EntityCard({ item, config, orgId, onPress }: EntityCardProps) {
   const router = useRouter();
   const { card, text, sub, border, primary, pressed, isDark } = useThemeColors();
@@ -59,12 +50,10 @@ export function EntityCard({ item, config, orgId, onPress }: EntityCardProps) {
         borderRadius: 12,
         padding: 10,
         backgroundColor: card,
-        // iOS Shadows
         shadowColor: text,
         shadowOffset: { width: 0, height: 6 }, // Increased height for deeper 3D look
         shadowOpacity: isDark ? 0.35 : 0.15,
         shadowRadius: 8,
-        // Android Shadow
         elevation: 8, 
       }}
     >
@@ -79,7 +68,6 @@ export function EntityCard({ item, config, orgId, onPress }: EntityCardProps) {
         })}
       >
       <HStack space="md" className="items-stretch">
-        {/* Avatar — image or icon fallback */}
         {image ? (
           <Image
             source={{ uri: image }}
@@ -99,7 +87,6 @@ export function EntityCard({ item, config, orgId, onPress }: EntityCardProps) {
           </View>
         )}
 
-        {/* Content */}
         <VStack space="xs" className="flex-1">
           <Text numberOfLines={1} style={{ fontSize: 15, fontWeight: '600', color: text }}>
             {title}
@@ -116,7 +103,6 @@ export function EntityCard({ item, config, orgId, onPress }: EntityCardProps) {
           ) : null}
         </VStack>
 
-        {/* Chevron */}
         <HStack space="md" className='items-center'>
           <I.chevronRight size={18} color={sub} />
         </HStack>

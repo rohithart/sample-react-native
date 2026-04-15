@@ -133,7 +133,6 @@ export default function UserDashboard() {
           showsVerticalScrollIndicator={false}
           scrollEnabled={!isDrawerOpen}
         >
-          {/* Organisation card */}
           <View style={{ borderRadius: 16, backgroundColor: cardBg, borderWidth: 1, borderColor: border, overflow: 'hidden' }}>
             <View style={{ height: 8, backgroundColor: secondary }} />
             <View style={{ padding: 16, gap: 12 }}>
@@ -170,7 +169,6 @@ export default function UserDashboard() {
                   </View>
                   <RNText style={{ fontSize: 12, color: secondaryText }}>Switch to Admin mode</RNText>
                 </View>
-                {/* Only show admin switch for ADMIN and USER roles, not VIEWER */}
                 {canAccessAdmin && (
                   <Pressable
                     onPress={() => router.push(`/admin/${id}` as any)}
@@ -199,7 +197,6 @@ export default function UserDashboard() {
             </View>
           </View>
 
-          {/* I.user profile card */}
           {userRole?.user && (
             <View style={{ borderRadius: 14, backgroundColor: cardBg, borderWidth: 1, borderColor: border, padding: 14, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
               {userRole.user.image ? (
@@ -232,7 +229,6 @@ export default function UserDashboard() {
             </View>
           )}
 
-          {/* Quick links */}
           {renderSection('Community', communityLinks)}
           {renderSection('Information & Communication', infoLinks)}
           {renderSection('Resources', resourceLinks)}

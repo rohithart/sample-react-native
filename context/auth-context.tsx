@@ -16,7 +16,6 @@ type AuthContextType = {
 const TOKEN_KEY = 'auth_token';
 const ROLE_KEY = 'auth_role';
 
-// expo-secure-store is not available on web — fall back to no-op
 const storage = {
   get: (key: string) =>
     Platform.OS !== 'web' ? SecureStore.getItemAsync(key) : Promise.resolve(null),
@@ -33,7 +32,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const [role, setRole] = useState<Role>('user');
 
-  // Hydrate auth state from secure storage on mount
   useEffect(() => {
     (async () => {
       try {

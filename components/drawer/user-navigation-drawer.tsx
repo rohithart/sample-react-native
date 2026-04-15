@@ -36,13 +36,11 @@ export function UserNavigationDrawer({
       drawerAnim={drawerAnim}
       topInset={topInset}
     >
-      {/* GENERAL — always visible */}
       <DrawerSectionHeading title="Main" />
       <DrawerItem icon={<I.dashboard size={16} color={c} />} label="Dashboard" onPress={() => go(`/view/${orgId}`)} />
       <DrawerItem icon={<I.wall size={16} color={c} />} label="Discussions" onPress={() => go(`/view/wall/${orgId}`)} />
       <DrawerItem icon={<I.user size={16} color={c} />} label="Admins" onPress={() => go(`/view/admins/${orgId}`)} />
 
-      {/* COMMUNICATION module — My space */}
       {hasAccess('communication') && (
         <>
           <DrawerDivider />
@@ -53,7 +51,6 @@ export function UserNavigationDrawer({
         </>
       )}
 
-      {/* COMMUNICATION module — Communication */}
       {hasAccess('communication') && (
         <>
           <DrawerDivider />
@@ -64,7 +61,6 @@ export function UserNavigationDrawer({
         </>
       )}
 
-      {/* GENERAL — always visible */}
       <DrawerDivider />
       <DrawerSectionHeading title="General" />
       <DrawerItem icon={<I.event size={16} color={c} />} label="Organisation events" onPress={() => go(`/view/events/${orgId}`)} />

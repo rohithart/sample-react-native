@@ -94,7 +94,6 @@ export function ConfirmationDialog({
               maxWidth: 320,
             }}
           >
-            {/* Header */}
             <HStack
               className="items-center justify-between"
               style={{
@@ -119,7 +118,6 @@ export function ConfirmationDialog({
               </Pressable>
             </HStack>
 
-            {/* Message */}
             <Text
               style={{
                 fontSize: 14,
@@ -132,7 +130,6 @@ export function ConfirmationDialog({
               {finalMessage}
             </Text>
 
-            {/* Buttons */}
             <HStack
               space="sm"
               style={{

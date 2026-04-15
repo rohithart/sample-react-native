@@ -2,9 +2,6 @@ import type { Invoice } from '@/types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from './api-client';
 
-// ---------------------------------------------------------------------------
-// Query keys
-// ---------------------------------------------------------------------------
 export const invoiceKeys = {
   all: (orgId: string) => ['invoice', orgId] as const,
   detail: (id: string) => ['invoice', 'detail', id] as const,
@@ -15,9 +12,6 @@ export const invoiceKeys = {
   forWorkorder: (woId: string) => ['invoice', 'workorder', woId] as const,
 };
 
-// ---------------------------------------------------------------------------
-// API functions
-// ---------------------------------------------------------------------------
 const invoiceApi = {
   getAll: (orgId: string) => api.get<Invoice[]>(`/invoice/org/${orgId}`),
   get: (id: string) => api.get<Invoice>(`/invoice/${id}`),
@@ -40,9 +34,6 @@ const invoiceApi = {
   remind: (id: string) => api.patch<Invoice>(`/invoice/remind/${id}`, {}),
 };
 
-// ---------------------------------------------------------------------------
-// Query hooks
-// ---------------------------------------------------------------------------
 export function useInvoices(orgId: string) {
   return useQuery({ queryKey: invoiceKeys.all(orgId), queryFn: () => invoiceApi.getAll(orgId), enabled: !!orgId });
 }
@@ -51,9 +42,6 @@ export function useInvoice(id: string) {
   return useQuery({ queryKey: invoiceKeys.detail(id), queryFn: () => invoiceApi.get(id), enabled: !!id });
 }
 
-// ---------------------------------------------------------------------------
-// Mutation hooks
-// ---------------------------------------------------------------------------
 export function useCreateInvoice(orgId: string) {
   const qc = useQueryClient();
   return useMutation({ mutationFn: (data: Partial<Invoice>) => invoiceApi.create(orgId, data), onSuccess: () => qc.invalidateQueries({ queryKey: invoiceKeys.all(orgId) }) });

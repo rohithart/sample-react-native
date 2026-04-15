@@ -116,7 +116,6 @@ export function GenericDetailPage({
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: bg }}>
-      {/* Header */}
       <View
         style={{
           flexDirection: 'row',
@@ -152,7 +151,6 @@ export function GenericDetailPage({
         </Pressable>
       </View>
 
-      {/* Content */}
       <ScrollView
         contentContainerStyle={{ padding: 16, gap: 16 }}
         showsVerticalScrollIndicator={false}
@@ -160,14 +158,12 @@ export function GenericDetailPage({
         {renderContent(item)}
       </ScrollView>
 
-      {/* Bottom Sheet */}
       <ActionBottomSheet
         isVisible={isBottomSheetOpen}
         onClose={() => setIsBottomSheetOpen(false)}
         actions={actions}
       />
 
-      {/* Delete Confirmation */}
       <ConfirmationDialog
         isOpen={confirmationType === 'delete'}
         onClose={() => setConfirmationType(null)}
@@ -176,7 +172,6 @@ export function GenericDetailPage({
         isLoading={isDeleting}
       />
 
-      {/* Archive Confirmation */}
       <ConfirmationDialog
         isOpen={confirmationType === 'archive'}
         onClose={() => setConfirmationType(null)}

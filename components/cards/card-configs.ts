@@ -1,9 +1,6 @@
 import type { EntityIconKey } from '@/constants/entity-icons';
 import type { EntityCardConfig } from './entity-card';
 
-// ---------------------------------------------------------------------------
-// Helper — defaults to titleField:'title', subtitleField:'description'
-// ---------------------------------------------------------------------------
 function cfg(
   icon: EntityIconKey,
   detailRoute: (orgId: string, itemId: string) => string,
@@ -12,9 +9,6 @@ function cfg(
   return { icon, titleField: 'title', subtitleField: 'description', ...overrides, detailRoute };
 }
 
-// ---------------------------------------------------------------------------
-// Admin configs (26)
-// ---------------------------------------------------------------------------
 export const ADMIN_CONFIGS = {
   workflow: cfg('workflow', (o, i) => `/admin/workflow/${o}/${i}`, {
     subtitleField: (item: any) => {
@@ -104,9 +98,6 @@ export const ADMIN_CONFIGS = {
   ledger: cfg('ledger', (o, i) => `/admin/ledger/${o}/${i}`),
 };
 
-// ---------------------------------------------------------------------------
-// Organisation config (standalone — not scoped to an org)
-// ---------------------------------------------------------------------------
 export const ORGANISATION_CONFIG: EntityCardConfig = {
   icon: 'organisation',
   titleField: 'name',

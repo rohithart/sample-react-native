@@ -2,9 +2,6 @@ import type { Task } from '@/types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from './api-client';
 
-// ---------------------------------------------------------------------------
-// Query keys
-// ---------------------------------------------------------------------------
 export const taskKeys = {
   all: (orgId: string) => ['tasks', orgId] as const,
   forUser: (orgId: string, userId: string) => ['tasks', orgId, 'user', userId] as const,
@@ -13,9 +10,6 @@ export const taskKeys = {
   detail: (id: string) => ['tasks', 'detail', id] as const,
 };
 
-// ---------------------------------------------------------------------------
-// API functions
-// ---------------------------------------------------------------------------
 const taskApi = {
   getAll: (orgId: string) =>
     api.get<Task[]>(`/task/org/${orgId}`),
@@ -60,9 +54,6 @@ const taskApi = {
     api.patch<Task>(`/task/unflag/${id}`, {}),
 };
 
-// ---------------------------------------------------------------------------
-// Query hooks
-// ---------------------------------------------------------------------------
 export function useTasks(orgId: string) {
   return useQuery({
     queryKey: taskKeys.all(orgId),
@@ -103,9 +94,6 @@ export function useTask(id: string) {
   });
 }
 
-// ---------------------------------------------------------------------------
-// Mutation hooks
-// ---------------------------------------------------------------------------
 export function useCreateTask(orgId: string) {
   const qc = useQueryClient();
   return useMutation({

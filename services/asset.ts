@@ -2,9 +2,6 @@ import type { Asset } from '@/types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from './api-client';
 
-// ---------------------------------------------------------------------------
-// Query keys
-// ---------------------------------------------------------------------------
 export const assetKeys = {
   all: (orgId: string) => ['asset', orgId] as const,
   detail: (id: string) => ['asset', 'detail', id] as const,
@@ -12,9 +9,6 @@ export const assetKeys = {
   forType: (typeId: string) => ['asset', 'type', typeId] as const,
 };
 
-// ---------------------------------------------------------------------------
-// API functions
-// ---------------------------------------------------------------------------
 const assetApi = {
   getAll: (orgId: string) => api.get<Asset[]>(`/asset/org/${orgId}`),
   get: (id: string) => api.get<Asset>(`/asset/${id}`),
@@ -29,9 +23,6 @@ const assetApi = {
   getAllForAssetType: (typeId: string) => api.get<Asset[]>(`/asset/type/${typeId}`),
 };
 
-// ---------------------------------------------------------------------------
-// Query hooks
-// ---------------------------------------------------------------------------
 export function useAssets(orgId: string) {
   return useQuery({ queryKey: assetKeys.all(orgId), queryFn: () => assetApi.getAll(orgId), enabled: !!orgId });
 }
@@ -40,9 +31,6 @@ export function useAsset(id: string) {
   return useQuery({ queryKey: assetKeys.detail(id), queryFn: () => assetApi.get(id), enabled: !!id });
 }
 
-// ---------------------------------------------------------------------------
-// Mutation hooks
-// ---------------------------------------------------------------------------
 export function useCreateAsset(orgId: string) {
   const qc = useQueryClient();
   return useMutation({ mutationFn: (data: Partial<Asset>) => assetApi.create(orgId, data), onSuccess: () => qc.invalidateQueries({ queryKey: assetKeys.all(orgId) }) });

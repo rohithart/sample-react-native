@@ -75,7 +75,6 @@ export function EntityImages({ isVisible, onClose, entity, entityId, orgId }: En
   return (
     <Modal transparent animationType="slide" visible={isVisible} onRequestClose={onClose}>
       <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
-        {/* Header */}
         <HStack className="items-center justify-between" style={{ paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: colors.border }}>
           <Text style={{ fontSize: 17, fontWeight: '700', color: colors.text }}>Images</Text>
           <HStack space="md" className="items-center">
@@ -90,7 +89,6 @@ export function EntityImages({ isVisible, onClose, entity, entityId, orgId }: En
           </HStack>
         </HStack>
 
-        {/* Add form */}
         {showAdd && (
           <HStack space="sm" style={{ paddingHorizontal: 16, paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: colors.border }}>
             <TextInput
@@ -106,7 +104,6 @@ export function EntityImages({ isVisible, onClose, entity, entityId, orgId }: En
           </HStack>
         )}
 
-        {/* Thumbnail grid */}
         {isLoading ? (
           <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <ActivityIndicator size="large" color={colors.primary} />
@@ -130,12 +127,10 @@ export function EntityImages({ isVisible, onClose, entity, entityId, orgId }: En
         )}
       </SafeAreaView>
 
-      {/* Fullscreen viewer */}
       {viewerImage && (
         <Modal transparent animationType="fade" visible={!!viewerImage} onRequestClose={() => setViewerIndex(null)}>
           <View style={{ flex: 1, backgroundColor: '#000' }}>
             <SafeAreaView style={{ flex: 1 }}>
-              {/* Viewer header */}
               <HStack className="items-center justify-between" style={{ paddingHorizontal: 16, paddingVertical: 10 }}>
                 <Text style={{ color: '#fff', fontSize: 14, fontWeight: '600' }}>
                   {(viewerIndex ?? 0) + 1} / {images?.length ?? 0}
@@ -152,7 +147,6 @@ export function EntityImages({ isVisible, onClose, entity, entityId, orgId }: En
                 </HStack>
               </HStack>
 
-              {/* Image */}
               <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                 {viewerImage.url ? (
                   <Image source={{ uri: viewerImage.url }} style={{ width: SCREEN_WIDTH, height: SCREEN_WIDTH }} resizeMode="contain" />
@@ -161,7 +155,6 @@ export function EntityImages({ isVisible, onClose, entity, entityId, orgId }: En
                 )}
               </View>
 
-              {/* Navigation arrows */}
               <HStack className="justify-between" style={{ paddingHorizontal: 16, paddingBottom: 20 }}>
                 <Pressable
                   onPress={() => setViewerIndex(Math.max(0, (viewerIndex ?? 0) - 1))}

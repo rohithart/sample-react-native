@@ -8,7 +8,6 @@ export default function MySpaceScreen() {
   const colors = useThemeColors();
   const router = useRouter();
 
-
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
       <View style={{ flexDirection: 'row', alignItems: 'center', padding: 16, borderBottomWidth: 1, borderColor: colors.border, backgroundColor: colors.card }}>

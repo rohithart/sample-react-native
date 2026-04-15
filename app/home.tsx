@@ -77,7 +77,6 @@ export default function HomeScreen() {
         }}
       />
 
-      {/* Navigation Drawer */}
       <HomeNavigationDrawer
         isOpen={isDrawerOpen}
         onClose={toggleDrawer}
@@ -85,7 +84,6 @@ export default function HomeScreen() {
         topInset={top}
       />
 
-      {/* Tab Content */}
       <View style={{ flex: 1 }}>
         {activeTab === 'organisations' ? (
           <OrganisationsList />
@@ -94,7 +92,6 @@ export default function HomeScreen() {
         )}
       </View>
 
-      {/* Bottom Tab Bar */}
       <View
         style={{
           flexDirection: 'row',

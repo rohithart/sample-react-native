@@ -51,7 +51,6 @@ export function NavigationDrawer({
 
   return (
     <>
-      {/* Drawer Overlay */}
       {isOpen && (
         <Box
           className="absolute inset-0 bg-black/30 z-40"
@@ -59,7 +58,6 @@ export function NavigationDrawer({
         />
       )}
 
-      {/* Drawer */}
       <Animated.View
         style={[
           {
@@ -80,7 +78,6 @@ export function NavigationDrawer({
         ]}
       >
         <View style={{ flex: 1, backgroundColor: colors.bg }}>
-          {/* User Header */}
           <Box
             className="px-6 py-4"
             style={{ borderBottomWidth: 1, borderColor: colors.border }}
@@ -106,7 +103,6 @@ export function NavigationDrawer({
             </Box>
           </Box>
 
-          {/* Menu Items (Children) — scrollable for long menus */}
           <ScrollView
             style={{ flex: 1 }}
             contentContainerStyle={{ gap: 4, paddingHorizontal: 12, paddingVertical: 16 }}
@@ -115,7 +111,6 @@ export function NavigationDrawer({
             {children}
           </ScrollView>
 
-          {/* I.settings & Logout Footer */}
           <Box className="px-4 pb-6 gap-3">
             <Button
               action="secondary"

@@ -1,4 +1,3 @@
-// Dummy data generators for consistent test data across all modules
 
 export interface DummyItem {
   id: string;
@@ -75,7 +74,6 @@ export function generateDummyList(count: number, overrides?: Partial<DummyItem>)
   );
 }
 
-// Module-specific generators
 export function generateWorkflows(count: number = 10): DummyItem[] {
   return generateDummyList(count, { name: 'Workflow' });
 }

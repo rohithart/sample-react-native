@@ -26,7 +26,6 @@ export function GenericListPage({
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: bg }}>
-      {/* Header */}
       <View
         style={{
           flexDirection: 'row',
@@ -58,7 +57,6 @@ export function GenericListPage({
         </Pressable>
       </View>
 
-      {/* List */}
       {items.length > 0 ? (
         <FlatList
           data={items}

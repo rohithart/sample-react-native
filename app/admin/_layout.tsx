@@ -13,26 +13,21 @@ export default function AdminLayout() {
   const [hydrationAttempted, setHydrationAttempted] = useState(!!organisation);
   const [redirectTo, setRedirectTo] = useState<string | null>(null);
 
-  // orgId can come from [orgId] param (detail/edit pages) or [id] param (list/new pages)
   const orgId = params.orgId || params.id;
 
   useEffect(() => {
-    // Already loaded — nothing to do
     if (organisation) return;
 
-    // Have an orgId from the URL — hydrate the context
     if (orgId && !isLoadingAccess && !hydrationAttempted) {
       hydrateFromOrgId(orgId).finally(() => setHydrationAttempted(true));
       return;
     }
 
-    // No orgId in URL — mark hydration as attempted so we redirect
     if (!orgId && !hydrationAttempted) {
       setHydrationAttempted(true);
     }
   }, [organisation, orgId, isLoadingAccess, hydrationAttempted, hydrateFromOrgId]);
 
-  // Show toast + set redirect after hydration completes
   useEffect(() => {
     if (isLoadingAccess || !hydrationAttempted) return;
 
@@ -45,12 +40,10 @@ export default function AdminLayout() {
     }
   }, [hydrationAttempted, isLoadingAccess, organisation, canAccessAdmin, showToast]);
 
-  // Redirect if needed
   if (redirectTo) {
     return <Redirect href={redirectTo as any} />;
   }
 
-  // Still loading — show spinner
   if (isLoadingAccess || (!organisation && !hydrationAttempted)) {
     return (
       <View style={{ flex: 1, backgroundColor: colors.bg, alignItems: 'center', justifyContent: 'center', gap: 12 }}>
@@ -60,7 +53,6 @@ export default function AdminLayout() {
     );
   }
 
-  // Waiting for redirect effect to fire
   if (!organisation || !canAccessAdmin) {
     return (
       <View style={{ flex: 1, backgroundColor: colors.bg, alignItems: 'center', justifyContent: 'center', gap: 12 }}>

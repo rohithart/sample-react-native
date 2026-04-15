@@ -79,16 +79,9 @@ import {
 } from 'lucide-react-native';
 import type { ComponentType } from 'react';
 
-// ---------------------------------------------------------------------------
-// Icon type — works regardless of lucide-react-native version
-// ---------------------------------------------------------------------------
 type IconComponent = ComponentType<{ size?: number; color?: string; strokeWidth?: number }>;
 
-// ---------------------------------------------------------------------------
-// Entity icon key — every entity that can appear in a list or card
-// ---------------------------------------------------------------------------
 export type EntityIconKey =
-  // Entities
   | 'workflow'
   | 'task'
   | 'evidence'
@@ -119,7 +112,6 @@ export type EntityIconKey =
   | 'organisation'
   | 'reminder'
   | 'transaction'
-  // Navigation / layout
   | 'dashboard'
   | 'home'
   | 'help'
@@ -127,18 +119,15 @@ export type EntityIconKey =
   | 'gallery'
   | 'attachment'
   | 'incomeStatement'
-  // Splash / branding
   | 'rocket'
   | 'sparkles'
   | 'zap'
   | 'shield'
-  // Settings
   | 'archive'
   | 'back'
   | 'eye'
   | 'moon'
   | 'sun'
-  // Action icons
   | 'alertCircle'
   | 'archiveRestore'
   | 'calendar'
@@ -178,11 +167,7 @@ export type EntityIconKey =
   | 'usersRound'
   | 'warning';
 
-// ---------------------------------------------------------------------------
-// Icon map — single source of truth for ALL icons used in the app
-// ---------------------------------------------------------------------------
 export const ENTITY_ICONS: Record<EntityIconKey, IconComponent> = {
-  // Entities
   workflow: GitBranch,
   task: ListChecks,
   evidence: FileCheck,
@@ -213,7 +198,6 @@ export const ENTITY_ICONS: Record<EntityIconKey, IconComponent> = {
   organisation: Building2,
   reminder: AlarmClock,
   transaction: Banknote,
-  // Navigation / layout
   dashboard: ChartPie,
   home: Home,
   help: HelpCircle,
@@ -221,18 +205,15 @@ export const ENTITY_ICONS: Record<EntityIconKey, IconComponent> = {
   gallery: ImageIcon,
   attachment: Paperclip,
   incomeStatement: ArrowUpDown,
-  // Splash / branding
   rocket: Rocket,
   sparkles: Sparkles,
   zap: Zap,
   shield: Shield,
-  // Settings
   archive: Archive,
   back: ChevronLeft,
   eye: Eye,
   moon: Moon,
   sun: Sun,
-  // Action icons
   alertCircle: AlertCircle,
   archiveRestore: ArchiveRestore,
   calendar: Calendar,

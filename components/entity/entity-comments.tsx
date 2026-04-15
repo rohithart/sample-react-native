@@ -70,12 +70,10 @@ export function EntityComments({ isVisible, onClose, entity, entityId, orgId }: 
 
     return (
       <HStack space="sm" className="items-start">
-        {/* Avatar */}
         <View style={{ width: 34, height: 34, borderRadius: 17, backgroundColor: colors.primary + '20', alignItems: 'center', justifyContent: 'center', marginTop: 2 }}>
           <Text style={{ fontSize: 12, fontWeight: '700', color: colors.primary }}>{getInitials(userName)}</Text>
         </View>
 
-        {/* Bubble */}
         <VStack space="xs" className="flex-1" style={{ backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border, borderRadius: 12, borderTopLeftRadius: 4, padding: 10 }}>
           <HStack className="justify-between items-center">
             <HStack space="sm" className="items-center flex-1">
@@ -99,7 +97,6 @@ export function EntityComments({ isVisible, onClose, entity, entityId, orgId }: 
   return (
     <Modal transparent animationType="slide" visible={isVisible} onRequestClose={onClose}>
       <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
-        {/* Header */}
         <HStack className="items-center justify-between" style={{ paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: colors.border }}>
           <HStack space="sm" className="items-center">
             <Text style={{ fontSize: 17, fontWeight: '700', color: colors.text }}>Comments</Text>
@@ -114,7 +111,6 @@ export function EntityComments({ isVisible, onClose, entity, entityId, orgId }: 
           </Pressable>
         </HStack>
 
-        {/* Content */}
         {isLoading ? (
           <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <ActivityIndicator size="large" color={colors.primary} />
@@ -135,7 +131,6 @@ export function EntityComments({ isVisible, onClose, entity, entityId, orgId }: 
           />
         )}
 
-        {/* Input bar */}
         <HStack space="sm" style={{ paddingHorizontal: 16, paddingVertical: 10, borderTopWidth: 1, borderTopColor: colors.border, paddingBottom: bottom + 10, backgroundColor: colors.bg }}>
           <TextInput
             value={content}

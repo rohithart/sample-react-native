@@ -61,7 +61,6 @@ export function DrawerItem({
   );
 }
 
-
 /** Uppercase section heading label. */
 export function DrawerSectionHeading({ title }: { title: string }) {
   const colors = useThemeColors();

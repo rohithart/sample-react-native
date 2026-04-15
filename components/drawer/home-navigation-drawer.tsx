@@ -27,7 +27,6 @@ export function HomeNavigationDrawer({
       drawerAnim={drawerAnim}
       topInset={topInset}
     >
-      {/* Home Menu Items */}
       <DrawerItem
         icon={<I.home size={20} color={primary} />}
         label="Home"
@@ -46,5 +45,4 @@ export function HomeNavigationDrawer({
     </NavigationDrawer>
   );
 }
-
 

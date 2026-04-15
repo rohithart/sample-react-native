@@ -12,9 +12,6 @@ type ToastContextType = {
   showToast: (config: ToastConfig) => void;
 };
 
-// ---------------------------------------------------------------------------
-// Colors / icons per type
-// ---------------------------------------------------------------------------
 const TOAST_THEME: Record<ToastType, { bg: string; border: string; icon: string; iconBg: string }> = {
   success: { bg: '#ecfdf5', border: '#6ee7b7', icon: '#059669', iconBg: '#d1fae5' },
   error: { bg: '#fef2f2', border: '#fca5a5', icon: '#dc2626', iconBg: '#fee2e2' },
@@ -39,9 +36,6 @@ function ToastIcon({ type, color }: { type: ToastType; color: string }) {
   }
 }
 
-// ---------------------------------------------------------------------------
-// Context
-// ---------------------------------------------------------------------------
 const ToastContext = createContext<ToastContextType | undefined>(undefined);
 
 export function ToastProvider({ children, isDark = false }: { children: ReactNode; isDark?: boolean }) {
@@ -66,7 +60,6 @@ export function ToastProvider({ children, isDark = false }: { children: ReactNod
       const id = ++idCounter.current;
       setToast({ ...config, id });
 
-      // Reset and animate in
       translateY.setValue(-100);
       opacity.setValue(0);
 
@@ -80,7 +73,6 @@ export function ToastProvider({ children, isDark = false }: { children: ReactNod
     [translateY, opacity, dismiss],
   );
 
-  // Register showToast so the API client can display toasts
   useEffect(() => {
     registerToastHandler(showToast);
     return unregisterToastHandler;

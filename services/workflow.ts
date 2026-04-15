@@ -2,9 +2,6 @@ import type { Workflow } from '@/types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from './api-client';
 
-// ---------------------------------------------------------------------------
-// Query keys
-// ---------------------------------------------------------------------------
 export const workflowKeys = {
   all: (orgId: string) => ['workflows', orgId] as const,
   forUser: (orgId: string, userId: string) => ['workflows', orgId, 'user', userId] as const,
@@ -16,9 +13,6 @@ export const workflowKeys = {
   subWorkflows: (id: string) => ['workflows', 'sub', id] as const,
 };
 
-// ---------------------------------------------------------------------------
-// API functions
-// ---------------------------------------------------------------------------
 const workflowApi = {
   getAll: (orgId: string) => api.get<Workflow[]>(`/workflow/org/${orgId}`),
   getAllForUser: (orgId: string, userId: string) => api.get<Workflow[]>(`/workflow/org/${orgId}/user/${userId}`),
@@ -41,9 +35,6 @@ const workflowApi = {
   unflag: (id: string) => api.patch<Workflow>(`/workflow/unflag/${id}`, {}),
 };
 
-// ---------------------------------------------------------------------------
-// Query hooks
-// ---------------------------------------------------------------------------
 export function useWorkflows(orgId: string) {
   return useQuery({ queryKey: workflowKeys.all(orgId), queryFn: () => workflowApi.getAll(orgId), enabled: !!orgId });
 }
@@ -60,9 +51,6 @@ export function useWorkflow(id: string) {
   return useQuery({ queryKey: workflowKeys.detail(id), queryFn: () => workflowApi.get(id), enabled: !!id });
 }
 
-// ---------------------------------------------------------------------------
-// Mutation hooks
-// ---------------------------------------------------------------------------
 export function useCreateWorkflow(orgId: string) {
   const qc = useQueryClient();
   return useMutation({ mutationFn: (data: Partial<Workflow>) => workflowApi.create(orgId, data), onSuccess: () => qc.invalidateQueries({ queryKey: workflowKeys.all(orgId) }) });

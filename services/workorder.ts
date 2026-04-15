@@ -2,9 +2,6 @@ import type { Workorder } from '@/types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from './api-client';
 
-// ---------------------------------------------------------------------------
-// Query keys
-// ---------------------------------------------------------------------------
 export const workorderKeys = {
   all: (orgId: string) => ['workorder', orgId] as const,
   detail: (id: string) => ['workorder', 'detail', id] as const,
@@ -14,9 +11,6 @@ export const workorderKeys = {
   forQuote: (qId: string) => ['workorder', 'quote', qId] as const,
 };
 
-// ---------------------------------------------------------------------------
-// API functions
-// ---------------------------------------------------------------------------
 const workorderApi = {
   getAll: (orgId: string) => api.get<Workorder[]>(`/workorder/org/${orgId}`),
   get: (id: string) => api.get<Workorder>(`/workorder/${id}`),
@@ -37,9 +31,6 @@ const workorderApi = {
   remind: (id: string) => api.patch<Workorder>(`/workorder/remind/${id}`, {}),
 };
 
-// ---------------------------------------------------------------------------
-// Query hooks
-// ---------------------------------------------------------------------------
 export function useWorkorders(orgId: string) {
   return useQuery({ queryKey: workorderKeys.all(orgId), queryFn: () => workorderApi.getAll(orgId), enabled: !!orgId });
 }
@@ -48,9 +39,6 @@ export function useWorkorder(id: string) {
   return useQuery({ queryKey: workorderKeys.detail(id), queryFn: () => workorderApi.get(id), enabled: !!id });
 }
 
-// ---------------------------------------------------------------------------
-// Mutation hooks
-// ---------------------------------------------------------------------------
 export function useCreateWorkorder(orgId: string) {
   const qc = useQueryClient();
   return useMutation({ mutationFn: (data: Partial<Workorder>) => workorderApi.create(orgId, data), onSuccess: () => qc.invalidateQueries({ queryKey: workorderKeys.all(orgId) }) });

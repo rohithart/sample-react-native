@@ -21,16 +21,11 @@ export function LoadingCard({ style }: LoadingCardProps) {
       className="items-start"
       style={[{ padding: 16, borderRadius: 12, backgroundColor: skeleton }, style]}
     >
-      {/* Round image placeholder */}
       <LoadingImage size={48} />
 
-      {/* Text lines */}
       <VStack space="sm" className="flex-1" style={{ paddingTop: 2 }}>
-        {/* Title line */}
         <Shimmer style={{ height: 14, borderRadius: 4, width: '80%' }} />
-        {/* Subtitle line */}
         <Shimmer style={{ height: 12, borderRadius: 4, width: '60%' }} />
-        {/* Meta line */}
         <Shimmer style={{ height: 10, borderRadius: 4, width: '40%' }} />
       </VStack>
     </HStack>

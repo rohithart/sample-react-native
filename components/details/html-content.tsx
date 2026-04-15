@@ -11,7 +11,6 @@ export function HtmlContent({ label, html }: HtmlContentProps) {
   const { card, text, sub, border } = useThemeColors();
   const { width } = useWindowDimensions();
 
-  // Strip HTML tags for plain-text rendering in RN
   const plainText = html
     .replace(/<br\s*\/?>/gi, '\n')
     .replace(/<\/p>/gi, '\n\n')
