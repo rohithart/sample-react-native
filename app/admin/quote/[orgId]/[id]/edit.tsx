@@ -53,7 +53,7 @@ export default function EditQuoteScreen() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
       <Stack.Screen options={{ headerShown: false }} />
-      <PageHeader title="Edit Quote" />
+      <PageHeader icon="quote" title="Edit Quote" />
 
       <ScrollView
         contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 16, gap: 16 }}

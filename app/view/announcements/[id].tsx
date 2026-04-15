@@ -19,7 +19,7 @@ export default function AnnouncementsListScreen() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
       <Stack.Screen options={{ headerShown: false }} />
-      <PageHeader title="Announcements" />
+      <PageHeader icon="announcement" title="Announcements" />
 
       {isLoading ? (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>

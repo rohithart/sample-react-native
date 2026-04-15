@@ -53,7 +53,7 @@ export default function EditEventTypeScreen() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
       <Stack.Screen options={{ headerShown: false }} />
-      <PageHeader title="Edit Event Type" />
+      <PageHeader icon="eventType" title="Edit Event Type" />
 
       <ScrollView
         contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 16, gap: 16 }}

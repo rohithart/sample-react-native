@@ -53,7 +53,7 @@ export default function EditUserScreen() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
       <Stack.Screen options={{ headerShown: false }} />
-      <PageHeader title="Edit User" />
+      <PageHeader icon="user" title="Edit User" />
 
       <ScrollView
         contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 16, gap: 16 }}

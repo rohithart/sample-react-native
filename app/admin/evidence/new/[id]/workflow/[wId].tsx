@@ -30,7 +30,7 @@ export default function Screen() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
       <Stack.Screen options={{ headerShown: false }} />
-      <PageHeader title="New Evidence" />
+      <PageHeader icon="evidence" title="New Evidence" />
 
       <ScrollView
         contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 16, gap: 16 }}

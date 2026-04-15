@@ -81,7 +81,7 @@ export default function BudgetDetailScreen() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
       <Stack.Screen options={{ headerShown: false }} />
-      <PageHeader
+      <PageHeader icon="budget"
         title={item?.title || item?.title || item?.name || 'Loading...'}
         rightAction={
           <Pressable onPress={() => setIsBottomSheetOpen(true)} style={{ padding: 8 }}>

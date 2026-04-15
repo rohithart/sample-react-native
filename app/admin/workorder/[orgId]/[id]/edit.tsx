@@ -53,7 +53,7 @@ export default function EditWorkOrderScreen() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
       <Stack.Screen options={{ headerShown: false }} />
-      <PageHeader title="Edit Work Order" />
+      <PageHeader icon="workorder" title="Edit Work Order" />
 
       <ScrollView
         contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 16, gap: 16 }}

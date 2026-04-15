@@ -30,7 +30,7 @@ export default function AddBookingTypeScreen() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
       <Stack.Screen options={{ headerShown: false }} />
-      <PageHeader title="Add New Booking Type" />
+      <PageHeader icon="bookingType" title="Add New Booking Type" />
 
       <ScrollView
         contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 16, gap: 16 }}

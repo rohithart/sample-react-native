@@ -24,7 +24,7 @@ export default function EventTypesListScreen() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
       <Stack.Screen options={{ headerShown: false }} />
-      <PageHeader
+      <PageHeader icon="eventType"
         title="Event Types"
         rightAction={
           <Pressable

@@ -30,7 +30,7 @@ export default function AddLedgerScreen() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
       <Stack.Screen options={{ headerShown: false }} />
-      <PageHeader title="Add New Ledger" />
+      <PageHeader icon="ledger" title="Add New Ledger" />
 
       <ScrollView
         contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 16, gap: 16 }}

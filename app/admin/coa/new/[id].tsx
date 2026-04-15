@@ -30,7 +30,7 @@ export default function AddChartofAccountScreen() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
       <Stack.Screen options={{ headerShown: false }} />
-      <PageHeader title="Add New Chart of Account" />
+      <PageHeader icon="chartOfAccount" title="Add New Chart of Account" />
 
       <ScrollView
         contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 16, gap: 16 }}

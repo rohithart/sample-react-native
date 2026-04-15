@@ -30,7 +30,7 @@ export default function AddAssetTypeScreen() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
       <Stack.Screen options={{ headerShown: false }} />
-      <PageHeader title="Add New Asset Type" />
+      <PageHeader icon="assetType" title="Add New Asset Type" />
 
       <ScrollView
         contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 16, gap: 16 }}

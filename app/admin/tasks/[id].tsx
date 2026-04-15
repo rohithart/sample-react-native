@@ -24,7 +24,7 @@ export default function TasksListScreen() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
       <Stack.Screen options={{ headerShown: false }} />
-      <PageHeader
+      <PageHeader icon="task"
         title="Tasks"
         rightAction={
           <Pressable

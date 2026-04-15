@@ -24,7 +24,7 @@ export default function UsersListScreen() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
       <Stack.Screen options={{ headerShown: false }} />
-      <PageHeader
+      <PageHeader icon="user"
         title="Users"
         rightAction={
           <Pressable

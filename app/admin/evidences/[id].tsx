@@ -24,7 +24,7 @@ export default function EvidencesListScreen() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
       <Stack.Screen options={{ headerShown: false }} />
-      <PageHeader
+      <PageHeader icon="evidence"
         title="Evidences"
         rightAction={
           <Pressable

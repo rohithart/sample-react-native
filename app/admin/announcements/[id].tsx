@@ -24,7 +24,7 @@ export default function AnnouncementsListScreen() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
       <Stack.Screen options={{ headerShown: false }} />
-      <PageHeader
+      <PageHeader icon="announcement"
         title="Announcements"
         rightAction={
           <Pressable

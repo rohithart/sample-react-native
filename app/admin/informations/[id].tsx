@@ -24,7 +24,7 @@ export default function InformationListScreen() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
       <Stack.Screen options={{ headerShown: false }} />
-      <PageHeader
+      <PageHeader icon="information"
         title="Information"
         rightAction={
           <Pressable

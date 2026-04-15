@@ -24,7 +24,7 @@ export default function BudgetsListScreen() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
       <Stack.Screen options={{ headerShown: false }} />
-      <PageHeader
+      <PageHeader icon="budget"
         title="Budgets"
         rightAction={
           <Pressable

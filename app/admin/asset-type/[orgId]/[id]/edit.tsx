@@ -53,7 +53,7 @@ export default function EditAssetTypeScreen() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
       <Stack.Screen options={{ headerShown: false }} />
-      <PageHeader title="Edit Asset Type" />
+      <PageHeader icon="assetType" title="Edit Asset Type" />
 
       <ScrollView
         contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 16, gap: 16 }}

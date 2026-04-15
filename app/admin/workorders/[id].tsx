@@ -24,7 +24,7 @@ export default function WorkOrdersListScreen() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
       <Stack.Screen options={{ headerShown: false }} />
-      <PageHeader
+      <PageHeader icon="workorder"
         title="Work Orders"
         rightAction={
           <Pressable

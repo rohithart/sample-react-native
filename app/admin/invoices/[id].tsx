@@ -24,7 +24,7 @@ export default function InvoicesListScreen() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
       <Stack.Screen options={{ headerShown: false }} />
-      <PageHeader
+      <PageHeader icon="invoice"
         title="Invoices"
         rightAction={
           <Pressable

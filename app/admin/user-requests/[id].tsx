@@ -24,7 +24,7 @@ export default function UserRequestsListScreen() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
       <Stack.Screen options={{ headerShown: false }} />
-      <PageHeader
+      <PageHeader icon="userRequest"
         title="User Requests"
         rightAction={
           <Pressable

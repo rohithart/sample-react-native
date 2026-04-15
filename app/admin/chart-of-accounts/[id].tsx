@@ -24,7 +24,7 @@ export default function ChartofAccountsListScreen() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
       <Stack.Screen options={{ headerShown: false }} />
-      <PageHeader
+      <PageHeader icon="chartOfAccount"
         title="Chart of Accounts"
         rightAction={
           <Pressable

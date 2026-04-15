@@ -53,7 +53,7 @@ export default function EditBookingTypeScreen() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
       <Stack.Screen options={{ headerShown: false }} />
-      <PageHeader title="Edit Booking Type" />
+      <PageHeader icon="bookingType" title="Edit Booking Type" />
 
       <ScrollView
         contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 16, gap: 16 }}
