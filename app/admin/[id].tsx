@@ -1,3 +1,4 @@
+import { HtmlContent } from '@/components/details';
 import { AdminNavigationDrawer } from '@/components/drawer/admin-navigation-drawer';
 import { Button } from '@/components/ui/button';
 import { ENTITY_ICONS, type EntityIconKey } from '@/constants/entity-icons';
@@ -229,12 +230,27 @@ export default function AdminDashboard() {
                 </View>
               </View>
 
-              {/* Description */}
-              {org?.description ? (
-                <RNText style={{ fontSize: 13, color: secondaryText, lineHeight: 19 }} numberOfLines={3}>
-                  {org.description}
-                </RNText>
-              ) : null}
+              <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: 8, borderTopWidth: 1, borderTopColor: border }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                  <View style={{ paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6, backgroundColor: primary + '15' }}>
+                    <RNText style={{ fontSize: 11, fontWeight: '700', color: primary }}>{userRole?.role || 'ADMIN'}</RNText>
+                  </View>
+                  <RNText style={{ fontSize: 12, color: secondaryText }}>Switch to user mode</RNText>
+                </View>
+                <Pressable
+                  onPress={() => router.push(`/view/${id}` as any)}
+                  style={({ pressed }) => ({
+                    flexDirection: 'row', alignItems: 'center', gap: 4,
+                    paddingHorizontal: 10, paddingVertical: 5, borderRadius: 8,
+                    backgroundColor: secondary + '12',
+                    opacity: pressed ? 0.7 : 1,
+                  })}
+                >
+                  <ChevronRight size={14} color={secondary} />
+                </Pressable>
+              </View>
+
+              {org?.description ? <HtmlContent label="Description" html={org.description} /> : null}
 
               {/* Details row */}
               <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12 }}>
@@ -256,28 +272,6 @@ export default function AdminDashboard() {
                     <RNText style={{ fontSize: 12, color: secondaryText }}>{org.identifier}</RNText>
                   </View>
                 ) : null}
-              </View>
-
-              {/* Role + mode switch */}
-              <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: 8, borderTopWidth: 1, borderTopColor: border }}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-                  <View style={{ paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6, backgroundColor: primary + '15' }}>
-                    <RNText style={{ fontSize: 11, fontWeight: '700', color: primary }}>{userRole?.role || 'ADMIN'}</RNText>
-                  </View>
-                  <RNText style={{ fontSize: 12, color: secondaryText }}>Admin Dashboard</RNText>
-                </View>
-                <Pressable
-                  onPress={() => router.push(`/view/${id}` as any)}
-                  style={({ pressed }) => ({
-                    flexDirection: 'row', alignItems: 'center', gap: 4,
-                    paddingHorizontal: 10, paddingVertical: 5, borderRadius: 8,
-                    backgroundColor: secondary + '12',
-                    opacity: pressed ? 0.7 : 1,
-                  })}
-                >
-                  <RNText style={{ fontSize: 12, fontWeight: '600', color: secondary }}>Member View</RNText>
-                  <ChevronRight size={14} color={secondary} />
-                </Pressable>
               </View>
             </View>
           </View>

@@ -1,3 +1,4 @@
+import { HtmlContent } from '@/components/details/html-content';
 import { UserNavigationDrawer } from '@/components/drawer/user-navigation-drawer';
 import { Button } from '@/components/ui/button';
 import { ENTITY_ICONS, type EntityIconKey } from '@/constants/entity-icons';
@@ -170,40 +171,12 @@ export default function UserDashboard() {
                 </View>
               </View>
 
-              {org?.description ? (
-                <RNText style={{ fontSize: 13, color: secondaryText, lineHeight: 19 }} numberOfLines={3}>
-                  {org.description}
-                </RNText>
-              ) : null}
-
-              <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12 }}>
-                {org?.address ? (
-                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                    <MapPin size={13} color={secondaryText} />
-                    <RNText style={{ fontSize: 12, color: secondaryText }} numberOfLines={1}>{org.address}</RNText>
-                  </View>
-                ) : null}
-                {org?.timezone ? (
-                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                    <Globe size={13} color={secondaryText} />
-                    <RNText style={{ fontSize: 12, color: secondaryText }}>{org.timezone}</RNText>
-                  </View>
-                ) : null}
-                {org?.identifier ? (
-                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                    <Shield size={13} color={secondaryText} />
-                    <RNText style={{ fontSize: 12, color: secondaryText }}>{org.identifier}</RNText>
-                  </View>
-                ) : null}
-              </View>
-
-              {/* Role + admin switch */}
               <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: 8, borderTopWidth: 1, borderTopColor: border }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
                   <View style={{ paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6, backgroundColor: secondary + '15' }}>
                     <RNText style={{ fontSize: 11, fontWeight: '700', color: secondary }}>{userRole?.role || 'VIEWER'}</RNText>
                   </View>
-                  <RNText style={{ fontSize: 12, color: secondaryText }}>Member Dashboard</RNText>
+                  <RNText style={{ fontSize: 12, color: secondaryText }}>Switch to Admin mode</RNText>
                 </View>
                 {/* Only show admin switch for ADMIN and USER roles, not VIEWER */}
                 {canAccessAdmin && (
@@ -216,10 +189,20 @@ export default function UserDashboard() {
                       opacity: pressed ? 0.7 : 1,
                     })}
                   >
-                    <RNText style={{ fontSize: 12, fontWeight: '600', color: primary }}>Admin View</RNText>
                     <ChevronRight size={14} color={primary} />
                   </Pressable>
                 )}
+              </View>
+
+              {org?.description ? <HtmlContent label="Description" html={org.description} /> : null}
+
+              <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12 }}>
+                {org?.address ? (
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                    <MapPin size={13} color={secondaryText} />
+                    <RNText style={{ fontSize: 12, color: secondaryText }} numberOfLines={1}>{org.address}</RNText>
+                  </View>
+                ) : null}
               </View>
             </View>
           </View>
