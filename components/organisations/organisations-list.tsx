@@ -5,8 +5,11 @@ import { useOrganisationContext } from '@/context/organisation-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useOrganisations } from '@/services/organisations';
 import { useRouter } from 'expo-router';
-import { Building2 } from 'lucide-react-native';
+
 import { ScrollView, Text, View } from 'react-native';
+import { ENTITY_ICONS } from '@/constants/entity-icons';
+
+const I = ENTITY_ICONS;
 
 export function OrganisationsList() {
   const colors = useThemeColors();
@@ -31,7 +34,7 @@ export function OrganisationsList() {
   if (!organisations || organisations.length === 0) {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 32, gap: 12 }}>
-        <Building2 size={48} color={colors.inactive} />
+        <I.organisation size={48} color={colors.inactive} />
         <Text style={{ fontSize: 18, fontWeight: '600', textAlign: 'center', color: colors.text }}>
           No Organisations Yet
         </Text>

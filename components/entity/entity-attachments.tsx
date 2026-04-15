@@ -4,10 +4,13 @@ import { useOrganisationContext } from '@/context/organisation-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useAttachments, useCreateAttachment, useDeleteAttachment } from '@/services/attachment';
 import type { Attachment } from '@/types';
-import { Download, File, FileImage, FileSpreadsheet, FileText, FileVideo, Plus, Trash2, X } from 'lucide-react-native';
+
 import React, { useCallback, useState } from 'react';
 import { ActivityIndicator, Alert, FlatList, Linking, Modal, Pressable, Text, TextInput, View } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { ENTITY_ICONS } from '@/constants/entity-icons';
+
+const I = ENTITY_ICONS;
 
 type AttachmentEntity = 'organisation' | 'workflow' | 'task' | 'quote' | 'invoice' | 'workorder' | 'evidence' | 'meeting' | 'document' | 'asset' | 'information' | 'transaction';
 
@@ -20,13 +23,13 @@ interface EntityAttachmentsProps {
 }
 
 function getFileIcon(name?: string) {
-  if (!name) return File;
+  if (!name) return I.file;
   const ext = name.split('.').pop()?.toLowerCase();
-  if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp'].includes(ext ?? '')) return FileImage;
-  if (['mp4', 'mov', 'avi', 'mkv', 'webm'].includes(ext ?? '')) return FileVideo;
-  if (['xls', 'xlsx', 'csv'].includes(ext ?? '')) return FileSpreadsheet;
-  if (['pdf', 'doc', 'docx', 'txt', 'rtf'].includes(ext ?? '')) return FileText;
-  return File;
+  if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp'].includes(ext ?? '')) return I.fileImage;
+  if (['mp4', 'mov', 'avi', 'mkv', 'webm'].includes(ext ?? '')) return I.fileVideo;
+  if (['xls', 'xlsx', 'csv'].includes(ext ?? '')) return I.fileSpreadsheet;
+  if (['pdf', 'doc', 'docx', 'txt', 'rtf'].includes(ext ?? '')) return I.fileText;
+  return I.file;
 }
 
 function formatSize(bytes: string | number | undefined): string | null {
@@ -119,8 +122,8 @@ export function EntityAttachments({ isVisible, onClose, entity, entityId, orgId 
             style={{ flex: 1, borderRadius: 8, paddingVertical: 8, backgroundColor: colors.primary + '12' }}
           >
             <HStack space="xs" className="items-center justify-center">
-              <Download size={16} color={colors.primary} />
-              <Text style={{ color: colors.primary, fontSize: 13, fontWeight: '600' }}>Download</Text>
+              <I.download size={16} color={colors.primary} />
+              <Text style={{ color: colors.primary, fontSize: 13, fontWeight: '600' }}>I.download</Text>
             </HStack>
           </Pressable>
           {isAdmin && (
@@ -134,7 +137,7 @@ export function EntityAttachments({ isVisible, onClose, entity, entityId, orgId 
                   <ActivityIndicator size="small" color={colors.danger} />
                 ) : (
                 <>
-                  <Trash2 size={14} color={colors.danger} />
+                  <I.trash size={14} color={colors.danger} />
                   <Text style={{ color: colors.danger, fontSize: 13, fontWeight: '600' }}>Delete</Text>
                 </>
               )}
@@ -157,11 +160,11 @@ export function EntityAttachments({ isVisible, onClose, entity, entityId, orgId 
           <HStack space="md" className="items-center">
             {isAdmin && (
               <Pressable onPress={() => setShowAdd(!showAdd)} style={{ padding: 4 }}>
-                <Plus size={22} color={colors.primary} />
+                <I.plus size={22} color={colors.primary} />
               </Pressable>
             )}
             <Pressable onPress={onClose} style={{ padding: 4 }}>
-              <X size={22} color={colors.sub} />
+              <I.close size={22} color={colors.sub} />
             </Pressable>
           </HStack>
         </HStack>
@@ -190,7 +193,7 @@ export function EntityAttachments({ isVisible, onClose, entity, entityId, orgId 
           </View>
         ) : !attachments?.length ? (
           <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 32 }}>
-            <FileText size={48} color={colors.sub} strokeWidth={1.2} />
+            <I.fileText size={48} color={colors.sub} strokeWidth={1.2} />
             <Text style={{ color: colors.sub, fontSize: 15, marginTop: 12, textAlign: 'center' }}>No attachments yet</Text>
           </View>
         ) : (

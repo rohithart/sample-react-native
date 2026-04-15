@@ -4,18 +4,21 @@ import { Button } from '@/components/ui/button';
 import { Text } from '@/components/ui/text';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { Stack, useFocusEffect } from 'expo-router';
-import { Building2, Menu, PlusCircle } from 'lucide-react-native';
+
 import { useCallback, useRef, useState } from 'react';
 import { Alert, Animated, BackHandler, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { HomeNavigationDrawer } from '@/components/drawer/home-navigation-drawer';
+import { ENTITY_ICONS } from '@/constants/entity-icons';
+
+const I = ENTITY_ICONS;
 
 type Tab = 'organisations' | 'add';
 
-const TABS: { key: Tab; label: string; Icon: typeof Building2 }[] = [
-  { key: 'organisations', label: 'Organisations', Icon: Building2 },
-  { key: 'add', label: 'Add New', Icon: PlusCircle },
+const TABS: { key: Tab; label: string; Icon: typeof I.organisation }[] = [
+  { key: 'organisations', label: 'Organisations', Icon: I.organisation },
+  { key: 'add', label: 'Add New', Icon: I.plusCircle },
 ];
 
 export default function HomeScreen() {
@@ -68,7 +71,7 @@ export default function HomeScreen() {
           headerShown: true,
           headerLeft: () => (
             <Button size="md" className="bg-transparent" onPress={toggleDrawer}>
-              <Menu size={24} color={colors.icon} />
+              <I.menu size={24} color={colors.icon} />
             </Button>
           ),
         }}

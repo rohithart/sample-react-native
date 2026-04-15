@@ -10,10 +10,13 @@ import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useMeeting } from '@/services/meeting';
 import { downloadAndSharePdf } from '@/utils/pdf-download';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-import { ArchiveRestore, Edit, FileDown, Info, MessageSquare, MoreVertical, Paperclip, Share2, Trash2 } from 'lucide-react-native';
+
 import React, { useState } from 'react';
 import { ActivityIndicator, Alert, Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { ENTITY_ICONS } from '@/constants/entity-icons';
+
+const I = ENTITY_ICONS;
 
 function fmt(d: string | Date | undefined | null) { if (!d) return '—'; return new Date(d).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }); }
 
@@ -52,32 +55,32 @@ export default function MeetingDetailScreen() {
     ...(isAdmin ? [{
       id: 'edit',
       label: 'Edit',
-      icon: <Edit size={24} color={colors.primary} />,
+      icon: <I.edit size={24} color={colors.primary} />,
       onPress: () => router.push(`/admin/meeting/${orgId}/${id}/edit`),
       color: 'primary' as const,
     }] : []),
     ...(isAdmin ? [{
       id: 'archive',
       label: 'Archive',
-      icon: <ArchiveRestore size={24} color={colors.warning} />,
+      icon: <I.archiveRestore size={24} color={colors.warning} />,
       onPress: () => setConfirmationType('archive'),
       color: 'warning' as const,
     }] : []),
-    { id: 'attachments', label: 'Attachments', icon: <Paperclip size={24} color={colors.primary} />, onPress: () => setShowAttachments(true), color: 'primary' as const },
-    { id: 'comments', label: 'Comments', icon: <MessageSquare size={24} color={colors.primary} />, onPress: () => setShowComments(true), color: 'primary' as const },
-    { id: 'pdf', label: 'Download PDF', icon: <FileDown size={24} color={colors.success} />, onPress: () => downloadAndSharePdf('meeting', id || ''), color: 'success' as const },
-    { id: 'audit', label: 'Audit Info', icon: <Info size={24} color={colors.secondary} />, onPress: () => setShowAudit(true), color: 'primary' as const },
+    { id: 'attachments', label: 'Attachments', icon: <I.attachment size={24} color={colors.primary} />, onPress: () => setShowAttachments(true), color: 'primary' as const },
+    { id: 'comments', label: 'Comments', icon: <I.comment size={24} color={colors.primary} />, onPress: () => setShowComments(true), color: 'primary' as const },
+    { id: 'pdf', label: 'Download PDF', icon: <I.fileDown size={24} color={colors.success} />, onPress: () => downloadAndSharePdf('meeting', id || ''), color: 'success' as const },
+    { id: 'audit', label: 'Audit Info', icon: <I.information size={24} color={colors.secondary} />, onPress: () => setShowAudit(true), color: 'primary' as const },
     {
       id: 'share',
       label: 'Share',
-      icon: <Share2 size={24} color={colors.success} />,
+      icon: <I.share size={24} color={colors.success} />,
       onPress: () => Alert.alert('Share', 'Share functionality coming soon'),
       color: 'success' as const,
     },
     ...(isAdmin ? [{
       id: 'delete',
       label: 'Delete',
-      icon: <Trash2 size={24} color={colors.danger} />,
+      icon: <I.trash size={24} color={colors.danger} />,
       onPress: () => setConfirmationType('delete'),
       color: 'danger' as const,
     }] : []),
@@ -90,7 +93,7 @@ export default function MeetingDetailScreen() {
         title={item?.title || item?.title || item?.name || 'Loading...'}
         rightAction={
           <Pressable onPress={() => setIsBottomSheetOpen(true)} style={{ padding: 8 }}>
-            <MoreVertical size={20} color={colors.primary} />
+            <I.moreVertical size={20} color={colors.primary} />
           </Pressable>
         }
       />

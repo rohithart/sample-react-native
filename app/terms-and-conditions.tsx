@@ -4,7 +4,9 @@ import { useState } from 'react';
 import { ScrollView, View, Pressable, Text as RNText } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
-import { CheckCircle2 } from 'lucide-react-native';
+import { ENTITY_ICONS } from '@/constants/entity-icons';
+
+const I = ENTITY_ICONS;
 
 export default function TermsAndConditionsScreen() {
   const router = useRouter();
@@ -134,7 +136,7 @@ export default function TermsAndConditionsScreen() {
             }}
           >
             {isAgreed && (
-              <CheckCircle2 size={32} color="#ffffff" strokeWidth={3} />
+              <I.checkCircle size={32} color="#ffffff" strokeWidth={3} />
             )}
           </View>
           <View style={{ flex: 1 }}>

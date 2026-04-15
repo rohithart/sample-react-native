@@ -3,10 +3,13 @@ import { VStack } from '@/components/ui/vstack';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useTimeline } from '@/services/timeline';
 import type { Timeline } from '@/types';
-import { Clock, X } from 'lucide-react-native';
+
 import React from 'react';
 import { ActivityIndicator, FlatList, Modal, Pressable, Text, View } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { ENTITY_ICONS } from '@/constants/entity-icons';
+
+const I = ENTITY_ICONS;
 
 type TimelineEntity = 'user' | 'workflow' | 'task' | 'quote' | 'invoice' | 'workorder' | 'evidence' | 'vote' | 'vendor' | 'document' | 'asset' | 'financial-year';
 
@@ -119,7 +122,7 @@ export function EntityTimeline({ isVisible, onClose, entity, entityId }: EntityT
         <HStack className="items-center justify-between" style={{ paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: colors.border }}>
           <Text style={{ fontSize: 17, fontWeight: '700', color: colors.text }}>Timeline</Text>
           <Pressable onPress={onClose} style={{ padding: 4 }}>
-            <X size={22} color={colors.sub} />
+            <I.close size={22} color={colors.sub} />
           </Pressable>
         </HStack>
 
@@ -131,7 +134,7 @@ export function EntityTimeline({ isVisible, onClose, entity, entityId }: EntityT
           </View>
         ) : !entries?.length ? (
           <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 32 }}>
-            <Clock size={48} color={colors.sub} strokeWidth={1.2} />
+            <I.clock size={48} color={colors.sub} strokeWidth={1.2} />
             <Text style={{ color: colors.sub, fontSize: 15, marginTop: 12, textAlign: 'center' }}>No timeline entries yet</Text>
           </View>
         ) : (

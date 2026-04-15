@@ -3,10 +3,13 @@ import { VStack } from '@/components/ui/vstack';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useHistory } from '@/services/history';
 import type { HistoryChanges, History as HistoryType } from '@/types';
-import { History, X } from 'lucide-react-native';
+
 import React from 'react';
 import { ActivityIndicator, FlatList, Modal, Pressable, Text, View } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { ENTITY_ICONS } from '@/constants/entity-icons';
+
+const I = ENTITY_ICONS;
 
 type HistoryEntity = 'workflow' | 'task' | 'quote' | 'invoice' | 'workorder' | 'evidence';
 
@@ -63,9 +66,9 @@ export function EntityHistory({ isVisible, onClose, entity, entityId }: EntityHi
       <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
         {/* Header */}
         <HStack className="items-center justify-between" style={{ paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: colors.border }}>
-          <Text style={{ fontSize: 17, fontWeight: '700', color: colors.text }}>History</Text>
+          <Text style={{ fontSize: 17, fontWeight: '700', color: colors.text }}>I.history</Text>
           <Pressable onPress={onClose} style={{ padding: 4 }}>
-            <X size={22} color={colors.sub} />
+            <I.close size={22} color={colors.sub} />
           </Pressable>
         </HStack>
 
@@ -77,7 +80,7 @@ export function EntityHistory({ isVisible, onClose, entity, entityId }: EntityHi
           </View>
         ) : !entries?.length ? (
           <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 32 }}>
-            <History size={48} color={colors.sub} strokeWidth={1.2} />
+            <I.history size={48} color={colors.sub} strokeWidth={1.2} />
             <Text style={{ color: colors.sub, fontSize: 15, marginTop: 12, textAlign: 'center' }}>No history entries yet</Text>
           </View>
         ) : (

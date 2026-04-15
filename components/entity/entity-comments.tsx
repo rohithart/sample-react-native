@@ -4,10 +4,13 @@ import { useOrganisationContext } from '@/context/organisation-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useComments, useCreateComment, useDeleteComment } from '@/services/comment';
 import type { Comment } from '@/types';
-import { MessageSquare, Send, Trash2, X } from 'lucide-react-native';
+
 import React, { useCallback, useState } from 'react';
 import { ActivityIndicator, Alert, FlatList, Modal, Pressable, Text, TextInput, View } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { ENTITY_ICONS } from '@/constants/entity-icons';
+
+const I = ENTITY_ICONS;
 
 type CommentEntity = 'workflow' | 'task' | 'quote' | 'invoice' | 'workorder' | 'evidence' | 'vendor' | 'document' | 'asset' | 'booking' | 'request' | 'meeting' | 'transaction' | 'financial-year';
 
@@ -81,7 +84,7 @@ export function EntityComments({ isVisible, onClose, entity, entityId, orgId }: 
             </HStack>
             {isAdmin && (
               <Pressable onPress={() => handleDelete(item._id)} style={{ padding: 4 }} disabled={deleteMutation.isPending}>
-                {deleteMutation.isPending ? <ActivityIndicator size="small" color={colors.danger} /> : <Trash2 size={14} color={colors.danger} />}
+                {deleteMutation.isPending ? <ActivityIndicator size="small" color={colors.danger} /> : <I.trash size={14} color={colors.danger} />}
               </Pressable>
             )}
           </HStack>
@@ -107,7 +110,7 @@ export function EntityComments({ isVisible, onClose, entity, entityId, orgId }: 
             ) : null}
           </HStack>
           <Pressable onPress={onClose} style={{ padding: 4 }}>
-            <X size={22} color={colors.sub} />
+            <I.close size={22} color={colors.sub} />
           </Pressable>
         </HStack>
 
@@ -119,7 +122,7 @@ export function EntityComments({ isVisible, onClose, entity, entityId, orgId }: 
           </View>
         ) : !comments?.length ? (
           <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 32 }}>
-            <MessageSquare size={48} color={colors.sub} strokeWidth={1.2} />
+            <I.comment size={48} color={colors.sub} strokeWidth={1.2} />
             <Text style={{ color: colors.sub, fontSize: 15, marginTop: 12, textAlign: 'center' }}>No comments yet</Text>
           </View>
         ) : (
@@ -143,7 +146,7 @@ export function EntityComments({ isVisible, onClose, entity, entityId, orgId }: 
             style={{ flex: 1, backgroundColor: colors.inputBg, borderWidth: 1, borderColor: colors.inputBorder, borderRadius: 10, paddingHorizontal: 12, paddingVertical: 8, color: colors.text, fontSize: 14, maxHeight: 100 }}
           />
           <Pressable onPress={handleSend} disabled={createMutation.isPending || !content.trim()} style={{ backgroundColor: colors.primary, borderRadius: 10, width: 42, alignItems: 'center', justifyContent: 'center', opacity: !content.trim() ? 0.5 : 1 }}>
-            {createMutation.isPending ? <ActivityIndicator size="small" color="#fff" /> : <Send size={18} color="#fff" />}
+            {createMutation.isPending ? <ActivityIndicator size="small" color="#fff" /> : <I.send size={18} color="#fff" />}
           </Pressable>
         </HStack>
       </SafeAreaView>

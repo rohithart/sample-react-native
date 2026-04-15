@@ -2,13 +2,16 @@ import { useThemeColors } from '@/hooks/use-theme-colors';
 import { PageHeader } from '@/components/ui/page-header';
 import { DetailField, DetailSection, HtmlContent, AuditInfo } from '@/components/details';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-import { MoreVertical, Share2, Info } from 'lucide-react-native';
+
 import React, { useState } from 'react';
 import { ActivityIndicator, ScrollView, Text, View, Pressable, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ActionBottomSheet, ActionItem } from '@/components/sheets/action-bottom-sheet';
 import { useBooking } from '@/services/booking';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
+import { ENTITY_ICONS } from '@/constants/entity-icons';
+
+const I = ENTITY_ICONS;
 
 function fmt(d: string | Date | undefined | null) { if (!d) return '—'; return new Date(d).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }); }
 
@@ -23,11 +26,11 @@ export default function BookingDetailScreen() {
   const refreshControl = useRefreshControl(refetch, isRefetching);
 
   const actions: ActionItem[] = [
-    { id: 'audit', label: 'Audit Info', icon: <Info size={24} color={colors.secondary} />, onPress: () => setShowAudit(true), color: 'primary' as const },
+    { id: 'audit', label: 'Audit Info', icon: <I.information size={24} color={colors.secondary} />, onPress: () => setShowAudit(true), color: 'primary' as const },
     {
       id: 'share',
       label: 'Share',
-      icon: <Share2 size={24} color={colors.success} />,
+      icon: <I.share size={24} color={colors.success} />,
       onPress: () => Alert.alert('Share', 'Share functionality coming soon'),
       color: 'success' as const,
     },
@@ -40,7 +43,7 @@ export default function BookingDetailScreen() {
         title={item?.title || 'Loading...'}
         rightAction={
           <Pressable onPress={() => setIsBottomSheetOpen(true)} style={{ padding: 8 }}>
-            <MoreVertical size={20} color={colors.primary} />
+            <I.moreVertical size={20} color={colors.primary} />
           </Pressable>
         }
       />

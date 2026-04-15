@@ -2,11 +2,14 @@ import { useThemeColors } from '@/hooks/use-theme-colors';
 import { PageHeader } from '@/components/ui/page-header';
 import { FormField } from '@/components/ui/form-field';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-import { Trash2 } from 'lucide-react-native';
+
 import React, { useState } from 'react';
 import { ScrollView, Text, Pressable, Alert } from 'react-native';
 import { useOrganisationContext } from '@/context/organisation-context';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { ENTITY_ICONS } from '@/constants/entity-icons';
+
+const I = ENTITY_ICONS;
 
 export default function EditVendorScreen() {
   const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
@@ -111,7 +114,7 @@ export default function EditVendorScreen() {
             opacity: pressed || isSubmitting ? 0.7 : 1,
           })}
         >
-          <Trash2 size={18} color={colors.danger} />
+          <I.trash size={18} color={colors.danger} />
           <Text style={{ fontSize: 16, fontWeight: '600', color: colors.danger }}>
             Delete Vendor
           </Text>

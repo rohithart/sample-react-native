@@ -3,9 +3,11 @@ import { VStack } from '@/components/ui/vstack';
 import { ENTITY_ICONS, type EntityIconKey } from '@/constants/entity-icons';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useRouter } from 'expo-router';
-import { ChevronRight } from 'lucide-react-native';
+
 import React from 'react';
 import { Pressable, Text, View } from 'react-native';
+
+const I = ENTITY_ICONS;
 
 interface LinkedFieldProps {
   label: string;
@@ -57,7 +59,7 @@ export function LinkedField({ label, value, icon, route }: LinkedFieldProps) {
           {value}
         </Text>
       </VStack>
-      {route ? <ChevronRight size={16} color={sub} /> : null}
+      {route ? <I.chevronRight size={16} color={sub} /> : null}
     </HStack>
   );
 

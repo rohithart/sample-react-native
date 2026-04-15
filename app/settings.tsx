@@ -4,16 +4,16 @@ import { useCallback, useEffect, useState } from 'react';
 import {
   Alert,
   Pressable,
+  Text as RNText,
   ScrollView,
   Switch,
-  Text as RNText,
   View,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { useTheme } from '@/context/theme-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
-import { Archive, ChevronLeft, Eye, Moon, Sun } from 'lucide-react-native';
 
 const DISPLAY_SETTINGS_KEY = '@app_display_settings';
 
@@ -27,6 +27,7 @@ export default function SettingsScreen() {
   const { isDark, toggleDarkMode } = useTheme();
   const colors = useThemeColors();
   const router = useRouter();
+  const I = ENTITY_ICONS;
 
   // Display settings only
   const [showCompleted, setShowCompleted] = useState(DEFAULT_DISPLAY_SETTINGS.showCompleted);
@@ -118,7 +119,7 @@ export default function SettingsScreen() {
                 paddingHorizontal: 8,
               })}
             >
-              <ChevronLeft size={24} color={colors.text} />
+              <I.back size={24} color={colors.text} />
             </Pressable>
           ),
           headerTintColor: colors.text,
@@ -154,7 +155,7 @@ export default function SettingsScreen() {
         {/* Display Section */}
         <View style={{ marginBottom: 32 }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 16 }}>
-            <Eye size={20} color={colors.primary} />
+            <I.eye size={20} color={colors.primary} />
             <RNText style={{ fontSize: 18, fontWeight: '600', color: colors.text }}>
               Display
             </RNText>
@@ -162,7 +163,7 @@ export default function SettingsScreen() {
 
           {/* Show Completed Toggle */}
           <SettingItem
-            icon={<Eye size={18} color={colors.secondary} />}
+            icon={<I.eye size={18} color={colors.secondary} />}
             label="Show Completed"
             description="Display completed items in lists"
             value={showCompleted}
@@ -172,7 +173,7 @@ export default function SettingsScreen() {
 
           {/* Show Archived Toggle */}
           <SettingItem
-            icon={<Archive size={18} color={colors.secondary} />}
+            icon={<I.archive size={18} color={colors.secondary} />}
             label="Show Archived Only"
             description="Display only archived items"
             value={showArchived}
@@ -185,9 +186,9 @@ export default function SettingsScreen() {
         <View>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 16 }}>
             {isDark ? (
-              <Moon size={20} color={colors.primary} />
+              <I.moon size={20} color={colors.primary} />
             ) : (
-              <Sun size={20} color={colors.primary} />
+              <I.sun size={20} color={colors.primary} />
             )}
             <RNText style={{ fontSize: 18, fontWeight: '600', color: colors.text }}>
               App
@@ -198,9 +199,9 @@ export default function SettingsScreen() {
           <SettingItem
             icon={
               isDark ? (
-                <Moon size={18} color={colors.secondary} />
+                <I.moon size={18} color={colors.secondary} />
               ) : (
-                <Sun size={18} color={colors.secondary} />
+                <I.sun size={18} color={colors.secondary} />
               )
             }
             label="Dark Mode"

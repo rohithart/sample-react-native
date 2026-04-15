@@ -2,9 +2,11 @@ import { HStack } from '@/components/ui/hstack';
 import { ENTITY_ICONS, type EntityIconKey } from '@/constants/entity-icons';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useRouter } from 'expo-router';
-import { ChevronLeft } from 'lucide-react-native';
+
 import React from 'react';
 import { Pressable, Text, View } from 'react-native';
+
+const I = ENTITY_ICONS;
 
 interface PageHeaderProps {
   title: string;
@@ -30,7 +32,7 @@ export function PageHeader({ title, rightAction, onBack, icon }: PageHeaderProps
     >
       <HStack space="md" className="items-center flex-1">
         <Pressable onPress={onBack ?? (() => router.back())} style={{ padding: 4 }}>
-          <ChevronLeft size={24} color={text} />
+          <I.back size={24} color={text} />
         </Pressable>
         {IconComponent && (
           <View style={{ width: 32, height: 32, borderRadius: 8, backgroundColor: primary + '15', alignItems: 'center', justifyContent: 'center' }}>

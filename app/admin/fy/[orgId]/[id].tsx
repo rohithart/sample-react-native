@@ -2,7 +2,7 @@ import { useThemeColors } from '@/hooks/use-theme-colors';
 import { PageHeader } from '@/components/ui/page-header';
 import { DetailField, DetailSection, AuditInfo } from '@/components/details';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-import { MoreVertical, Edit, ArchiveRestore, Share2, Trash2, Info } from 'lucide-react-native';
+
 import React, { useState } from 'react';
 import { ActivityIndicator, ScrollView, Text, View, Pressable, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -12,6 +12,9 @@ import { useOrganisationContext } from '@/context/organisation-context';
 
 import { useFinancialYear } from '@/services/financial-year';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
+import { ENTITY_ICONS } from '@/constants/entity-icons';
+
+const I = ENTITY_ICONS;
 
 function fmt(d: string | Date | undefined | null) { if (!d) return '—'; return new Date(d).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }); }
 
@@ -24,7 +27,6 @@ export default function FinancialYearDetailScreen() {
   const [confirmationType, setConfirmationType] = useState<'delete' | 'archive' | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [showAudit, setShowAudit] = useState(false);
-
 
   const { data: item, isLoading: isLoadingItem, refetch, isRefetching } = useFinancialYear(id || '');
   const refreshControl = useRefreshControl(refetch, isRefetching);
@@ -49,30 +51,30 @@ export default function FinancialYearDetailScreen() {
     ...(isAdmin ? [{
       id: 'edit',
       label: 'Edit',
-      icon: <Edit size={24} color={colors.primary} />,
+      icon: <I.edit size={24} color={colors.primary} />,
       onPress: () => router.push(`/admin/fy/${orgId}/${id}/edit`),
       color: 'primary' as const,
     }] : []),
     ...(isAdmin ? [{
       id: 'archive',
       label: 'Archive',
-      icon: <ArchiveRestore size={24} color={colors.warning} />,
+      icon: <I.archiveRestore size={24} color={colors.warning} />,
       onPress: () => setConfirmationType('archive'),
       color: 'warning' as const,
     }] : []),
 
-    { id: 'audit', label: 'Audit Info', icon: <Info size={24} color={colors.secondary} />, onPress: () => setShowAudit(true), color: 'primary' as const },
+    { id: 'audit', label: 'Audit Info', icon: <I.information size={24} color={colors.secondary} />, onPress: () => setShowAudit(true), color: 'primary' as const },
     {
       id: 'share',
       label: 'Share',
-      icon: <Share2 size={24} color={colors.success} />,
+      icon: <I.share size={24} color={colors.success} />,
       onPress: () => Alert.alert('Share', 'Share functionality coming soon'),
       color: 'success' as const,
     },
     ...(isAdmin ? [{
       id: 'delete',
       label: 'Delete',
-      icon: <Trash2 size={24} color={colors.danger} />,
+      icon: <I.trash size={24} color={colors.danger} />,
       onPress: () => setConfirmationType('delete'),
       color: 'danger' as const,
     }] : []),
@@ -85,7 +87,7 @@ export default function FinancialYearDetailScreen() {
         title={'Financial Year' || 'Loading...'}
         rightAction={
           <Pressable onPress={() => setIsBottomSheetOpen(true)} style={{ padding: 8 }}>
-            <MoreVertical size={20} color={colors.primary} />
+            <I.moreVertical size={20} color={colors.primary} />
           </Pressable>
         }
       />

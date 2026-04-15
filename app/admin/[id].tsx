@@ -5,20 +5,12 @@ import { ENTITY_ICONS, type EntityIconKey } from '@/constants/entity-icons';
 import { useOrganisationContext } from '@/context/organisation-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-import {
-  Building2,
-  ChevronRight,
-  Globe,
-  Mail,
-  MapPin,
-  Menu,
-  Phone,
-  Shield,
-  User
-} from 'lucide-react-native';
+
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Animated, Image, Pressable, Text as RNText, ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+const I = ENTITY_ICONS;
 
 type QuickLink = {
   label: string;
@@ -65,7 +57,7 @@ export default function AdminDashboard() {
       links: [
         { label: 'Users', icon: 'user', route: `/admin/users/${id}`, accent: 'primary' },
         { label: 'Groups', icon: 'group', route: `/admin/groups/${id}`, accent: 'secondary' },
-        { label: 'User Requests', icon: 'userRequest', route: `/admin/user-requests/${id}`, accent: 'primary' },
+        { label: 'I.user Requests', icon: 'userRequest', route: `/admin/user-requests/${id}`, accent: 'primary' },
       ],
     },
     {
@@ -168,7 +160,7 @@ export default function AdminDashboard() {
           title: org?.name || 'Admin',
           headerLeft: () => (
             <Button size="md" className="bg-transparent" onPress={toggleDrawer}>
-              <Menu size={24} color={textColor} />
+              <I.menu size={24} color={textColor} />
             </Button>
           ),
           headerTintColor: textColor,
@@ -208,7 +200,7 @@ export default function AdminDashboard() {
                   <Image source={{ uri: org.image }} style={{ width: 52, height: 52, borderRadius: 14, borderWidth: 1, borderColor: border }} />
                 ) : (
                   <View style={{ width: 52, height: 52, borderRadius: 14, backgroundColor: primary + '20', alignItems: 'center', justifyContent: 'center' }}>
-                    <Building2 size={24} color={primary} />
+                    <I.organisation size={24} color={primary} />
                   </View>
                 )}
                 <View style={{ flex: 1 }}>
@@ -246,7 +238,7 @@ export default function AdminDashboard() {
                     opacity: pressed ? 0.7 : 1,
                   })}
                 >
-                  <ChevronRight size={14} color={secondary} />
+                  <I.chevronRight size={14} color={secondary} />
                 </Pressable>
               </View>
 
@@ -256,19 +248,19 @@ export default function AdminDashboard() {
               <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12 }}>
                 {org?.address ? (
                   <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                    <MapPin size={13} color={secondaryText} />
+                    <I.mapPin size={13} color={secondaryText} />
                     <RNText style={{ fontSize: 12, color: secondaryText }} numberOfLines={1}>{org.address}</RNText>
                   </View>
                 ) : null}
                 {org?.timezone ? (
                   <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                    <Globe size={13} color={secondaryText} />
+                    <I.globe size={13} color={secondaryText} />
                     <RNText style={{ fontSize: 12, color: secondaryText }}>{org.timezone}</RNText>
                   </View>
                 ) : null}
                 {org?.identifier ? (
                   <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                    <Shield size={13} color={secondaryText} />
+                    <I.shield size={13} color={secondaryText} />
                     <RNText style={{ fontSize: 12, color: secondaryText }}>{org.identifier}</RNText>
                   </View>
                 ) : null}
@@ -276,14 +268,14 @@ export default function AdminDashboard() {
             </View>
           </View>
 
-          {/* User profile card */}
+          {/* I.user profile card */}
           {userRole?.user && (
             <View style={{ borderRadius: 14, backgroundColor: cardBg, borderWidth: 1, borderColor: border, padding: 14, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
               {userRole.user.image ? (
                 <Image source={{ uri: userRole.user.image }} style={{ width: 44, height: 44, borderRadius: 22, borderWidth: 1, borderColor: border }} />
               ) : (
                 <View style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: primary + '15', alignItems: 'center', justifyContent: 'center' }}>
-                  <User size={20} color={primary} />
+                  <I.user size={20} color={primary} />
                 </View>
               )}
               <View style={{ flex: 1, gap: 2 }}>
@@ -292,13 +284,13 @@ export default function AdminDashboard() {
                 </RNText>
                 {userRole.user.email ? (
                   <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                    <Mail size={11} color={secondaryText} />
+                    <I.mail size={11} color={secondaryText} />
                     <RNText style={{ fontSize: 12, color: secondaryText }} numberOfLines={1}>{userRole.user.email}</RNText>
                   </View>
                 ) : null}
                 {userRole.user.phone ? (
                   <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                    <Phone size={11} color={secondaryText} />
+                    <I.phone size={11} color={secondaryText} />
                     <RNText style={{ fontSize: 12, color: secondaryText }}>{userRole.user.phone}</RNText>
                   </View>
                 ) : null}

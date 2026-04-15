@@ -1,11 +1,14 @@
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useRouter } from 'expo-router';
-import { MoreVertical, Edit, ArchiveRestore, Share2, Trash2 } from 'lucide-react-native';
+
 import React, { useState } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ActionBottomSheet, ActionItem } from '@/components/sheets/action-bottom-sheet';
 import { ConfirmationDialog } from '@/components/dialogs/confirmation-dialog';
+import { ENTITY_ICONS } from '@/constants/entity-icons';
+
+const I = ENTITY_ICONS;
 
 interface DetailPageProps {
   title: string;
@@ -70,7 +73,7 @@ export function GenericDetailPage({
           {
             id: 'edit',
             label: 'Edit',
-            icon: <Edit size={24} color={primary} />,
+            icon: <I.edit size={24} color={primary} />,
             onPress: handleEdit,
             color: 'primary' as const,
           },
@@ -81,7 +84,7 @@ export function GenericDetailPage({
           {
             id: 'archive',
             label: isArchived ? 'Restore' : 'Archive',
-            icon: <ArchiveRestore size={24} color={warning} />,
+            icon: <I.archiveRestore size={24} color={warning} />,
             onPress: () => setConfirmationType('archive'),
             color: 'warning' as const,
           },
@@ -92,7 +95,7 @@ export function GenericDetailPage({
           {
             id: 'share',
             label: 'Share',
-            icon: <Share2 size={24} color={success} />,
+            icon: <I.share size={24} color={success} />,
             onPress: handleShare,
             color: 'success' as const,
           },
@@ -103,7 +106,7 @@ export function GenericDetailPage({
           {
             id: 'delete',
             label: 'Delete',
-            icon: <Trash2 size={24} color={danger} />,
+            icon: <I.trash size={24} color={danger} />,
             onPress: () => setConfirmationType('delete'),
             color: 'danger' as const,
           },
@@ -145,7 +148,7 @@ export function GenericDetailPage({
           onPress={() => setIsBottomSheetOpen(true)}
           style={{ padding: 8 }}
         >
-          <MoreVertical size={20} color={primary} />
+          <I.moreVertical size={20} color={primary} />
         </Pressable>
       </View>
 

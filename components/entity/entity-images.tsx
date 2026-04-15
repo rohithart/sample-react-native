@@ -3,10 +3,13 @@ import { useOrganisationContext } from '@/context/organisation-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useCreateImage, useDeleteImage, useImages } from '@/services/image';
 import type { AppImage } from '@/types';
-import { ChevronLeft, ChevronRight, ImageIcon, Plus, Trash2, X } from 'lucide-react-native';
+
 import React, { useCallback, useState } from 'react';
 import { ActivityIndicator, Alert, Dimensions, FlatList, Image, Modal, Pressable, Text, TextInput, View } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { ENTITY_ICONS } from '@/constants/entity-icons';
+
+const I = ENTITY_ICONS;
 
 type ImageEntity = 'organisation' | 'user' | 'workflow' | 'task' | 'quote' | 'invoice' | 'workorder' | 'evidence' | 'document' | 'asset';
 
@@ -61,7 +64,7 @@ export function EntityImages({ isVisible, onClose, entity, entityId, orgId }: En
         <Image source={{ uri: item.url }} style={{ width: '100%', height: '100%' }} resizeMode="cover" />
       ) : (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <ImageIcon size={24} color={colors.sub} />
+          <I.gallery size={24} color={colors.sub} />
         </View>
       )}
     </Pressable>
@@ -78,11 +81,11 @@ export function EntityImages({ isVisible, onClose, entity, entityId, orgId }: En
           <HStack space="md" className="items-center">
             {isAdmin && (
               <Pressable onPress={() => setShowAdd(!showAdd)} style={{ padding: 4 }}>
-                <Plus size={22} color={colors.primary} />
+                <I.plus size={22} color={colors.primary} />
               </Pressable>
             )}
             <Pressable onPress={onClose} style={{ padding: 4 }}>
-              <X size={22} color={colors.sub} />
+              <I.close size={22} color={colors.sub} />
             </Pressable>
           </HStack>
         </HStack>
@@ -111,7 +114,7 @@ export function EntityImages({ isVisible, onClose, entity, entityId, orgId }: En
           </View>
         ) : !images?.length ? (
           <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 32 }}>
-            <ImageIcon size={48} color={colors.sub} strokeWidth={1.2} />
+            <I.gallery size={48} color={colors.sub} strokeWidth={1.2} />
             <Text style={{ color: colors.sub, fontSize: 15, marginTop: 12, textAlign: 'center' }}>No images yet</Text>
           </View>
         ) : (
@@ -140,11 +143,11 @@ export function EntityImages({ isVisible, onClose, entity, entityId, orgId }: En
                 <HStack space="lg" className="items-center">
                   {isAdmin && (
                     <Pressable onPress={() => handleDelete(viewerImage._id)} style={{ padding: 6 }}>
-                      <Trash2 size={20} color="#ef4444" />
+                      <I.trash size={20} color="#ef4444" />
                     </Pressable>
                   )}
                   <Pressable onPress={() => setViewerIndex(null)} style={{ padding: 6 }}>
-                    <X size={22} color="#fff" />
+                    <I.close size={22} color="#fff" />
                   </Pressable>
                 </HStack>
               </HStack>
@@ -154,7 +157,7 @@ export function EntityImages({ isVisible, onClose, entity, entityId, orgId }: En
                 {viewerImage.url ? (
                   <Image source={{ uri: viewerImage.url }} style={{ width: SCREEN_WIDTH, height: SCREEN_WIDTH }} resizeMode="contain" />
                 ) : (
-                  <ImageIcon size={64} color="#666" />
+                  <I.gallery size={64} color="#666" />
                 )}
               </View>
 
@@ -165,7 +168,7 @@ export function EntityImages({ isVisible, onClose, entity, entityId, orgId }: En
                   disabled={(viewerIndex ?? 0) === 0}
                   style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: 'rgba(255,255,255,0.15)', alignItems: 'center', justifyContent: 'center', opacity: (viewerIndex ?? 0) === 0 ? 0.3 : 1 }}
                 >
-                  <ChevronLeft size={24} color="#fff" />
+                  <I.back size={24} color="#fff" />
                 </Pressable>
                 <View style={{ alignItems: 'center', justifyContent: 'center' }}>
                   <Text style={{ color: 'rgba(255,255,255,0.6)', fontSize: 11 }}>
@@ -177,7 +180,7 @@ export function EntityImages({ isVisible, onClose, entity, entityId, orgId }: En
                   disabled={(viewerIndex ?? 0) >= (images?.length ?? 1) - 1}
                   style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: 'rgba(255,255,255,0.15)', alignItems: 'center', justifyContent: 'center', opacity: (viewerIndex ?? 0) >= (images?.length ?? 1) - 1 ? 0.3 : 1 }}
                 >
-                  <ChevronRight size={24} color="#fff" />
+                  <I.chevronRight size={24} color="#fff" />
                 </Pressable>
               </HStack>
             </SafeAreaView>

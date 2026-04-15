@@ -1,10 +1,13 @@
 import { HStack } from '@/components/ui/hstack';
 import { VStack } from '@/components/ui/vstack';
 import { useThemeColors } from '@/hooks/use-theme-colors';
-import { Calendar, RefreshCw, User, X } from 'lucide-react-native';
+
 import React from 'react';
 import { Modal, Pressable, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { ENTITY_ICONS } from '@/constants/entity-icons';
+
+const I = ENTITY_ICONS;
 
 interface AuditInfoProps {
   isVisible: boolean;
@@ -27,7 +30,7 @@ function formatDate(d?: string | Date): string {
   });
 }
 
-/** Safely resolve a user ref that may be a string name, a User object, or nullish */
+/** Safely resolve a user ref that may be a string name, a I.user object, or nullish */
 function resolveUserName(ref: unknown): string {
   if (!ref) return '—';
   if (typeof ref === 'string') return ref;
@@ -46,10 +49,10 @@ export function AuditInfo({ isVisible, onClose, createdBy, updatedBy, createdAt,
   if (!isVisible) return null;
 
   const rows: { icon: React.ReactNode; label: string; value: string }[] = [
-    { icon: <User size={16} color={primary} />, label: 'Created by', value: resolveUserName(createdBy) },
-    { icon: <Calendar size={16} color={primary} />, label: 'Created at', value: formatDate(createdAt) },
-    { icon: <User size={16} color={secondary} />, label: 'Updated by', value: resolveUserName(updatedBy) },
-    { icon: <RefreshCw size={16} color={secondary} />, label: 'Updated at', value: formatDate(updatedAt) },
+    { icon: <I.user size={16} color={primary} />, label: 'Created by', value: resolveUserName(createdBy) },
+    { icon: <I.calendar size={16} color={primary} />, label: 'Created at', value: formatDate(createdAt) },
+    { icon: <I.user size={16} color={secondary} />, label: 'Updated by', value: resolveUserName(updatedBy) },
+    { icon: <I.refresh size={16} color={secondary} />, label: 'Updated at', value: formatDate(updatedAt) },
   ];
 
   return (
@@ -77,7 +80,7 @@ export function AuditInfo({ isVisible, onClose, createdBy, updatedBy, createdAt,
           >
             <Text style={{ fontSize: 16, fontWeight: '700', color: text }}>Audit Information</Text>
             <Pressable onPress={onClose} hitSlop={8}>
-              <X size={20} color={sub} />
+              <I.close size={20} color={sub} />
             </Pressable>
           </HStack>
 

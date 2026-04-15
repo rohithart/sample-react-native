@@ -1,9 +1,12 @@
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useRouter } from 'expo-router';
-import { Plus } from 'lucide-react-native';
+
 import React, { useState } from 'react';
 import { FlatList, Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { ENTITY_ICONS } from '@/constants/entity-icons';
+
+const I = ENTITY_ICONS;
 
 interface ListPageProps {
   title: string;
@@ -51,7 +54,7 @@ export function GenericListPage({
             borderRadius: 8,
           }}
         >
-          <Plus size={20} color="#ffffff" />
+          <I.plus size={20} color="#ffffff" />
         </Pressable>
       </View>
 

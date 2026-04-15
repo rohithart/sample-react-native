@@ -1,9 +1,12 @@
 import { registerToastHandler, unregisterToastHandler } from '@/services/api-client';
 import { ToastConfig, ToastType } from '@/types/toast';
-import { AlertCircle, CheckCircle2, Info, TriangleAlert, X } from 'lucide-react-native';
+
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Animated, Pressable, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { ENTITY_ICONS } from '@/constants/entity-icons';
+
+const I = ENTITY_ICONS;
 
 type ToastContextType = {
   showToast: (config: ToastConfig) => void;
@@ -29,10 +32,10 @@ const TOAST_THEME_DARK: Record<ToastType, { bg: string; border: string; icon: st
 function ToastIcon({ type, color }: { type: ToastType; color: string }) {
   const size = 18;
   switch (type) {
-    case 'success': return <CheckCircle2 size={size} color={color} />;
-    case 'error': return <AlertCircle size={size} color={color} />;
-    case 'warning': return <TriangleAlert size={size} color={color} />;
-    case 'info': return <Info size={size} color={color} />;
+    case 'success': return <I.checkCircle size={size} color={color} />;
+    case 'error': return <I.alertCircle size={size} color={color} />;
+    case 'warning': return <I.warning size={size} color={color} />;
+    case 'info': return <I.information size={size} color={color} />;
   }
 }
 
@@ -149,7 +152,7 @@ export function ToastProvider({ children, isDark = false }: { children: ReactNod
               hitSlop={8}
               style={{ padding: 2, marginTop: 1 }}
             >
-              <X size={16} color={t.icon} />
+              <I.close size={16} color={t.icon} />
             </Pressable>
           </View>
         </Animated.View>

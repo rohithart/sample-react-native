@@ -1,6 +1,6 @@
 import { HStack } from '@/components/ui/hstack';
 import { useThemeColors } from '@/hooks/use-theme-colors';
-import { X } from 'lucide-react-native';
+
 import React from 'react';
 import {
     Modal,
@@ -8,6 +8,9 @@ import {
     Text,
     View,
 } from 'react-native';
+import { ENTITY_ICONS } from '@/constants/entity-icons';
+
+const I = ENTITY_ICONS;
 
 type DialogType = 'delete' | 'archive' | 'custom';
 
@@ -112,7 +115,7 @@ export function ConfirmationDialog({
                 {finalTitle}
               </Text>
               <Pressable onPress={onClose} style={{ padding: 4, marginLeft: 8 }}>
-                <X size={20} color={sub} />
+                <I.close size={20} color={sub} />
               </Pressable>
             </HStack>
 

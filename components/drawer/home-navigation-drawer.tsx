@@ -1,5 +1,5 @@
+import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { useThemeColors } from '@/hooks/use-theme-colors';
-import { BarChart3, Home, Rocket } from 'lucide-react-native';
 import { Animated } from 'react-native';
 import { DrawerItem } from './drawer-items';
 import { NavigationDrawer } from './navigation-drawer';
@@ -18,6 +18,7 @@ export function HomeNavigationDrawer({
   topInset,
 }: HomeNavigationDrawerProps) {
   const { primary } = useThemeColors();
+  const I = ENTITY_ICONS;
 
   return (
     <NavigationDrawer
@@ -28,17 +29,17 @@ export function HomeNavigationDrawer({
     >
       {/* Home Menu Items */}
       <DrawerItem
-        icon={<Home size={20} color={primary} />}
+        icon={<I.home size={20} color={primary} />}
         label="Home"
         onPress={onClose}
       />
       <DrawerItem
-        icon={<Rocket size={20} color={primary} />}
+        icon={<I.rocket size={20} color={primary} />}
         label="Features"
         onPress={onClose}
       />
       <DrawerItem
-        icon={<BarChart3 size={20} color={primary} />}
+        icon={<I.dashboard size={20} color={primary} />}
         label="Analytics"
         onPress={onClose}
       />

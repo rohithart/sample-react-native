@@ -9,10 +9,13 @@ import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useVote } from '@/services/vote';
 import { resolveId } from '@/utils/resolve-ref';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-import { ArchiveRestore, Clock, Edit, Info, MoreVertical, Share2, Trash2 } from 'lucide-react-native';
+
 import React, { useState } from 'react';
 import { ActivityIndicator, Alert, Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { ENTITY_ICONS } from '@/constants/entity-icons';
+
+const I = ENTITY_ICONS;
 
 function fmt(d: string | Date | undefined | null) { if (!d) return '—'; return new Date(d).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }); }
 
@@ -50,30 +53,30 @@ export default function VoteDetailScreen() {
     ...(isAdmin ? [{
       id: 'edit',
       label: 'Edit',
-      icon: <Edit size={24} color={colors.primary} />,
+      icon: <I.edit size={24} color={colors.primary} />,
       onPress: () => router.push(`/admin/vote/${orgId}/${id}/edit`),
       color: 'primary' as const,
     }] : []),
     ...(isAdmin ? [{
       id: 'archive',
       label: 'Archive',
-      icon: <ArchiveRestore size={24} color={colors.warning} />,
+      icon: <I.archiveRestore size={24} color={colors.warning} />,
       onPress: () => setConfirmationType('archive'),
       color: 'warning' as const,
     }] : []),
-    { id: 'timeline', label: 'Timeline', icon: <Clock size={24} color={colors.secondary} />, onPress: () => setShowTimeline(true), color: 'primary' as const },
-    { id: 'audit', label: 'Audit Info', icon: <Info size={24} color={colors.secondary} />, onPress: () => setShowAudit(true), color: 'primary' as const },
+    { id: 'timeline', label: 'Timeline', icon: <I.clock size={24} color={colors.secondary} />, onPress: () => setShowTimeline(true), color: 'primary' as const },
+    { id: 'audit', label: 'Audit Info', icon: <I.information size={24} color={colors.secondary} />, onPress: () => setShowAudit(true), color: 'primary' as const },
     {
       id: 'share',
       label: 'Share',
-      icon: <Share2 size={24} color={colors.success} />,
+      icon: <I.share size={24} color={colors.success} />,
       onPress: () => Alert.alert('Share', 'Share functionality coming soon'),
       color: 'success' as const,
     },
     ...(isAdmin ? [{
       id: 'delete',
       label: 'Delete',
-      icon: <Trash2 size={24} color={colors.danger} />,
+      icon: <I.trash size={24} color={colors.danger} />,
       onPress: () => setConfirmationType('delete'),
       color: 'danger' as const,
     }] : []),
@@ -86,7 +89,7 @@ export default function VoteDetailScreen() {
         title={item?.question || item?.title || item?.name || 'Loading...'}
         rightAction={
           <Pressable onPress={() => setIsBottomSheetOpen(true)} style={{ padding: 8 }}>
-            <MoreVertical size={20} color={colors.primary} />
+            <I.moreVertical size={20} color={colors.primary} />
           </Pressable>
         }
       />

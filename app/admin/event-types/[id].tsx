@@ -3,12 +3,15 @@ import { PageHeader } from '@/components/ui/page-header';
 import { EntityCard } from '@/components/cards/entity-card';
 import { ADMIN_CONFIGS } from '@/components/cards/card-configs';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-import { Plus } from 'lucide-react-native';
+
 import React from 'react';
 import { ActivityIndicator, FlatList, Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useEventTypes } from '@/services/event-type';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
+import { ENTITY_ICONS } from '@/constants/entity-icons';
+
+const I = ENTITY_ICONS;
 
 export default function EventTypesListScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -31,7 +34,7 @@ export default function EventTypesListScreen() {
             onPress={handleAdd}
             style={{ padding: 8, backgroundColor: colors.primary, borderRadius: 8 }}
           >
-            <Plus size={20} color="#ffffff" />
+            <I.plus size={20} color="#ffffff" />
           </Pressable>
         }
       />

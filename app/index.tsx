@@ -1,13 +1,14 @@
+import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { Stack, useRouter } from 'expo-router';
-import { Sparkles, Zap, Shield, Rocket } from 'lucide-react-native';
 import { useEffect, useRef } from 'react';
-import { Animated, Easing, View, ScrollView, Text as RNText } from 'react-native';
+import { Animated, Easing, Text as RNText, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function SplashScreen() {
   const colors = useThemeColors();
   const router = useRouter();
+  const I = ENTITY_ICONS;
 
   // Multiple animations for staggered effects
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -143,7 +144,7 @@ export default function SplashScreen() {
                       ],
                     }}
                   >
-                    <Sparkles size={60} color={primary} strokeWidth={1.5} />
+                    <I.sparkles size={60} color={primary} />
                   </Animated.View>
                 </View>
               </Animated.View>
@@ -188,7 +189,7 @@ export default function SplashScreen() {
                 }}
               >
                 <FeatureCard
-                  icon={<Rocket size={28} color={primary} />}
+                  icon={<I.rocket size={28} color={primary} />}
                   title="Lightning Fast"
                   description="Built on Expo 54 with Metro bundler for instant delivery"
                   bgColor={card}
@@ -207,7 +208,7 @@ export default function SplashScreen() {
                 }}
               >
                 <FeatureCard
-                  icon={<Zap size={28} color={secondary} />}
+                  icon={<I.zap size={28} color={secondary} />}
                   title="Beautifully Designed"
                   description="Premium UI with Gluestack components and Tailwind CSS"
                   bgColor={card}
@@ -226,7 +227,7 @@ export default function SplashScreen() {
                 }}
               >
                 <FeatureCard
-                  icon={<Shield size={28} color={colors.success} />}
+                  icon={<I.shield size={28} color={colors.success} />}
                   title="Production Ready"
                   description="Complete with authentication, error handling & deep linking"
                   bgColor={card}

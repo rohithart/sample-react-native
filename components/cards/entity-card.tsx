@@ -4,9 +4,11 @@ import { VStack } from '@/components/ui/vstack';
 import { ENTITY_ICONS, type EntityIconKey } from '@/constants/entity-icons';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useRouter } from 'expo-router';
-import { ChevronRight } from 'lucide-react-native';
+
 import React from 'react';
 import { Image, Pressable, Text, View } from 'react-native';
+
+const I = ENTITY_ICONS;
 
 // ---------------------------------------------------------------------------
 // Types
@@ -116,7 +118,7 @@ export function EntityCard({ item, config, orgId, onPress }: EntityCardProps) {
 
         {/* Chevron */}
         <HStack space="md" className='items-center'>
-          <ChevronRight size={18} color={sub} />
+          <I.chevronRight size={18} color={sub} />
         </HStack>
       </HStack>
     </Pressable>

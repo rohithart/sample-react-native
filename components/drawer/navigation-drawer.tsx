@@ -4,8 +4,11 @@ import { Text } from '@/components/ui/text';
 import { useAuth } from '@/context/auth-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useRouter } from 'expo-router';
-import { LogOut, Settings, X } from 'lucide-react-native';
+
 import { Alert, Animated, ScrollView, View } from 'react-native';
+import { ENTITY_ICONS } from '@/constants/entity-icons';
+
+const I = ENTITY_ICONS;
 
 interface NavigationDrawerProps {
   isOpen: boolean;
@@ -89,7 +92,7 @@ export function NavigationDrawer({
                 className="bg-transparent"
                 onPress={onClose}
               >
-                <X size={24} color={colors.icon} />
+                <I.close size={24} color={colors.icon} />
               </Button>
             </Box>
             <Box
@@ -112,7 +115,7 @@ export function NavigationDrawer({
             {children}
           </ScrollView>
 
-          {/* Settings & Logout Footer */}
+          {/* I.settings & Logout Footer */}
           <Box className="px-4 pb-6 gap-3">
             <Button
               action="secondary"
@@ -120,9 +123,9 @@ export function NavigationDrawer({
               style={{ borderColor: colors.border }}
               onPress={handleSettings}
             >
-              <Settings size={20} color={colors.primary} />
+              <I.settings size={20} color={colors.primary} />
               <ButtonText style={{ color: colors.primary }}>
-                Settings
+                I.settings
               </ButtonText>
             </Button>
 
@@ -135,7 +138,7 @@ export function NavigationDrawer({
               }}
               onPress={handleLogout}
             >
-              <LogOut size={20} color={colors.danger} />
+              <I.logOut size={20} color={colors.danger} />
               <ButtonText style={{ color: colors.danger }}>
                 Logout
               </ButtonText>

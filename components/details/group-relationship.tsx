@@ -4,9 +4,11 @@ import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { resolveId } from '@/utils/resolve-ref';
 import { useRouter } from 'expo-router';
-import { ChevronRight } from 'lucide-react-native';
+
 import React from 'react';
 import { Pressable, Text, View } from 'react-native';
+
+const I = ENTITY_ICONS;
 
 interface GroupRelationshipProps {
   orgId: string;
@@ -65,7 +67,7 @@ export function GroupRelationship({ orgId, item }: GroupRelationshipProps) {
             {displayName}
           </Text>
         </VStack>
-        <ChevronRight size={16} color={sub} />
+        <I.chevronRight size={16} color={sub} />
       </HStack>
     </Pressable>
   );

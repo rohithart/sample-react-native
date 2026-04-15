@@ -2,7 +2,7 @@ import { HStack } from '@/components/ui/hstack';
 import { VStack } from '@/components/ui/vstack';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { useThemeColors } from '@/hooks/use-theme-colors';
-import { Check, ChevronDown, Search, UserPlus } from 'lucide-react-native';
+
 import React, { useMemo, useState } from 'react';
 import {
     ActivityIndicator,
@@ -14,6 +14,8 @@ import {
     View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+
+const I = ENTITY_ICONS;
 
 interface UserItem {
   _id: string;
@@ -96,13 +98,13 @@ export function UserSelect({
                 justifyContent: 'center',
               }}
             >
-              <UserPlus size={16} color={primary} />
+              <I.userPlus size={16} color={primary} />
             </View>
             <VStack className="flex-1">
               <Text style={{ fontSize: 13, fontWeight: '500', color: sub }}>Not assigned to a user</Text>
               <Text style={{ fontSize: 11, color: primary }}>Tap to assign</Text>
             </VStack>
-            <ChevronDown size={16} color={sub} />
+            <I.chevronDown size={16} color={sub} />
           </HStack>
         ) : (
           <HStack space="sm" className="items-center">
@@ -127,7 +129,7 @@ export function UserSelect({
                 {displayName}
               </Text>
             </VStack>
-            <ChevronDown size={16} color={sub} />
+            <I.chevronDown size={16} color={sub} />
           </HStack>
         )}
       </Pressable>
@@ -195,9 +197,9 @@ export function UserSelect({
                   borderColor: border,
                 }}
               >
-                <Search size={16} color={sub} />
+                <I.search size={16} color={sub} />
                 <TextInput
-                  placeholder="Search users..."
+                  placeholder="I.search users..."
                   placeholderTextColor={sub}
                   value={search}
                   onChangeText={setSearch}
@@ -263,7 +265,7 @@ export function UserSelect({
                             {getUserDisplay(u)}
                           </Text>
                           {isSelected ? (
-                            <Check size={18} color={primary} />
+                            <I.check size={18} color={primary} />
                           ) : null}
                         </HStack>
                       </Pressable>
