@@ -1,15 +1,21 @@
+import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { useThemeColors } from '@/hooks/use-theme-colors';
-import React from 'react';
-import { Text, View, useWindowDimensions } from 'react-native';
+import React, { useState } from 'react';
+import { Pressable, ScrollView, Text, View } from 'react-native';
+
+const COLLAPSED_HEIGHT = 160;
 
 interface HtmlContentProps {
   label?: string;
   html: string;
+  maxHeight?: number;
 }
 
-export function HtmlContent({ label, html }: HtmlContentProps) {
-  const { card, text, sub, border } = useThemeColors();
-  const { width } = useWindowDimensions();
+export function HtmlContent({ label, html, maxHeight = COLLAPSED_HEIGHT }: HtmlContentProps) {
+  const { card, text, sub, border, primary } = useThemeColors();
+  const [expanded, setExpanded] = useState(false);
+  const [contentHeight, setContentHeight] = useState(0);
+  const I = ENTITY_ICONS;
 
   const plainText = html
     .replace(/<br\s*\/?>/gi, '\n')
@@ -28,6 +34,9 @@ export function HtmlContent({ label, html }: HtmlContentProps) {
 
   if (!plainText) return null;
 
+  const isOverflow = contentHeight > maxHeight;
+  const showScroll = isOverflow && !expanded;
+
   return (
     <View
       style={{
@@ -44,7 +53,35 @@ export function HtmlContent({ label, html }: HtmlContentProps) {
           {label}
         </Text>
       ) : null}
-      <Text style={{ fontSize: 14, color: text, lineHeight: 22 }}>{plainText}</Text>
+
+      <View style={showScroll ? { maxHeight, overflow: 'hidden' } : undefined}>
+        <ScrollView
+          scrollEnabled={showScroll}
+          showsVerticalScrollIndicator={showScroll}
+          nestedScrollEnabled
+        >
+          <Text
+            style={{ fontSize: 14, color: text, lineHeight: 22 }}
+            onLayout={(e) => setContentHeight(e.nativeEvent.layout.height)}
+          >
+            {plainText}
+          </Text>
+        </ScrollView>
+      </View>
+
+      {isOverflow && (
+        <Pressable
+          onPress={() => setExpanded((v) => !v)}
+          style={{ flexDirection: 'row', alignItems: 'center', gap: 4, paddingTop: 4 }}
+        >
+          <View style={expanded ? { transform: [{ rotate: '180deg' }] } : undefined}>
+            <I.chevronDown size={14} color={primary} />
+          </View>
+          <Text style={{ fontSize: 12, fontWeight: '600', color: primary }}>
+            {expanded ? 'Show less' : 'Show more'}
+          </Text>
+        </Pressable>
+      )}
     </View>
   );
 }
