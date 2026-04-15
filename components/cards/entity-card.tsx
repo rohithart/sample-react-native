@@ -41,7 +41,7 @@ function resolveField(item: any, field: string | ((item: any) => any) | undefine
 // ---------------------------------------------------------------------------
 export function EntityCard({ item, config, orgId, onPress }: EntityCardProps) {
   const router = useRouter();
-  const { card, text, sub, border, primary, pressed } = useThemeColors();
+  const { card, text, sub, border, primary, pressed, isDark } = useThemeColors();
 
   const Icon = ENTITY_ICONS[config.icon];
   const title = resolveField(item, config.titleField) || 'Untitled';
@@ -54,33 +54,37 @@ export function EntityCard({ item, config, orgId, onPress }: EntityCardProps) {
       onPress={onPress ?? (() => router.push(config.detailRoute(orgId, item._id) as any))}
       style={({ pressed: isPressed }) => ({
         padding: 14,
-        marginHorizontal: 12,
-        marginVertical: 5,
+        marginTop: 10,
+        marginHorizontal: 14,
         backgroundColor: isPressed ? pressed : card,
         borderRadius: 12,
         borderWidth: 1,
         borderColor: border,
+        shadowColor: text,
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: isDark ? 0.15 : 0.06,
+        shadowRadius: 4,
+        elevation: 2,
       })}
     >
-      <HStack space="md" className="items-center">
+      <HStack space="md" className="items-stretch">
         {/* Avatar — image or icon fallback */}
         {image ? (
           <Image
             source={{ uri: image }}
-            style={{ width: 44, height: 44, borderRadius: 10 }}
+            style={{ width: 48, borderRadius: 10, aspectRatio: 1, alignSelf: 'center' }}
           />
         ) : (
           <View
             style={{
-              width: 44,
-              height: 44,
+              width: 48,
               borderRadius: 10,
               backgroundColor: primary + '15',
               alignItems: 'center',
               justifyContent: 'center',
             }}
           >
-            <Icon size={20} color={primary} />
+            <Icon size={22} color={primary} />
           </View>
         )}
 
