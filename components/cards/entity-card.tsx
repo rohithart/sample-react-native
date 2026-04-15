@@ -55,10 +55,12 @@ export function EntityCard({ item, config, orgId, onPress }: EntityCardProps) {
         marginTop: 10,
         marginHorizontal: 14,
         borderRadius: 12,
+        backgroundColor: card,
         shadowColor: text,
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: isDark ? 0.15 : 0.06,
-        shadowRadius: 4,
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: isDark ? 0.25 : 0.12,
+        shadowRadius: 6,
+        elevation: 4,
       }}
     >
       <Pressable
@@ -69,7 +71,6 @@ export function EntityCard({ item, config, orgId, onPress }: EntityCardProps) {
           borderRadius: 12,
           borderWidth: 1,
           borderColor: border,
-          overflow: 'hidden',
         })}
       >
       <HStack space="md" className="items-stretch">
