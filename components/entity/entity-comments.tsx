@@ -1,3 +1,5 @@
+import { HStack } from '@/components/ui/hstack';
+import { VStack } from '@/components/ui/vstack';
 import { useOrganisationContext } from '@/context/organisation-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useComments, useCreateComment, useDeleteComment } from '@/services/comment';
@@ -64,28 +66,28 @@ export function EntityComments({ isVisible, onClose, entity, entityId, orgId }: 
     const commentText = (item as any).comment || (item as any).content || '';
 
     return (
-      <View style={{ flexDirection: 'row', gap: 10, alignItems: 'flex-start' }}>
+      <HStack space="sm" className="items-start">
         {/* Avatar */}
         <View style={{ width: 34, height: 34, borderRadius: 17, backgroundColor: colors.primary + '20', alignItems: 'center', justifyContent: 'center', marginTop: 2 }}>
           <Text style={{ fontSize: 12, fontWeight: '700', color: colors.primary }}>{getInitials(userName)}</Text>
         </View>
 
         {/* Bubble */}
-        <View style={{ flex: 1, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border, borderRadius: 12, borderTopLeftRadius: 4, padding: 10, gap: 4 }}>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-            <View style={{ flexDirection: 'row', gap: 8, alignItems: 'center', flex: 1 }}>
+        <VStack space="xs" className="flex-1" style={{ backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border, borderRadius: 12, borderTopLeftRadius: 4, padding: 10 }}>
+          <HStack className="justify-between items-center">
+            <HStack space="sm" className="items-center flex-1">
               {userName && <Text style={{ fontSize: 13, fontWeight: '600', color: colors.text }}>{userName}</Text>}
               <Text style={{ fontSize: 11, color: colors.sub }}>{fmtTime(item.createdAt)}</Text>
-            </View>
+            </HStack>
             {isAdmin && (
               <Pressable onPress={() => handleDelete(item._id)} style={{ padding: 4 }} disabled={deleteMutation.isPending}>
                 {deleteMutation.isPending ? <ActivityIndicator size="small" color={colors.danger} /> : <Trash2 size={14} color={colors.danger} />}
               </Pressable>
             )}
-          </View>
+          </HStack>
           <Text style={{ color: colors.text, fontSize: 14, lineHeight: 20 }}>{commentText}</Text>
-        </View>
-      </View>
+        </VStack>
+      </HStack>
     );
   };
 
@@ -95,19 +97,19 @@ export function EntityComments({ isVisible, onClose, entity, entityId, orgId }: 
     <Modal transparent animationType="slide" visible={isVisible} onRequestClose={onClose}>
       <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
         {/* Header */}
-        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: colors.border }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+        <HStack className="items-center justify-between" style={{ paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: colors.border }}>
+          <HStack space="sm" className="items-center">
             <Text style={{ fontSize: 17, fontWeight: '700', color: colors.text }}>Comments</Text>
             {comments?.length ? (
               <View style={{ backgroundColor: colors.primary + '15', borderRadius: 10, paddingHorizontal: 8, paddingVertical: 2 }}>
                 <Text style={{ fontSize: 12, fontWeight: '600', color: colors.primary }}>{comments.length}</Text>
               </View>
             ) : null}
-          </View>
+          </HStack>
           <Pressable onPress={onClose} style={{ padding: 4 }}>
             <X size={22} color={colors.sub} />
           </Pressable>
-        </View>
+        </HStack>
 
         {/* Content */}
         {isLoading ? (
@@ -131,7 +133,7 @@ export function EntityComments({ isVisible, onClose, entity, entityId, orgId }: 
         )}
 
         {/* Input bar */}
-        <View style={{ flexDirection: 'row', paddingHorizontal: 16, paddingVertical: 10, gap: 8, borderTopWidth: 1, borderTopColor: colors.border, paddingBottom: bottom + 10, backgroundColor: colors.bg }}>
+        <HStack space="sm" style={{ paddingHorizontal: 16, paddingVertical: 10, borderTopWidth: 1, borderTopColor: colors.border, paddingBottom: bottom + 10, backgroundColor: colors.bg }}>
           <TextInput
             value={content}
             onChangeText={setContent}
@@ -143,7 +145,7 @@ export function EntityComments({ isVisible, onClose, entity, entityId, orgId }: 
           <Pressable onPress={handleSend} disabled={createMutation.isPending || !content.trim()} style={{ backgroundColor: colors.primary, borderRadius: 10, width: 42, alignItems: 'center', justifyContent: 'center', opacity: !content.trim() ? 0.5 : 1 }}>
             {createMutation.isPending ? <ActivityIndicator size="small" color="#fff" /> : <Send size={18} color="#fff" />}
           </Pressable>
-        </View>
+        </HStack>
       </SafeAreaView>
     </Modal>
   );

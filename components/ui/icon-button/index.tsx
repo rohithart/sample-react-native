@@ -1,6 +1,7 @@
+import { VStack } from '@/components/ui/vstack';
+import { useThemeColors } from '@/hooks/use-theme-colors';
 import React from 'react';
 import { Pressable, Text, View } from 'react-native';
-import { useThemeColors } from '@/hooks/use-theme-colors';
 
 interface IconButtonProps {
   icon: React.ReactNode;
@@ -48,7 +49,7 @@ export function IconButton({
         borderColor: colors.border,
       })}
     >
-      <View style={{ alignItems: 'center', gap: 8 }}>
+      <VStack space="sm" className="items-center">
         <View
           style={{
             width: 48,
@@ -71,7 +72,7 @@ export function IconButton({
         >
           {text}
         </Text>
-      </View>
+      </VStack>
     </Pressable>
   );
 }

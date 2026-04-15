@@ -1,3 +1,4 @@
+import { HStack } from '@/components/ui/hstack';
 import { useOrganisationContext } from '@/context/organisation-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useCreateImage, useDeleteImage, useImages } from '@/services/image';
@@ -72,9 +73,9 @@ export function EntityImages({ isVisible, onClose, entity, entityId, orgId }: En
     <Modal transparent animationType="slide" visible={isVisible} onRequestClose={onClose}>
       <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
         {/* Header */}
-        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: colors.border }}>
+        <HStack className="items-center justify-between" style={{ paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: colors.border }}>
           <Text style={{ fontSize: 17, fontWeight: '700', color: colors.text }}>Images</Text>
-          <View style={{ flexDirection: 'row', gap: 12, alignItems: 'center' }}>
+          <HStack space="md" className="items-center">
             {isAdmin && (
               <Pressable onPress={() => setShowAdd(!showAdd)} style={{ padding: 4 }}>
                 <Plus size={22} color={colors.primary} />
@@ -83,12 +84,12 @@ export function EntityImages({ isVisible, onClose, entity, entityId, orgId }: En
             <Pressable onPress={onClose} style={{ padding: 4 }}>
               <X size={22} color={colors.sub} />
             </Pressable>
-          </View>
-        </View>
+          </HStack>
+        </HStack>
 
         {/* Add form */}
         {showAdd && (
-          <View style={{ flexDirection: 'row', paddingHorizontal: 16, paddingVertical: 10, gap: 8, borderBottomWidth: 1, borderBottomColor: colors.border }}>
+          <HStack space="sm" style={{ paddingHorizontal: 16, paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: colors.border }}>
             <TextInput
               value={url}
               onChangeText={setUrl}
@@ -99,7 +100,7 @@ export function EntityImages({ isVisible, onClose, entity, entityId, orgId }: En
             <Pressable onPress={handleAdd} disabled={createMutation.isPending} style={{ backgroundColor: colors.primary, borderRadius: 8, paddingHorizontal: 16, justifyContent: 'center' }}>
               {createMutation.isPending ? <ActivityIndicator size="small" color="#fff" /> : <Text style={{ color: '#fff', fontWeight: '600', fontSize: 14 }}>Add</Text>}
             </Pressable>
-          </View>
+          </HStack>
         )}
 
         {/* Thumbnail grid */}
@@ -132,11 +133,11 @@ export function EntityImages({ isVisible, onClose, entity, entityId, orgId }: En
           <View style={{ flex: 1, backgroundColor: '#000' }}>
             <SafeAreaView style={{ flex: 1 }}>
               {/* Viewer header */}
-              <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, paddingVertical: 10 }}>
+              <HStack className="items-center justify-between" style={{ paddingHorizontal: 16, paddingVertical: 10 }}>
                 <Text style={{ color: '#fff', fontSize: 14, fontWeight: '600' }}>
                   {(viewerIndex ?? 0) + 1} / {images?.length ?? 0}
                 </Text>
-                <View style={{ flexDirection: 'row', gap: 16, alignItems: 'center' }}>
+                <HStack space="lg" className="items-center">
                   {isAdmin && (
                     <Pressable onPress={() => handleDelete(viewerImage._id)} style={{ padding: 6 }}>
                       <Trash2 size={20} color="#ef4444" />
@@ -145,8 +146,8 @@ export function EntityImages({ isVisible, onClose, entity, entityId, orgId }: En
                   <Pressable onPress={() => setViewerIndex(null)} style={{ padding: 6 }}>
                     <X size={22} color="#fff" />
                   </Pressable>
-                </View>
-              </View>
+                </HStack>
+              </HStack>
 
               {/* Image */}
               <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -158,7 +159,7 @@ export function EntityImages({ isVisible, onClose, entity, entityId, orgId }: En
               </View>
 
               {/* Navigation arrows */}
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 16, paddingBottom: 20 }}>
+              <HStack className="justify-between" style={{ paddingHorizontal: 16, paddingBottom: 20 }}>
                 <Pressable
                   onPress={() => setViewerIndex(Math.max(0, (viewerIndex ?? 0) - 1))}
                   disabled={(viewerIndex ?? 0) === 0}
@@ -178,7 +179,7 @@ export function EntityImages({ isVisible, onClose, entity, entityId, orgId }: En
                 >
                   <ChevronRight size={24} color="#fff" />
                 </Pressable>
-              </View>
+              </HStack>
             </SafeAreaView>
           </View>
         </Modal>

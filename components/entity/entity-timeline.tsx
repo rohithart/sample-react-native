@@ -1,3 +1,5 @@
+import { HStack } from '@/components/ui/hstack';
+import { VStack } from '@/components/ui/vstack';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useTimeline } from '@/services/timeline';
 import type { Timeline } from '@/types';
@@ -36,7 +38,8 @@ export function EntityTimeline({ isVisible, onClose, entity, entityId }: EntityT
     const isFirst = index === 0;
 
     const card = (
-      <View
+      <VStack
+        space="xs"
         style={{
           flex: 1,
           backgroundColor: colors.card,
@@ -44,7 +47,6 @@ export function EntityTimeline({ isVisible, onClose, entity, entityId }: EntityT
           borderColor: colors.border,
           borderRadius: 10,
           padding: 10,
-          gap: 4,
         }}
       >
         <Text style={{ fontSize: 13, fontWeight: '600', color: colors.text }} numberOfLines={3}>
@@ -52,11 +54,11 @@ export function EntityTimeline({ isVisible, onClose, entity, entityId }: EntityT
         </Text>
         <Text style={{ fontSize: 11, color: colors.sub }}>{item.category}</Text>
         <Text style={{ fontSize: 10, color: colors.sub }}>{item.createdBy}</Text>
-      </View>
+      </VStack>
     );
 
     return (
-      <View style={{ flexDirection: 'row', alignItems: 'flex-start', minHeight: 72 }}>
+      <HStack className="items-start" style={{ minHeight: 72 }}>
         {/* Left content */}
         <View style={{ flex: 1, paddingRight: 10, alignItems: 'flex-end' }}>
           {isLeft ? card : null}
@@ -104,7 +106,7 @@ export function EntityTimeline({ isVisible, onClose, entity, entityId }: EntityT
         <View style={{ flex: 1, paddingLeft: 10, alignItems: 'flex-start' }}>
           {!isLeft ? card : null}
         </View>
-      </View>
+      </HStack>
     );
   };
 
@@ -114,12 +116,12 @@ export function EntityTimeline({ isVisible, onClose, entity, entityId }: EntityT
     <Modal transparent animationType="slide" visible={isVisible} onRequestClose={onClose}>
       <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
         {/* Header */}
-        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: colors.border }}>
+        <HStack className="items-center justify-between" style={{ paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: colors.border }}>
           <Text style={{ fontSize: 17, fontWeight: '700', color: colors.text }}>Timeline</Text>
           <Pressable onPress={onClose} style={{ padding: 4 }}>
             <X size={22} color={colors.sub} />
           </Pressable>
-        </View>
+        </HStack>
 
         {/* Content */}
         {isLoading ? (

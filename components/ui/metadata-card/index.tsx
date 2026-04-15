@@ -1,6 +1,8 @@
-import React from 'react';
-import { Text, View } from 'react-native';
+import { HStack } from '@/components/ui/hstack';
+import { VStack } from '@/components/ui/vstack';
 import { useThemeColors } from '@/hooks/use-theme-colors';
+import React from 'react';
+import { Text } from 'react-native';
 
 interface MetadataRow {
   label: string;
@@ -15,22 +17,22 @@ export function MetadataCard({ rows }: MetadataCardProps) {
   const { card, text, sub, border } = useThemeColors();
 
   return (
-    <View
+    <VStack
+      space="sm"
       style={{
         backgroundColor: card,
         borderWidth: 1,
         borderColor: border,
         borderRadius: 8,
         padding: 12,
-        gap: 8,
       }}
     >
       {rows.map((row, idx) => (
-        <View key={idx} style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+        <HStack key={idx} className="justify-between">
           <Text style={{ color: sub, fontSize: 13 }}>{row.label}</Text>
           <Text style={{ color: text, fontSize: 13, fontWeight: '500' }}>{row.value}</Text>
-        </View>
+        </HStack>
       ))}
-    </View>
+    </VStack>
   );
 }

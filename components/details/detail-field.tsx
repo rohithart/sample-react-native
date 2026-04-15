@@ -1,6 +1,7 @@
+import { HStack } from '@/components/ui/hstack';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Text } from 'react-native';
 
 interface DetailFieldProps {
   label: string;
@@ -11,11 +12,9 @@ export function DetailField({ label, value }: DetailFieldProps) {
   const { card, text, sub, border } = useThemeColors();
 
   return (
-    <View
+    <HStack
+      className="justify-between items-start"
       style={{
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'flex-start',
         paddingVertical: 12,
         paddingHorizontal: 14,
         backgroundColor: card,
@@ -31,6 +30,6 @@ export function DetailField({ label, value }: DetailFieldProps) {
       >
         {value != null && value !== '' ? String(value) : '—'}
       </Text>
-    </View>
+    </HStack>
   );
 }

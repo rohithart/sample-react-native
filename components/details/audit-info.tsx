@@ -1,3 +1,5 @@
+import { HStack } from '@/components/ui/hstack';
+import { VStack } from '@/components/ui/vstack';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { Calendar, RefreshCw, User, X } from 'lucide-react-native';
 import React from 'react';
@@ -65,11 +67,9 @@ export function AuditInfo({ isVisible, onClose, createdBy, updatedBy, createdAt,
           }}
         >
           {/* Header */}
-          <View
+          <HStack
+            className="items-center justify-between"
             style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
               padding: 16,
               borderBottomWidth: 1,
               borderColor: border,
@@ -79,17 +79,16 @@ export function AuditInfo({ isVisible, onClose, createdBy, updatedBy, createdAt,
             <Pressable onPress={onClose} hitSlop={8}>
               <X size={20} color={sub} />
             </Pressable>
-          </View>
+          </HStack>
 
           {/* Body */}
-          <View style={{ padding: 16, gap: 12 }}>
+          <VStack space="md" style={{ padding: 16 }}>
             {rows.map((row, idx) => (
-              <View
+              <HStack
                 key={idx}
+                space="md"
+                className="items-center"
                 style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  gap: 12,
                   paddingVertical: 10,
                   paddingHorizontal: 12,
                   backgroundColor: bg,
@@ -110,15 +109,15 @@ export function AuditInfo({ isVisible, onClose, createdBy, updatedBy, createdAt,
                 >
                   {row.icon}
                 </View>
-                <View style={{ flex: 1 }}>
+                <VStack className="flex-1">
                   <Text style={{ fontSize: 11, color: sub }}>{row.label}</Text>
                   <Text style={{ fontSize: 13, fontWeight: '500', color: text }} numberOfLines={1}>
                     {row.value}
                   </Text>
-                </View>
-              </View>
+                </VStack>
+              </HStack>
             ))}
-          </View>
+          </VStack>
         </Pressable>
       </Pressable>
     </Modal>

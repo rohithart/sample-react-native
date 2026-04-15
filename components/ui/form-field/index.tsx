@@ -1,6 +1,7 @@
-import React from 'react';
-import { Text, TextInput, TextInputProps, View } from 'react-native';
+import { VStack } from '@/components/ui/vstack';
 import { useThemeColors } from '@/hooks/use-theme-colors';
+import React from 'react';
+import { Text, TextInput, TextInputProps } from 'react-native';
 
 interface FormFieldProps extends TextInputProps {
   label: string;
@@ -11,7 +12,7 @@ export function FormField({ label, required, style, ...rest }: FormFieldProps) {
   const { text, sub, inputBg, inputBorder } = useThemeColors();
 
   return (
-    <View style={{ gap: 8 }}>
+    <VStack space="sm">
       <Text style={{ fontSize: 14, fontWeight: '600', color: text }}>
         {label}{required ? ' *' : ''}
       </Text>
@@ -33,6 +34,6 @@ export function FormField({ label, required, style, ...rest }: FormFieldProps) {
         ]}
         {...rest}
       />
-    </View>
+    </VStack>
   );
 }

@@ -1,3 +1,4 @@
+import { HStack } from '@/components/ui/hstack';
 import { ENTITY_ICONS, type EntityIconKey } from '@/constants/entity-icons';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useRouter } from 'expo-router';
@@ -18,18 +19,16 @@ export function PageHeader({ title, rightAction, onBack, icon }: PageHeaderProps
   const IconComponent = icon ? ENTITY_ICONS[icon] : null;
 
   return (
-    <View
+    <HStack
+      className="items-center justify-between"
       style={{
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
         padding: 16,
         borderBottomWidth: 1,
         borderColor: border,
         backgroundColor: card,
       }}
     >
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12, flex: 1 }}>
+      <HStack space="md" className="items-center flex-1">
         <Pressable onPress={onBack ?? (() => router.back())} style={{ padding: 4 }}>
           <ChevronLeft size={24} color={text} />
         </Pressable>
@@ -44,8 +43,8 @@ export function PageHeader({ title, rightAction, onBack, icon }: PageHeaderProps
         >
           {title}
         </Text>
-      </View>
+      </HStack>
       {rightAction}
-    </View>
+    </HStack>
   );
 }

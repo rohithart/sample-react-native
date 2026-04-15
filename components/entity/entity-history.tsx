@@ -1,3 +1,5 @@
+import { HStack } from '@/components/ui/hstack';
+import { VStack } from '@/components/ui/vstack';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useHistory } from '@/services/history';
 import type { HistoryChanges, History as HistoryType } from '@/types';
@@ -21,7 +23,7 @@ export function EntityHistory({ isVisible, onClose, entity, entityId }: EntityHi
   const { data: entries, isLoading } = useHistory(entity, entityId);
 
   const renderChange = (change: HistoryChanges, idx: number) => (
-    <View key={idx} style={{ flexDirection: 'row', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+    <HStack key={idx} space="sm" className="items-center" style={{ flexWrap: 'wrap' }}>
       <Text style={{ fontSize: 12, fontWeight: '500', color: colors.text }}>{change.field}</Text>
       {change.oldValue != null && (
         <View style={{ backgroundColor: colors.dangerBg, borderRadius: 6, paddingHorizontal: 8, paddingVertical: 3 }}>
@@ -36,22 +38,22 @@ export function EntityHistory({ isVisible, onClose, entity, entityId }: EntityHi
           <Text style={{ color: colors.primary, fontSize: 11 }}>{String(change.newValue)}</Text>
         </View>
       )}
-    </View>
+    </HStack>
   );
 
   const renderItem = ({ item }: { item: HistoryType }) => (
-    <View style={{ backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border, borderRadius: 10, padding: 12, gap: 8 }}>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+    <VStack space="sm" style={{ backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border, borderRadius: 10, padding: 12 }}>
+      <HStack className="justify-between items-center">
         <Text style={{ color: colors.text, fontSize: 14, fontWeight: '600' }}>{item.action}</Text>
-      </View>
+      </HStack>
       <Text style={{ color: colors.sub, fontSize: 11 }}>by {item.updatedBy}</Text>
       {item.changes?.length > 0 && (
-        <View style={{ gap: 6, paddingTop: 4, borderTopWidth: 1, borderTopColor: colors.border }}>
+        <VStack space="sm" style={{ paddingTop: 4, borderTopWidth: 1, borderTopColor: colors.border }}>
           {item.changes.map(renderChange)}
-        </View>
+        </VStack>
       )}
       <Text style={{ color: colors.sub, fontSize: 10 }}>{new Date(item.createdAt).toLocaleString()}</Text>
-    </View>
+    </VStack>
   );
 
   if (!isVisible) return null;
@@ -60,12 +62,12 @@ export function EntityHistory({ isVisible, onClose, entity, entityId }: EntityHi
     <Modal transparent animationType="slide" visible={isVisible} onRequestClose={onClose}>
       <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
         {/* Header */}
-        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: colors.border }}>
+        <HStack className="items-center justify-between" style={{ paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: colors.border }}>
           <Text style={{ fontSize: 17, fontWeight: '700', color: colors.text }}>History</Text>
           <Pressable onPress={onClose} style={{ padding: 4 }}>
             <X size={22} color={colors.sub} />
           </Pressable>
-        </View>
+        </HStack>
 
         {/* Content */}
         {isLoading ? (

@@ -1,3 +1,5 @@
+import { HStack } from '@/components/ui/hstack';
+import { VStack } from '@/components/ui/vstack';
 import { ENTITY_ICONS, type EntityIconKey } from '@/constants/entity-icons';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useRouter } from 'expo-router';
@@ -17,55 +19,26 @@ export function LinkedField({ label, value, icon, route }: LinkedFieldProps) {
   const { card, text, sub, border, primary } = useThemeColors();
   const Icon = ENTITY_ICONS[icon];
 
+  const containerStyle = {
+    paddingVertical: 12,
+    paddingHorizontal: 14,
+    backgroundColor: card,
+    borderWidth: 1,
+    borderColor: border,
+    borderRadius: 10,
+  };
+
   if (!value) {
     return (
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          paddingVertical: 12,
-          paddingHorizontal: 14,
-          backgroundColor: card,
-          borderWidth: 1,
-          borderColor: border,
-          borderRadius: 10,
-        }}
-      >
+      <HStack className="items-center" style={containerStyle}>
         <Text style={{ fontSize: 13, color: sub, flex: 1 }}>{label}</Text>
         <Text style={{ fontSize: 13, color: sub }}>—</Text>
-      </View>
+      </HStack>
     );
   }
 
-  const Wrapper = route ? Pressable : View;
-  const wrapperProps = route
-    ? { onPress: () => router.push(route as any), style: ({ pressed }: { pressed: boolean }) => ({
-        flexDirection: 'row' as const,
-        alignItems: 'center' as const,
-        paddingVertical: 12,
-        paddingHorizontal: 14,
-        backgroundColor: card,
-        borderWidth: 1,
-        borderColor: border,
-        borderRadius: 10,
-        opacity: pressed ? 0.7 : 1,
-        gap: 10,
-      }) }
-    : { style: {
-        flexDirection: 'row' as const,
-        alignItems: 'center' as const,
-        paddingVertical: 12,
-        paddingHorizontal: 14,
-        backgroundColor: card,
-        borderWidth: 1,
-        borderColor: border,
-        borderRadius: 10,
-        gap: 10,
-      } };
-
-  return (
-    // @ts-ignore — dynamic Wrapper
-    <Wrapper {...wrapperProps}>
+  const content = (
+    <HStack space="sm" className="items-center">
       <View
         style={{
           width: 32,
@@ -78,13 +51,26 @@ export function LinkedField({ label, value, icon, route }: LinkedFieldProps) {
       >
         <Icon size={16} color={primary} />
       </View>
-      <View style={{ flex: 1 }}>
+      <VStack className="flex-1">
         <Text style={{ fontSize: 11, color: sub }}>{label}</Text>
         <Text style={{ fontSize: 13, fontWeight: '500', color: text }} numberOfLines={1}>
           {value}
         </Text>
-      </View>
+      </VStack>
       {route ? <ChevronRight size={16} color={sub} /> : null}
-    </Wrapper>
+    </HStack>
   );
+
+  if (route) {
+    return (
+      <Pressable
+        onPress={() => router.push(route as any)}
+        style={({ pressed }) => ({ ...containerStyle, opacity: pressed ? 0.7 : 1 })}
+      >
+        {content}
+      </Pressable>
+    );
+  }
+
+  return <View style={containerStyle}>{content}</View>;
 }

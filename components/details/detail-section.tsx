@@ -1,6 +1,7 @@
+import { VStack } from '@/components/ui/vstack';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Text } from 'react-native';
 
 interface DetailSectionProps {
   title: string;
@@ -11,7 +12,7 @@ export function DetailSection({ title, children }: DetailSectionProps) {
   const { sub } = useThemeColors();
 
   return (
-    <View style={{ gap: 8 }}>
+    <VStack space="sm">
       <Text
         style={{
           fontSize: 12,
@@ -25,6 +26,6 @@ export function DetailSection({ title, children }: DetailSectionProps) {
         {title}
       </Text>
       {children}
-    </View>
+    </VStack>
   );
 }

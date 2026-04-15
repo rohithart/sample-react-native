@@ -1,11 +1,12 @@
+import { HStack } from '@/components/ui/hstack';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { X } from 'lucide-react-native';
 import React from 'react';
 import {
-  Modal,
-  Pressable,
-  Text,
-  View,
+    Modal,
+    Pressable,
+    Text,
+    View,
 } from 'react-native';
 
 type DialogType = 'delete' | 'archive' | 'custom';
@@ -91,11 +92,9 @@ export function ConfirmationDialog({
             }}
           >
             {/* Header */}
-            <View
+            <HStack
+              className="items-center justify-between"
               style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
                 paddingHorizontal: 16,
                 paddingBottom: 12,
                 borderBottomWidth: 1,
@@ -115,7 +114,7 @@ export function ConfirmationDialog({
               <Pressable onPress={onClose} style={{ padding: 4, marginLeft: 8 }}>
                 <X size={20} color={sub} />
               </Pressable>
-            </View>
+            </HStack>
 
             {/* Message */}
             <Text
@@ -131,12 +130,11 @@ export function ConfirmationDialog({
             </Text>
 
             {/* Buttons */}
-            <View
+            <HStack
+              space="sm"
               style={{
-                flexDirection: 'row',
                 marginTop: 16,
                 paddingHorizontal: 16,
-                gap: 8,
               }}
             >
               <Pressable
@@ -176,7 +174,7 @@ export function ConfirmationDialog({
                   {isLoading ? '...' : finalConfirmText}
                 </Text>
               </Pressable>
-            </View>
+            </HStack>
           </Pressable>
         </View>
       </Pressable>

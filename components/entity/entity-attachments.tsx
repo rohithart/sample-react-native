@@ -1,3 +1,5 @@
+import { HStack } from '@/components/ui/hstack';
+import { VStack } from '@/components/ui/vstack';
 import { useOrganisationContext } from '@/context/organisation-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useAttachments, useCreateAttachment, useDeleteAttachment } from '@/services/attachment';
@@ -88,55 +90,59 @@ export function EntityAttachments({ isVisible, onClose, entity, entityId, orgId 
     const uploader = (item as any).user?.name || (item as any).user?.user?.name;
 
     return (
-      <View style={{ backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border, borderRadius: 12, padding: 12, gap: 10 }}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+      <VStack space="sm" style={{ backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border, borderRadius: 12, padding: 12 }}>
+        <HStack space="sm" className="items-center">
           <View style={{ width: 40, height: 40, borderRadius: 10, backgroundColor: colors.primary + '15', alignItems: 'center', justifyContent: 'center' }}>
             <Icon size={20} color={colors.primary} />
           </View>
-          <View style={{ flex: 1 }}>
+          <VStack className="flex-1">
             <Text style={{ color: colors.text, fontWeight: '600', fontSize: 14 }} numberOfLines={2}>{item.name}</Text>
-            <View style={{ flexDirection: 'row', gap: 8, marginTop: 3, flexWrap: 'wrap' }}>
+            <HStack space="sm" className="items-center" style={{ marginTop: 3, flexWrap: 'wrap' }}>
               {size && (
                 <View style={{ backgroundColor: colors.primary + '12', borderRadius: 6, paddingHorizontal: 8, paddingVertical: 2 }}>
                   <Text style={{ fontSize: 11, color: colors.primary, fontWeight: '500' }}>{size}</Text>
                 </View>
               )}
               <Text style={{ fontSize: 11, color: colors.sub }}>{fmtDate(item.createdAt)}</Text>
-            </View>
-          </View>
-        </View>
+            </HStack>
+          </VStack>
+        </HStack>
 
         {uploader && (
           <Text style={{ fontSize: 11, color: colors.sub }}>Uploaded by {uploader}</Text>
         )}
 
         {/* Action row */}
-        <View style={{ flexDirection: 'row', gap: 8, borderTopWidth: 1, borderTopColor: colors.border, paddingTop: 10 }}>
+        <HStack space="sm" style={{ borderTopWidth: 1, borderTopColor: colors.border, paddingTop: 10 }}>
           <Pressable
             onPress={() => handleDownload(item)}
-            style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, backgroundColor: colors.primary + '12', borderRadius: 8, paddingVertical: 8 }}
+            style={{ flex: 1, borderRadius: 8, paddingVertical: 8, backgroundColor: colors.primary + '12' }}
           >
-            <Download size={16} color={colors.primary} />
-            <Text style={{ color: colors.primary, fontSize: 13, fontWeight: '600' }}>Download</Text>
+            <HStack space="xs" className="items-center justify-center">
+              <Download size={16} color={colors.primary} />
+              <Text style={{ color: colors.primary, fontSize: 13, fontWeight: '600' }}>Download</Text>
+            </HStack>
           </Pressable>
           {isAdmin && (
             <Pressable
               onPress={() => handleDelete(item._id)}
               disabled={deleteMutation.isPending}
-              style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, backgroundColor: colors.dangerBg, borderRadius: 8, paddingVertical: 8, paddingHorizontal: 16 }}
+              style={{ borderRadius: 8, paddingVertical: 8, paddingHorizontal: 16, backgroundColor: colors.dangerBg }}
             >
-              {deleteMutation.isPending ? (
-                <ActivityIndicator size="small" color={colors.danger} />
-              ) : (
+              <HStack space="xs" className="items-center justify-center">
+                {deleteMutation.isPending ? (
+                  <ActivityIndicator size="small" color={colors.danger} />
+                ) : (
                 <>
                   <Trash2 size={14} color={colors.danger} />
                   <Text style={{ color: colors.danger, fontSize: 13, fontWeight: '600' }}>Delete</Text>
                 </>
               )}
+              </HStack>
             </Pressable>
           )}
-        </View>
-      </View>
+        </HStack>
+      </VStack>
     );
   };
 
@@ -146,9 +152,9 @@ export function EntityAttachments({ isVisible, onClose, entity, entityId, orgId 
     <Modal transparent animationType="slide" visible={isVisible} onRequestClose={onClose}>
       <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
         {/* Header */}
-        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: colors.border }}>
+        <HStack className="items-center justify-between" style={{ paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: colors.border }}>
           <Text style={{ fontSize: 17, fontWeight: '700', color: colors.text }}>Attachments</Text>
-          <View style={{ flexDirection: 'row', gap: 12, alignItems: 'center' }}>
+          <HStack space="md" className="items-center">
             {isAdmin && (
               <Pressable onPress={() => setShowAdd(!showAdd)} style={{ padding: 4 }}>
                 <Plus size={22} color={colors.primary} />
@@ -157,12 +163,12 @@ export function EntityAttachments({ isVisible, onClose, entity, entityId, orgId 
             <Pressable onPress={onClose} style={{ padding: 4 }}>
               <X size={22} color={colors.sub} />
             </Pressable>
-          </View>
-        </View>
+          </HStack>
+        </HStack>
 
         {/* Add form */}
         {showAdd && (
-          <View style={{ flexDirection: 'row', paddingHorizontal: 16, paddingVertical: 10, gap: 8, borderBottomWidth: 1, borderBottomColor: colors.border }}>
+          <HStack space="sm" style={{ paddingHorizontal: 16, paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: colors.border }}>
             <TextInput
               value={name}
               onChangeText={setName}
@@ -173,7 +179,7 @@ export function EntityAttachments({ isVisible, onClose, entity, entityId, orgId 
             <Pressable onPress={handleAdd} disabled={createMutation.isPending} style={{ backgroundColor: colors.primary, borderRadius: 8, paddingHorizontal: 16, justifyContent: 'center' }}>
               {createMutation.isPending ? <ActivityIndicator size="small" color="#fff" /> : <Text style={{ color: '#fff', fontWeight: '600', fontSize: 14 }}>Add</Text>}
             </Pressable>
-          </View>
+          </HStack>
         )}
 
         {/* Content */}

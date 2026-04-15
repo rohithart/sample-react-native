@@ -1,4 +1,6 @@
+import { HStack } from '@/components/ui/hstack';
 import { StatusBadge } from '@/components/ui/status-badge';
+import { VStack } from '@/components/ui/vstack';
 import { ENTITY_ICONS, type EntityIconKey } from '@/constants/entity-icons';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useRouter } from 'expo-router';
@@ -50,8 +52,6 @@ export function EntityCard({ item, config, orgId }: EntityCardProps) {
     <Pressable
       onPress={() => router.push(config.detailRoute(orgId, item._id) as any)}
       style={({ pressed: isPressed }) => ({
-        flexDirection: 'row',
-        alignItems: 'center',
         padding: 14,
         marginHorizontal: 12,
         marginVertical: 5,
@@ -59,49 +59,50 @@ export function EntityCard({ item, config, orgId }: EntityCardProps) {
         borderRadius: 12,
         borderWidth: 1,
         borderColor: border,
-        gap: 12,
       })}
     >
-      {/* Avatar — image or icon fallback */}
-      {image ? (
-        <Image
-          source={{ uri: image }}
-          style={{ width: 44, height: 44, borderRadius: 10 }}
-        />
-      ) : (
-        <View
-          style={{
-            width: 44,
-            height: 44,
-            borderRadius: 10,
-            backgroundColor: primary + '15',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <Icon size={20} color={primary} />
-        </View>
-      )}
-
-      {/* Content */}
-      <View style={{ flex: 1, gap: 2 }}>
-        <Text numberOfLines={1} style={{ fontSize: 15, fontWeight: '600', color: text }}>
-          {title}
-        </Text>
-        {subtitle ? (
-          <Text numberOfLines={1} style={{ fontSize: 13, color: sub }}>
-            {subtitle}
-          </Text>
-        ) : null}
-        {status ? (
-          <View style={{ flexDirection: 'row', marginTop: 4 }}>
-            <StatusBadge status={status} />
+      <HStack space="md" className="items-center">
+        {/* Avatar — image or icon fallback */}
+        {image ? (
+          <Image
+            source={{ uri: image }}
+            style={{ width: 44, height: 44, borderRadius: 10 }}
+          />
+        ) : (
+          <View
+            style={{
+              width: 44,
+              height: 44,
+              borderRadius: 10,
+              backgroundColor: primary + '15',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Icon size={20} color={primary} />
           </View>
-        ) : null}
-      </View>
+        )}
 
-      {/* Chevron */}
-      <ChevronRight size={18} color={sub} />
+        {/* Content */}
+        <VStack space="xs" className="flex-1">
+          <Text numberOfLines={1} style={{ fontSize: 15, fontWeight: '600', color: text }}>
+            {title}
+          </Text>
+          {subtitle ? (
+            <Text numberOfLines={1} style={{ fontSize: 13, color: sub }}>
+              {subtitle}
+            </Text>
+          ) : null}
+          {status ? (
+            <HStack style={{ marginTop: 4 }}>
+              <StatusBadge status={status} />
+            </HStack>
+          ) : null}
+        </VStack>
+
+        {/* Chevron */}
+        <ChevronRight size={18} color={sub} />
+      </HStack>
     </Pressable>
   );
 }

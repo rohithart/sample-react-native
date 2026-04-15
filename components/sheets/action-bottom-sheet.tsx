@@ -1,8 +1,9 @@
+import { HStack } from '@/components/ui/hstack';
+import { IconButton } from '@/components/ui/icon-button';
+import { useThemeColors } from '@/hooks/use-theme-colors';
 import React, { useState } from 'react';
 import { Animated, Modal, Pressable, View } from 'react-native';
-import { useSafeAreaInsets, SafeAreaView } from 'react-native-safe-area-context';
-import { useThemeColors } from '@/hooks/use-theme-colors';
-import { IconButton } from '@/components/ui/icon-button';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export interface ActionItem {
   id: string;
@@ -98,12 +99,10 @@ export function ActionBottomSheet({
 
               {/* Actions Grid - 3 items per row */}
               {rows.map((row, rowIndex) => (
-                <View
+                <HStack
                   key={rowIndex}
+                  className="justify-around items-center"
                   style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-around',
-                    alignItems: 'center',
                     paddingHorizontal: 4,
                     paddingBottom: 8,
                   }}
@@ -130,7 +129,7 @@ export function ActionBottomSheet({
                       />
                     </View>
                   ))}
-                </View>
+                </HStack>
               ))}
 
               {/* Spacer */}

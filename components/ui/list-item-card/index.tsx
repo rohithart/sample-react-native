@@ -1,7 +1,9 @@
-import React from 'react';
-import { Pressable, Text, View } from 'react-native';
-import { useThemeColors } from '@/hooks/use-theme-colors';
+import { HStack } from '@/components/ui/hstack';
 import { StatusBadge } from '@/components/ui/status-badge';
+import { VStack } from '@/components/ui/vstack';
+import { useThemeColors } from '@/hooks/use-theme-colors';
+import React from 'react';
+import { Pressable, Text } from 'react-native';
 
 interface ListItemCardProps {
   title: string;
@@ -26,15 +28,17 @@ export function ListItemCard({ title, description, status, onPress }: ListItemCa
         borderColor: border,
       }}
     >
-      <Text style={{ fontSize: 16, fontWeight: '600', color: text }}>{title}</Text>
-      {description ? (
-        <Text style={{ fontSize: 13, color: sub, marginTop: 4 }}>{description}</Text>
-      ) : null}
-      {status ? (
-        <View style={{ flexDirection: 'row', gap: 8, marginTop: 8 }}>
-          <StatusBadge status={status} />
-        </View>
-      ) : null}
+      <VStack space="xs">
+        <Text style={{ fontSize: 16, fontWeight: '600', color: text }}>{title}</Text>
+        {description ? (
+          <Text style={{ fontSize: 13, color: sub }}>{description}</Text>
+        ) : null}
+        {status ? (
+          <HStack space="sm" style={{ marginTop: 4 }}>
+            <StatusBadge status={status} />
+          </HStack>
+        ) : null}
+      </VStack>
     </Pressable>
   );
 }
