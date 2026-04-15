@@ -1,18 +1,17 @@
-import { useThemeColors } from '@/hooks/use-theme-colors';
-import { PageHeader } from '@/components/ui/page-header';
-import { DetailField, DetailSection, LinkedField, HtmlContent, AuditInfo } from '@/components/details';
-import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-import { MoreVertical, Edit, ArchiveRestore, Share2, Trash2, Info } from 'lucide-react-native';
-import React, { useState } from 'react';
-import { ActivityIndicator, ScrollView, Text, View, Pressable, Alert } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { ActionBottomSheet, ActionItem } from '@/components/sheets/action-bottom-sheet';
+import { AuditInfo, DetailField, DetailSection, GroupRelationship, HtmlContent } from '@/components/details';
 import { ConfirmationDialog } from '@/components/dialogs/confirmation-dialog';
+import { ActionBottomSheet, ActionItem } from '@/components/sheets/action-bottom-sheet';
+import { PageHeader } from '@/components/ui/page-header';
 import { useOrganisationContext } from '@/context/organisation-context';
+import { useThemeColors } from '@/hooks/use-theme-colors';
+import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
+import { ArchiveRestore, Edit, Info, MoreVertical, Share2, Trash2 } from 'lucide-react-native';
+import React, { useState } from 'react';
+import { ActivityIndicator, Alert, Pressable, ScrollView, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { useAnnouncement } from '@/services/announcement';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
-import { resolveId } from '@/utils/resolve-ref';
+import { useAnnouncement } from '@/services/announcement';
 
 export default function AnnouncementDetailScreen() {
   const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
@@ -105,7 +104,7 @@ export default function AnnouncementDetailScreen() {
           <DetailField label="All Users" value={item.allUsers ? 'Yes' : 'No'} />
         </DetailSection>
         <DetailSection title="Relationships">
-          <LinkedField label="Group" icon="group" value={item.group?.title} route={`/admin/group/${orgId}/${resolveId(item.group)}`} />
+          <GroupRelationship orgId={orgId || ''} item={item} />
         </DetailSection>
       </ScrollView>
       )}

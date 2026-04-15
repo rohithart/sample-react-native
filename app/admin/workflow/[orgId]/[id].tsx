@@ -1,24 +1,24 @@
-import { useThemeColors } from '@/hooks/use-theme-colors';
-import { PageHeader } from '@/components/ui/page-header';
-import { StatusBadge } from '@/components/ui/status-badge';
-import { DetailField, DetailSection, LinkedField, HtmlContent, AuditInfo } from '@/components/details';
-import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-import { MoreVertical, Edit, ArchiveRestore, Share2, Trash2, Info, Paperclip, MessageSquare, ImageIcon, FileDown, Clock, History } from 'lucide-react-native';
-import React, { useState } from 'react';
-import { ActivityIndicator, ScrollView, Text, View, Pressable, Alert } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { ActionBottomSheet, ActionItem } from '@/components/sheets/action-bottom-sheet';
+import { AuditInfo, DetailField, DetailSection, GroupRelationship, HtmlContent, LinkedField, UserRelationship } from '@/components/details';
 import { ConfirmationDialog } from '@/components/dialogs/confirmation-dialog';
-import { useOrganisationContext } from '@/context/organisation-context';
 import { EntityAttachments } from '@/components/entity/entity-attachments';
 import { EntityComments } from '@/components/entity/entity-comments';
-import { EntityImages } from '@/components/entity/entity-images';
-import { downloadAndSharePdf } from '@/utils/pdf-download';
-import { EntityTimeline } from '@/components/entity/entity-timeline';
 import { EntityHistory } from '@/components/entity/entity-history';
-import { useWorkflow } from '@/services/workflow';
+import { EntityImages } from '@/components/entity/entity-images';
+import { EntityTimeline } from '@/components/entity/entity-timeline';
+import { ActionBottomSheet, ActionItem } from '@/components/sheets/action-bottom-sheet';
+import { PageHeader } from '@/components/ui/page-header';
+import { StatusBadge } from '@/components/ui/status-badge';
+import { useOrganisationContext } from '@/context/organisation-context';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
+import { useThemeColors } from '@/hooks/use-theme-colors';
+import { useWorkflow } from '@/services/workflow';
+import { downloadAndSharePdf } from '@/utils/pdf-download';
 import { resolveId } from '@/utils/resolve-ref';
+import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
+import { ArchiveRestore, Clock, Edit, FileDown, History, ImageIcon, Info, MessageSquare, MoreVertical, Paperclip, Share2, Trash2 } from 'lucide-react-native';
+import React, { useState } from 'react';
+import { ActivityIndicator, Alert, Pressable, ScrollView, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function WorkflowDetailScreen() {
   const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
@@ -124,8 +124,8 @@ export default function WorkflowDetailScreen() {
         </DetailSection>
         <DetailSection title="Relationships">
           <LinkedField label="Category" icon="category" value={item.category?.title} route={`/admin/category/${orgId}/${resolveId(item.category)}`} />
-          <LinkedField label="Assigned User" icon="user" value={item.user?.user?.name || item.user?.user?.email} route={`/admin/user/${orgId}/${resolveId(item.user)}`} />
-          <LinkedField label="Group" icon="group" value={item.group?.title} route={`/admin/group/${orgId}/${resolveId(item.group)}`} />
+          <UserRelationship orgId={orgId || ''} item={item} />
+          <GroupRelationship orgId={orgId || ''} item={item} />
         </DetailSection>
       </ScrollView>
       )}

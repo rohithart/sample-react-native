@@ -1,24 +1,24 @@
-import { useThemeColors } from '@/hooks/use-theme-colors';
-import { PageHeader } from '@/components/ui/page-header';
-import { StatusBadge } from '@/components/ui/status-badge';
-import { DetailField, DetailSection, LinkedField, HtmlContent, AuditInfo } from '@/components/details';
-import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-import { MoreVertical, Edit, ArchiveRestore, Share2, Trash2, Info, Paperclip, MessageSquare, ImageIcon, FileDown, Clock, History } from 'lucide-react-native';
-import React, { useState } from 'react';
-import { ActivityIndicator, ScrollView, Text, View, Pressable, Alert } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { ActionBottomSheet, ActionItem } from '@/components/sheets/action-bottom-sheet';
+import { AuditInfo, DetailField, DetailSection, HtmlContent, LinkedField, VendorRelationship } from '@/components/details';
 import { ConfirmationDialog } from '@/components/dialogs/confirmation-dialog';
-import { useOrganisationContext } from '@/context/organisation-context';
 import { EntityAttachments } from '@/components/entity/entity-attachments';
 import { EntityComments } from '@/components/entity/entity-comments';
-import { EntityImages } from '@/components/entity/entity-images';
-import { downloadAndSharePdf } from '@/utils/pdf-download';
-import { EntityTimeline } from '@/components/entity/entity-timeline';
 import { EntityHistory } from '@/components/entity/entity-history';
-import { useQuote } from '@/services/quote';
+import { EntityImages } from '@/components/entity/entity-images';
+import { EntityTimeline } from '@/components/entity/entity-timeline';
+import { ActionBottomSheet, ActionItem } from '@/components/sheets/action-bottom-sheet';
+import { PageHeader } from '@/components/ui/page-header';
+import { StatusBadge } from '@/components/ui/status-badge';
+import { useOrganisationContext } from '@/context/organisation-context';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
+import { useThemeColors } from '@/hooks/use-theme-colors';
+import { useQuote } from '@/services/quote';
+import { downloadAndSharePdf } from '@/utils/pdf-download';
 import { resolveId } from '@/utils/resolve-ref';
+import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
+import { ArchiveRestore, Clock, Edit, FileDown, History, ImageIcon, Info, MessageSquare, MoreVertical, Paperclip, Share2, Trash2 } from 'lucide-react-native';
+import React, { useState } from 'react';
+import { ActivityIndicator, Alert, Pressable, ScrollView, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 function fmt(d: string | Date | undefined | null) { if (!d) return '—'; return new Date(d).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }); }
 
@@ -132,7 +132,7 @@ export default function QuoteDetailScreen() {
           <DetailField label="Flagged" value={item.isFlagged ? 'Yes' : 'No'} />
         </DetailSection>
         <DetailSection title="Relationships">
-          <LinkedField label="Vendor" icon="vendor" value={item.vendor?.name} route={`/admin/vendor/${orgId}/${resolveId(item.vendor)}`} />
+          <VendorRelationship orgId={orgId || ''} item={item} />
           <LinkedField label="Workflow" icon="workflow" value={item.workflow?.title} route={`/admin/workflow/${orgId}/${resolveId(item.workflow)}`} />
         </DetailSection>
       </ScrollView>

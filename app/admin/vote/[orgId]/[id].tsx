@@ -1,18 +1,18 @@
-import { useThemeColors } from '@/hooks/use-theme-colors';
-import { PageHeader } from '@/components/ui/page-header';
-import { DetailField, DetailSection, LinkedField, AuditInfo } from '@/components/details';
-import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-import { MoreVertical, Edit, ArchiveRestore, Share2, Trash2, Info, Clock } from 'lucide-react-native';
-import React, { useState } from 'react';
-import { ActivityIndicator, ScrollView, Text, View, Pressable, Alert } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { ActionBottomSheet, ActionItem } from '@/components/sheets/action-bottom-sheet';
+import { AuditInfo, DetailField, DetailSection, GroupRelationship, LinkedField } from '@/components/details';
 import { ConfirmationDialog } from '@/components/dialogs/confirmation-dialog';
-import { useOrganisationContext } from '@/context/organisation-context';
 import { EntityTimeline } from '@/components/entity/entity-timeline';
-import { useVote } from '@/services/vote';
+import { ActionBottomSheet, ActionItem } from '@/components/sheets/action-bottom-sheet';
+import { PageHeader } from '@/components/ui/page-header';
+import { useOrganisationContext } from '@/context/organisation-context';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
+import { useThemeColors } from '@/hooks/use-theme-colors';
+import { useVote } from '@/services/vote';
 import { resolveId } from '@/utils/resolve-ref';
+import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
+import { ArchiveRestore, Clock, Edit, Info, MoreVertical, Share2, Trash2 } from 'lucide-react-native';
+import React, { useState } from 'react';
+import { ActivityIndicator, Alert, Pressable, ScrollView, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 function fmt(d: string | Date | undefined | null) { if (!d) return '—'; return new Date(d).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }); }
 
@@ -109,7 +109,7 @@ export default function VoteDetailScreen() {
           <DetailField label="End Date" value={fmt(item.endDate)} />
         </DetailSection>
         <DetailSection title="Relationships">
-          <LinkedField label="Group" icon="group" value={item.group?.title} route={`/admin/group/${orgId}/${resolveId(item.group)}`} />
+          <GroupRelationship orgId={orgId || ''} item={item} />
           <LinkedField label="Workflow" icon="workflow" value={item.workflow?.title} route={`/admin/workflow/${orgId}/${resolveId(item.workflow)}`} />
         </DetailSection>
       </ScrollView>

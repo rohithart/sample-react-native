@@ -1,20 +1,19 @@
-import { useThemeColors } from '@/hooks/use-theme-colors';
-import { PageHeader } from '@/components/ui/page-header';
-import { DetailField, DetailSection, LinkedField, HtmlContent, AuditInfo } from '@/components/details';
-import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-import { MoreVertical, Edit, ArchiveRestore, Share2, Trash2, Info, Paperclip, MessageSquare, FileDown } from 'lucide-react-native';
-import React, { useState } from 'react';
-import { ActivityIndicator, ScrollView, Text, View, Pressable, Alert } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { ActionBottomSheet, ActionItem } from '@/components/sheets/action-bottom-sheet';
+import { AuditInfo, DetailField, DetailSection, GroupRelationship, HtmlContent } from '@/components/details';
 import { ConfirmationDialog } from '@/components/dialogs/confirmation-dialog';
-import { useOrganisationContext } from '@/context/organisation-context';
 import { EntityAttachments } from '@/components/entity/entity-attachments';
 import { EntityComments } from '@/components/entity/entity-comments';
-import { downloadAndSharePdf } from '@/utils/pdf-download';
-import { useMeeting } from '@/services/meeting';
+import { ActionBottomSheet, ActionItem } from '@/components/sheets/action-bottom-sheet';
+import { PageHeader } from '@/components/ui/page-header';
+import { useOrganisationContext } from '@/context/organisation-context';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
-import { resolveId } from '@/utils/resolve-ref';
+import { useThemeColors } from '@/hooks/use-theme-colors';
+import { useMeeting } from '@/services/meeting';
+import { downloadAndSharePdf } from '@/utils/pdf-download';
+import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
+import { ArchiveRestore, Edit, FileDown, Info, MessageSquare, MoreVertical, Paperclip, Share2, Trash2 } from 'lucide-react-native';
+import React, { useState } from 'react';
+import { ActivityIndicator, Alert, Pressable, ScrollView, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 function fmt(d: string | Date | undefined | null) { if (!d) return '—'; return new Date(d).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }); }
 
@@ -124,7 +123,7 @@ export default function MeetingDetailScreen() {
           <DetailField label="Archived" value={item.archived ? 'Yes' : 'No'} />
         </DetailSection>
         <DetailSection title="Relationships">
-          <LinkedField label="Group" icon="group" value={item.group?.title} route={`/admin/group/${orgId}/${resolveId(item.group)}`} />
+          <GroupRelationship orgId={orgId || ''} item={item} />
         </DetailSection>
       </ScrollView>
       )}
