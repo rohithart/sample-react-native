@@ -34,18 +34,18 @@ export function OrganisationProvider({ children }: { children: ReactNode }) {
   const [userRole, setUserRole] = useState<UserRole | null>(null);
   const [isLoadingAccess, setIsLoadingAccess] = useState(false);
 
-  const selectOrganisation = useCallback(async (id: string) => {
+  const selectOrganisation = useCallback(async (org: Organisation) => {
     setOrganisation(null);
     setOrgAccess(null);
     setUserRole(null);
     setIsLoadingAccess(true);
     try {
-      const [org, access, roleData] = await Promise.all([
-        api.get<Organisation>(`/organisation/${id}`),
-        api.get<OrgAccess>(`/organisation/access/${id}`),
-        api.get<UserRole>(`/user/role/${id}`),
+      const [organisation, access, roleData] = await Promise.all([
+        api.get<Organisation>(`/organisation/${org._id}`),
+        api.get<OrgAccess>(`/organisation/access/${org._id}`),
+        api.get<UserRole>(`/user/role/${org._id}`),
       ]);
-      setOrganisation(org);
+      setOrganisation(organisation);
       setOrgAccess(access);
       setUserRole(roleData);
     } catch {
