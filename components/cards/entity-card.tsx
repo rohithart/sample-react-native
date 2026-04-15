@@ -55,12 +55,15 @@ export function EntityCard({ item, config, orgId, onPress }: EntityCardProps) {
         marginTop: 10,
         marginHorizontal: 14,
         borderRadius: 12,
+        padding: 10,
         backgroundColor: card,
+        // iOS Shadows
         shadowColor: text,
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: isDark ? 0.25 : 0.12,
-        shadowRadius: 6,
-        elevation: 4,
+        shadowOffset: { width: 0, height: 6 }, // Increased height for deeper 3D look
+        shadowOpacity: isDark ? 0.35 : 0.15,
+        shadowRadius: 8,
+        // Android Shadow
+        elevation: 8, 
       }}
     >
       <Pressable
