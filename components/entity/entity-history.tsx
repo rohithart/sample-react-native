@@ -23,12 +23,12 @@ export function EntityHistory({ isVisible, onClose, entity, entityId }: EntityHi
   const renderChange = (change: HistoryChanges, idx: number) => (
     <View key={idx} style={{ flexDirection: 'row', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
       <Text style={{ fontSize: 12, fontWeight: '500', color: colors.text }}>{change.field}</Text>
-      {change.previousValue != null && (
+      {change.oldValue != null && (
         <View style={{ backgroundColor: colors.dangerBg, borderRadius: 6, paddingHorizontal: 8, paddingVertical: 3 }}>
-          <Text style={{ color: colors.danger, fontSize: 11 }}>{String(change.previousValue)}</Text>
+          <Text style={{ color: colors.danger, fontSize: 11 }}>{String(change.oldValue)}</Text>
         </View>
       )}
-      {change.previousValue != null && change.newValue != null && (
+      {change.oldValue != null && change.newValue != null && (
         <Text style={{ color: colors.sub, fontSize: 12 }}>→</Text>
       )}
       {change.newValue != null && (
