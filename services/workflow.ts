@@ -97,3 +97,8 @@ export function useUpdateWorkflowGroup(orgId: string) {
   const qc = useQueryClient();
   return useMutation({ mutationFn: ({ id, groupId }: { id: string; groupId: string }) => workflowApi.updateGroup(id, { groupId }), onSuccess: (_, { id }) => { qc.invalidateQueries({ queryKey: workflowKeys.all(orgId) }); qc.invalidateQueries({ queryKey: workflowKeys.detail(id) }); } });
 }
+
+export function useUpdateWorkflowStatus(orgId: string) {
+  const qc = useQueryClient();
+  return useMutation({ mutationFn: ({ id, status }: { id: string; status: string }) => workflowApi.updateStatus(id, { status }), onSuccess: (_, { id }) => { qc.invalidateQueries({ queryKey: workflowKeys.all(orgId) }); qc.invalidateQueries({ queryKey: workflowKeys.detail(id) }); } });
+}

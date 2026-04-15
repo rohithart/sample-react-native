@@ -74,3 +74,8 @@ export function useUnarchiveWorkorder(orgId: string) {
   const qc = useQueryClient();
   return useMutation({ mutationFn: (id: string) => workorderApi.unarchive(id), onSuccess: () => { qc.invalidateQueries({ queryKey: workorderKeys.all(orgId) }); } });
 }
+
+export function useUpdateWorkorderStatus(orgId: string) {
+  const qc = useQueryClient();
+  return useMutation({ mutationFn: ({ id, status }: { id: string; status: string }) => workorderApi.updateStatus(id, { status }), onSuccess: (_, { id }) => { qc.invalidateQueries({ queryKey: workorderKeys.all(orgId) }); qc.invalidateQueries({ queryKey: workorderKeys.detail(id) }); } });
+}

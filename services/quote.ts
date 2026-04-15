@@ -72,3 +72,8 @@ export function useUnarchiveQuote(orgId: string) {
   const qc = useQueryClient();
   return useMutation({ mutationFn: (id: string) => quoteApi.unarchive(id), onSuccess: () => { qc.invalidateQueries({ queryKey: quoteKeys.all(orgId) }); } });
 }
+
+export function useUpdateQuoteStatus(orgId: string) {
+  const qc = useQueryClient();
+  return useMutation({ mutationFn: ({ id, status }: { id: string; status: string }) => quoteApi.updateStatus(id, { status }), onSuccess: (_, { id }) => { qc.invalidateQueries({ queryKey: quoteKeys.all(orgId) }); qc.invalidateQueries({ queryKey: quoteKeys.detail(id) }); } });
+}

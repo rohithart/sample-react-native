@@ -1,4 +1,4 @@
-import { AuditInfo, DetailField, DetailSection, GroupSelect, HtmlContent, LinkedField, UserSelect } from '@/components/details';
+import { AuditInfo, DetailField, DetailSection, GroupSelect, HtmlContent, LinkedField, StatusSelect, UserSelect } from '@/components/details';
 import { ConfirmationDialog } from '@/components/dialogs/confirmation-dialog';
 import { EntityAttachments } from '@/components/entity/entity-attachments';
 import { EntityComments } from '@/components/entity/entity-comments';
@@ -7,13 +7,13 @@ import { EntityImages } from '@/components/entity/entity-images';
 import { EntityTimeline } from '@/components/entity/entity-timeline';
 import { ActionBottomSheet, ActionItem } from '@/components/sheets/action-bottom-sheet';
 import { PageHeader } from '@/components/ui/page-header';
-import { StatusBadge } from '@/components/ui/status-badge';
+import { workflowStatuses } from '@/constants/status';
 import { useOrganisationContext } from '@/context/organisation-context';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useGroups } from '@/services/group';
 import { useAssignableUsers } from '@/services/user';
-import { useUpdateWorkflowGroup, useUpdateWorkflowUser, useWorkflow } from '@/services/workflow';
+import { useUpdateWorkflowGroup, useUpdateWorkflowStatus, useUpdateWorkflowUser, useWorkflow } from '@/services/workflow';
 import { downloadAndSharePdf } from '@/utils/pdf-download';
 import { resolveId } from '@/utils/resolve-ref';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
@@ -42,6 +42,7 @@ export default function WorkflowDetailScreen() {
   const { data: groups = [], isLoading: isLoadingGroups } = useGroups(orgId || '');
   const updateUser = useUpdateWorkflowUser(orgId || '');
   const updateGroup = useUpdateWorkflowGroup(orgId || '');
+  const updateStatus = useUpdateWorkflowStatus(orgId || '');
   const refreshControl = useRefreshControl(refetch, isRefetching);
 
   const handleDelete = async () => {
@@ -121,7 +122,12 @@ export default function WorkflowDetailScreen() {
         contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 8, paddingBottom: 24, gap: 14 }}
         showsVerticalScrollIndicator={false}
       >
-        <StatusBadge status={item.status} />
+        <StatusSelect
+          statuses={workflowStatuses}
+          selectedValue={item.status}
+          onSelect={(status) => updateStatus.mutate({ id: id!, status })}
+          disabled={!isAdmin}
+        />
         {item.description ? <HtmlContent label="Description" html={item.description} /> : null}
         <DetailSection title="Details">
           <DetailField label="Priority" value={item.priority} />

@@ -77,3 +77,8 @@ export function useUnarchiveInvoice(orgId: string) {
   const qc = useQueryClient();
   return useMutation({ mutationFn: (id: string) => invoiceApi.unarchive(id), onSuccess: () => { qc.invalidateQueries({ queryKey: invoiceKeys.all(orgId) }); } });
 }
+
+export function useUpdateInvoiceStatus(orgId: string) {
+  const qc = useQueryClient();
+  return useMutation({ mutationFn: ({ id, status }: { id: string; status: string }) => invoiceApi.updateStatus(id, { status }), onSuccess: (_, { id }) => { qc.invalidateQueries({ queryKey: invoiceKeys.all(orgId) }); qc.invalidateQueries({ queryKey: invoiceKeys.detail(id) }); } });
+}

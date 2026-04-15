@@ -73,3 +73,8 @@ export function useUnarchiveEvidence(orgId: string) {
   const qc = useQueryClient();
   return useMutation({ mutationFn: (id: string) => evidenceApi.unarchive(id), onSuccess: () => { qc.invalidateQueries({ queryKey: evidenceKeys.all(orgId) }); } });
 }
+
+export function useUpdateEvidenceStatus(orgId: string) {
+  const qc = useQueryClient();
+  return useMutation({ mutationFn: ({ id, status }: { id: string; status: string }) => evidenceApi.updateStatus(id, { status }), onSuccess: (_, { id }) => { qc.invalidateQueries({ queryKey: evidenceKeys.all(orgId) }); qc.invalidateQueries({ queryKey: evidenceKeys.detail(id) }); } });
+}

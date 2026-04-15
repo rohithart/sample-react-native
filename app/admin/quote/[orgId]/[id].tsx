@@ -1,4 +1,4 @@
-import { AuditInfo, DetailField, DetailSection, HtmlContent, LinkedField, VendorRelationship } from '@/components/details';
+import { AuditInfo, DetailField, DetailSection, HtmlContent, LinkedField, StatusSelect, VendorRelationship } from '@/components/details';
 import { ConfirmationDialog } from '@/components/dialogs/confirmation-dialog';
 import { EntityAttachments } from '@/components/entity/entity-attachments';
 import { EntityComments } from '@/components/entity/entity-comments';
@@ -7,11 +7,11 @@ import { EntityImages } from '@/components/entity/entity-images';
 import { EntityTimeline } from '@/components/entity/entity-timeline';
 import { ActionBottomSheet, ActionItem } from '@/components/sheets/action-bottom-sheet';
 import { PageHeader } from '@/components/ui/page-header';
-import { StatusBadge } from '@/components/ui/status-badge';
+import { quoteStatuses } from '@/constants/status';
 import { useOrganisationContext } from '@/context/organisation-context';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
 import { useThemeColors } from '@/hooks/use-theme-colors';
-import { useQuote } from '@/services/quote';
+import { useQuote, useUpdateQuoteStatus } from '@/services/quote';
 import { downloadAndSharePdf } from '@/utils/pdf-download';
 import { resolveId } from '@/utils/resolve-ref';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
@@ -38,6 +38,7 @@ export default function QuoteDetailScreen() {
   const [showHistory, setShowHistory] = useState(false);
 
   const { data: item, isLoading: isLoadingItem, refetch, isRefetching } = useQuote(id || '');
+  const updateStatus = useUpdateQuoteStatus(orgId || '');
   const refreshControl = useRefreshControl(refetch, isRefetching);
 
   const handleDelete = async () => {
@@ -117,7 +118,12 @@ export default function QuoteDetailScreen() {
         contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 8, paddingBottom: 24, gap: 14 }}
         showsVerticalScrollIndicator={false}
       >
-        <StatusBadge status={item.status} />
+        <StatusSelect
+          statuses={quoteStatuses}
+          selectedValue={item.status}
+          onSelect={(status) => updateStatus.mutate({ id: id!, status })}
+          disabled={!isAdmin}
+        />
         {item.description ? <HtmlContent label="Description" html={item.description} /> : null}
         {item.vendorDescription ? <HtmlContent label="Vendor Description" html={item.vendorDescription} /> : null}
         <DetailSection title="Financial">

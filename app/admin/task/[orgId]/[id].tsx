@@ -1,4 +1,4 @@
-import { AuditInfo, DetailField, DetailSection, HtmlContent, LinkedField, UserSelect } from '@/components/details';
+import { AuditInfo, DetailField, DetailSection, HtmlContent, LinkedField, StatusSelect, UserSelect } from '@/components/details';
 import { ConfirmationDialog } from '@/components/dialogs/confirmation-dialog';
 import { EntityAttachments } from '@/components/entity/entity-attachments';
 import { EntityComments } from '@/components/entity/entity-comments';
@@ -7,11 +7,11 @@ import { EntityImages } from '@/components/entity/entity-images';
 import { EntityTimeline } from '@/components/entity/entity-timeline';
 import { ActionBottomSheet, ActionItem } from '@/components/sheets/action-bottom-sheet';
 import { PageHeader } from '@/components/ui/page-header';
-import { StatusBadge } from '@/components/ui/status-badge';
+import { taskStatuses } from '@/constants/status';
 import { useOrganisationContext } from '@/context/organisation-context';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
 import { useThemeColors } from '@/hooks/use-theme-colors';
-import { useAssignTaskUser, useTask } from '@/services/task';
+import { useAssignTaskUser, useTask, useUpdateTaskStatus } from '@/services/task';
 import { useAssignableUsers } from '@/services/user';
 import { downloadAndSharePdf } from '@/utils/pdf-download';
 import { resolveId } from '@/utils/resolve-ref';
@@ -39,6 +39,7 @@ export default function TaskDetailScreen() {
   const { data: item, isLoading: isLoadingItem, refetch, isRefetching } = useTask(id || '');
   const { data: assignableUsers = [], isLoading: isLoadingUsers } = useAssignableUsers(orgId || '');
   const assignUser = useAssignTaskUser(orgId || '');
+  const updateStatus = useUpdateTaskStatus(orgId || '');
   const refreshControl = useRefreshControl(refetch, isRefetching);
 
   const handleDelete = async () => {
@@ -118,7 +119,12 @@ export default function TaskDetailScreen() {
         contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 8, paddingBottom: 24, gap: 14 }}
         showsVerticalScrollIndicator={false}
       >
-        <StatusBadge status={item.status} />
+        <StatusSelect
+          statuses={taskStatuses}
+          selectedValue={item.status}
+          onSelect={(status) => updateStatus.mutate({ id: id!, status })}
+          disabled={!isAdmin}
+        />
         {item.description ? <HtmlContent label="Description" html={item.description} /> : null}
         <DetailSection title="Details">
           <DetailField label="Archived" value={item.archived ? 'Yes' : 'No'} />
