@@ -58,6 +58,7 @@ export type EntityIconKey =
   | 'budget'
   | 'ledger'
   | 'wall'
+  | 'organisation'
   | 'reminder';
 
 // ---------------------------------------------------------------------------
@@ -91,5 +92,6 @@ export const ENTITY_ICONS: Record<EntityIconKey, IconComponent> = {
   budget: PiggyBank,
   ledger: BookOpen,
   wall: Radio,
+  organisation: Building2,
   reminder: Bell,
 };

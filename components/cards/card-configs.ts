@@ -92,8 +92,16 @@ export const ADMIN_CONFIGS = {
 };
 
 // ---------------------------------------------------------------------------
-// View configs (8)
+// Organisation config (standalone — not scoped to an org)
 // ---------------------------------------------------------------------------
+export const ORGANISATION_CONFIG: EntityCardConfig = {
+  icon: 'organisation',
+  titleField: 'name',
+  subtitleField: (item: any) => item.slug || item.description,
+  imageField: 'image',
+  statusField: (item: any) => (item.isActive ? 'ACTIVE' : 'INACTIVE'),
+  detailRoute: (_orgId: string, itemId: string) => `/view/${itemId}`,
+};
 export const VIEW_CONFIGS = {
   announcement: cfg('announcement', (o, i) => `/view/announcement/${o}/${i}`),
   meeting: cfg('meeting', (o, i) => `/view/meeting/${o}/${i}`, {

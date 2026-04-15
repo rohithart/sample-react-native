@@ -24,6 +24,7 @@ interface EntityCardProps {
   item: Record<string, any>;
   config: EntityCardConfig;
   orgId: string;
+  onPress?: () => void;
 }
 
 // ---------------------------------------------------------------------------
@@ -38,7 +39,7 @@ function resolveField(item: any, field: string | ((item: any) => any) | undefine
 // ---------------------------------------------------------------------------
 // Component
 // ---------------------------------------------------------------------------
-export function EntityCard({ item, config, orgId }: EntityCardProps) {
+export function EntityCard({ item, config, orgId, onPress }: EntityCardProps) {
   const router = useRouter();
   const { card, text, sub, border, primary, pressed } = useThemeColors();
 
@@ -50,7 +51,7 @@ export function EntityCard({ item, config, orgId }: EntityCardProps) {
 
   return (
     <Pressable
-      onPress={() => router.push(config.detailRoute(orgId, item._id) as any)}
+      onPress={onPress ?? (() => router.push(config.detailRoute(orgId, item._id) as any))}
       style={({ pressed: isPressed }) => ({
         padding: 14,
         marginHorizontal: 12,
