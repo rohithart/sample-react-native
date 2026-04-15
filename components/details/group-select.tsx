@@ -2,7 +2,7 @@ import { HStack } from '@/components/ui/hstack';
 import { VStack } from '@/components/ui/vstack';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { useThemeColors } from '@/hooks/use-theme-colors';
-import { Check, ChevronDown, Search } from 'lucide-react-native';
+import { Check, ChevronDown, Search, UsersRound } from 'lucide-react-native';
 import React, { useMemo, useState } from 'react';
 import {
     ActivityIndicator,
@@ -78,8 +78,26 @@ export function GroupSelect({
         })}
       >
         {!displayName ? (
-          <HStack className="items-center">
-            <Text style={{ fontSize: 13, color: sub, flex: 1 }}>Group</Text>
+          <HStack space="sm" className="items-center">
+            <View
+              style={{
+                width: 32,
+                height: 32,
+                borderRadius: 8,
+                backgroundColor: primary + '10',
+                borderWidth: 1,
+                borderColor: primary + '30',
+                borderStyle: 'dashed',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <UsersRound size={16} color={primary} />
+            </View>
+            <VStack className="flex-1">
+              <Text style={{ fontSize: 13, fontWeight: '500', color: sub }}>Not assigned to a group</Text>
+              <Text style={{ fontSize: 11, color: primary }}>Tap to assign</Text>
+            </VStack>
             <ChevronDown size={16} color={sub} />
           </HStack>
         ) : (
