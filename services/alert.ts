@@ -2,8 +2,12 @@ import type { Alert } from '@/types';
 import { useQuery } from '@tanstack/react-query';
 import { api } from './api-client';
 
-export const alertKeys = { all: ['alerts'] as const };
+export const alertKeys = { android: ['alerts'] as const, ios: ['alerts'] as const };
 
-export function useAlerts() {
-  return useQuery({ queryKey: alertKeys.all, queryFn: () => api.get<Alert[]>('/alert/web') });
+export function useAlertsAndroid() {
+  return useQuery({ queryKey: alertKeys.android, queryFn: () => api.get<Alert[]>('/alert/android') });
+}
+
+export function useAlertsiOS() {
+  return useQuery({ queryKey: alertKeys.ios, queryFn: () => api.get<Alert[]>('/alert/ios') });
 }

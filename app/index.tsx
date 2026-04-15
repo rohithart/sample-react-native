@@ -1,15 +1,19 @@
 import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { useToast } from '@/context/toast-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
+import { useAlertsAndroid, useAlertsiOS } from '@/services/alert';
+import { useHealth } from '@/services/health';
 import { Stack, useRouter } from 'expo-router';
 import { useEffect, useRef } from 'react';
-import { Animated, Easing, Text as RNText, ScrollView, View } from 'react-native';
+import { Animated, BackHandler, Easing, Platform, Text as RNText, ScrollView, View } from 'react-native';
+import Constants from 'expo-constants';
 import { SafeAreaView } from 'react-native-safe-area-context';
+
 
 export default function SplashScreen() {
   const colors = useThemeColors();
   const router = useRouter();
   const I = ENTITY_ICONS;
-
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(30)).current;
   const logoScale = useRef(new Animated.Value(0.8)).current;
@@ -17,8 +21,10 @@ export default function SplashScreen() {
   const featureAnim2 = useRef(new Animated.Value(20)).current;
   const featureAnim3 = useRef(new Animated.Value(20)).current;
   const floatAnim = useRef(new Animated.Value(0)).current;
-
   const { bg, card, text, sub: textSecondary, primary, secondary } = colors;
+  const { showToast } = useToast();
+  const alertsQuery = Platform.OS === 'android' ? useAlertsAndroid() : useAlertsiOS();
+  const healthQuery = useHealth();
 
   useEffect(() => {
     Animated.timing(fadeAnim, {
@@ -76,13 +82,62 @@ export default function SplashScreen() {
         }),
       ])
     ).start();
+  }, [fadeAnim, slideAnim, logoScale, featureAnim1, featureAnim2, featureAnim3, floatAnim]);
 
+  // Alerts toast
+  useEffect(() => {
+    if (alertsQuery.data && Array.isArray(alertsQuery.data)) {
+      alertsQuery.data.forEach((alert) => {
+        showToast({
+          type: alert.type || 'info',
+          title: alert.title || 'Alert',
+          message: alert.message,
+          duration: 4000,
+        });
+      });
+    }
+  }, [alertsQuery.data, showToast]);
+
+  // Health minVersion check
+  useEffect(() => {
+    if (healthQuery.data) {
+      const minVersion = healthQuery.data?.minVersion;
+      let currentVersion = '1.0.0';
+      if (Constants.expoConfig?.version) {
+        currentVersion = Constants.expoConfig.version;
+      }
+      if (minVersion && compareVersions(minVersion, currentVersion) > 0) {
+        showToast({
+          type: 'error',
+          title: 'Update Required',
+          message: 'A new version of the app is required. Please update to continue.',
+          duration: 5000,
+        });
+        setTimeout(() => {
+          BackHandler.exitApp();
+        }, 2000);
+      }
+    }
+  }, [healthQuery.data, showToast]);
+
+  useEffect(() => {
     const timer = setTimeout(() => {
       router.replace('/terms-and-conditions');
     }, 3000);
-
     return () => clearTimeout(timer);
   }, [router]);
+
+  // Version comparison helper
+  function compareVersions(a: string, b: string) {
+    const pa = a.split('.').map(Number);
+    const pb = b.split('.').map(Number);
+    for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
+      const na = pa[i] || 0, nb = pb[i] || 0;
+      if (na > nb) return 1;
+      if (na < nb) return -1;
+    }
+    return 0;
+  }
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: bg }}>
