@@ -1,45 +1,78 @@
 
 import { HStack } from '@/components/ui/hstack';
-import { VStack } from '@/components/ui/vstack';
+import { useDisplaySettings } from '@/context/display-settings-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
+import { useRouter } from 'expo-router';
+import { Pressable, Text, View } from 'react-native';
 
 export function DisplaySettingsIndicator() {
   const router = useRouter();
   const { showArchived, showCompleted } = useDisplaySettings();
-  const { card, text, sub, border, pressed, primary } = useThemeColors();
+  const { card, text, primary, sub, isDark, success, warning } = useThemeColors();
 
   return (
+    <View
+      style={{
+        margin: 10,
+        borderRadius: 12,
+        padding: 5,
+        backgroundColor: card,
+        shadowColor: text,
+        shadowOffset: { width: 0, height: 6 },
+        shadowOpacity: isDark ? 0.35 : 0.15,
+        shadowRadius: 8,
+        elevation: 8, 
+      }}
+    >
     <Pressable
       onPress={() => router.push('/settings')}
-      style={({ pressed: isPressed }) => ({
-        marginHorizontal: 14,
-        marginTop: 10,
-        borderRadius: 12,
-        padding: 10,
-        backgroundColor: isPressed ? pressed : card,
-        borderWidth: 1,
-        borderColor: border,
-        shadowColor: text,
-        shadowOffset: { width: 0, height: 3 },
-        shadowOpacity: 0.08,
-        shadowRadius: 4,
-        elevation: 4,
-      })}
     >
-      <VStack space="xs">
-        <HStack className="items-center justify-between">
-          <Text style={{ fontWeight: '600', color: text, fontSize: 15 }}>Display Settings</Text>
-          <Text style={{ color: primary, fontSize: 13 }}>Edit</Text>
+      <HStack className="items-center justify-between">
+        <HStack className="items-center" space="md" style={{ flex: 1, minWidth: 0 }}>
+          <View
+            style={{
+              paddingVertical: 4,
+              paddingHorizontal: 10,
+              borderRadius: 999,
+              backgroundColor: showArchived 
+                ? (isDark ? warning + '20' : warning + '10') 
+                : (isDark ? '#111827' : '#f8fafc'),
+              borderWidth: 1,
+              borderColor: showArchived ? warning : (isDark ? '#374151' : '#e2e8f0'),
+            }}
+          >
+            <Text style={{ 
+              color: showArchived ? warning : sub, 
+              fontSize: 11, 
+              fontWeight: '600' 
+            }}>
+              Archived {showArchived ? 'On' : 'Off'}
+            </Text>
+          </View>
+          <View
+            style={{
+              paddingVertical: 4,
+              paddingHorizontal: 10,
+              borderRadius: 999,
+              backgroundColor: showCompleted 
+                ? (isDark ? success + '20' : success + '10') 
+                : (isDark ? '#111827' : '#f8fafc'),
+              borderWidth: 1,
+              borderColor: showCompleted ? success : (isDark ? '#374151' : '#e2e8f0'),
+            }}
+          >
+            <Text style={{ 
+              color: showCompleted ? success : sub, 
+              fontSize: 11, 
+              fontWeight: '600' 
+            }}>
+              Completed {showCompleted ? 'On' : 'Off'}
+            </Text>
+          </View>
         </HStack>
-        <HStack className="items-center" space="md">
-          <Text style={{ color: sub, fontSize: 13 }}>Show Archived:</Text>
-          <Text style={{ color: text, fontWeight: '500', fontSize: 13 }}>{showArchived ? 'On' : 'Off'}</Text>
-        </HStack>
-        <HStack className="items-center" space="md">
-          <Text style={{ color: sub, fontSize: 13 }}>Show Completed:</Text>
-          <Text style={{ color: text, fontWeight: '500', fontSize: 13 }}>{showCompleted ? 'On' : 'Off'}</Text>
-        </HStack>
-      </VStack>
+        <Text style={{ color: primary, fontWeight: '700', fontSize: 18, marginHorizontal: 10 }}>›</Text>
+      </HStack>
     </Pressable>
+  </View>
   );
 }
