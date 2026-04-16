@@ -11,6 +11,7 @@ import { AuthProvider } from '@/context/auth-context';
 import { OrganisationProvider } from '@/context/organisation-context';
 import { ThemeProvider, useTheme } from '@/context/theme-context';
 import { ToastProvider } from '@/context/toast-context';
+import { DisplaySettingsProvider } from '@/context/display-settings-context';
 
 const queryClient = new QueryClient();
 
@@ -43,7 +44,9 @@ export default function RootLayout() {
           <GluestackUIProvider mode="system">
             <AuthProvider>
               <OrganisationProvider>
+                <DisplaySettingsProvider>
                 <RootLayoutContent />
+                </DisplaySettingsProvider>
               </OrganisationProvider>
             </AuthProvider>
           </GluestackUIProvider>
