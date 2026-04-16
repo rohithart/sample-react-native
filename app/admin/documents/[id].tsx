@@ -1,16 +1,15 @@
-import { ADMIN_CONFIGS } from '@/components/cards/card-configs';
-import { EntityCard } from '@/components/cards/entity-card';
-import { PageHeader } from '@/components/ui/page-header';
 import { useThemeColors } from '@/hooks/use-theme-colors';
+import { PageHeader } from '@/components/ui/page-header';
+import { EntityCard } from '@/components/cards/entity-card';
+import { ADMIN_CONFIGS } from '@/components/cards/card-configs';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 
-import { ENTITY_ICONS } from '@/constants/entity-icons';
-import { useRefreshControl } from '@/hooks/use-refresh-control';
-import { useDocuments } from '@/services/document';
 import React from 'react';
 import { ActivityIndicator, FlatList, Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { DisplaySettingsIndicator } from '@/components/display-settings';
+import { useDocuments } from '@/services/document';
+import { useRefreshControl } from '@/hooks/use-refresh-control';
+import { ENTITY_ICONS } from '@/constants/entity-icons';
 
 const I = ENTITY_ICONS;
 
@@ -18,15 +17,8 @@ export default function DocumentsListScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const colors = useThemeColors();
-
-  const documentsQuery = useDocuments(id);
-  const items = documentsQuery.data ?? [];
-  const isLoading = documentsQuery.isLoading;
-  const refetching = documentsQuery.isRefetching;
-  const refreshControl = useRefreshControl(
-    documentsQuery.refetch,
-    refetching
-  );
+  const { data: items, isLoading, refetch, isRefetching } = useDocuments(id);
+  const refreshControl = useRefreshControl(refetch, isRefetching);
 
   const handleAdd = () => {
     router.push(`/admin/document/new/${id}`);
@@ -46,8 +38,6 @@ export default function DocumentsListScreen() {
           </Pressable>
         }
       />
-
-      <DisplaySettingsIndicator />
 
       {isLoading ? (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>

@@ -1,17 +1,15 @@
-import { DisplaySettingsIndicator } from '@/components/display-settings';
-import { ADMIN_CONFIGS } from '@/components/cards/card-configs';
-import { EntityCard } from '@/components/cards/entity-card';
-import { PageHeader } from '@/components/ui/page-header';
 import { useThemeColors } from '@/hooks/use-theme-colors';
+import { PageHeader } from '@/components/ui/page-header';
+import { EntityCard } from '@/components/cards/entity-card';
+import { ADMIN_CONFIGS } from '@/components/cards/card-configs';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 
-import { ENTITY_ICONS } from '@/constants/entity-icons';
-import { useDisplaySettings } from '@/context/display-settings-context';
-import { useRefreshControl } from '@/hooks/use-refresh-control';
-import { useArchivedInvoices, useInvoices } from '@/services/invoice';
 import React from 'react';
 import { ActivityIndicator, FlatList, Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useInvoices } from '@/services/invoice';
+import { useRefreshControl } from '@/hooks/use-refresh-control';
+import { ENTITY_ICONS } from '@/constants/entity-icons';
 
 const I = ENTITY_ICONS;
 
@@ -19,42 +17,29 @@ export default function InvoicesListScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const colors = useThemeColors();
+  const { data: items, isLoading, refetch, isRefetching } = useInvoices(id);
+  const refreshControl = useRefreshControl(refetch, isRefetching);
 
-  const { showArchived } = useDisplaySettings();
-  const invoicesQuery = useInvoices(id);
-  const archivedInvoicesQuery = useArchivedInvoices(id);
-  const items = showArchived ? archivedInvoicesQuery.data ?? [] : invoicesQuery.data ?? [];
-  const isLoading = showArchived ? archivedInvoicesQuery.isLoading : invoicesQuery.isLoading;
-  const refetching = showArchived ? archivedInvoicesQuery.isRefetching : invoicesQuery.isRefetching;
-  const refreshControl = useRefreshControl(
-    showArchived ? archivedInvoicesQuery.refetch : invoicesQuery.refetch,
-    return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
-        <Stack.Screen options={{ headerShown: false }} />
-        <PageHeader
-          icon="invoice"
-          title="Invoices"
-          rightAction={
-            <Pressable
-              onPress={handleAdd}
-              style={{ padding: 8, backgroundColor: colors.primary, borderRadius: 8 }}
-            >
-              <I.plus size={20} color="#ffffff" />
-            </Pressable>
-          }
-        />
+  const handleAdd = () => {
+    router.push(`/admin/invoice/new/${id}`);
+  };
 
-        <DisplaySettingsIndicator />
+  return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
+      <Stack.Screen options={{ headerShown: false }} />
+      <PageHeader icon="invoice"
+        title="Invoices"
+        rightAction={
+          <Pressable
+            onPress={handleAdd}
+            style={{ padding: 8, backgroundColor: colors.primary, borderRadius: 8 }}
+          >
+            <I.plus size={20} color="#ffffff" />
+          </Pressable>
+        }
+      />
 
-        {isLoading ? (
-          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <ActivityIndicator size="large" color={colors.primary} />
-            <Text style={{ color: colors.sub, fontSize: 14, marginTop: 10 }}>Loading...</Text>
-          </View>
-        ) : (
-          <FlatList
-            data={items ?? []}
-            renderItem={({ item }) => (
+      {isLoading ? (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
           <ActivityIndicator size="large" color={colors.primary} />
           <Text style={{ color: colors.sub, fontSize: 14, marginTop: 10 }}>Loading...</Text>

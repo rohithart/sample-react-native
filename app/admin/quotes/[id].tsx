@@ -1,16 +1,15 @@
-import { ADMIN_CONFIGS } from '@/components/cards/card-configs';
-import { EntityCard } from '@/components/cards/entity-card';
-import { PageHeader } from '@/components/ui/page-header';
 import { useThemeColors } from '@/hooks/use-theme-colors';
+import { PageHeader } from '@/components/ui/page-header';
+import { EntityCard } from '@/components/cards/entity-card';
+import { ADMIN_CONFIGS } from '@/components/cards/card-configs';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 
-import { ENTITY_ICONS } from '@/constants/entity-icons';
-import { useDisplaySettings } from '@/context/display-settings-context';
-import { useRefreshControl } from '@/hooks/use-refresh-control';
-import { useArchivedQuotes, useQuotes } from '@/services/quote';
 import React from 'react';
 import { ActivityIndicator, FlatList, Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useQuotes } from '@/services/quote';
+import { useRefreshControl } from '@/hooks/use-refresh-control';
+import { ENTITY_ICONS } from '@/constants/entity-icons';
 
 const I = ENTITY_ICONS;
 
@@ -18,17 +17,8 @@ export default function QuotesListScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const colors = useThemeColors();
-
-  const { showArchived } = useDisplaySettings();
-  const quotesQuery = useQuotes(id);
-  const archivedQuotesQuery = useArchivedQuotes(id);
-  const items = showArchived ? archivedQuotesQuery.data ?? [] : quotesQuery.data ?? [];
-  const isLoading = showArchived ? archivedQuotesQuery.isLoading : quotesQuery.isLoading;
-  const refetching = showArchived ? archivedQuotesQuery.isRefetching : quotesQuery.isRefetching;
-  const refreshControl = useRefreshControl(
-    showArchived ? archivedQuotesQuery.refetch : quotesQuery.refetch,
-    refetching
-  );
+  const { data: items, isLoading, refetch, isRefetching } = useQuotes(id);
+  const refreshControl = useRefreshControl(refetch, isRefetching);
 
   const handleAdd = () => {
     router.push(`/admin/quote/new/${id}`);

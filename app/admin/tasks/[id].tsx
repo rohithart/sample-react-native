@@ -7,11 +7,9 @@ import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import React from 'react';
 import { ActivityIndicator, FlatList, Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useTasks, useArchivedTasks } from '@/services/task';
-import { useDisplaySettings } from '@/context/display-settings-context';
+import { useTasks } from '@/services/task';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
-import { DisplaySettingsIndicator } from '@/components/display-settings';
 
 const I = ENTITY_ICONS;
 
@@ -19,17 +17,8 @@ export default function TasksListScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const colors = useThemeColors();
-
-  const { showArchived } = useDisplaySettings();
-  const tasksQuery = useTasks(id);
-  const archivedTasksQuery = useArchivedTasks(id);
-  const items = showArchived ? archivedTasksQuery.data ?? [] : tasksQuery.data ?? [];
-  const isLoading = showArchived ? archivedTasksQuery.isLoading : tasksQuery.isLoading;
-  const refetching = showArchived ? archivedTasksQuery.isRefetching : tasksQuery.isRefetching;
-  const refreshControl = useRefreshControl(
-    showArchived ? archivedTasksQuery.refetch : tasksQuery.refetch,
-    refetching
-  );
+  const { data: items, isLoading, refetch, isRefetching } = useTasks(id);
+  const refreshControl = useRefreshControl(refetch, isRefetching);
 
   const handleAdd = () => {
     router.push(`/admin/task/new/${id}`);
@@ -50,7 +39,6 @@ export default function TasksListScreen() {
         }
       />
 
-      <DisplaySettingsIndicator />
       {isLoading ? (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
           <ActivityIndicator size="large" color={colors.primary} />

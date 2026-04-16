@@ -38,10 +38,6 @@ export function useInvoices(orgId: string) {
   return useQuery({ queryKey: invoiceKeys.all(orgId), queryFn: () => invoiceApi.getAll(orgId), enabled: !!orgId });
 }
 
-export function useArchivedInvoices(orgId: string) {
-  return useQuery({ queryKey: invoiceKeys.archived(orgId), queryFn: () => invoiceApi.getAllArchived(orgId), enabled: !!orgId });
-}
-
 export function useInvoice(id: string) {
   return useQuery({ queryKey: invoiceKeys.detail(id), queryFn: () => invoiceApi.get(id), enabled: !!id });
 }
