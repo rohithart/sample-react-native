@@ -1,15 +1,17 @@
-import { useThemeColors } from '@/hooks/use-theme-colors';
-import { PageHeader } from '@/components/ui/page-header';
-import { EntityCard } from '@/components/cards/entity-card';
 import { ADMIN_CONFIGS } from '@/components/cards/card-configs';
+import { EntityCard } from '@/components/cards/entity-card';
+import { DisplaySettingsIndicator } from '@/components/display-settings';
+import { PageHeader } from '@/components/ui/page-header';
+import { useThemeColors } from '@/hooks/use-theme-colors';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 
+import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { useDisplaySettings } from '@/context/display-settings-context';
+import { useRefreshControl } from '@/hooks/use-refresh-control';
+import { useArchivedWorkflows, useWorkflows } from '@/services/workflow';
 import React from 'react';
 import { ActivityIndicator, FlatList, Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useWorkflows } from '@/services/workflow';
-import { useRefreshControl } from '@/hooks/use-refresh-control';
-import { ENTITY_ICONS } from '@/constants/entity-icons';
 
 const I = ENTITY_ICONS;
 
@@ -17,8 +19,18 @@ export default function WorkflowsListScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const colors = useThemeColors();
-  const { data: items, isLoading, refetch, isRefetching } = useWorkflows(id);
-  const refreshControl = useRefreshControl(refetch, isRefetching);
+
+  const { showArchived } = useDisplaySettings();
+  const workflowsQuery = useWorkflows(id);
+  const archivedWorkflowsQuery = useArchivedWorkflows(id);
+
+  const items = showArchived ? archivedWorkflowsQuery.data ?? [] : workflowsQuery.data ?? [];
+  const isLoading = showArchived ? archivedWorkflowsQuery.isLoading : workflowsQuery.isLoading;
+  const refetching = showArchived ? archivedWorkflowsQuery.isRefetching : workflowsQuery.isRefetching;
+  const refreshControl = useRefreshControl(
+    showArchived ? archivedWorkflowsQuery.refetch : workflowsQuery.refetch,
+    refetching
+  );
 
   const handleAdd = () => {
     router.push(`/admin/workflow/new/${id}`);
@@ -27,7 +39,8 @@ export default function WorkflowsListScreen() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
       <Stack.Screen options={{ headerShown: false }} />
-      <PageHeader icon="workflow"
+      <PageHeader
+        icon="workflow"
         title="Workflows"
         rightAction={
           <Pressable
@@ -38,6 +51,8 @@ export default function WorkflowsListScreen() {
           </Pressable>
         }
       />
+
+      <DisplaySettingsIndicator />
 
       {isLoading ? (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
