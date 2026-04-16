@@ -37,7 +37,9 @@ const RED_500 = '#ef4444';
 const RED_900_30 = 'rgba(127, 29, 29, 0.3)';
 const RED_50 = '#fef2f2';
 const ORANGE_500 = '#f97316';
+const GREEN_50 = '#ecfdf5';
 const GREEN_500 = '#10b981';
+const GREEN_500_30 = 'rgba(16, 185, 129, 0.3)';
 
 const WHITE = '#ffffff';
 const PRESSED_ALPHA_LIGHT = 'rgba(0, 0, 0, 0.05)';
@@ -67,6 +69,7 @@ const DARK: Omit<ThemeColors, 'isDark'> = {
   switchThumb: GRAY_400,
   switchThumbActive: PURPLE_200,
   dangerBg: RED_900_30,
+  successBg: GREEN_500_30,
   cardPrimaryBg: PURPLE_50_DARK,
   cardSecondaryBg: TEAL_50_DARK,
 };
@@ -95,6 +98,7 @@ const LIGHT: Omit<ThemeColors, 'isDark'> = {
   switchThumb: SLATE_200,
   switchThumbActive: PURPLE_200,
   dangerBg: RED_50,
+  successBg: GREEN_50,
   cardPrimaryBg: PURPLE_50_LIGHT,
   cardSecondaryBg: TEAL_50_LIGHT,
 };
@@ -135,6 +139,8 @@ export interface ThemeColors {
   switchThumbActive: string;
   /** Danger-tinted background for buttons */
   dangerBg: string;
+  /** Success-tinted background for buttons */
+  successBg: string;
   /** Dashboard card background — primary accent */
   cardPrimaryBg: string;
   /** Dashboard card background — secondary accent */

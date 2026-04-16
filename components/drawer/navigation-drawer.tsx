@@ -1,6 +1,7 @@
 import { Box } from '@/components/ui/box';
 import { Button, ButtonText } from '@/components/ui/button';
 import { Text } from '@/components/ui/text';
+import { AccountCard } from '@/components/account-card';
 import { useAuth } from '@/context/auth-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useRouter } from 'expo-router';
@@ -92,15 +93,7 @@ export function NavigationDrawer({
                 <I.close size={24} color={colors.icon} />
               </Button>
             </Box>
-            <Box
-              className="rounded-lg p-3"
-              style={{ backgroundColor: colors.card }}
-            >
-              <Text className="font-semibold text-base">John Doe</Text>
-              <Text className="text-sm" style={{ color: colors.sub }}>
-                john@example.com
-              </Text>
-            </Box>
+            <AccountCard onPress={onClose} />
           </Box>
 
           <ScrollView
