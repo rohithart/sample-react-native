@@ -1,10 +1,10 @@
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { PageHeader } from '@/components/ui/page-header';
 import { HtmlContent, AuditInfo } from '@/components/details';
-import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
+import { Stack, useLocalSearchParams } from 'expo-router';
 
 import React, { useState } from 'react';
-import { ActivityIndicator, ScrollView, Text, View, Pressable, Alert } from 'react-native';
+import { ActivityIndicator, ScrollView, Text, View, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ActionBottomSheet, ActionItem } from '@/components/sheets/action-bottom-sheet';
 import { useInformation } from '@/services/information';
@@ -14,8 +14,7 @@ import { ENTITY_ICONS } from '@/constants/entity-icons';
 const I = ENTITY_ICONS;
 
 export default function InformationDetailScreen() {
-  const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
-  const router = useRouter();
+  const { id } = useLocalSearchParams<{ orgId: string; id: string }>();
   const colors = useThemeColors();
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [showAudit, setShowAudit] = useState(false);
@@ -25,13 +24,6 @@ export default function InformationDetailScreen() {
 
   const actions: ActionItem[] = [
     { id: 'audit', label: 'Audit Info', icon: <I.information size={24} color={colors.secondary} />, onPress: () => setShowAudit(true), color: 'primary' as const },
-    {
-      id: 'share',
-      label: 'Share',
-      icon: <I.share size={24} color={colors.success} />,
-      onPress: () => Alert.alert('Share', 'Share functionality coming soon'),
-      color: 'success' as const,
-    },
   ];
 
   return (
