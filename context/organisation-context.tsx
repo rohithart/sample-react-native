@@ -41,9 +41,9 @@ export function OrganisationProvider({ children }: { children: ReactNode }) {
     setIsLoadingAccess(true);
     try {
       const [organisation, access, roleData] = await Promise.all([
-        api.get<Organisation>(`/organisation/${org._id}`),
-        api.get<OrgAccess>(`/organisation/access/${org._id}`),
-        api.get<UserRole>(`/user/role/${org._id}`),
+        api.get<Organisation>(`/api/organisation/${org._id}`),
+        api.get<OrgAccess>(`/api/organisation/access/${org._id}`),
+        api.get<UserRole>(`/api/user/role/${org._id}`),
       ]);
       setOrganisation(organisation);
       setOrgAccess(access);
@@ -69,9 +69,9 @@ export function OrganisationProvider({ children }: { children: ReactNode }) {
     setIsLoadingAccess(true);
     try {
       const [org, access, roleData] = await Promise.all([
-        api.get<Organisation>(`/organisation/${orgId}`),
-        api.get<OrgAccess>(`/organisation/access/${orgId}`),
-        api.get<UserRole>(`/user/role/${orgId}`),
+        api.get<Organisation>(`/api/organisation/${orgId}`),
+        api.get<OrgAccess>(`/api/organisation/access/${orgId}`),
+        api.get<UserRole>(`/api/user/role/${orgId}`),
       ]);
       setOrganisation(org);
       setOrgAccess(access);
