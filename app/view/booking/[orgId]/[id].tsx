@@ -10,30 +10,34 @@ import { ActionBottomSheet, ActionItem } from '@/components/sheets/action-bottom
 import { useBooking } from '@/services/booking';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { EntityComments } from '@/components/entity/entity-comments';
 
 const I = ENTITY_ICONS;
 
 function fmt(d: string | Date | undefined | null) { if (!d) return '—'; return new Date(d).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }); }
 
+function calculateDuration(from: string | Date | undefined | null, to: string | Date | undefined | null) {
+  if (!from || !to) return '—';
+  const fromDate = new Date(from);
+  const toDate = new Date(to);
+  const diffTime = Math.abs(toDate.getTime() - fromDate.getTime());
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+  return `${diffDays} day${diffDays !== 1 ? 's' : ''}`;
+}
+
 export default function BookingDetailScreen() {
   const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
-  const router = useRouter();
   const colors = useThemeColors();
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [showAudit, setShowAudit] = useState(false);
+  const [showComments, setShowComments] = useState(false);
 
   const { data: item, isLoading: isLoadingItem, refetch, isRefetching } = useBooking(id || '');
   const refreshControl = useRefreshControl(refetch, isRefetching);
 
   const actions: ActionItem[] = [
     { id: 'audit', label: 'Audit Info', icon: <I.information size={24} color={colors.secondary} />, onPress: () => setShowAudit(true), color: 'primary' as const },
-    {
-      id: 'share',
-      label: 'Share',
-      icon: <I.share size={24} color={colors.success} />,
-      onPress: () => Alert.alert('Share', 'Share functionality coming soon'),
-      color: 'success' as const,
-    },
+    { id: 'comments', label: 'Comments', icon: <I.comment size={24} color={colors.primary} />, onPress: () => setShowComments(true), color: 'primary' as const },
   ];
 
   return (
@@ -64,16 +68,17 @@ export default function BookingDetailScreen() {
           <DetailField label="From" value={fmt(item.bookingDateFrom)} />
           <DetailField label="To" value={fmt(item.bookingDateTo)} />
           <DetailField label="Full Day" value={item.isFullDay ? 'Yes' : 'No'} />
+          <DetailField label="Duration" value={calculateDuration(item.bookingDateFrom, item.bookingDateTo)} />
         </DetailSection>
         <DetailSection title="Status">
-          <DetailField label="Approved" value={item.isApproved ? 'Yes' : 'No'} />
-          <DetailField label="Rejected" value={item.isRejected ? 'Yes' : 'No'} />
+          <DetailField label="Status" value={item.isApproved ? 'Approved' : item.isRejected ? 'Rejected' : 'Pending'} />
         </DetailSection>
       </ScrollView>
       )}
 
       <ActionBottomSheet isVisible={isBottomSheetOpen} onClose={() => setIsBottomSheetOpen(false)} actions={actions} />
       <AuditInfo isVisible={showAudit} onClose={() => setShowAudit(false)} createdBy={item?.createdBy} updatedBy={item?.updatedBy} createdAt={item?.createdAt} updatedAt={item?.updatedAt} />
+      <EntityComments isVisible={showComments} onClose={() => setShowComments(false)} entity={'booking'} entityId={id || ''} orgId={orgId || ''} />
     </SafeAreaView>
   );
 }

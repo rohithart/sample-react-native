@@ -2,18 +2,17 @@ import { useThemeColors } from '@/hooks/use-theme-colors';
 import { PageHeader } from '@/components/ui/page-header';
 import { EntityCard } from '@/components/cards/entity-card';
 import { VIEW_CONFIGS } from '@/components/cards/card-configs';
-import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
+import { Stack, useLocalSearchParams } from 'expo-router';
 import React from 'react';
-import { ActivityIndicator, FlatList, Pressable, Text, View } from 'react-native';
+import { ActivityIndicator, FlatList, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useBookings } from '@/services/booking';
+import { useBookingsForUser } from '@/services/booking';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
 
 export default function BookingsListScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const router = useRouter();
   const colors = useThemeColors();
-  const { data: items, isLoading, refetch, isRefetching } = useBookings(id);
+  const { data: items, isLoading, refetch, isRefetching } = useBookingsForUser(id);
   const refreshControl = useRefreshControl(refetch, isRefetching);
 
   return (

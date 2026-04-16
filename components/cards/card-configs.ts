@@ -63,6 +63,11 @@ export const ADMIN_CONFIGS = {
       item.isApproved ? 'APPROVED' : item.isRejected ? 'REJECTED' : 'PENDING',
   }),
   booking: cfg('booking', (o, i) => `/admin/booking/${o}/${i}`, {
+    subtitleField: (item: any) => {
+      const from = item.bookingDateFrom ? new Date(item.bookingDateFrom).toLocaleDateString() : '';
+      const to = item.bookingDateTo ? new Date(item.bookingDateTo).toLocaleDateString() : '';
+      return from && to ? `${from} – ${to}` : from || to || 'Event';
+    },
     statusField: (item: any) =>
       item.isApproved ? 'APPROVED' : item.isRejected ? 'REJECTED' : 'PENDING',
   }),
@@ -139,6 +144,11 @@ export const VIEW_CONFIGS = {
     }
   }),
   booking: cfg('booking', (o, i) => `/view/booking/${o}/${i}`, {
+    subtitleField: (item: any) => {
+      const from = item.bookingDateFrom ? new Date(item.bookingDateFrom).toLocaleDateString() : '';
+      const to = item.bookingDateTo ? new Date(item.bookingDateTo).toLocaleDateString() : '';
+      return from && to ? `${from} – ${to}` : from || to || 'Event';
+    },
     statusField: (item: any) =>
       item.isApproved ? 'APPROVED' : item.isRejected ? 'REJECTED' : 'PENDING',
   }),

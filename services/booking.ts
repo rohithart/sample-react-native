@@ -26,6 +26,10 @@ export function useBookings(orgId: string) {
   return useQuery({ queryKey: bookingKeys.all(orgId), queryFn: () => bookingApi.getAll(orgId), enabled: !!orgId });
 }
 
+export function useBookingsForUser(orgId: string) {
+  return useQuery({ queryKey: bookingKeys.forUser(orgId), queryFn: () => bookingApi.getAllForUser(orgId), enabled: !!orgId });
+}
+
 export function useBooking(id: string) {
   return useQuery({ queryKey: bookingKeys.detail(id), queryFn: () => bookingApi.get(id), enabled: !!id });
 }
