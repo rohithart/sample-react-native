@@ -2,12 +2,14 @@ import { useThemeColors } from '@/hooks/use-theme-colors';
 import { PageHeader } from '@/components/ui/page-header';
 import { EntityCard } from '@/components/cards/entity-card';
 import { ADMIN_CONFIGS } from '@/components/cards/card-configs';
+import { DisplaySettingsIndicator } from '@/components/display-settings';
+import { useDisplaySettings } from '@/context/display-settings-context';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 
 import React from 'react';
 import { ActivityIndicator, FlatList, Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useTasks } from '@/services/task';
+import { useArchivedTasks, useTasks } from '@/services/task';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 
@@ -17,8 +19,16 @@ export default function TasksListScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const colors = useThemeColors();
-  const { data: items, isLoading, refetch, isRefetching } = useTasks(id);
-  const refreshControl = useRefreshControl(refetch, isRefetching);
+  const { showArchived } = useDisplaySettings();
+  const tasksQuery = useTasks(id);
+  const archivedTasksQuery = useArchivedTasks(id);
+  const items = showArchived ? archivedTasksQuery.data ?? [] : tasksQuery.data ?? [];
+  const isLoading = showArchived ? archivedTasksQuery.isLoading : tasksQuery.isLoading;
+  const refetching = showArchived ? archivedTasksQuery.isRefetching : tasksQuery.isRefetching;
+  const refreshControl = useRefreshControl(
+    showArchived ? archivedTasksQuery.refetch : tasksQuery.refetch,
+    refetching
+  );
 
   const handleAdd = () => {
     router.push(`/admin/task/new/${id}`);
@@ -38,6 +48,8 @@ export default function TasksListScreen() {
           </Pressable>
         }
       />
+
+      <DisplaySettingsIndicator />
 
       {isLoading ? (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>

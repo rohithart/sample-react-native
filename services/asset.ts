@@ -31,6 +31,10 @@ export function useAsset(id: string) {
   return useQuery({ queryKey: assetKeys.detail(id), queryFn: () => assetApi.get(id), enabled: !!id });
 }
 
+export function useArchivedAssets(orgId: string) {
+  return useQuery({ queryKey: assetKeys.archived(orgId), queryFn: () => assetApi.getAllArchived(orgId), enabled: !!orgId });
+}
+
 export function useCreateAsset(orgId: string) {
   const qc = useQueryClient();
   return useMutation({ mutationFn: (data: Partial<Asset>) => assetApi.create(orgId, data), onSuccess: () => qc.invalidateQueries({ queryKey: assetKeys.all(orgId) }) });

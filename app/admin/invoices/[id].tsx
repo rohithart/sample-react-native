@@ -2,12 +2,14 @@ import { useThemeColors } from '@/hooks/use-theme-colors';
 import { PageHeader } from '@/components/ui/page-header';
 import { EntityCard } from '@/components/cards/entity-card';
 import { ADMIN_CONFIGS } from '@/components/cards/card-configs';
+import { DisplaySettingsIndicator } from '@/components/display-settings';
+import { useDisplaySettings } from '@/context/display-settings-context';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 
 import React from 'react';
 import { ActivityIndicator, FlatList, Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useInvoices } from '@/services/invoice';
+import { useArchivedInvoices, useInvoices } from '@/services/invoice';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 
@@ -17,8 +19,16 @@ export default function InvoicesListScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const colors = useThemeColors();
-  const { data: items, isLoading, refetch, isRefetching } = useInvoices(id);
-  const refreshControl = useRefreshControl(refetch, isRefetching);
+  const { showArchived } = useDisplaySettings();
+  const invoicesQuery = useInvoices(id);
+  const archivedInvoicesQuery = useArchivedInvoices(id);
+  const items = showArchived ? archivedInvoicesQuery.data ?? [] : invoicesQuery.data ?? [];
+  const isLoading = showArchived ? archivedInvoicesQuery.isLoading : invoicesQuery.isLoading;
+  const refetching = showArchived ? archivedInvoicesQuery.isRefetching : invoicesQuery.isRefetching;
+  const refreshControl = useRefreshControl(
+    showArchived ? archivedInvoicesQuery.refetch : invoicesQuery.refetch,
+    refetching
+  );
 
   const handleAdd = () => {
     router.push(`/admin/invoice/new/${id}`);
@@ -38,6 +48,8 @@ export default function InvoicesListScreen() {
           </Pressable>
         }
       />
+
+      <DisplaySettingsIndicator />
 
       {isLoading ? (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>

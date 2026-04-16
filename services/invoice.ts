@@ -42,6 +42,10 @@ export function useInvoice(id: string) {
   return useQuery({ queryKey: invoiceKeys.detail(id), queryFn: () => invoiceApi.get(id), enabled: !!id });
 }
 
+export function useArchivedInvoices(orgId: string) {
+  return useQuery({ queryKey: invoiceKeys.archived(orgId), queryFn: () => invoiceApi.getAllArchived(orgId), enabled: !!orgId });
+}
+
 export function useCreateInvoice(orgId: string) {
   const qc = useQueryClient();
   return useMutation({ mutationFn: (data: Partial<Invoice>) => invoiceApi.create(orgId, data), onSuccess: () => qc.invalidateQueries({ queryKey: invoiceKeys.all(orgId) }) });

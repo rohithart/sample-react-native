@@ -36,6 +36,10 @@ export function useVote(id: string) {
   return useQuery({ queryKey: voteKeys.detail(id), queryFn: () => voteApi.get(id), enabled: !!id });
 }
 
+export function useArchivedVotes(orgId: string) {
+  return useQuery({ queryKey: voteKeys.archived(orgId), queryFn: () => voteApi.getAllArchived(orgId), enabled: !!orgId });
+}
+
 export function useCreateVote(orgId: string) {
   const qc = useQueryClient();
   return useMutation({ mutationFn: (data: Partial<Vote>) => voteApi.create(orgId, data), onSuccess: () => qc.invalidateQueries({ queryKey: voteKeys.all(orgId) }) });

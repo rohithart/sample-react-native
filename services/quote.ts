@@ -37,6 +37,10 @@ export function useQuote(id: string) {
   return useQuery({ queryKey: quoteKeys.detail(id), queryFn: () => quoteApi.get(id), enabled: !!id });
 }
 
+export function useArchivedQuotes(orgId: string) {
+  return useQuery({ queryKey: quoteKeys.archived(orgId), queryFn: () => quoteApi.getAllArchived(orgId), enabled: !!orgId });
+}
+
 export function useCreateQuote(orgId: string) {
   const qc = useQueryClient();
   return useMutation({ mutationFn: (data: Partial<Quote>) => quoteApi.create(orgId, data), onSuccess: () => qc.invalidateQueries({ queryKey: quoteKeys.all(orgId) }) });

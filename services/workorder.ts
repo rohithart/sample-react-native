@@ -39,6 +39,10 @@ export function useWorkorder(id: string) {
   return useQuery({ queryKey: workorderKeys.detail(id), queryFn: () => workorderApi.get(id), enabled: !!id });
 }
 
+export function useArchivedWorkorders(orgId: string) {
+  return useQuery({ queryKey: workorderKeys.archived(orgId), queryFn: () => workorderApi.getAllArchived(orgId), enabled: !!orgId });
+}
+
 export function useCreateWorkorder(orgId: string) {
   const qc = useQueryClient();
   return useMutation({ mutationFn: (data: Partial<Workorder>) => workorderApi.create(orgId, data), onSuccess: () => qc.invalidateQueries({ queryKey: workorderKeys.all(orgId) }) });

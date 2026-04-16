@@ -34,6 +34,10 @@ export function useEvidences(orgId: string) {
   return useQuery({ queryKey: evidenceKeys.all(orgId), queryFn: () => evidenceApi.getAll(orgId), enabled: !!orgId });
 }
 
+export function useArchivedEvidences(orgId: string) {
+  return useQuery({ queryKey: evidenceKeys.archived(orgId), queryFn: () => evidenceApi.getAllArchived(orgId), enabled: !!orgId });
+}
+
 export function useEvidence(id: string) {
   return useQuery({ queryKey: evidenceKeys.detail(id), queryFn: () => evidenceApi.get(id), enabled: !!id });
 }

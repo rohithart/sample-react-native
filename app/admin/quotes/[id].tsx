@@ -2,12 +2,14 @@ import { useThemeColors } from '@/hooks/use-theme-colors';
 import { PageHeader } from '@/components/ui/page-header';
 import { EntityCard } from '@/components/cards/entity-card';
 import { ADMIN_CONFIGS } from '@/components/cards/card-configs';
+import { DisplaySettingsIndicator } from '@/components/display-settings';
+import { useDisplaySettings } from '@/context/display-settings-context';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 
 import React from 'react';
 import { ActivityIndicator, FlatList, Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useQuotes } from '@/services/quote';
+import { useArchivedQuotes, useQuotes } from '@/services/quote';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 
@@ -17,8 +19,16 @@ export default function QuotesListScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const colors = useThemeColors();
-  const { data: items, isLoading, refetch, isRefetching } = useQuotes(id);
-  const refreshControl = useRefreshControl(refetch, isRefetching);
+  const { showArchived } = useDisplaySettings();
+  const quotesQuery = useQuotes(id);
+  const archivedQuotesQuery = useArchivedQuotes(id);
+  const items = showArchived ? archivedQuotesQuery.data ?? [] : quotesQuery.data ?? [];
+  const isLoading = showArchived ? archivedQuotesQuery.isLoading : quotesQuery.isLoading;
+  const refetching = showArchived ? archivedQuotesQuery.isRefetching : quotesQuery.isRefetching;
+  const refreshControl = useRefreshControl(
+    showArchived ? archivedQuotesQuery.refetch : quotesQuery.refetch,
+    refetching
+  );
 
   const handleAdd = () => {
     router.push(`/admin/quote/new/${id}`);
@@ -38,6 +48,8 @@ export default function QuotesListScreen() {
           </Pressable>
         }
       />
+
+      <DisplaySettingsIndicator />
 
       {isLoading ? (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>

@@ -27,6 +27,10 @@ export function useVendor(id: string) {
   return useQuery({ queryKey: vendorKeys.detail(id), queryFn: () => vendorApi.get(id), enabled: !!id });
 }
 
+export function useArchivedVendors(orgId: string) {
+  return useQuery({ queryKey: vendorKeys.archived(orgId), queryFn: () => vendorApi.getAllArchived(orgId), enabled: !!orgId });
+}
+
 export function useCreateVendor(orgId: string) {
   const qc = useQueryClient();
   return useMutation({ mutationFn: (data: Partial<Vendor>) => vendorApi.create(orgId, data), onSuccess: () => qc.invalidateQueries({ queryKey: vendorKeys.all(orgId) }) });

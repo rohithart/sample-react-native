@@ -33,6 +33,10 @@ export function useDocument(id: string) {
   return useQuery({ queryKey: documentKeys.detail(id), queryFn: () => documentApi.get(id), enabled: !!id });
 }
 
+export function useArchivedDocuments(orgId: string) {
+  return useQuery({ queryKey: documentKeys.archived(orgId), queryFn: () => documentApi.getAllArchived(orgId), enabled: !!orgId });
+}
+
 export function useCreateDocument(orgId: string) {
   const qc = useQueryClient();
   return useMutation({ mutationFn: (data: Partial<Document>) => documentApi.create(orgId, data), onSuccess: () => qc.invalidateQueries({ queryKey: documentKeys.all(orgId) }) });

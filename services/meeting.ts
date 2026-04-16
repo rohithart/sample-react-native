@@ -34,6 +34,10 @@ export function useMeeting(id: string) {
   return useQuery({ queryKey: meetingKeys.detail(id), queryFn: () => meetingApi.get(id), enabled: !!id });
 }
 
+export function useArchivedMeetings(orgId: string) {
+  return useQuery({ queryKey: meetingKeys.archived(orgId), queryFn: () => meetingApi.getAllArchived(orgId), enabled: !!orgId });
+}
+
 export function useCreateMeeting(orgId: string) {
   const qc = useQueryClient();
   return useMutation({ mutationFn: (data: Partial<Meeting>) => meetingApi.create(orgId, data), onSuccess: () => qc.invalidateQueries({ queryKey: meetingKeys.all(orgId) }) });
