@@ -47,7 +47,9 @@ export const ADMIN_CONFIGS = {
       typeof item.vendor === 'object' ? item.vendor?.name : undefined,
     statusField: 'status',
   }),
-  announcement: cfg('announcement', (o, i) => `/admin/announcement/${o}/${i}`),
+  announcement: cfg('announcement', (o, i) => `/admin/announcement/${o}/${i}`, {
+    subtitleField: (item: any) => (item.group?.title ?? 'Everyone'),
+  }),
   meeting: cfg('meeting', (o, i) => `/admin/meeting/${o}/${i}`, {
     subtitleField: (item) => item.meetingDate ? new Date(item.meetingDate).toLocaleDateString() : '',
   }),
@@ -115,7 +117,9 @@ export const ORGANISATION_CONFIG: EntityCardConfig = {
   detailRoute: (_orgId: string, itemId: string) => `/view/${itemId}`,
 };
 export const VIEW_CONFIGS = {
-  announcement: cfg('announcement', (o, i) => `/view/announcement/${o}/${i}`),
+  announcement: cfg('announcement', (o, i) => `/view/announcement/${o}/${i}`, {
+    subtitleField: (item: any) => (item.group?.title ?? 'Everyone'),
+  }),
   meeting: cfg('meeting', (o, i) => `/view/meeting/${o}/${i}`, {
     subtitleField: (item) => item.meetingDate ? new Date(item.meetingDate).toLocaleDateString() : '',
   }),
