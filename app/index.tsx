@@ -1,8 +1,10 @@
 import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { TERMS_AND_CONDITIONS_KEY } from '@/constants/memory';
 import { useToast } from '@/context/toast-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useAlertsAndroid, useAlertsiOS } from '@/services/alert';
 import { useHealth } from '@/services/health';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Constants from 'expo-constants';
 import { Stack, useRouter } from 'expo-router';
 import { useEffect, useRef } from 'react';
@@ -133,13 +135,19 @@ export default function SplashScreen() {
   }, [healthQuery.data, healthQuery.isError, showToast]);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      router.replace('/terms-and-conditions');
-    }, 3000);
+    let timer: number;
+    AsyncStorage.getItem(TERMS_AND_CONDITIONS_KEY).then((value) => {
+      timer = setTimeout(() => {
+        if (value === 'true') {
+          router.replace('/home');
+        } else {
+          router.replace('/terms-and-conditions');
+        }
+      }, 3000);
+    });
     return () => clearTimeout(timer);
   }, [router]);
 
-  // Version comparison helper
   function compareVersions(a: string, b: string) {
     const pa = a.split('.').map(Number);
     const pb = b.split('.').map(Number);

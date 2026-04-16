@@ -1,10 +1,12 @@
+import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { TERMS_AND_CONDITIONS_KEY } from '@/constants/memory';
+import { useThemeColors } from '@/hooks/use-theme-colors';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Stack, useRouter } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
-import { useState } from 'react';
-import { ScrollView, View, Pressable, Text as RNText } from 'react-native';
+import { useEffect, useState } from 'react';
+import { Pressable, Text as RNText, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useThemeColors } from '@/hooks/use-theme-colors';
-import { ENTITY_ICONS } from '@/constants/entity-icons';
 
 const I = ENTITY_ICONS;
 
@@ -13,14 +15,23 @@ export default function TermsAndConditionsScreen() {
   const colors = useThemeColors();
   const [isAgreed, setIsAgreed] = useState(false);
 
+  useEffect(() => {
+    AsyncStorage.getItem(TERMS_AND_CONDITIONS_KEY).then((value) => {
+      if (value === 'true') {
+        setIsAgreed(true);
+      }
+    });
+  }, []);
+
   const { bg, card, text, sub: textSecondary, border, primary } = colors;
 
   const handleOpenTerms = async () => {
     await WebBrowser.openBrowserAsync('https://example.com/terms');
   };
 
-  const handleProceed = () => {
+  const handleProceed = async () => {
     if (isAgreed) {
+      await AsyncStorage.setItem(TERMS_AND_CONDITIONS_KEY, 'true');
       router.replace('/home');
     }
   };

@@ -14,8 +14,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { useTheme } from '@/context/theme-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
+import { DISPLAY_SETTINGS_KEY } from '@/constants/memory';
 
-const DISPLAY_SETTINGS_KEY = '@app_display_settings';
 
 const DEFAULT_DISPLAY_SETTINGS = {
   showCompleted: true,
