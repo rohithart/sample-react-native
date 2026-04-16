@@ -144,6 +144,7 @@ export const VIEW_CONFIGS = {
   }),
   group: cfg('group', (o, i) => `/view/group/${o}/${i}`),
   userRequest: cfg('userRequest', (o, i) => `/view/user-request/${o}/${i}`, {
+    subtitleField: () => undefined,
     statusField: (item: any) =>
       item.isApproved ? 'APPROVED' : item.isRejected ? 'REJECTED' : 'PENDING',
   }),

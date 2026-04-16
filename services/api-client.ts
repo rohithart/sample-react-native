@@ -84,7 +84,14 @@ async function request<T>(
 
   if (res.status === 204) return undefined as T;
 
-  return res.json();
+  try {
+    return await res.json();
+  } catch (e) {
+    if (e instanceof SyntaxError) {
+      return undefined as T;
+    }
+    throw e;
+  }
 }
 
 export const api = {

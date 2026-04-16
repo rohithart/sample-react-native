@@ -1,14 +1,15 @@
 import { HStack } from '@/components/ui/hstack';
-import { VStack } from '@/components/ui/vstack';
 import { useOrganisationContext } from '@/context/organisation-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useComments, useCreateComment, useDeleteComment } from '@/services/comment';
 import type { Comment } from '@/types';
+import { UserInfoModal } from '@/components/user-info-modal';
 
 import React, { useCallback, useState } from 'react';
 import { ActivityIndicator, Alert, FlatList, Modal, Pressable, Text, TextInput, View } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { useReportComment } from '@/services/email';
 
 const I = ENTITY_ICONS;
 
@@ -48,7 +49,10 @@ export function EntityComments({ isVisible, onClose, entity, entityId, orgId }: 
   const { data: comments, isLoading } = useComments(entity, entityId);
   const createMutation = useCreateComment(orgId, entity, entityId);
   const deleteMutation = useDeleteComment(entity, entityId);
+  const reportMutation = useReportComment();
   const [content, setContent] = useState('');
+  const [selectedUserRole, setSelectedUserRole] = useState<any>(null);
+  const [isUserInfoModalVisible, setIsUserInfoModalVisible] = useState(false);
 
   const handleSend = () => {
     if (!content.trim()) return;
@@ -57,37 +61,60 @@ export function EntityComments({ isVisible, onClose, entity, entityId, orgId }: 
     });
   };
 
+  const handleReport = useCallback((id: string, org: any) => {
+    const data: any = {organisation: org}
+    Alert.alert('Report Comment', 'Are you sure you want to report this comment?', [
+      { text: 'Cancel', style: 'cancel' },
+      { text: 'Report', style: 'destructive', onPress: () => reportMutation.mutateAsync({ id, data }) },
+    ]);
+  }, [reportMutation]);
+
   const handleDelete = useCallback((id: string) => {
     Alert.alert('Delete Comment', 'Are you sure you want to delete this comment?', [
-      { text: 'Cancel', style: 'cancel' },
       { text: 'Delete', style: 'destructive', onPress: () => deleteMutation.mutate(id) },
     ]);
   }, [deleteMutation]);
 
+
+  const handleUserAvatarPress = useCallback((userRole: any) => {
+    setSelectedUserRole(userRole);
+    setIsUserInfoModalVisible(true);
+  }, []);
+
+  const handleUserInfoModalClose = useCallback(() => {
+    setIsUserInfoModalVisible(false);
+    setSelectedUserRole(null);
+  }, []);
+
   const renderItem = ({ item }: { item: Comment }) => {
     const userName = (item as any).user?.name || (item as any).user?.user?.name;
+    const userRole = (item as any).user || (item as any).user?.user;
     const commentText = (item as any).comment || (item as any).content || '';
 
     return (
-      <HStack space="sm" className="items-start">
-        <View style={{ width: 34, height: 34, borderRadius: 17, backgroundColor: colors.primary + '20', alignItems: 'center', justifyContent: 'center', marginTop: 2 }}>
-          <Text style={{ fontSize: 12, fontWeight: '700', color: colors.primary }}>{getInitials(userName)}</Text>
-        </View>
+      <HStack space="sm" className="items-center">
+        <Pressable onPress={() => handleUserAvatarPress(userRole)}>
+          <View style={{ width: 34, height: 34, borderRadius: 17, backgroundColor: colors.primary + '20', alignItems: 'center', justifyContent: 'center' }}>
+            <Text style={{ fontSize: 12, fontWeight: '700', color: colors.primary }}>{getInitials(userName)}</Text>
+          </View>
+        </Pressable>
 
-        <VStack space="xs" className="flex-1" style={{ backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border, borderRadius: 12, borderTopLeftRadius: 4, padding: 10 }}>
-          <HStack className="justify-between items-center">
-            <HStack space="sm" className="items-center flex-1">
-              {userName && <Text style={{ fontSize: 13, fontWeight: '600', color: colors.text }}>{userName}</Text>}
-              <Text style={{ fontSize: 11, color: colors.sub }}>{fmtTime(item.createdAt)}</Text>
-            </HStack>
+        <HStack className="justify-between" style={{ backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border, borderRadius: 12, padding: 10, flex: 1}}>
+          <View>
+            <Text style={{ fontSize: 13, fontWeight: '600', color: colors.text }}>{commentText}</Text>
+            <Text style={{ fontSize: 11, color: colors.sub, marginTop: 4 }}>{fmtTime(item.createdAt)}</Text>
+          </View>
+          <HStack space="sm" className="items-center">
+            <Pressable onPress={() => handleReport(item._id, item.organisation)} style={{ padding: 4 }} disabled={reportMutation.isPending}>
+              {reportMutation.isPending ? <ActivityIndicator size="small" color={colors.danger} /> : <I.warning size={14} color={colors.warning} />}
+            </Pressable>
             {isAdmin && (
-              <Pressable onPress={() => handleDelete(item._id)} style={{ padding: 4 }} disabled={deleteMutation.isPending}>
-                {deleteMutation.isPending ? <ActivityIndicator size="small" color={colors.danger} /> : <I.trash size={14} color={colors.danger} />}
-              </Pressable>
-            )}
+            <Pressable onPress={() => handleDelete(item._id)} style={{ padding: 4 }} disabled={deleteMutation.isPending}>
+              {deleteMutation.isPending ? <ActivityIndicator size="small" color={colors.danger} /> : <I.trash size={14} color={colors.danger} />}
+            </Pressable>
+              )}
           </HStack>
-          <Text style={{ color: colors.text, fontSize: 14, lineHeight: 20 }}>{commentText}</Text>
-        </VStack>
+        </HStack>
       </HStack>
     );
   };
@@ -145,6 +172,12 @@ export function EntityComments({ isVisible, onClose, entity, entityId, orgId }: 
           </Pressable>
         </HStack>
       </SafeAreaView>
+
+      <UserInfoModal
+        isVisible={isUserInfoModalVisible}
+        onClose={handleUserInfoModalClose}
+        userRole={selectedUserRole}
+      />
     </Modal>
   );
 }
