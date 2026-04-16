@@ -1,10 +1,10 @@
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { PageHeader } from '@/components/ui/page-header';
 import { DetailField, DetailSection, HtmlContent, AuditInfo } from '@/components/details';
-import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
+import { Stack, useLocalSearchParams } from 'expo-router';
 
 import React, { useState } from 'react';
-import { ActivityIndicator, ScrollView, Text, View, Pressable, Alert } from 'react-native';
+import { ActivityIndicator, ScrollView, Text, View, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ActionBottomSheet, ActionItem } from '@/components/sheets/action-bottom-sheet';
 import { useMeeting } from '@/services/meeting';
@@ -13,11 +13,28 @@ import { ENTITY_ICONS } from '@/constants/entity-icons';
 
 const I = ENTITY_ICONS;
 
-function fmt(d: string | Date | undefined | null) { if (!d) return '—'; return new Date(d).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }); }
+function fmtDate(d: string | Date | undefined | null) {
+  if (!d) return '—';
+  return new Date(d).toLocaleDateString('en-AU', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  });
+}
+
+function fmtTime(d: string | Date | undefined | null) {
+  if (!d) return '—';
+  if (typeof d === 'string') {
+    return d;
+  }
+  return new Date(d).toLocaleTimeString('en-AU', {
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+}
 
 export default function MeetingDetailScreen() {
   const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
-  const router = useRouter();
   const colors = useThemeColors();
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [showAudit, setShowAudit] = useState(false);
@@ -27,13 +44,6 @@ export default function MeetingDetailScreen() {
 
   const actions: ActionItem[] = [
     { id: 'audit', label: 'Audit Info', icon: <I.information size={24} color={colors.secondary} />, onPress: () => setShowAudit(true), color: 'primary' as const },
-    {
-      id: 'share',
-      label: 'Share',
-      icon: <I.share size={24} color={colors.success} />,
-      onPress: () => Alert.alert('Share', 'Share functionality coming soon'),
-      color: 'success' as const,
-    },
   ];
 
   return (
@@ -63,8 +73,8 @@ export default function MeetingDetailScreen() {
         {item.details ? <HtmlContent label="Details" html={item.details} /> : null}
         {item.mom ? <HtmlContent label="Minutes of Meeting" html={item.mom} /> : null}
         <DetailSection title="Schedule">
-          <DetailField label="Date" value={fmt(item.meetingDate)} />
-          <DetailField label="Time" value={fmt(item.meetingTime)} />
+          <DetailField label="Date" value={fmtDate(item.meetingDate)} />
+          <DetailField label="Time" value={fmtTime(item.meetingTime)} />
           <DetailField label="Duration" value={item.duration ? item.duration + ' min' : null} />
         </DetailSection>
         <DetailSection title="Links">

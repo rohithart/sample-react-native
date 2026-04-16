@@ -49,7 +49,7 @@ export const ADMIN_CONFIGS = {
   }),
   announcement: cfg('announcement', (o, i) => `/admin/announcement/${o}/${i}`),
   meeting: cfg('meeting', (o, i) => `/admin/meeting/${o}/${i}`, {
-    subtitleField: 'agenda',
+    subtitleField: (item) => item.meetingDate ? new Date(item.meetingDate).toLocaleDateString() : '',
   }),
   vote: cfg('vote', (o, i) => `/admin/vote/${o}/${i}`, {
     titleField: 'question',
@@ -117,7 +117,7 @@ export const ORGANISATION_CONFIG: EntityCardConfig = {
 export const VIEW_CONFIGS = {
   announcement: cfg('announcement', (o, i) => `/view/announcement/${o}/${i}`),
   meeting: cfg('meeting', (o, i) => `/view/meeting/${o}/${i}`, {
-    subtitleField: 'agenda',
+    subtitleField: (item) => item.meetingDate ? new Date(item.meetingDate).toLocaleDateString() : '',
   }),
   vote: cfg('vote', (o, i) => `/view/vote/${o}/${i}`, {
     titleField: 'question',

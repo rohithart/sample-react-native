@@ -2,18 +2,17 @@ import { useThemeColors } from '@/hooks/use-theme-colors';
 import { PageHeader } from '@/components/ui/page-header';
 import { EntityCard } from '@/components/cards/entity-card';
 import { VIEW_CONFIGS } from '@/components/cards/card-configs';
-import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
+import { Stack, useLocalSearchParams } from 'expo-router';
 import React from 'react';
-import { ActivityIndicator, FlatList, Pressable, Text, View } from 'react-native';
+import { ActivityIndicator, FlatList, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useMeetings } from '@/services/meeting';
+import { useMeetingsForUser } from '@/services/meeting';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
 
 export default function MeetingsListScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const router = useRouter();
   const colors = useThemeColors();
-  const { data: items, isLoading, refetch, isRefetching } = useMeetings(id);
+  const { data: items, isLoading, refetch, isRefetching } = useMeetingsForUser(id);
   const refreshControl = useRefreshControl(refetch, isRefetching);
 
   return (

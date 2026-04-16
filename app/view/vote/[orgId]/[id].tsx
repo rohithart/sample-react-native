@@ -44,13 +44,6 @@ export default function VoteDetailScreen() {
 
   const actions: ActionItem[] = [
     { id: 'audit', label: 'Audit Info', icon: <I.information size={24} color={colors.secondary} />, onPress: () => setShowAudit(true), color: 'primary' as const },
-    {
-      id: 'share',
-      label: 'Share',
-      icon: <I.share size={24} color={colors.success} />,
-      onPress: () => Alert.alert('Share', 'Share functionality coming soon'),
-      color: 'success' as const,
-    },
   ];
 
   return (

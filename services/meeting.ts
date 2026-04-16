@@ -30,6 +30,10 @@ export function useMeetings(orgId: string) {
   return useQuery({ queryKey: meetingKeys.all(orgId), queryFn: () => meetingApi.getAll(orgId), enabled: !!orgId });
 }
 
+export function useMeetingsForUser(orgId: string) {
+  return useQuery({ queryKey: meetingKeys.forUser(orgId), queryFn: () => meetingApi.getAllForUser(orgId), enabled: !!orgId });
+}
+
 export function useMeeting(id: string) {
   return useQuery({ queryKey: meetingKeys.detail(id), queryFn: () => meetingApi.get(id), enabled: !!id });
 }
