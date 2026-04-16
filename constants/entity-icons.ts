@@ -39,6 +39,7 @@ import {
     ImageIcon,
     Info,
     ListChecks,
+    Lock,
     LogOut,
     Mail,
     MapPin,
@@ -124,6 +125,7 @@ export type EntityIconKey =
   | 'zap'
   | 'shield'
   | 'archive'
+  | 'lock'
   | 'back'
   | 'eye'
   | 'moon'
@@ -210,6 +212,7 @@ export const ENTITY_ICONS: Record<EntityIconKey, IconComponent> = {
   zap: Zap,
   shield: Shield,
   archive: Archive,
+  lock: Lock,
   back: ChevronLeft,
   eye: Eye,
   moon: Moon,

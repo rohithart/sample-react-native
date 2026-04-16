@@ -1,4 +1,4 @@
-import type { Vote, VoteCast } from '@/types';
+import type { Vote } from '@/types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from './api-client';
 
@@ -19,8 +19,8 @@ const voteApi = {
   getForUser: (orgId: string, id: string) => api.get<Vote>(`/api/vote/view/${orgId}/${id}`),
   getAllForWorkflow: (wId: string) => api.get<Vote[]>(`/api/vote/workflow/${wId}`),
   get: (id: string) => api.get<Vote>(`/api/vote/${id}`),
-  getAllCasted: (id: string) => api.get<VoteCast[]>(`/api/vote/all-casted/${id}`),
-  getCasted: (orgId: string, id: string) => api.get<VoteCast>(`/api/vote/casted/${orgId}/${id}`),
+  getAllCasted: (id: string) => api.get<any>(`/api/vote/all-casted/${id}`),
+  getCasted: (orgId: string, id: string) => api.get<any>(`/api/vote/casted/${orgId}/${id}`),
   create: (orgId: string, data: Partial<Vote>) => api.post<Vote>(`/api/vote/${orgId}`, data),
   complete: (id: string) => api.patch<Vote>(`/api/vote/finish/${id}`, {}),
   remind: (id: string) => api.patch<Vote>(`/api/vote/remind/${id}`, {}),
@@ -50,7 +50,21 @@ export function useDeleteVote(orgId: string) {
   return useMutation({ mutationFn: (id: string) => voteApi.delete(id), onSuccess: () => qc.invalidateQueries({ queryKey: voteKeys.all(orgId) }) });
 }
 
-export function useCastVote(orgId: string) {
+export function useAllCastedVotes(id: string) {
+  return useQuery({ queryKey: voteKeys.casted(id), queryFn: () => voteApi.getAllCasted(id), enabled: !!id });
+}
+
+export function useCastedVote(orgId: string, id: string) {
+  return useQuery({ queryKey: [...voteKeys.casted(id), 'user', orgId], queryFn: () => voteApi.getCasted(orgId, id), enabled: !!orgId && !!id });
+}
+
+export function useCastVote(orgId: string, id: string) {
   const qc = useQueryClient();
-  return useMutation({ mutationFn: ({ id, data }: { id: string; data: any }) => voteApi.cast(orgId, id, data), onSuccess: (_, { id }) => { qc.invalidateQueries({ queryKey: voteKeys.all(orgId) }); qc.invalidateQueries({ queryKey: voteKeys.detail(id) }); } });
+  return useMutation({
+    mutationFn: (data: { index: number }) => voteApi.cast(orgId, id, data),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: voteKeys.casted(id) });
+      qc.invalidateQueries({ queryKey: [...voteKeys.casted(id), 'user', orgId] });
+    }
+  });
 }
