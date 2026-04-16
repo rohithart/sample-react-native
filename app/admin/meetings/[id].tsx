@@ -1,15 +1,17 @@
-import { useThemeColors } from '@/hooks/use-theme-colors';
-import { PageHeader } from '@/components/ui/page-header';
-import { EntityCard } from '@/components/cards/entity-card';
+import { DisplaySettingsIndicator } from '@/components/display-settings';
 import { ADMIN_CONFIGS } from '@/components/cards/card-configs';
+import { EntityCard } from '@/components/cards/entity-card';
+import { PageHeader } from '@/components/ui/page-header';
+import { useThemeColors } from '@/hooks/use-theme-colors';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 
+import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { useDisplaySettings } from '@/context/display-settings-context';
+import { useRefreshControl } from '@/hooks/use-refresh-control';
+import { useArchivedMeetings, useMeetings } from '@/services/meeting';
 import React from 'react';
 import { ActivityIndicator, FlatList, Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useMeetings } from '@/services/meeting';
-import { useRefreshControl } from '@/hooks/use-refresh-control';
-import { ENTITY_ICONS } from '@/constants/entity-icons';
 
 const I = ENTITY_ICONS;
 
@@ -17,29 +19,42 @@ export default function MeetingsListScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const colors = useThemeColors();
-  const { data: items, isLoading, refetch, isRefetching } = useMeetings(id);
-  const refreshControl = useRefreshControl(refetch, isRefetching);
 
-  const handleAdd = () => {
-    router.push(`/admin/meeting/new/${id}`);
-  };
+  const { showArchived } = useDisplaySettings();
+  const meetingsQuery = useMeetings(id);
+  const archivedMeetingsQuery = useArchivedMeetings(id);
+  const items = showArchived ? archivedMeetingsQuery.data ?? [] : meetingsQuery.data ?? [];
+  const isLoading = showArchived ? archivedMeetingsQuery.isLoading : meetingsQuery.isLoading;
+  const refetching = showArchived ? archivedMeetingsQuery.isRefetching : meetingsQuery.isRefetching;
+  const refreshControl = useRefreshControl(
+    showArchived ? archivedMeetingsQuery.refetch : meetingsQuery.refetch,
+    return (
+      <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
+        <Stack.Screen options={{ headerShown: false }} />
+        <PageHeader
+          icon="meeting"
+          title="Meetings"
+          rightAction={
+            <Pressable
+              onPress={handleAdd}
+              style={{ padding: 8, backgroundColor: colors.primary, borderRadius: 8 }}
+            >
+              <I.plus size={20} color="#ffffff" />
+            </Pressable>
+          }
+        />
 
-  return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
-      <Stack.Screen options={{ headerShown: false }} />
-      <PageHeader icon="meeting"
-        title="Meetings"
-        rightAction={
-          <Pressable
-            onPress={handleAdd}
-            style={{ padding: 8, backgroundColor: colors.primary, borderRadius: 8 }}
-          >
-            <I.plus size={20} color="#ffffff" />
-          </Pressable>
-        }
-      />
+        <DisplaySettingsIndicator />
 
-      {isLoading ? (
+        {isLoading ? (
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <ActivityIndicator size="large" color={colors.primary} />
+            <Text style={{ color: colors.sub, fontSize: 14, marginTop: 10 }}>Loading...</Text>
+          </View>
+        ) : (
+          <FlatList
+            data={items ?? []}
+            renderItem={({ item }) => (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
           <ActivityIndicator size="large" color={colors.primary} />
           <Text style={{ color: colors.sub, fontSize: 14, marginTop: 10 }}>Loading...</Text>
