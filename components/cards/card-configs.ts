@@ -68,7 +68,13 @@ export const ADMIN_CONFIGS = {
   asset: cfg('asset', (o, i) => `/admin/asset/${o}/${i}`),
   assetType: cfg('assetType', (o, i) => `/admin/asset-type/${o}/${i}`),
   document: cfg('document', (o, i) => `/admin/document/${o}/${i}`),
-  event: cfg('event', (o, i) => `/admin/event/${o}/${i}`),
+  event: cfg('event', (o, i) => `/admin/event/${o}/${i}`, {
+    subtitleField(item) {
+      const from = item.eventDateFrom ? new Date(item.eventDateFrom).toLocaleDateString() : '';
+      const to = item.eventDateTo ? new Date(item.eventDateTo).toLocaleDateString() : '';
+      return from && to ? `${from} – ${to}` : from || to || 'Event';
+    },
+  }),
   eventType: cfg('eventType', (o, i) => `/admin/event-type/${o}/${i}`),
   information: cfg('information', (o, i) => `/admin/information/${o}/${i}`),
   group: cfg('group', (o, i) => `/admin/group/${o}/${i}`),
@@ -117,7 +123,13 @@ export const VIEW_CONFIGS = {
     statusField: (item: any) => (item.closed ? 'CLOSED' : 'OPEN'),
   }),
   information: cfg('information', (o, i) => `/view/information/${o}/${i}`),
-  event: cfg('event', (o, i) => `/view/event/${o}/${i}`),
+  event: cfg('event', (o, i) => `/view/event/${o}/${i}`, {
+    subtitleField: (item: any) => {
+      const from = item.eventDateFrom ? new Date(item.eventDateFrom).toLocaleDateString() : '';
+      const to = item.eventDateTo ? new Date(item.eventDateTo).toLocaleDateString() : '';
+      return from && to ? `${from} – ${to}` : from || to || 'Event';
+    }
+  }),
   booking: cfg('booking', (o, i) => `/view/booking/${o}/${i}`, {
     statusField: (item: any) =>
       item.isApproved ? 'APPROVED' : item.isRejected ? 'REJECTED' : 'PENDING',
