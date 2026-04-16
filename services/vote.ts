@@ -4,6 +4,7 @@ import { api } from './api-client';
 
 export const voteKeys = {
   all: (orgId: string) => ['votes', orgId] as const,
+  allForUser: (orgId: string) => ['votes', orgId, 'all-user'] as const,
   archived: (orgId: string) => ['votes', orgId, 'archived'] as const,
   forUser: (orgId: string) => ['votes', orgId, 'user'] as const,
   forWorkflow: (wId: string) => ['votes', 'workflow', wId] as const,
@@ -30,6 +31,10 @@ const voteApi = {
 
 export function useVotes(orgId: string) {
   return useQuery({ queryKey: voteKeys.all(orgId), queryFn: () => voteApi.getAll(orgId), enabled: !!orgId });
+}
+
+export function useVotesForUser(orgId: string) {
+  return useQuery({ queryKey: voteKeys.allForUser(orgId), queryFn: () => voteApi.getAllForUser(orgId), enabled: !!orgId });
 }
 
 export function useVote(id: string) {

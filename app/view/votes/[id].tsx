@@ -2,18 +2,17 @@ import { useThemeColors } from '@/hooks/use-theme-colors';
 import { PageHeader } from '@/components/ui/page-header';
 import { EntityCard } from '@/components/cards/entity-card';
 import { VIEW_CONFIGS } from '@/components/cards/card-configs';
-import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
+import { Stack, useLocalSearchParams } from 'expo-router';
 import React from 'react';
-import { ActivityIndicator, FlatList, Pressable, Text, View } from 'react-native';
+import { ActivityIndicator, FlatList, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useVotes } from '@/services/vote';
+import { useVotesForUser } from '@/services/vote';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
 
 export default function VotesListScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const router = useRouter();
   const colors = useThemeColors();
-  const { data: items, isLoading, refetch, isRefetching } = useVotes(id);
+  const { data: items, isLoading, refetch, isRefetching } = useVotesForUser(id);
   const refreshControl = useRefreshControl(refetch, isRefetching);
 
   return (
