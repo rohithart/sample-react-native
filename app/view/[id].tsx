@@ -188,15 +188,6 @@ export default function UserDashboard() {
               </View>
 
               {org?.description ? <HtmlContent label="Description" html={org.description} /> : null}
-
-              <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12 }}>
-                {org?.address ? (
-                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                    <I.mapPin size={13} color={secondaryText} />
-                    <RNText style={{ fontSize: 12, color: secondaryText }} numberOfLines={1}>{org.address}</RNText>
-                  </View>
-                ) : null}
-              </View>
             </View>
           </View>
 
