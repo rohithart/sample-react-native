@@ -2,6 +2,7 @@ import { AddOrganisation } from '@/components/organisations/add-organisation';
 import { OrganisationsList } from '@/components/organisations/organisations-list';
 import { Button } from '@/components/ui/button';
 import { Text } from '@/components/ui/text';
+import { useOrganisationContext } from '@/context/organisation-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { Stack, useFocusEffect } from 'expo-router';
 
@@ -24,6 +25,7 @@ const TABS: { key: Tab; label: string; Icon: typeof I.organisation }[] = [
 export default function HomeScreen() {
   const { top, bottom } = useSafeAreaInsets();
   const colors = useThemeColors();
+  const { clearOrganisation } = useOrganisationContext();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<Tab>('organisations');
   const drawerAnim = useRef(new Animated.Value(-300)).current;
@@ -37,6 +39,12 @@ export default function HomeScreen() {
       useNativeDriver: true,
     }).start();
   }, [isDrawerOpen, drawerAnim]);
+
+  useFocusEffect(
+    useCallback(() => {
+      clearOrganisation();
+    }, [clearOrganisation])
+  );
 
   useFocusEffect(
     useCallback(() => {
