@@ -53,7 +53,7 @@ export const ADMIN_CONFIGS = {
   }),
   vote: cfg('vote', (o, i) => `/admin/vote/${o}/${i}`, {
     titleField: 'question',
-    subtitleField: undefined,
+    subtitleField: (item: any) => (item.group?.title ?? 'Everyone'),
     statusField: (item: any) => (item.closed ? 'CLOSED' : 'OPEN'),
   }),
   userRequest: cfg('userRequest', (o, i) => `/admin/user-request/${o}/${i}`, {
@@ -76,7 +76,9 @@ export const ADMIN_CONFIGS = {
     },
   }),
   eventType: cfg('eventType', (o, i) => `/admin/event-type/${o}/${i}`),
-  information: cfg('information', (o, i) => `/admin/information/${o}/${i}`),
+  information: cfg('information', (o, i) => `/admin/information/${o}/${i}`, {
+    subtitleField: (item: any) => new Date(item.createdAt).toLocaleDateString(),
+  }),
   group: cfg('group', (o, i) => `/admin/group/${o}/${i}`),
   user: cfg('user', (o, i) => `/admin/user/${o}/${i}`, {
     titleField: (item: any) => item.user?.name || item.user?.email || '-',
@@ -119,10 +121,12 @@ export const VIEW_CONFIGS = {
   }),
   vote: cfg('vote', (o, i) => `/view/vote/${o}/${i}`, {
     titleField: 'question',
-    subtitleField: undefined,
+    subtitleField: (item: any) => (item.group?.title ?? 'Everyone'),
     statusField: (item: any) => (item.closed ? 'CLOSED' : 'OPEN'),
   }),
-  information: cfg('information', (o, i) => `/view/information/${o}/${i}`),
+  information: cfg('information', (o, i) => `/view/information/${o}/${i}`, {
+    subtitleField: (item: any) => new Date(item.createdAt).toLocaleDateString(),
+  }),
   event: cfg('event', (o, i) => `/view/event/${o}/${i}`, {
     subtitleField: (item: any) => {
       const from = item.eventDateFrom ? new Date(item.eventDateFrom).toLocaleDateString() : '';
