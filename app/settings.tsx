@@ -1,6 +1,5 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Stack, useRouter } from 'expo-router';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback } from 'react';
 import {
   Alert,
   Pressable,
@@ -12,15 +11,10 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { useDisplaySettings } from '@/context/display-settings-context';
 import { useTheme } from '@/context/theme-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
-import { DISPLAY_SETTINGS_KEY } from '@/constants/memory';
 
-
-const DEFAULT_DISPLAY_SETTINGS = {
-  showCompleted: true,
-  showArchived: false,
-};
 
 export default function SettingsScreen() {
   const { top, bottom } = useSafeAreaInsets();
@@ -28,42 +22,20 @@ export default function SettingsScreen() {
   const colors = useThemeColors();
   const router = useRouter();
   const I = ENTITY_ICONS;
+  const {
+    showCompleted,
+    setShowCompleted,
+    showArchived,
+    setShowArchived,
+    reload,
+  } = useDisplaySettings();
 
-  const [showCompleted, setShowCompleted] = useState(DEFAULT_DISPLAY_SETTINGS.showCompleted);
-  const [showArchived, setShowArchived] = useState(DEFAULT_DISPLAY_SETTINGS.showArchived);
-
-  useEffect(() => {
-    loadSettings();
-  }, []);
-
-  useEffect(() => {
-    saveSettings();
-  }, [showCompleted, showArchived]);
-
-  const loadSettings = async () => {
-    try {
-      const saved = await AsyncStorage.getItem(DISPLAY_SETTINGS_KEY);
-      if (saved) {
-        const settings = JSON.parse(saved);
-        setShowCompleted(settings.showCompleted ?? DEFAULT_DISPLAY_SETTINGS.showCompleted);
-        setShowArchived(settings.showArchived ?? DEFAULT_DISPLAY_SETTINGS.showArchived);
-      }
-    } catch (error) {
-      console.error('Error loading settings:', error);
-    }
-  };
-
-  const saveSettings = async () => {
-    try {
-      const settings = {
-        showCompleted,
-        showArchived,
-      };
-      await AsyncStorage.setItem(DISPLAY_SETTINGS_KEY, JSON.stringify(settings));
-    } catch (error) {
-      console.error('Error saving settings:', error);
-    }
-  };
+  const handleDarkModeToggle = useCallback(
+    (value: boolean) => {
+      toggleDarkMode(value);
+    },
+    [toggleDarkMode]
+  );
 
   const resetSettings = () => {
     Alert.alert(
@@ -78,14 +50,10 @@ export default function SettingsScreen() {
         {
           text: 'Reset',
           onPress: async () => {
-            setShowCompleted(DEFAULT_DISPLAY_SETTINGS.showCompleted);
-            setShowArchived(DEFAULT_DISPLAY_SETTINGS.showArchived);
-            await toggleDarkMode(false); // Reset dark mode to off
-            try {
-              await AsyncStorage.removeItem(DISPLAY_SETTINGS_KEY);
-            } catch (error) {
-              console.error('Error resetting settings:', error);
-            }
+            setShowCompleted(true);
+            setShowArchived(false);
+            await toggleDarkMode(false);
+            reload();
           },
           style: 'destructive',
         },
@@ -93,17 +61,8 @@ export default function SettingsScreen() {
     );
   };
 
-  const handleDarkModeToggle = useCallback(
-    (value: boolean) => {
-      toggleDarkMode(value);
-    },
-    [toggleDarkMode]
-  );
-
   return (
-    <View
-      style={{ flex: 1, backgroundColor: colors.bg, paddingTop: top, paddingBottom: bottom }}
-    >
+    <View style={{ flex: 1, backgroundColor: colors.bg, paddingTop: top, paddingBottom: bottom }}>
       <Stack.Screen
         options={{
           title: 'Settings',
