@@ -51,7 +51,7 @@ export function EntityCard({ item, config, orgId, onPress }: EntityCardProps) {
         padding: 10,
         backgroundColor: card,
         shadowColor: text,
-        shadowOffset: { width: 0, height: 6 }, // Increased height for deeper 3D look
+        shadowOffset: { width: 0, height: 6 },
         shadowOpacity: isDark ? 0.35 : 0.15,
         shadowRadius: 8,
         elevation: 8, 

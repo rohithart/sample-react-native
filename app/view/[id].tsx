@@ -1,6 +1,7 @@
 import { HtmlContent } from '@/components/details/html-content';
 import { UserNavigationDrawer } from '@/components/drawer/user-navigation-drawer';
 import { Button } from '@/components/ui/button';
+import { HStack } from '@/components/ui/hstack';
 import { ENTITY_ICONS, type EntityIconKey } from '@/constants/entity-icons';
 import { useOrganisationContext } from '@/context/organisation-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
@@ -165,27 +166,50 @@ export default function UserDashboard() {
                 </View>
               </View>
 
-              <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: 8, borderTopWidth: 1, borderTopColor: border }}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-                  <View style={{ paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6, backgroundColor: secondary + '15' }}>
-                    <RNText style={{ fontSize: 11, fontWeight: '700', color: secondary }}>{userRole?.role || 'VIEWER'}</RNText>
-                  </View>
-                  <RNText style={{ fontSize: 12, color: secondaryText }}>Switch to Admin mode</RNText>
-                </View>
-                {canAccessAdmin && (
+              {canAccessAdmin && (
+                <View
+                  style={{
+                    marginHorizontal: 5,
+                    borderRadius: 12,
+                    padding: 5,
+                    backgroundColor: cardBg,
+                    shadowColor: textColor,
+                    shadowOffset: { width: 0, height: 6 },
+                    shadowOpacity: 0.15,
+                    shadowRadius: 8,
+                    elevation: 8,
+                  }}
+                >
                   <Pressable
                     onPress={() => router.push(`/admin/${id}` as any)}
                     style={({ pressed }) => ({
-                      flexDirection: 'row', alignItems: 'center', gap: 4,
-                      paddingHorizontal: 10, paddingVertical: 5, borderRadius: 8,
-                      backgroundColor: primary + '12',
-                      opacity: pressed ? 0.7 : 1,
+                      marginTop: 8,
+                      borderRadius: 12,
+                      backgroundColor: primary + (pressed ? '25' : '12'),
+                      borderWidth: 2,
+                      borderColor: primary + (pressed ? 'FF' : '50'),
+                      shadowColor: primary,
+                      shadowOpacity: pressed ? 0.4 : 0.1,
+                      shadowRadius: 8,
+                      shadowOffset: { width: 0, height: 2 },
+                      elevation: pressed ? 6 : 2,
+                      transform: pressed ? [{ scale: 0.98 }] : [{ scale: 1 }],
                     })}
                   >
-                    <I.chevronRight size={14} color={primary} />
+                    <HStack space="lg" style={{ justifyContent: 'space-between', paddingHorizontal: 14, paddingVertical: 12 }}>
+                      <HStack space="md" style={{ flex: 1 }}>
+                        <View style={{ flex: 1 }}>
+                          <RNText style={{ fontSize: 13, fontWeight: '600', color: primary }}>Switch to Admin Mode</RNText>
+                          <RNText style={{ fontSize: 11, color: secondaryText, marginTop: 2 }}>View admin options</RNText>
+                        </View>
+                      </HStack>
+                      <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                        <I.chevronRight size={18} color={primary} />
+                      </View>
+                    </HStack>
                   </Pressable>
-                )}
-              </View>
+                </View>
+              )}
 
               {org?.description ? <HtmlContent label="Description" html={org.description} /> : null}
             </View>

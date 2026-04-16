@@ -1,6 +1,7 @@
 import { HtmlContent } from '@/components/details';
 import { AdminNavigationDrawer } from '@/components/drawer/admin-navigation-drawer';
 import { Button } from '@/components/ui/button';
+import { HStack } from '@/components/ui/hstack';
 import { ENTITY_ICONS, type EntityIconKey } from '@/constants/entity-icons';
 import { useOrganisationContext } from '@/context/organisation-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
@@ -33,6 +34,7 @@ export default function AdminDashboard() {
   const { organisation, orgAccess, userRole, isLoadingAccess, hydrateFromOrgId } = useOrganisationContext();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const drawerAnim = useRef(new Animated.Value(-300)).current;
+  const { card, text, isDark } = useThemeColors();
 
   useEffect(() => { if (id) hydrateFromOrgId(id); }, [id, hydrateFromOrgId]);
 
@@ -220,26 +222,50 @@ export default function AdminDashboard() {
                   </RNText>
                 </View>
               </View>
-
-              <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: 8, borderTopWidth: 1, borderTopColor: border }}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-                  <View style={{ paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6, backgroundColor: primary + '15' }}>
-                    <RNText style={{ fontSize: 11, fontWeight: '700', color: primary }}>{userRole?.role || 'ADMIN'}</RNText>
-                  </View>
-                  <RNText style={{ fontSize: 12, color: secondaryText }}>Switch to user mode</RNText>
-                </View>
+              <View
+                style={{
+                  marginHorizontal: 5,
+                  borderRadius: 12,
+                  padding: 5,
+                  backgroundColor: card,
+                  shadowColor: text,
+                  shadowOffset: { width: 0, height: 6 },
+                  shadowOpacity: isDark ? 0.35 : 0.15,
+                  shadowRadius: 8,
+                  elevation: 8, 
+                }}
+              >
                 <Pressable
-                  onPress={() => router.push(`/view/${id}` as any)}
-                  style={({ pressed }) => ({
-                    flexDirection: 'row', alignItems: 'center', gap: 4,
-                    paddingHorizontal: 10, paddingVertical: 5, borderRadius: 8,
-                    backgroundColor: secondary + '12',
-                    opacity: pressed ? 0.7 : 1,
-                  })}
-                >
-                  <I.chevronRight size={14} color={secondary} />
-                </Pressable>
-              </View>
+                onPress={() => router.push(`/view/${id}` as any)}
+                style={({ pressed }) => ({
+                  marginTop: 8,
+                  borderRadius: 12,
+                  backgroundColor: secondary + (pressed ? '25' : '12'),
+                  borderWidth: 2,
+                  borderColor: secondary + (pressed ? 'FF' : '50'),
+                  shadowColor: secondary,
+                  shadowOpacity: pressed ? 0.4 : 0.1,
+                  shadowRadius: 8,
+                  shadowOffset: { width: 0, height: 2 },
+                  elevation: pressed ? 6 : 2,
+                  transform: pressed ? [{ scale: 0.98 }] : [{ scale: 1 }],
+                })}
+              >
+                <HStack space="lg" style={{ justifyContent: 'space-between', paddingHorizontal: 14, paddingVertical: 12 }}>
+                  <HStack space="md" style={{ flex: 1 }}>
+                    <View style={{ flex: 1 }}>
+                      <RNText style={{ fontSize: 13, fontWeight: '600', color: secondary }}>Switch to User Mode</RNText>
+                      <RNText style={{ fontSize: 11, color: secondaryText, marginTop: 2 }}>View as regular user</RNText>
+                    </View>
+                  </HStack>
+                  <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                    <I.chevronRight size={18} color={secondary} />
+                  </View>
+                </HStack>
+              </Pressable>
+            </View>
+
+             
 
               {org?.description ? <HtmlContent label="Description" html={org.description} /> : null}
 
