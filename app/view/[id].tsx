@@ -241,9 +241,6 @@ export default function UserDashboard() {
                   </View>
                 ) : null}
               </View>
-              <View style={{ paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6, backgroundColor: secondary + '15' }}>
-                <RNText style={{ fontSize: 10, fontWeight: '700', color: secondary }}>{userRole.role}</RNText>
-              </View>
             </View>
           )}
 

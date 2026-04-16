@@ -38,11 +38,6 @@ export function AdminNavigationDrawer({
       drawerAnim={drawerAnim}
       topInset={topInset}
     >
-      <DrawerSectionHeading title="Organisations" />
-      <DrawerItem icon={<I.organisation size={16} color={c} />} label="All organisations" onPress={() => go('/home')} />
-      <DrawerItem icon={<I.plus size={16} color={c} />} label="New organisation" onPress={() => go('/home')} />
-
-      <DrawerDivider />
       <DrawerSectionHeading title={orgName} />
       <DrawerItem icon={<I.dashboard size={16} color={c} />} label="Dashboard" onPress={() => go(`/admin/${orgId}`)} />
       <DrawerItem icon={<I.mySpace size={16} color={c} />} label="My space" onPress={() => go(`/admin/me/${orgId}`)} />
