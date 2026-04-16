@@ -1,11 +1,24 @@
 import { useThemeColors } from '@/hooks/use-theme-colors';
+import { getHelpData, type HelpItem } from '@/utils/help-data';
 import { useRouter } from 'expo-router';
-import { Pressable, Text, View } from 'react-native';
+import { Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Screen() {
   const colors = useThemeColors();
   const router = useRouter();
+  const helpData = getHelpData('user');
+
+  const renderHelpItem = (item: HelpItem, index: number) => (
+    <View key={index} style={{ marginBottom: 24 }}>
+      <Text style={{ fontSize: 18, fontWeight: '700', color: colors.text, marginBottom: 8 }}>
+        {item.heading}
+      </Text>
+      <Text style={{ fontSize: 14, color: colors.sub, lineHeight: 20 }}>
+        {item.content}
+      </Text>
+    </View>
+  );
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
@@ -15,11 +28,9 @@ export default function Screen() {
         </Pressable>
         <Text style={{ fontSize: 18, fontWeight: '700', color: colors.text }}>Help & Support</Text>
       </View>
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-        <Text style={{ fontSize: 48 }}>❓</Text>
-        <Text style={{ fontSize: 20, fontWeight: '700', color: colors.text }}>Help & Support</Text>
-        <Text style={{ fontSize: 14, color: colors.sub }}>Coming soon</Text>
-      </View>
+      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: 16 }}>
+        {helpData.map(renderHelpItem)}
+      </ScrollView>
     </SafeAreaView>
   );
 }
