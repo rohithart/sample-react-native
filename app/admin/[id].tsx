@@ -204,8 +204,11 @@ export default function AdminDashboard() {
                   <RNText style={{ fontSize: 18, fontWeight: '700', color: textColor }} numberOfLines={1}>
                     {org?.name || 'Organisation'}
                   </RNText>
-                  {org?.slug ? (
-                    <RNText style={{ fontSize: 12, color: secondaryText, marginTop: 2 }}>@{org.slug}</RNText>
+                  {org?.address ? (
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                      <I.mapPin size={13} color={secondaryText} />
+                      <RNText style={{ fontSize: 12, color: secondaryText }} numberOfLines={1}>{org.address}</RNText>
+                    </View>
                   ) : null}
                 </View>
                 <View style={{
