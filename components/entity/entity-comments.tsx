@@ -3,7 +3,7 @@ import { useOrganisationContext } from '@/context/organisation-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useComments, useCreateComment, useDeleteComment } from '@/services/comment';
 import type { Comment } from '@/types';
-import { UserInfoModal } from '@/components/user-info-modal';
+import { UserAvatar } from '@/components/user-avatar';
 
 import React, { useCallback, useState } from 'react';
 import { ActivityIndicator, Alert, FlatList, Modal, Pressable, Text, TextInput, View } from 'react-native';
@@ -37,11 +37,6 @@ function fmtTime(d: string) {
   return date.toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
-function getInitials(name?: string): string {
-  if (!name) return '?';
-  return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
-}
-
 export function EntityComments({ isVisible, onClose, entity, entityId, orgId }: EntityCommentsProps) {
   const colors = useThemeColors();
   const { bottom } = useSafeAreaInsets();
@@ -51,8 +46,6 @@ export function EntityComments({ isVisible, onClose, entity, entityId, orgId }: 
   const deleteMutation = useDeleteComment(entity, entityId);
   const reportMutation = useReportComment();
   const [content, setContent] = useState('');
-  const [selectedUserRole, setSelectedUserRole] = useState<any>(null);
-  const [isUserInfoModalVisible, setIsUserInfoModalVisible] = useState(false);
 
   const handleSend = () => {
     if (!content.trim()) return;
@@ -75,29 +68,13 @@ export function EntityComments({ isVisible, onClose, entity, entityId, orgId }: 
     ]);
   }, [deleteMutation]);
 
-
-  const handleUserAvatarPress = useCallback((userRole: any) => {
-    setSelectedUserRole(userRole);
-    setIsUserInfoModalVisible(true);
-  }, []);
-
-  const handleUserInfoModalClose = useCallback(() => {
-    setIsUserInfoModalVisible(false);
-    setSelectedUserRole(null);
-  }, []);
-
   const renderItem = ({ item }: { item: Comment }) => {
-    const userName = (item as any).user?.name || (item as any).user?.user?.name;
     const userRole = (item as any).user || (item as any).user?.user;
     const commentText = (item as any).comment || (item as any).content || '';
 
     return (
       <HStack space="sm" className="items-center">
-        <Pressable onPress={() => handleUserAvatarPress(userRole)}>
-          <View style={{ width: 34, height: 34, borderRadius: 17, backgroundColor: colors.primary + '20', alignItems: 'center', justifyContent: 'center' }}>
-            <Text style={{ fontSize: 12, fontWeight: '700', color: colors.primary }}>{getInitials(userName)}</Text>
-          </View>
-        </Pressable>
+        <UserAvatar userRole={userRole} />
 
         <HStack className="justify-between" style={{ backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border, borderRadius: 12, padding: 10, flex: 1}}>
           <View>
@@ -172,12 +149,6 @@ export function EntityComments({ isVisible, onClose, entity, entityId, orgId }: 
           </Pressable>
         </HStack>
       </SafeAreaView>
-
-      <UserInfoModal
-        isVisible={isUserInfoModalVisible}
-        onClose={handleUserInfoModalClose}
-        userRole={selectedUserRole}
-      />
     </Modal>
   );
 }
