@@ -29,3 +29,8 @@ export function useDeleteMessage(conversationId: string) {
   const qc = useQueryClient();
   return useMutation({ mutationFn: (id: string) => messageApi.delete(id), onSuccess: () => qc.invalidateQueries({ queryKey: messageKeys.forConversation(conversationId) }) });
 }
+
+export function useToggleReaction(messageId: string, conversationId: string) {
+  const qc = useQueryClient();
+  return useMutation({ mutationFn: (data: any) => messageApi.toggleReaction(messageId, data), onSuccess: () => qc.invalidateQueries({ queryKey: messageKeys.forConversation(conversationId) }) });
+}

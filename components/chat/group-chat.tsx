@@ -78,7 +78,14 @@ export function GroupChat({ orgId, groupId, group }: GroupChatProps) {
               ref={listRef}
               data={messages || []}
               keyExtractor={(item) => item._id}
-              renderItem={({ item }) => <ChatMessage message={item} currentUser={userRole} />}
+              renderItem={({ item }) => (
+                <ChatMessage
+                  message={item}
+                  currentUser={userRole}
+                  conversationId={conversation?._id || ''}
+                  orgId={orgId}
+                />
+              )}
               contentContainerStyle={{ padding: 16, paddingBottom: 12 }}
               showsVerticalScrollIndicator={false}
               onContentSizeChange={() => listRef.current?.scrollToEnd({ animated: true })}

@@ -62,6 +62,7 @@ import {
     Settings,
     Share2,
     Shield,
+    Smile,
     Sparkles,
     Sun,
     Tag,
@@ -127,6 +128,7 @@ export type EntityIconKey =
   | 'archive'
   | 'lock'
   | 'back'
+  | 'smile'
   | 'eye'
   | 'moon'
   | 'sun'
@@ -251,6 +253,7 @@ export const ENTITY_ICONS: Record<EntityIconKey, IconComponent> = {
   send: Send,
   settings: Settings,
   share: Share2,
+  smile: Smile,
   trash: Trash2,
   userPlus: UserPlus,
   usersRound: UsersRound,
