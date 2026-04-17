@@ -2,7 +2,7 @@ import type { Message, UserRole } from '@/types';
 import { useToggleReaction, useDeleteMessage } from '@/services/message';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import React, { useState } from 'react';
-import { Alert, Modal, Pressable, Text, View } from 'react-native';
+import { Alert, Modal, Pressable, Text, TouchableOpacity, View } from 'react-native';
 import { UserAvatar } from '../user-avatar';
 import { HStack } from '../ui/hstack';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
@@ -17,7 +17,7 @@ interface ChatMessageProps {
 const COMMON_EMOJIS = ['👍', '👎', '❤️', '😂', '😄', '😮', '😢', '😡', '🤔', '👏', '🙌', '🎉', '🔥', '🚀', '💯', '✅', '❌', '👀', '💡', '🙏'];
 
 export function ChatMessage({ message, currentUser, conversationId, orgId }: ChatMessageProps) {
-   const I = ENTITY_ICONS;
+  const I = ENTITY_ICONS;
   const colors = useThemeColors();
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [showReadByModal, setShowReadByModal] = useState(false);
@@ -59,6 +59,11 @@ export function ChatMessage({ message, currentUser, conversationId, orgId }: Cha
     setShowEmojiPicker(false);
   };
 
+  const onToggleEmoji = (emoji: string) => {
+    if (!conversationId) return;
+    reactionMutation.mutate({ emoji, organisation: orgId });
+  }
+
   const handleDelete = () => {
     if (!isMine) return;
     Alert.alert('Delete message', 'Are you sure you want to delete this message?', [
@@ -99,11 +104,13 @@ export function ChatMessage({ message, currentUser, conversationId, orgId }: Cha
                <Pressable onPress={() => setShowEmojiPicker((prev) => !prev)} style={{ paddingVertical: 6, paddingHorizontal: 6, borderRadius: 16, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border }}>
                 <I.smile size={15} color={colors.success} />
               </Pressable>
-              {reactions?.map(([emoji, users]) => (
-                <View key={emoji} style={{ backgroundColor: colors.inputBg, borderRadius: 16, paddingHorizontal: 8, paddingVertical: 4, flexDirection: 'row', alignItems: 'center' }}>
+              {reactions?.filter(([_, users]) => users.length > 0).map(([emoji, users]) => (
+                <Pressable key={emoji} onPress={() => onToggleEmoji(emoji)} style={{ backgroundColor: colors.inputBg, borderRadius: 16, paddingHorizontal: 8, paddingVertical: 4, flexDirection: 'row', alignItems: 'center' }}>
+                  <View  style={{ backgroundColor: colors.inputBg, borderRadius: 16, paddingHorizontal: 8, paddingVertical: 4, flexDirection: 'row', alignItems: 'center' }}>
                   <Text style={{ fontSize: 14, marginRight: 4 }}>{emoji}</Text>
                   <Text style={{ color: colors.text, fontSize: 12 }}>{Array.isArray(users) ? users.length : users}</Text>
                 </View>
+                </Pressable>
               ))}
               {isMine ? (
               <Pressable onPress={handleDelete} style={{ paddingVertical: 6, paddingHorizontal: 10, borderRadius: 16, backgroundColor: colors.dangerBg, borderWidth: 1, borderColor: colors.danger }}>
