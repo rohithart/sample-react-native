@@ -1,4 +1,3 @@
-import type { DashboardData } from '@/types';
 import { useQuery } from '@tanstack/react-query';
 import { api } from './api-client';
 
@@ -8,8 +7,8 @@ export const dashboardKeys = {
 };
 
 const dashboardApi = {
-  getAdmin: (orgId: string) => api.get<DashboardData>(`/api/dashboard/org/${orgId}`),
-  getUser: (orgId: string) => api.get<DashboardData>(`/api/dashboard/user/${orgId}`),
+  getAdmin: (orgId: string) => api.get<any>(`/api/dashboard/org/${orgId}`),
+  getUser: (orgId: string) => api.get<any>(`/api/dashboard/user/${orgId}`),
 };
 
 export function useAdminDashboard(orgId: string) {
