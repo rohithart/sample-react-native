@@ -25,7 +25,7 @@ export function ChatMessage({ message, currentUser, conversationId, orgId }: Cha
   const reactionMutation = useToggleReaction(message._id, conversationId);
   const isMine = currentUser?._id === message.sender?._id;
 
-  const bubbleStyle = {
+  const bubbleStyle: any = {
     alignSelf: isMine ? 'flex-end' as const : 'flex-start' as const,
     backgroundColor: isMine ? colors.primary : colors.card,
     borderColor: isMine ? colors.primary : colors.border,
