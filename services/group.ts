@@ -1,4 +1,4 @@
-import type { Group } from '@/types';
+import type { Group, GroupUser } from '@/types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from './api-client';
 
@@ -13,7 +13,7 @@ const groupApi = {
   getAll: (orgId: string) => api.get<Group[]>(`/api/group/org/${orgId}`),
   getAllUsers: (orgId: string) => api.get<any[]>(`/api/group/users/${orgId}`),
   getAllUserGroup: (id: string) => api.get<Group[]>(`/api/group/user-groups/${id}`),
-  getCurrentUserGroup: (id: string) => api.get<Group>(`/api/group/current-user/${id}`),
+  getCurrentUserGroup: (id: string) => api.get<GroupUser[]>(`/api/group/current-user/${id}`),
   getAllUnAssignedUsers: (orgId: string) => api.get<any[]>(`/api/group/unassigned-users/${orgId}`),
   get: (id: string) => api.get<Group>(`/api/group/${id}`),
   create: (orgId: string, data: Partial<Group>) => api.post<Group>(`/api/group/${orgId}`, data),
@@ -26,6 +26,10 @@ const groupApi = {
 
 export function useGroups(orgId: string) {
   return useQuery({ queryKey: groupKeys.all(orgId), queryFn: () => groupApi.getAll(orgId), enabled: !!orgId });
+}
+
+export function useCurrentUsersGroups(orgId: string) {
+  return useQuery({ queryKey: groupKeys.userGroups(orgId), queryFn: () => groupApi.getCurrentUserGroup(orgId), enabled: !!orgId });
 }
 
 export function useGroup(id: string) {

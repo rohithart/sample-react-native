@@ -2,18 +2,17 @@ import { useThemeColors } from '@/hooks/use-theme-colors';
 import { PageHeader } from '@/components/ui/page-header';
 import { EntityCard } from '@/components/cards/entity-card';
 import { VIEW_CONFIGS } from '@/components/cards/card-configs';
-import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
+import { Stack, useLocalSearchParams } from 'expo-router';
 import React from 'react';
-import { ActivityIndicator, FlatList, Pressable, Text, View } from 'react-native';
+import { ActivityIndicator, FlatList, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useGroups } from '@/services/group';
+import { useCurrentUsersGroups } from '@/services/group';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
 
 export default function GroupsListScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const router = useRouter();
   const colors = useThemeColors();
-  const { data: items, isLoading, refetch, isRefetching } = useGroups(id);
+  const { data: items, isLoading, refetch, isRefetching } = useCurrentUsersGroups(id);
   const refreshControl = useRefreshControl(refetch, isRefetching);
 
   return (
@@ -31,7 +30,7 @@ export default function GroupsListScreen() {
           data={items ?? []}
           renderItem={({ item }) => (
             <EntityCard
-              item={item}
+              item={item.group}
               config={VIEW_CONFIGS.group}
               orgId={id}
             />

@@ -1,26 +1,55 @@
 import { useThemeColors } from '@/hooks/use-theme-colors';
-import { useLocalSearchParams, useRouter } from 'expo-router';
-import { Pressable, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { PageHeader } from '@/components/ui/page-header';
+import { AuditInfo } from '@/components/details';
+import { Stack, useLocalSearchParams } from 'expo-router';
 
-export default function Screen() {
+import React, { useState } from 'react';
+import { ActivityIndicator, Text, View, Pressable } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { ActionBottomSheet, ActionItem } from '@/components/sheets/action-bottom-sheet';
+import { useGroup } from '@/services/group';
+import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { GroupChat } from '@/components/chat/group-chat';
+
+const I = ENTITY_ICONS;
+
+export default function ChatScreen() {
   const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
   const colors = useThemeColors();
-  const router = useRouter();
+  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
+  const [showAudit, setShowAudit] = useState(false);
+
+  const { data: item, isLoading: isLoadingItem} = useGroup(id || '');
+
+  const actions: ActionItem[] = [
+    { id: 'audit', label: 'Audit Info', icon: <I.information size={24} color={colors.secondary} />, onPress: () => setShowAudit(true), color: 'primary' as const },
+  ];
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
-      <View style={{ flexDirection: 'row', alignItems: 'center', padding: 16, borderBottomWidth: 1, borderColor: colors.border, backgroundColor: colors.card }}>
-        <Pressable onPress={() => router.back()} style={{ padding: 4, marginRight: 12 }}>
-          <Text style={{ fontSize: 24, color: colors.text }}>‹</Text>
-        </Pressable>
-        <Text style={{ fontSize: 18, fontWeight: '700', color: colors.text }}>Chat</Text>
-      </View>
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-        <Text style={{ fontSize: 48 }}>🚧</Text>
-        <Text style={{ fontSize: 20, fontWeight: '700', color: colors.text }}>Chat</Text>
-        <Text style={{ fontSize: 14, color: colors.sub }}>ID ${id}</Text>
-      </View>
+      <Stack.Screen options={{ headerShown: false }} />
+      <PageHeader icon="group"
+        title={item?.title || 'Loading...'}
+        rightAction={
+          <Pressable onPress={() => setIsBottomSheetOpen(true)} style={{ padding: 8 }}>
+            <I.moreVertical size={20} color={colors.primary} />
+          </Pressable>
+        }
+      />
+
+      {isLoadingItem || !item ? (
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <ActivityIndicator size="large" color={colors.primary} />
+          <Text style={{ color: colors.sub, fontSize: 14, marginTop: 10 }}>Loading...</Text>
+        </View>
+      ) : (
+        <View style={{ flex: 1 }}>
+          <GroupChat groupId={id || ''} orgId={orgId || ''} group={item} />
+        </View>
+      )}
+
+      <ActionBottomSheet isVisible={isBottomSheetOpen} onClose={() => setIsBottomSheetOpen(false)} actions={actions} />
+      <AuditInfo isVisible={showAudit} onClose={() => setShowAudit(false)} createdBy={item?.createdBy} createdAt={item?.createdAt} updatedAt={item?.updatedAt} />
     </SafeAreaView>
   );
 }

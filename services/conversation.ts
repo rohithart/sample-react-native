@@ -10,11 +10,19 @@ export const conversationKeys = {
 const conversationApi = {
   getForGroup: (groupId: string, orgId: string) => api.get<Conversation>(`/api/conversation/group/${groupId}/${orgId}`),
   get: (id: string) => api.get<Conversation>(`/api/conversation/${id}`),
-  create: (id: string, data: Partial<Conversation>) => api.post<Conversation>(`/api/conversation/${id}`, data),
+  create: (id: string, data: any) => api.post<Conversation>(`/api/conversation/${id}`, data),
 };
 
 export function useConversation(id: string) {
   return useQuery({ queryKey: conversationKeys.detail(id), queryFn: () => conversationApi.get(id), enabled: !!id });
+}
+
+export function useConversationForGroup(groupId: string, orgId: string) {
+  return useQuery({
+    queryKey: conversationKeys.forGroup(groupId, orgId),
+    queryFn: () => conversationApi.getForGroup(groupId, orgId),
+    enabled: !!groupId && !!orgId,
+  });
 }
 
 export function useCreateConversation() {

@@ -10,7 +10,7 @@ export const messageKeys = {
 const messageApi = {
   getForConversation: (conversationId: string, limit = 50, skip = 0) => api.get<Message[]>(`/api/message/conversation/${conversationId}?limit=${limit}&skip=${skip}`),
   get: (id: string) => api.get<Message>(`/api/message/${id}`),
-  send: (conversationId: string, data: { content: string }) => api.post<Message>(`/api/message/send/${conversationId}`, data),
+  send: (conversationId: string, data: { message: string, organisation: string }) => api.post<Message>(`/api/message/send/${conversationId}`, data),
   markRead: (orgId: string, conversationId: string) => api.put<void>(`/api/message/read/${orgId}/${conversationId}`, {}),
   toggleReaction: (messageId: string, data: any) => api.put<Message>(`/api/message/react/${messageId}`, data),
   delete: (id: string) => api.delete<boolean>(`/api/message/${id}`),
@@ -22,7 +22,7 @@ export function useMessages(conversationId: string) {
 
 export function useSendMessage(conversationId: string) {
   const qc = useQueryClient();
-  return useMutation({ mutationFn: (data: { content: string }) => messageApi.send(conversationId, data), onSuccess: () => qc.invalidateQueries({ queryKey: messageKeys.forConversation(conversationId) }) });
+  return useMutation({ mutationFn: (data: { message: string, organisation: string }) => messageApi.send(conversationId, data), onSuccess: () => qc.invalidateQueries({ queryKey: messageKeys.forConversation(conversationId) }) });
 }
 
 export function useDeleteMessage(conversationId: string) {

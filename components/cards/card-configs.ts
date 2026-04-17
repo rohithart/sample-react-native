@@ -152,7 +152,7 @@ export const VIEW_CONFIGS = {
     statusField: (item: any) =>
       item.isApproved ? 'APPROVED' : item.isRejected ? 'REJECTED' : 'PENDING',
   }),
-  group: cfg('group', (o, i) => `/view/group/${o}/${i}`),
+  group: cfg('group', (o, i) => `/view/chat/${o}/${i}`),
   userRequest: cfg('userRequest', (o, i) => `/view/user-request/${o}/${i}`, {
     subtitleField: () => undefined,
     statusField: (item: any) =>
