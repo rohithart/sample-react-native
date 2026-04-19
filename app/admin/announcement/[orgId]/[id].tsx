@@ -1,6 +1,7 @@
 import { AuditInfo, DetailField, DetailSection, GroupRelationship, HtmlContent } from '@/components/details';
 import { ConfirmationDialog } from '@/components/dialogs/confirmation-dialog';
-import { ActionBottomSheet, ActionItem } from '@/components/sheets/action-bottom-sheet';
+import { ActionBottomSheet } from '@/components/sheets/action-bottom-sheet';
+import { ActionItem } from '@/types/actionItem';
 import { PageHeader } from '@/components/ui/page-header';
 import { useOrganisationContext } from '@/context/organisation-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';

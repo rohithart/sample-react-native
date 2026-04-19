@@ -1,7 +1,8 @@
 import { AuditInfo, DetailField, DetailSection, GroupRelationship, LinkedField } from '@/components/details';
 import { ConfirmationDialog } from '@/components/dialogs/confirmation-dialog';
 import { EntityTimeline } from '@/components/entity/entity-timeline';
-import { ActionBottomSheet, ActionItem } from '@/components/sheets/action-bottom-sheet';
+import { ActionBottomSheet } from '@/components/sheets/action-bottom-sheet';
+import { ActionItem } from '@/types/actionItem';
 import { PageHeader } from '@/components/ui/page-header';
 import { useOrganisationContext } from '@/context/organisation-context';
 import { useRefreshControl } from '@/hooks/use-refresh-control';

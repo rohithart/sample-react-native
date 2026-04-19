@@ -111,9 +111,9 @@ export function NavigationDrawer({
               style={{ borderColor: colors.border }}
               onPress={handleSettings}
             >
-              <I.settings size={20} color={colors.primary} />
-              <ButtonText style={{ color: colors.primary }}>
-                I.settings
+              <I.settings size={20} color={colors.skeleton} />
+              <ButtonText style={{ color: colors.skeleton }}>
+                Settings
               </ButtonText>
             </Button>
 

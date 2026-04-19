@@ -1,18 +1,9 @@
-import { HStack } from '@/components/ui/hstack';
-import { IconButton } from '@/components/ui/icon-button';
 import { useThemeColors } from '@/hooks/use-theme-colors';
+import { ActionItem } from '@/types/actionItem';
 import React, { useState } from 'react';
 import { Animated, Modal, Pressable, View } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
-
-export interface ActionItem {
-  id: string;
-  label: string;
-  icon: React.ReactNode;
-  onPress: () => void;
-  color?: 'primary' | 'success' | 'warning' | 'danger';
-  disabled?: boolean;
-}
+import { Matrix } from '../matrix';
 
 interface ActionBottomSheetProps {
   isVisible: boolean;
@@ -96,37 +87,7 @@ export function ActionBottomSheet({
               </View>
 
               {rows.map((row, rowIndex) => (
-                <HStack
-                  key={rowIndex}
-                  className="justify-around items-center"
-                  style={{
-                    paddingHorizontal: 4,
-                    paddingBottom: 8,
-                  }}
-                >
-                  {row.map((action) => (
-                    <View
-                      key={action.id}
-                      style={{
-                        flex: 1,
-                        maxWidth: '33.33%',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      <IconButton
-                        icon={action.icon}
-                        text={action.label}
-                        onPress={() => {
-                          action.onPress();
-                          onClose();
-                        }}
-                        color={action.color}
-                        disabled={action.disabled}
-                      />
-                    </View>
-                  ))}
-                </HStack>
+                <Matrix key={rowIndex} row={row} index={rowIndex} onClose={onClose} />
               ))}
 
               <View style={{ height: bottom + 16 }} />

@@ -1,10 +1,12 @@
 import { HtmlContent } from '@/components/details/html-content';
 import { UserNavigationDrawer } from '@/components/drawer/user-navigation-drawer';
+import { Matrix } from '@/components/matrix';
 import { Button } from '@/components/ui/button';
 import { HStack } from '@/components/ui/hstack';
-import { ENTITY_ICONS, type EntityIconKey } from '@/constants/entity-icons';
+import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { useOrganisationContext } from '@/context/organisation-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
+import { ActionItem } from '@/types/actionItem';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -12,13 +14,6 @@ import { ActivityIndicator, Animated, Image, Pressable, Text as RNText, ScrollVi
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const I = ENTITY_ICONS;
-
-type QuickLink = {
-  label: string;
-  icon: EntityIconKey;
-  route: string;
-  accent: 'primary' | 'secondary';
-};
 
 export default function UserDashboard() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -41,61 +36,25 @@ export default function UserDashboard() {
     }).start();
   }, [isDrawerOpen, drawerAnim]);
 
-  const { bg: bgColor, text: textColor, sub: secondaryText, primary, secondary, pressed: pressedColor, border, cardPrimaryBg, cardSecondaryBg, card: cardBg, success, danger } = colors;
+  const { bg: bgColor, text: textColor, sub: secondaryText, primary, secondary, border, card: cardBg, success, danger } = colors;
 
   const org = organisation;
 
-  const communityLinks: QuickLink[] = [
-    { label: 'Wall', icon: 'wall', route: `/view/wall/${id}`, accent: 'primary' },
-    { label: 'Groups', icon: 'group', route: `/view/groups/${id}`, accent: 'secondary' },
-    { label: 'My Requests', icon: 'userRequest', route: `/view/user-requests/${id}`, accent: 'primary' },
+  const communityLinks: ActionItem[] = [
+    { id: 'wall', label: 'Wall', icon: <I.wall size={24} color={colors.primary} />, onPress: () => router.push(`/view/wall/${id}`), color: 'primary' as const },
+    { id: 'groups', label: 'Groups', icon: <I.group size={24} color={colors.primary} />, onPress: () => router.push(`/view/groups /${id}`), color: 'primary' as const },
+    { id: 'events', label: 'Events', icon: <I.event size={24} color={colors.primary} />, onPress: () => router.push(`/view/events/${id}`), color: 'primary' as const },
   ];
 
-  const infoLinks: QuickLink[] = [
-    { label: 'Announcements', icon: 'announcement', route: `/view/announcements/${id}`, accent: 'primary' },
-    { label: 'Meetings', icon: 'meeting', route: `/view/meetings/${id}`, accent: 'secondary' },
-    { label: 'Votes', icon: 'vote', route: `/view/votes/${id}`, accent: 'primary' },
-    { label: 'Information', icon: 'information', route: `/view/informations/${id}`, accent: 'secondary' },
+  const infoLinks: ActionItem[] = [
+    { id: 'wall', label: 'Announcements', icon: <I.announcement size={24} color={colors.secondary} />, onPress: () => router.push(`/view/announcements/${id}`), color: 'primary' as const },
+    { id: 'information', label: 'Information', icon: <I.information size={24} color={colors.secondary} />, onPress: () => router.push(`/view/informations/${id}`), color: 'primary' as const },
   ];
 
-  const resourceLinks: QuickLink[] = [
-    { label: 'Events', icon: 'event', route: `/view/events/${id}`, accent: 'primary' },
-    { label: 'Bookings', icon: 'booking', route: `/view/bookings/${id}`, accent: 'secondary' },
+  const resourceLinks: ActionItem[] = [
+    { id: 'user-request', label: 'My Requests', icon: <I.userRequest size={24} color={colors.secondary} />, onPress: () => router.push(`/view/user-requests/${id}`), color: 'primary' as const },
+    { id: 'booking', label: 'Bookings', icon: <I.booking size={24} color={colors.secondary} />, onPress: () => router.push(`/view/bookings/${id}`), color: 'primary' as const },
   ];
-
-  const renderQuickLink = (link: QuickLink) => {
-    const Icon = ENTITY_ICONS[link.icon];
-    const color = link.accent === 'primary' ? primary : secondary;
-    return (
-      <Pressable
-        key={link.label}
-        onPress={() => router.push(link.route as any)}
-        style={({ pressed }) => ({
-          width: '47%',
-          padding: 16,
-          borderRadius: 14,
-          backgroundColor: pressed ? pressedColor : (link.accent === 'primary' ? cardPrimaryBg : cardSecondaryBg),
-          gap: 10,
-          borderWidth: 1,
-          borderColor: border,
-        })}
-      >
-        <Icon size={24} color={color} />
-        <RNText style={{ fontSize: 13, fontWeight: '600', color: textColor }}>{link.label}</RNText>
-      </Pressable>
-    );
-  };
-
-  const renderSection = (title: string, links: QuickLink[]) => (
-    <View key={title} style={{ gap: 10 }}>
-      <RNText style={{ fontSize: 12, fontWeight: '600', letterSpacing: 0.6, textTransform: 'uppercase', color: secondaryText }}>
-        {title}
-      </RNText>
-      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12 }}>
-        {links.map(renderQuickLink)}
-      </View>
-    </View>
-  );
 
   return (
     <View style={{ flex: 1, backgroundColor: bgColor, paddingBottom: bottom }}>
@@ -243,10 +202,9 @@ export default function UserDashboard() {
               </View>
             </View>
           )}
-
-          {renderSection('Community', communityLinks)}
-          {renderSection('Information & Communication', infoLinks)}
-          {renderSection('Resources', resourceLinks)}
+          <Matrix row={communityLinks} index={0} onClose={() => {}} />
+          <Matrix row={infoLinks} index={1} onClose={() => {}} />
+          <Matrix row={resourceLinks} index={2} onClose={() => {}} />
         </ScrollView>
       )}
     </View>

@@ -2,7 +2,7 @@ import { HtmlContent } from '@/components/details';
 import { AdminNavigationDrawer } from '@/components/drawer/admin-navigation-drawer';
 import { Button } from '@/components/ui/button';
 import { HStack } from '@/components/ui/hstack';
-import { ENTITY_ICONS, type EntityIconKey } from '@/constants/entity-icons';
+import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { useOrganisationContext } from '@/context/organisation-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
@@ -12,19 +12,6 @@ import { ActivityIndicator, Animated, Image, Pressable, Text as RNText, ScrollVi
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const I = ENTITY_ICONS;
-
-type QuickLink = {
-  label: string;
-  icon: EntityIconKey;
-  route: string;
-  accent: 'primary' | 'secondary';
-};
-
-type Section = {
-  title: string;
-  module?: string; // OrgAccess module key — hide section if disabled
-  links: QuickLink[];
-};
 
 export default function AdminDashboard() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -48,110 +35,9 @@ export default function AdminDashboard() {
     }).start();
   }, [isDrawerOpen, drawerAnim]);
 
-  const { bg: bgColor, text: textColor, sub: secondaryText, primary, secondary, pressed: pressedColor, border, cardPrimaryBg, cardSecondaryBg, card: cardBg, success, danger } = colors;
+  const { bg: bgColor, text: textColor, sub: secondaryText, primary, secondary, border, card: cardBg, success, danger } = colors;
 
   const org = organisation;
-
-  const sections: Section[] = [
-    {
-      title: 'People & Organisation',
-      module: 'user',
-      links: [
-        { label: 'Users', icon: 'user', route: `/admin/users/${id}`, accent: 'primary' },
-        { label: 'Groups', icon: 'group', route: `/admin/groups/${id}`, accent: 'secondary' },
-        { label: 'I.user Requests', icon: 'userRequest', route: `/admin/user-requests/${id}`, accent: 'primary' },
-      ],
-    },
-    {
-      title: 'Workflows',
-      module: 'workflow',
-      links: [
-        { label: 'Workflows', icon: 'workflow', route: `/admin/workflows/${id}`, accent: 'primary' },
-        { label: 'Tasks', icon: 'task', route: `/admin/tasks/${id}`, accent: 'secondary' },
-        { label: 'Evidence', icon: 'evidence', route: `/admin/evidences/${id}`, accent: 'primary' },
-        { label: 'Categories', icon: 'category', route: `/admin/categories/${id}`, accent: 'secondary' },
-      ],
-    },
-    {
-      title: 'Vendors & Work',
-      module: 'vendor',
-      links: [
-        { label: 'Vendors', icon: 'vendor', route: `/admin/vendors/${id}`, accent: 'primary' },
-        { label: 'Quotes', icon: 'quote', route: `/admin/quotes/${id}`, accent: 'secondary' },
-        { label: 'Work Orders', icon: 'workorder', route: `/admin/workorders/${id}`, accent: 'primary' },
-        { label: 'Invoices', icon: 'invoice', route: `/admin/invoices/${id}`, accent: 'secondary' },
-      ],
-    },
-    {
-      title: 'Communication',
-      module: 'communication',
-      links: [
-        { label: 'Announcements', icon: 'announcement', route: `/admin/announcements/${id}`, accent: 'primary' },
-        { label: 'Meetings', icon: 'meeting', route: `/admin/meetings/${id}`, accent: 'secondary' },
-        { label: 'Votes', icon: 'vote', route: `/admin/votes/${id}`, accent: 'primary' },
-        { label: 'Bookings', icon: 'booking', route: `/admin/bookings/${id}`, accent: 'secondary' },
-      ],
-    },
-    {
-      title: 'Finance',
-      module: 'finance',
-      links: [
-        { label: 'Financial Years', icon: 'financialYear', route: `/admin/financial-years/${id}`, accent: 'primary' },
-        { label: 'Chart of Accounts', icon: 'chartOfAccount', route: `/admin/chart-of-accounts/${id}`, accent: 'secondary' },
-        { label: 'Budgets', icon: 'budget', route: `/admin/budgets/${id}`, accent: 'primary' },
-        { label: 'Ledger', icon: 'ledger', route: `/admin/ledgers/${id}`, accent: 'secondary' },
-      ],
-    },
-    {
-      title: 'Assets & Resources',
-      module: 'asset',
-      links: [
-        { label: 'Assets', icon: 'asset', route: `/admin/assets/${id}`, accent: 'primary' },
-        { label: 'Documents', icon: 'document', route: `/admin/documents/${id}`, accent: 'secondary' },
-        { label: 'Events', icon: 'event', route: `/admin/events/${id}`, accent: 'primary' },
-        { label: 'Information', icon: 'information', route: `/admin/informations/${id}`, accent: 'secondary' },
-      ],
-    },
-    {
-      title: 'Analytics',
-      module: 'analytics',
-      links: [
-        { label: 'Workflow Analytics', icon: 'workflow', route: `/admin/analytics/${id}`, accent: 'primary' },
-      ],
-    },
-  ];
-
-  const visibleSections = sections.filter((s) => {
-    if (!s.module || !orgAccess) return true;
-    return (orgAccess as any)[s.module] !== false;
-  });
-
-  const renderQuickLink = (link: QuickLink) => {
-    const Icon = ENTITY_ICONS[link.icon];
-    const color = link.accent === 'primary' ? primary : secondary;
-    return (
-      <Pressable
-        key={link.label}
-        onPress={() => router.push(link.route as any)}
-        style={({ pressed }) => ({
-          flex: 1,
-          minWidth: '30%',
-          padding: 14,
-          borderRadius: 12,
-          backgroundColor: pressed ? pressedColor : (link.accent === 'primary' ? cardPrimaryBg : cardSecondaryBg),
-          gap: 8,
-          alignItems: 'center',
-          borderWidth: 1,
-          borderColor: border,
-        })}
-      >
-        <Icon size={22} color={color} />
-        <RNText style={{ fontSize: 11, fontWeight: '600', color: textColor, textAlign: 'center' }} numberOfLines={1}>
-          {link.label}
-        </RNText>
-      </Pressable>
-    );
-  };
 
   return (
     <View style={{ flex: 1, backgroundColor: bgColor, paddingBottom: bottom }}>
@@ -344,20 +230,6 @@ export default function AdminDashboard() {
               </View>
             </View>
           )}
-
-          {visibleSections.map((section) => (
-            <View key={section.title} style={{ gap: 10 }}>
-              <RNText style={{ fontSize: 12, fontWeight: '600', letterSpacing: 0.6, textTransform: 'uppercase', color: secondaryText }}>
-                {section.title}
-              </RNText>
-              <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
-                {section.links.map(renderQuickLink)}
-                {section.links.length % 3 !== 0 && Array.from({ length: 3 - (section.links.length % 3) }).map((_, i) => (
-                  <View key={`pad-${i}`} style={{ flex: 1, minWidth: '30%' }} />
-                ))}
-              </View>
-            </View>
-          ))}
         </ScrollView>
       )}
     </View>
