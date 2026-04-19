@@ -3,7 +3,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-export default function Screen() {
+export default function AdminsListScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const colors = useThemeColors();
   const router = useRouter();

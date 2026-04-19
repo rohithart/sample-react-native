@@ -2,7 +2,7 @@ import type { Message, UserRole } from '@/types';
 import { useToggleReaction, useDeleteMessage } from '@/services/message';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import React, { useState } from 'react';
-import { Alert, Modal, Pressable, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Modal, Pressable, Text, View } from 'react-native';
 import { UserAvatar } from '../user-avatar';
 import { HStack } from '../ui/hstack';
 import { ENTITY_ICONS } from '@/constants/entity-icons';

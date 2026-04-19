@@ -4,7 +4,6 @@ import { useThemeColors } from '@/hooks/use-theme-colors';
 
 import React from 'react';
 import { Modal, Pressable, Text, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 
 const I = ENTITY_ICONS;
@@ -44,7 +43,6 @@ function resolveUserName(ref: unknown): string {
 
 export function AuditInfo({ isVisible, onClose, createdBy, updatedBy, createdAt, updatedAt }: AuditInfoProps) {
   const { bg, card, text, sub, border, primary, secondary } = useThemeColors();
-  const { top, bottom } = useSafeAreaInsets();
 
   if (!isVisible) return null;
 
