@@ -2,6 +2,7 @@ import { HStack } from '@/components/ui/hstack';
 import { VStack } from '@/components/ui/vstack';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { useThemeColors } from '@/hooks/use-theme-colors';
+import { Group } from '@/types';
 
 import React, { useMemo, useState } from 'react';
 import {
@@ -17,22 +18,21 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 const I = ENTITY_ICONS;
 
-interface GroupItem {
-  _id: string;
-  title?: string;
-  name?: string;
-}
 
 interface GroupSelectProps {
-  groups: GroupItem[];
+  groups: Group[];
   selectedId?: string | null;
   onSelect: (groupId: string) => void;
   isLoading?: boolean;
   disabled?: boolean;
 }
 
-function getGroupDisplay(g: GroupItem): string {
-  return g.title || g.name || 'Unknown';
+function getGroupDisplay(g: Group): string {
+  return g.title || 'Unknown';
+}
+
+function getGroupDescription(g: Group): string {
+  return g.description || 'No description available';
 }
 
 export function GroupSelect({
@@ -236,7 +236,7 @@ export function GroupSelect({
                               : 'transparent',
                         })}
                       >
-                        <HStack space="sm" className="items-center">
+                        <HStack space="sm" className="items-center" style={{margin: 10}}>
                           <View
                             style={{
                               width: 32,
@@ -249,17 +249,30 @@ export function GroupSelect({
                           >
                             <Icon size={16} color={primary} />
                           </View>
-                          <Text
-                            style={{
-                              flex: 1,
-                              fontSize: 14,
-                              color: text,
-                              fontWeight: isSelected ? '600' : '400',
-                            }}
-                            numberOfLines={1}
-                          >
-                            {getGroupDisplay(g)}
-                          </Text>
+                           <VStack className="flex-1">
+                              <Text
+                                style={{
+                                  flex: 1,
+                                  fontSize: 14,
+                                  color: text,
+                                  fontWeight: isSelected ? '600' : '400',
+                                }}
+                                numberOfLines={1}
+                              >
+                                {getGroupDisplay(g)}
+                              </Text>
+                              <Text
+                                style={{
+                                  flex: 1,
+                                  fontSize: 12,
+                                  color: text,
+                                  fontWeight: isSelected ? '600' : '400',
+                                }}
+                                numberOfLines={1}
+                              >
+                                {getGroupDescription(g)}
+                              </Text>
+                            </VStack>
                           {isSelected ? (
                             <I.check size={18} color={primary} />
                           ) : null}

@@ -14,29 +14,31 @@ import {
     View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { UserDisplay } from '../user';
+import { UserRole } from '@/types';
 
 const I = ENTITY_ICONS;
 
-interface UserItem {
-  _id: string;
-  user?: { name?: string; email?: string } | string;
-  name?: string;
-  email?: string;
-}
-
 interface UserSelectProps {
-  users: UserItem[];
+  users: UserRole[];
   selectedId?: string | null;
   onSelect: (userId: string) => void;
   isLoading?: boolean;
   disabled?: boolean;
 }
 
-function getUserDisplay(u: UserItem): string {
+function getUserDisplay(u: UserRole): string {
   if (typeof u.user === 'object' && u.user) {
     return u.user.name || u.user.email || 'Unknown';
   }
-  return u.name || u.email || 'Unknown';
+  return 'Unknown';
+}
+
+function getUserEmail(u: UserRole): string {
+  if (typeof u.user === 'object' && u.user) {
+    return u.user.email || 'Unknown';
+  }
+  return 'Unknown';
 }
 
 export function UserSelect({
@@ -72,7 +74,10 @@ export function UserSelect({
     opacity: disabled ? 0.5 : 1,
   };
 
+  console.log(selectedId);
+  console.log(selected);
   const displayName = selected ? getUserDisplay(selected) : null;
+  console.log('Selected user display:', displayName);
 
   return (
     <>
@@ -240,7 +245,7 @@ export function UserSelect({
                               : 'transparent',
                         })}
                       >
-                        <HStack space="sm" className="items-center">
+                        <HStack space="sm" className="items-center" style={{margin: 10}}>
                           <View
                             style={{
                               width: 32,
@@ -251,19 +256,33 @@ export function UserSelect({
                               justifyContent: 'center',
                             }}
                           >
-                            <Icon size={16} color={primary} />
+                            <UserDisplay userRole={u} />
                           </View>
-                          <Text
-                            style={{
-                              flex: 1,
-                              fontSize: 14,
-                              color: text,
-                              fontWeight: isSelected ? '600' : '400',
-                            }}
-                            numberOfLines={1}
-                          >
-                            {getUserDisplay(u)}
-                          </Text>
+                          <VStack className="flex-1">
+                            <Text
+                              style={{
+                                flex: 1,
+                                fontSize: 14,
+                                color: text,
+                                fontWeight: isSelected ? '600' : '400',
+                              }}
+                              numberOfLines={1}
+                            >
+                              {getUserDisplay(u)}
+                            </Text>
+                            <Text
+                              style={{
+                                flex: 1,
+                                fontSize: 12,
+                                color: text,
+                                fontWeight: isSelected ? '600' : '400',
+                              }}
+                              numberOfLines={1}
+                            >
+                              {getUserEmail(u)}
+                            </Text>
+                          </VStack>
+                          
                           {isSelected ? (
                             <I.check size={18} color={primary} />
                           ) : null}
