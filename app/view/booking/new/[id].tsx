@@ -7,8 +7,8 @@ import React, { useState } from 'react';
 import { Alert, Pressable, ScrollView, Switch, Text, View } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import QuillEditor, { QuillToolbar } from 'react-native-quill';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Wysiwyg from '@/components/wysiwyg';
 
 
 export default function AddBookingScreen() {
@@ -90,16 +90,12 @@ export default function AddBookingScreen() {
         </View>
 
         <Text style={{ fontWeight: '600', color: colors.text, marginBottom: 6 }}>Description *</Text>
-        <View style={{ minHeight: 120, borderWidth: 1, borderColor: colors.border, borderRadius: 8, backgroundColor: colors.bg, marginBottom: 8 }}>
-          <QuillEditor
-            style={{ minHeight: 100, color: colors.text, backgroundColor: colors.bg, borderRadius: 8 }}
-            value={description}
-            onChange={setDescription}
-            theme="light"
-            placeholder="Enter description..."
-          />
-          <QuillToolbar editorId={undefined} options={[['bold', 'italic', 'underline'], ['list', 'bullet'], ['link'], ['undo', 'redo']]} />
-        </View>
+        <Wysiwyg
+          value={description}
+          onChange={setDescription}
+          placeholder="Enter description..."
+          style={{ minHeight: 120, borderWidth: 1, borderColor: colors.border, borderRadius: 8, backgroundColor: colors.bg, marginBottom: 8 }}
+        />
 
         <View style={{ flexDirection: 'row', gap: 16, alignItems: 'center' }}>
           <View style={{ flex: 1 }}>
