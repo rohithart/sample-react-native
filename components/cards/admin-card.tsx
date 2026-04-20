@@ -1,7 +1,7 @@
 import { ENTITY_ICONS } from "@/constants/entity-icons";
 import { useThemeColors } from "@/hooks/use-theme-colors";
 import { useCallback } from "react";
-import { Linking, Pressable, Text, View } from 'react-native';
+import { Linking, Pressable, Text, View, Image } from 'react-native';
 
 const I = ENTITY_ICONS;
 
@@ -32,7 +32,11 @@ export function AdminCard({ admin }: { admin: any }) {
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         {user.image ? (
           <View style={{ width: 48, height: 48, borderRadius: 24, overflow: 'hidden', backgroundColor: colors.primary + '20', alignItems: 'center', justifyContent: 'center', marginRight: 14 }}>
-            <I.user size={28} color={colors.primary} />
+            <Image
+              source={{ uri: user.image }}
+              className="w-full h-full"
+              resizeMode="cover"
+            />
           </View>
         ) : (
           <View style={{ width: 48, height: 48, borderRadius: 24, backgroundColor: colors.primary + '20', alignItems: 'center', justifyContent: 'center', marginRight: 14 }}>
@@ -41,20 +45,14 @@ export function AdminCard({ admin }: { admin: any }) {
         )}
         <View style={{ flex: 1 }}>
           <Text style={{ fontSize: 16, fontWeight: '700', color: colors.text }} numberOfLines={1}>{user.name || user.email || '-'}</Text>
-          <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 2 }}>
-            <Pressable onPress={handleEmail} disabled={!user.email} style={{ marginRight: 12 }}>
+          <Pressable onPress={handleEmail} disabled={!user.email} style={{ marginRight: 12 }}>
               <Text style={{ color: colors.primary, textDecorationLine: 'underline', fontSize: 14 }}>{user.email || 'No email'}</Text>
             </Pressable>
             <Pressable onPress={handlePhone} disabled={!user.phone}>
               <Text style={{ color: colors.primary, textDecorationLine: 'underline', fontSize: 14 }}>{user.phone || 'No phone'}</Text>
             </Pressable>
-          </View>
-          <Text style={{ color: colors.sub, fontSize: 13, marginTop: 2 }}>{admin.role || 'Admin'}</Text>
         </View>
       </View>
-      {admin.description ? (
-        <Text style={{ color: colors.sub, fontSize: 13, marginTop: 8 }}>{admin.description}</Text>
-      ) : null}
     </View>
   );
 }
