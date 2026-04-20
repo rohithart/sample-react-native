@@ -12,6 +12,7 @@ import { useUserRequest } from '@/services/user-request';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { EntityComments } from '@/components/entity/entity-comments';
+import { EntityType } from '@/enums';
 
 const I = ENTITY_ICONS;
 
@@ -63,7 +64,7 @@ export default function UserRequestDetailScreen() {
 
       <ActionBottomSheet isVisible={isBottomSheetOpen} onClose={() => setIsBottomSheetOpen(false)} actions={actions} />
       <AuditInfo isVisible={showAudit} onClose={() => setShowAudit(false)} createdBy={item?.createdBy} updatedBy={item?.updatedBy} createdAt={item?.createdAt} updatedAt={item?.updatedAt} />
-      <EntityComments isVisible={showComments} onClose={() => setShowComments(false)} entity={'request'} entityId={id || ''} orgId={orgId || ''} />
+      <EntityComments isVisible={showComments} onClose={() => setShowComments(false)} entity={EntityType.USER_REQUEST} entityId={id || ''} orgId={orgId || ''} />
     </SafeAreaView>
   );
 }

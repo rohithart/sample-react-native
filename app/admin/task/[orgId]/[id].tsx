@@ -22,6 +22,7 @@ import React, { useState } from 'react';
 import { ActivityIndicator, Alert, Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { EntityType } from '@/enums';
 
 const I = ENTITY_ICONS;
 
@@ -104,7 +105,7 @@ export default function TaskDetailScreen() {
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
       <Stack.Screen options={{ headerShown: false }} />
       <PageHeader icon="task"
-        title={item?.title || item?.title || item?.name || 'Loading...'}
+        title={item?.title || 'Loading...'}
         rightAction={
           <Pressable onPress={() => setIsBottomSheetOpen(true)} style={{ padding: 8 }}>
             <I.moreVertical size={20} color={colors.primary} />
@@ -151,11 +152,11 @@ export default function TaskDetailScreen() {
       <ConfirmationDialog isOpen={confirmationType === 'delete'} onClose={() => setConfirmationType(null)} onConfirm={handleDelete} type="delete" isLoading={isProcessing} />
       <ConfirmationDialog isOpen={confirmationType === 'archive'} onClose={() => setConfirmationType(null)} onConfirm={handleArchive} type="archive" isLoading={isProcessing} />
       <AuditInfo isVisible={showAudit} onClose={() => setShowAudit(false)} createdBy={item?.createdBy} updatedBy={item?.updatedBy} createdAt={item?.createdAt} updatedAt={item?.updatedAt} />
-      <EntityAttachments isVisible={showAttachments} onClose={() => setShowAttachments(false)} entity={'task'} entityId={id || ''} orgId={orgId || ''} />
-      <EntityComments isVisible={showComments} onClose={() => setShowComments(false)} entity={'task'} entityId={id || ''} orgId={orgId || ''} />
-      <EntityImages isVisible={showImages} onClose={() => setShowImages(false)} entity={'task'} entityId={id || ''} orgId={orgId || ''} />
-      <EntityTimeline isVisible={showTimeline} onClose={() => setShowTimeline(false)} entity={'task'} entityId={id || ''} />
-      <EntityHistory isVisible={showHistory} onClose={() => setShowHistory(false)} entity={'task'} entityId={id || ''} />
+      <EntityAttachments isVisible={showAttachments} onClose={() => setShowAttachments(false)} entity={EntityType.TASK} entityId={id || ''} orgId={orgId || ''} />
+      <EntityComments isVisible={showComments} onClose={() => setShowComments(false)} entity={EntityType.TASK} entityId={id || ''} orgId={orgId || ''} />
+      <EntityImages isVisible={showImages} onClose={() => setShowImages(false)} entity={EntityType.TASK} entityId={id || ''} orgId={orgId || ''} />
+      <EntityTimeline isVisible={showTimeline} onClose={() => setShowTimeline(false)} entity={EntityType.TASK} entityId={id || ''} />
+      <EntityHistory isVisible={showHistory} onClose={() => setShowHistory(false)} entity={EntityType.TASK} entityId={id || ''} />
     </SafeAreaView>
   );
 }

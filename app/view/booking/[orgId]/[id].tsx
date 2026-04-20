@@ -1,10 +1,10 @@
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { PageHeader } from '@/components/ui/page-header';
 import { DetailField, DetailSection, HtmlContent, AuditInfo } from '@/components/details';
-import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
+import { Stack, useLocalSearchParams } from 'expo-router';
 
 import React, { useState } from 'react';
-import { ActivityIndicator, ScrollView, Text, View, Pressable, Alert } from 'react-native';
+import { ActivityIndicator, ScrollView, Text, View, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ActionBottomSheet } from '@/components/sheets/action-bottom-sheet';
 import { ActionItem } from '@/types/actionItem';
@@ -12,6 +12,7 @@ import { useBooking } from '@/services/booking';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { EntityComments } from '@/components/entity/entity-comments';
+import { EntityType } from '@/enums';
 
 const I = ENTITY_ICONS;
 
@@ -79,7 +80,7 @@ export default function BookingDetailScreen() {
 
       <ActionBottomSheet isVisible={isBottomSheetOpen} onClose={() => setIsBottomSheetOpen(false)} actions={actions} />
       <AuditInfo isVisible={showAudit} onClose={() => setShowAudit(false)} createdBy={item?.createdBy} updatedBy={item?.updatedBy} createdAt={item?.createdAt} updatedAt={item?.updatedAt} />
-      <EntityComments isVisible={showComments} onClose={() => setShowComments(false)} entity={'booking'} entityId={id || ''} orgId={orgId || ''} />
+      <EntityComments isVisible={showComments} onClose={() => setShowComments(false)} entity={EntityType.BOOKING} entityId={id || ''} orgId={orgId || ''} />
     </SafeAreaView>
   );
 }

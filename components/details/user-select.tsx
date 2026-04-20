@@ -74,10 +74,7 @@ export function UserSelect({
     opacity: disabled ? 0.5 : 1,
   };
 
-  console.log(selectedId);
-  console.log(selected);
   const displayName = selected ? getUserDisplay(selected) : null;
-  console.log('Selected user display:', displayName);
 
   return (
     <>

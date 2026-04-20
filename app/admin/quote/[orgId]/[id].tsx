@@ -21,6 +21,7 @@ import React, { useState } from 'react';
 import { ActivityIndicator, Alert, Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { EntityType } from '@/enums';
 
 const I = ENTITY_ICONS;
 
@@ -103,7 +104,7 @@ export default function QuoteDetailScreen() {
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
       <Stack.Screen options={{ headerShown: false }} />
       <PageHeader icon="quote"
-        title={item?.title || item?.title || item?.name || 'Loading...'}
+        title={item?.title || 'Loading...'}
         rightAction={
           <Pressable onPress={() => setIsBottomSheetOpen(true)} style={{ padding: 8 }}>
             <I.moreVertical size={20} color={colors.primary} />
@@ -152,11 +153,11 @@ export default function QuoteDetailScreen() {
       <ConfirmationDialog isOpen={confirmationType === 'delete'} onClose={() => setConfirmationType(null)} onConfirm={handleDelete} type="delete" isLoading={isProcessing} />
       <ConfirmationDialog isOpen={confirmationType === 'archive'} onClose={() => setConfirmationType(null)} onConfirm={handleArchive} type="archive" isLoading={isProcessing} />
       <AuditInfo isVisible={showAudit} onClose={() => setShowAudit(false)} createdBy={item?.createdBy} updatedBy={item?.updatedBy} createdAt={item?.createdAt} updatedAt={item?.updatedAt} />
-      <EntityAttachments isVisible={showAttachments} onClose={() => setShowAttachments(false)} entity={'quote'} entityId={id || ''} orgId={orgId || ''} />
-      <EntityComments isVisible={showComments} onClose={() => setShowComments(false)} entity={'quote'} entityId={id || ''} orgId={orgId || ''} />
-      <EntityImages isVisible={showImages} onClose={() => setShowImages(false)} entity={'quote'} entityId={id || ''} orgId={orgId || ''} />
-      <EntityTimeline isVisible={showTimeline} onClose={() => setShowTimeline(false)} entity={'quote'} entityId={id || ''} />
-      <EntityHistory isVisible={showHistory} onClose={() => setShowHistory(false)} entity={'quote'} entityId={id || ''} />
+      <EntityAttachments isVisible={showAttachments} onClose={() => setShowAttachments(false)} entity={EntityType.QUOTE} entityId={id || ''} orgId={orgId || ''} />
+      <EntityComments isVisible={showComments} onClose={() => setShowComments(false)} entity={EntityType.QUOTE} entityId={id || ''} orgId={orgId || ''} />
+      <EntityImages isVisible={showImages} onClose={() => setShowImages(false)} entity={EntityType.QUOTE} entityId={id || ''} orgId={orgId || ''} />
+      <EntityTimeline isVisible={showTimeline} onClose={() => setShowTimeline(false)} entity={EntityType.QUOTE} entityId={id || ''} />
+      <EntityHistory isVisible={showHistory} onClose={() => setShowHistory(false)} entity={EntityType.QUOTE} entityId={id || ''} />
     </SafeAreaView>
   );
 }

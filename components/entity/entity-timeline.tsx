@@ -8,15 +8,14 @@ import React from 'react';
 import { ActivityIndicator, FlatList, Modal, Pressable, Text, View } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { EntityType } from '@/enums';
 
 const I = ENTITY_ICONS;
-
-type TimelineEntity = 'user' | 'workflow' | 'task' | 'quote' | 'invoice' | 'workorder' | 'evidence' | 'vote' | 'vendor' | 'document' | 'asset' | 'financial-year';
 
 interface EntityTimelineProps {
   isVisible: boolean;
   onClose: () => void;
-  entity: TimelineEntity;
+  entity: EntityType;
   entityId: string;
 }
 

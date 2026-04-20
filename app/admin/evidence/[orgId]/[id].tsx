@@ -21,6 +21,7 @@ import React, { useState } from 'react';
 import { ActivityIndicator, Alert, Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { EntityType } from '@/enums';
 
 const I = ENTITY_ICONS;
 
@@ -101,7 +102,7 @@ export default function EvidenceDetailScreen() {
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
       <Stack.Screen options={{ headerShown: false }} />
       <PageHeader icon="evidence"
-        title={item?.title || item?.title || item?.name || 'Loading...'}
+        title={item?.title || 'Loading...'}
         rightAction={
           <Pressable onPress={() => setIsBottomSheetOpen(true)} style={{ padding: 8 }}>
             <I.moreVertical size={20} color={colors.primary} />
@@ -143,11 +144,11 @@ export default function EvidenceDetailScreen() {
       <ConfirmationDialog isOpen={confirmationType === 'delete'} onClose={() => setConfirmationType(null)} onConfirm={handleDelete} type="delete" isLoading={isProcessing} />
       <ConfirmationDialog isOpen={confirmationType === 'archive'} onClose={() => setConfirmationType(null)} onConfirm={handleArchive} type="archive" isLoading={isProcessing} />
       <AuditInfo isVisible={showAudit} onClose={() => setShowAudit(false)} createdBy={item?.createdBy} updatedBy={item?.updatedBy} createdAt={item?.createdAt} updatedAt={item?.updatedAt} />
-      <EntityAttachments isVisible={showAttachments} onClose={() => setShowAttachments(false)} entity={'evidence'} entityId={id || ''} orgId={orgId || ''} />
-      <EntityComments isVisible={showComments} onClose={() => setShowComments(false)} entity={'evidence'} entityId={id || ''} orgId={orgId || ''} />
-      <EntityImages isVisible={showImages} onClose={() => setShowImages(false)} entity={'evidence'} entityId={id || ''} orgId={orgId || ''} />
-      <EntityTimeline isVisible={showTimeline} onClose={() => setShowTimeline(false)} entity={'evidence'} entityId={id || ''} />
-      <EntityHistory isVisible={showHistory} onClose={() => setShowHistory(false)} entity={'evidence'} entityId={id || ''} />
+      <EntityAttachments isVisible={showAttachments} onClose={() => setShowAttachments(false)} entity={EntityType.EVIDENCE} entityId={id || ''} orgId={orgId || ''} />
+      <EntityComments isVisible={showComments} onClose={() => setShowComments(false)} entity={EntityType.EVIDENCE} entityId={id || ''} orgId={orgId || ''} />
+      <EntityImages isVisible={showImages} onClose={() => setShowImages(false)} entity={EntityType.EVIDENCE} entityId={id || ''} orgId={orgId || ''} />
+      <EntityTimeline isVisible={showTimeline} onClose={() => setShowTimeline(false)} entity={EntityType.EVIDENCE} entityId={id || ''} />
+      <EntityHistory isVisible={showHistory} onClose={() => setShowHistory(false)} entity={EntityType.EVIDENCE} entityId={id || ''} />
     </SafeAreaView>
   );
 }

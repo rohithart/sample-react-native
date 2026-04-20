@@ -1,17 +1,17 @@
 import type { Timeline } from '@/types';
 import { useQuery } from '@tanstack/react-query';
 import { api } from './api-client';
+import { EntityType } from '@/enums';
+import { resolveEntityType } from '@/utils/entity';
 
 export const timelineKeys = {
   forEntity: (entity: string, id: string) => ['timeline', entity, id] as const,
 };
 
-type Entity = 'user' | 'workflow' | 'task' | 'quote' | 'invoice' | 'workorder' | 'evidence' | 'vote' | 'vendor' | 'document' | 'asset' | 'financial-year';
-
 const timelineApi = {
-  get: (entity: Entity, id: string) => api.get<Timeline[]>(`/api/timeline/${entity}/${id}`),
+  get: (entity: EntityType, id: string) => api.get<Timeline[]>(`/api/timeline/${resolveEntityType(entity)}/${id}`),
 };
 
-export function useTimeline(entity: Entity, id: string) {
+export function useTimeline(entity: EntityType, id: string) {
   return useQuery({ queryKey: timelineKeys.forEntity(entity, id), queryFn: () => timelineApi.get(entity, id), enabled: !!id });
 }

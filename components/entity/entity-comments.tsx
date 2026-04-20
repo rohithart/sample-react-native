@@ -10,15 +10,14 @@ import { ActivityIndicator, Alert, FlatList, Modal, Pressable, Text, TextInput, 
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { useReportComment } from '@/services/email';
+import { EntityType } from '@/enums';
 
 const I = ENTITY_ICONS;
-
-type CommentEntity = 'workflow' | 'task' | 'quote' | 'invoice' | 'workorder' | 'evidence' | 'vendor' | 'document' | 'asset' | 'booking' | 'request' | 'meeting' | 'transaction' | 'financial-year';
 
 interface EntityCommentsProps {
   isVisible: boolean;
   onClose: () => void;
-  entity: CommentEntity;
+  entity: EntityType;
   entityId: string;
   orgId: string;
 }
@@ -49,7 +48,7 @@ export function EntityComments({ isVisible, onClose, entity, entityId, orgId }: 
 
   const handleSend = () => {
     if (!content.trim()) return;
-    createMutation.mutate({ comment: content.trim(), entityType: entity, entityId } as any, {
+    createMutation.mutate({ comment: content.trim(), entityType: entity, entityId, organisation: orgId } as any, {
       onSuccess: () => setContent(''),
     });
   };

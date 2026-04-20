@@ -9,7 +9,7 @@ import { VStack } from '@/components/ui/vstack';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import type { UserRole } from '@/types';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
-import { Role } from '@propordo/models/dist/enum';
+import { Role } from '@/enums';
 
 const I = ENTITY_ICONS;
 

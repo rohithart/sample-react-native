@@ -15,6 +15,7 @@ import { EntityTimeline } from '@/components/entity/entity-timeline';
 import { useVendor } from '@/services/vendor';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { EntityType } from '@/enums';
 
 const I = ENTITY_ICONS;
 
@@ -87,7 +88,7 @@ export default function VendorDetailScreen() {
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
       <Stack.Screen options={{ headerShown: false }} />
       <PageHeader icon="vendor"
-        title={item?.name || item?.title || item?.name || 'Loading...'}
+        title={item?.name || 'Loading...'}
         rightAction={
           <Pressable onPress={() => setIsBottomSheetOpen(true)} style={{ padding: 8 }}>
             <I.moreVertical size={20} color={colors.primary} />
@@ -124,8 +125,8 @@ export default function VendorDetailScreen() {
       <ConfirmationDialog isOpen={confirmationType === 'delete'} onClose={() => setConfirmationType(null)} onConfirm={handleDelete} type="delete" isLoading={isProcessing} />
       <ConfirmationDialog isOpen={confirmationType === 'archive'} onClose={() => setConfirmationType(null)} onConfirm={handleArchive} type="archive" isLoading={isProcessing} />
       <AuditInfo isVisible={showAudit} onClose={() => setShowAudit(false)} createdBy={item?.createdBy} updatedBy={item?.updatedBy} createdAt={item?.createdAt} updatedAt={item?.updatedAt} />
-      <EntityComments isVisible={showComments} onClose={() => setShowComments(false)} entity={'vendor'} entityId={id || ''} orgId={orgId || ''} />
-      <EntityTimeline isVisible={showTimeline} onClose={() => setShowTimeline(false)} entity={'vendor'} entityId={id || ''} />
+      <EntityComments isVisible={showComments} onClose={() => setShowComments(false)} entity={EntityType.VENDOR} entityId={id || ''} orgId={orgId || ''} />
+      <EntityTimeline isVisible={showTimeline} onClose={() => setShowTimeline(false)} entity={EntityType.VENDOR} entityId={id || ''} />
     </SafeAreaView>
   );
 }

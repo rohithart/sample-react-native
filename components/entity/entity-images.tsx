@@ -8,15 +8,14 @@ import React, { useCallback, useState } from 'react';
 import { ActivityIndicator, Alert, Dimensions, FlatList, Image, Modal, Pressable, Text, TextInput, View } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { EntityType } from '@/enums';
 
 const I = ENTITY_ICONS;
-
-type ImageEntity = 'organisation' | 'user' | 'workflow' | 'task' | 'quote' | 'invoice' | 'workorder' | 'evidence' | 'document' | 'asset';
 
 interface EntityImagesProps {
   isVisible: boolean;
   onClose: () => void;
-  entity: ImageEntity;
+  entity: EntityType;
   entityId: string;
   orgId: string;
 }
@@ -60,8 +59,8 @@ export function EntityImages({ isVisible, onClose, entity, entityId, orgId }: En
 
   const renderThumb = ({ item, index }: { item: AppImage; index: number }) => (
     <Pressable onPress={() => setViewerIndex(index)} style={{ width: THUMB_SIZE, height: THUMB_SIZE, borderRadius: 10, overflow: 'hidden', backgroundColor: colors.shimmer }}>
-      {item.url ? (
-        <Image source={{ uri: item.url }} style={{ width: '100%', height: '100%' }} resizeMode="cover" />
+      {item.location ? (
+        <Image source={{ uri: item.location }} style={{ width: '100%', height: '100%' }} resizeMode="cover" />
       ) : (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
           <I.gallery size={24} color={colors.sub} />
@@ -148,8 +147,8 @@ export function EntityImages({ isVisible, onClose, entity, entityId, orgId }: En
               </HStack>
 
               <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                {viewerImage.url ? (
-                  <Image source={{ uri: viewerImage.url }} style={{ width: SCREEN_WIDTH, height: SCREEN_WIDTH }} resizeMode="contain" />
+                {viewerImage.location ? (
+                  <Image source={{ uri: viewerImage.location }} style={{ width: SCREEN_WIDTH, height: SCREEN_WIDTH }} resizeMode="contain" />
                 ) : (
                   <I.gallery size={64} color="#666" />
                 )}

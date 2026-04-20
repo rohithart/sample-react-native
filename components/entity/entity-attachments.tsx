@@ -9,15 +9,14 @@ import React, { useCallback, useState } from 'react';
 import { ActivityIndicator, Alert, FlatList, Linking, Modal, Pressable, Text, TextInput, View } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { EntityType } from '@/enums';
 
 const I = ENTITY_ICONS;
-
-type AttachmentEntity = 'organisation' | 'workflow' | 'task' | 'quote' | 'invoice' | 'workorder' | 'evidence' | 'meeting' | 'document' | 'asset' | 'information' | 'transaction';
 
 interface EntityAttachmentsProps {
   isVisible: boolean;
   onClose: () => void;
-  entity: AttachmentEntity;
+  entity: EntityType;
   entityId: string;
   orgId: string;
 }

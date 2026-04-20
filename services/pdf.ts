@@ -1,7 +1,8 @@
+import { EntityType } from '@/enums';
 import { api } from './api-client';
 
-type PdfEntity = 'workflow' | 'task' | 'quote' | 'invoice' | 'workorder' | 'evidence' | 'meeting' | 'document' | 'asset' | 'information' | 'balance-sheet' | 'income-expense';
+import { resolveEntityType } from '@/utils/entity';
 
 export const pdfApi = {
-  get: (entity: PdfEntity, id: string) => api.get<Blob>(`/api/pdf/${entity}/${id}`),
+  get: (entity: EntityType, id: string) => api.get<Blob>(`/api/pdf/${resolveEntityType(entity)}/${id}`),
 };
