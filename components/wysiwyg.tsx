@@ -1,6 +1,7 @@
-import { TentapEditor, TentapToolbar, useTentapEditor } from '@10play/tentap-editor';
+import { RichText, Toolbar, useEditorBridge } from '@10play/tentap-editor';
 import React from 'react';
-import { StyleProp, View, ViewStyle } from 'react-native';
+import { KeyboardAvoidingView, Platform, StyleProp, View, ViewStyle } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export interface WysiwygProps {
   value: string;
@@ -8,8 +9,6 @@ export interface WysiwygProps {
   placeholder?: string;
   style?: StyleProp<ViewStyle>;
   minHeight?: number;
-  toolbarProps?: any;
-  editorProps?: any;
 }
 
 export const Wysiwyg: React.FC<WysiwygProps> = ({
@@ -17,26 +16,31 @@ export const Wysiwyg: React.FC<WysiwygProps> = ({
   onChange,
   placeholder = 'Enter text...',
   style,
-  minHeight = 100,
-  toolbarProps = {},
-  editorProps = {},
+  minHeight = 150,
 }) => {
-  const editor = useTentapEditor({
-    content: value,
-    onUpdate: ({ editor }) => onChange(editor.getHTML()),
-    extensions: [], // Add extensions as needed
+  const editor = useEditorBridge({
+    autofocus: true,
+    avoidIosKeyboard: true,
+    initialContent: value || `<p>${placeholder}</p>`, 
+    onChange: async () => {
+      const html = await editor.getHTML();
+      onChange(html);
+    },
   });
 
   return (
-    <View style={[{ minHeight, borderWidth: 1, borderRadius: 8, padding: 8 }, style]}>
-      <TentapToolbar editor={editor} {...toolbarProps} />
-      <TentapEditor
-        editor={editor}
-        style={{ minHeight, borderRadius: 8 }}
-        placeholder={placeholder}
-        {...editorProps}
-      />
-    </View>
+    <SafeAreaView style={{ flex: 1 }}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={[{ flex: 1, minHeight }, style]}
+      >
+        <View style={{ flex: 1, borderWidth: 1, borderRadius: 8, overflow: 'hidden' }}>
+          <RichText editor={editor} />
+        </View>
+        
+        <Toolbar editor={editor} />
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
 
