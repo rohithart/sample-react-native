@@ -2,21 +2,24 @@ import { UserAvatar } from '@/components/user-avatar';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { useOrganisationContext } from '@/context/organisation-context';
 import { useToast } from '@/context/toast-context';
+import { EntityType } from '@/enums';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useCreateComment, useDeleteComment } from '@/services/comment';
+import { useReportComment } from '@/services/email';
 import { useDeleteWall, useLikeWall } from '@/services/wall';
-import { Comment } from '@/types';
-import React, { useState } from 'react';
+import { Comment, Wall } from '@/types';
+import React, { useCallback, useState } from 'react';
 import { ActivityIndicator, Alert, FlatList, Pressable, Text, TextInput, View } from 'react-native';
 
 const I = ENTITY_ICONS;
 
-export function WallCard({ wall, orgId, onRefresh, isLiked }: { wall: any; orgId: string; onRefresh: () => void; isLiked: (id: string) => boolean }) {
+export function WallCard({ wall, orgId, onRefresh, isLiked }: { wall: Wall; orgId: string; onRefresh: () => void; isLiked: (id: string) => boolean }) {
   const colors = useThemeColors();
   const likeMutation = useLikeWall(orgId);
   const deleteMutation = useDeleteWall(orgId);
   const createComment = useCreateComment(orgId, 'wall', wall._id);
   const deleteCommentMutation = useDeleteComment('wall', wall._id);
+  const reportMutation = useReportComment();
   const { showToast } = useToast();
   const [deleting, setDeleting] = useState(false);
   const [commentText, setCommentText] = useState('');
@@ -45,6 +48,14 @@ export function WallCard({ wall, orgId, onRefresh, isLiked }: { wall: any; orgId
     ]);
   };
 
+  const handleReport = useCallback((id: string, org: any) => {
+      const data: any = {organisation: org}
+      Alert.alert('Report Comment', 'Are you sure you want to report this comment?', [
+        { text: 'Cancel', style: 'cancel' },
+        { text: 'Report', style: 'destructive', onPress: () => reportMutation.mutateAsync({ id, data }) },
+      ]);
+    }, [reportMutation]);
+
   const handleDeleteComment = (id: string) => {
     Alert.alert('Delete Comment', 'Are you sure you want to delete this comment?', [
       { text: 'Cancel', style: 'cancel' },
@@ -57,7 +68,7 @@ export function WallCard({ wall, orgId, onRefresh, isLiked }: { wall: any; orgId
     setPosting(true);
     createComment.mutate({
       comment: commentText.trim(),
-      entityType: 'wall',
+      entityType: EntityType.WALL,
       entityId: wall._id,
       organisation: orgId,
     }, {
@@ -78,6 +89,9 @@ export function WallCard({ wall, orgId, onRefresh, isLiked }: { wall: any; orgId
           <Text style={{ color: colors.text, fontSize: 13 }}>{item.comment}</Text>
           <Text style={{ color: colors.sub, fontSize: 11, marginTop: 2 }}>{new Date(item.createdAt).toLocaleString()}</Text>
         </View>
+        <Pressable onPress={() => handleReport(item._id, item.organisation)} style={{ padding: 4 }} disabled={reportMutation.isPending}>
+          {reportMutation.isPending ? <ActivityIndicator size="small" color={colors.danger} /> : <I.warning size={14} color={colors.warning} />}
+        </Pressable>
         {isAdmin && (
         <Pressable onPress={() => handleDeleteComment(item._id)} style={{ padding: 4 }} disabled={deleteMutation.isPending}>
             {deleteMutation.isPending ? <ActivityIndicator size="small" color={colors.danger} /> : <I.trash size={14} color={colors.danger} />}

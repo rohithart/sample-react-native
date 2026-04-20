@@ -48,7 +48,7 @@ export default function WallScreen() {
           placeholderTextColor={colors.sub}
           style={{ backgroundColor: colors.bg, borderRadius: 8, padding: 10, color: colors.text, fontSize: 15, borderWidth: 1, borderColor: colors.border, marginBottom: 8 }}
           multiline
-          numberOfLines={3}
+          numberOfLines={5}
         />
         <Pressable
           onPress={handleAddPost}
