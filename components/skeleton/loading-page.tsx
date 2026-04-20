@@ -1,29 +1,12 @@
 import { HStack } from '@/components/ui/hstack';
 import { VStack } from '@/components/ui/vstack';
 import { useThemeColors } from '@/hooks/use-theme-colors';
-import { ScrollView } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { ScrollView, View } from 'react-native';
 import { LoadingImage } from './loading-image';
 import { Shimmer } from './shimmer';
 
-/**
- * Full-page skeleton for an item detail screen.
- *
- * Layout mirrors a typical detail page:
- *   ┌─────────────────────────────┐
- *   │   Banner image (full width) │
- *   ├─────────────────────────────┤
- *   │ ◉  Title ────────           │
- *   │     Subtitle ───            │
- *   ├─────────────────────────────┤
- *   │ Body lines (5)              │
- *   │ Tag chips row               │
- *   │ [ Action ] [ Action ]       │
- *   └─────────────────────────────┘
- */
 export function LoadingPage() {
   const { bg, separator: dividerColor } = useThemeColors();
-  const { top } = useSafeAreaInsets();
 
   return (
     <ScrollView

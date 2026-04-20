@@ -10,6 +10,7 @@ import { Stack, useRouter } from 'expo-router';
 import { useEffect, useRef } from 'react';
 import { Animated, BackHandler, Easing, Platform, Text as RNText, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Alert } from '@/types';
 
 
 export default function SplashScreen() {
@@ -89,11 +90,11 @@ export default function SplashScreen() {
   // Alerts toast
   useEffect(() => {
     if (alertsQuery.data && Array.isArray(alertsQuery.data)) {
-      alertsQuery.data.forEach((alert) => {
+      alertsQuery.data.forEach((alert: Alert) => {
         showToast({
-          type: alert.type || 'info',
-          title: alert.title || 'Alert',
-          message: alert.message,
+          type: alert.alertType || 'info',
+          title: 'Alert',
+          message: alert.name || 'Alert',
           duration: 4000,
         });
       });

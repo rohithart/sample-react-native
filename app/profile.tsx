@@ -41,7 +41,6 @@ export default function ProfileScreen() {
         contentContainerStyle={{ paddingHorizontal: 16, paddingVertical: 20 }}
         showsVerticalScrollIndicator={false}
       >
-        {/* Avatar Section */}
         <Box className="items-center mb-8">
           {userRole?.user?.image ? (
             <Box
@@ -69,7 +68,6 @@ export default function ProfileScreen() {
           </Text>
         </Box>
 
-        {/* User Information Card */}
         <Box
           className="rounded-xl p-4 mb-6"
           style={{ backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border }}
@@ -78,7 +76,6 @@ export default function ProfileScreen() {
             Personal Information
           </Text>
 
-          {/* Email */}
           <Box className="flex-row items-center mb-4">
             <Box
               className="w-10 h-10 rounded-lg items-center justify-center mr-3"
@@ -94,7 +91,6 @@ export default function ProfileScreen() {
             </Box>
           </Box>
 
-          {/* Phone */}
           <Box className="flex-row items-center mb-4">
             <Box
               className="w-10 h-10 rounded-lg items-center justify-center mr-3"
@@ -110,7 +106,6 @@ export default function ProfileScreen() {
             </Box>
           </Box>
 
-          {/* Role Description */}
           <Box className="flex-row items-center">
             <Box
               className="w-10 h-10 rounded-lg items-center justify-center mr-3"

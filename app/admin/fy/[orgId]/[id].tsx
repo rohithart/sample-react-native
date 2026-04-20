@@ -85,7 +85,7 @@ export default function FinancialYearDetailScreen() {
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
       <Stack.Screen options={{ headerShown: false }} />
       <PageHeader icon="financialYear"
-        title={'Financial Year' || 'Loading...'}
+        title={'Financial Year'}
         rightAction={
           <Pressable onPress={() => setIsBottomSheetOpen(true)} style={{ padding: 8 }}>
             <I.moreVertical size={20} color={colors.primary} />

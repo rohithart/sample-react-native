@@ -21,7 +21,8 @@ export function HomeNavigationDrawer({
       onClose={onClose}
       drawerAnim={drawerAnim}
       topInset={topInset}
-    >
+      >
+      
     </NavigationDrawer>
   );
 }

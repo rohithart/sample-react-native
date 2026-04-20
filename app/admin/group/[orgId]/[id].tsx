@@ -83,7 +83,7 @@ export default function GroupDetailScreen() {
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
       <Stack.Screen options={{ headerShown: false }} />
       <PageHeader icon="group"
-        title={item?.title || item?.title || item?.name || 'Loading...'}
+        title={item?.title || 'Loading...'}
         rightAction={
           <Pressable onPress={() => setIsBottomSheetOpen(true)} style={{ padding: 8 }}>
             <I.moreVertical size={20} color={colors.primary} />
@@ -112,7 +112,7 @@ export default function GroupDetailScreen() {
       <ActionBottomSheet isVisible={isBottomSheetOpen} onClose={() => setIsBottomSheetOpen(false)} actions={actions} />
       <ConfirmationDialog isOpen={confirmationType === 'delete'} onClose={() => setConfirmationType(null)} onConfirm={handleDelete} type="delete" isLoading={isProcessing} />
       <ConfirmationDialog isOpen={confirmationType === 'archive'} onClose={() => setConfirmationType(null)} onConfirm={handleArchive} type="archive" isLoading={isProcessing} />
-      <AuditInfo isVisible={showAudit} onClose={() => setShowAudit(false)} createdBy={item?.createdBy} updatedBy={item?.updatedBy} createdAt={item?.createdAt} updatedAt={item?.updatedAt} />
+      <AuditInfo isVisible={showAudit} onClose={() => setShowAudit(false)} createdBy={item?.createdBy} createdAt={item?.createdAt} updatedAt={item?.updatedAt} />
 
     </SafeAreaView>
   );

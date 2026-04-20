@@ -28,7 +28,7 @@ export default function WallScreen() {
 
   const isLiked = useCallback((id: string) => {
     const wall = walls?.find((w) => w._id === id);
-    return wall?.likedByUsers?.length > 0;
+    return wall?.likedByUsers?.length ? wall?.likedByUsers?.length > 0 : false;
   }, [walls]);
 
   return (

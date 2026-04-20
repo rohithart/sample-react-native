@@ -25,8 +25,8 @@ export default function AddBookingScreen() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [fromDate, setFromDate] = useState<Date | null>(null);
   const [toDate, setToDate] = useState<Date | null>(null);
-  const [fromTime, setFromTime] = useState<Date | null>(null);
-  const [toTime, setToTime] = useState<Date | null>(null);
+  const [fromTime, setFromTime] = useState<Date | undefined>(undefined);
+  const [toTime, setToTime] = useState<Date | undefined>(undefined);
   const [isFullDay, setIsFullDay] = useState(false);
   const [showFromDate, setShowFromDate] = useState(false);
   const [showToDate, setShowToDate] = useState(false);
@@ -72,13 +72,13 @@ export default function AddBookingScreen() {
       await createBooking.mutateAsync({
         title: title.trim(),
         description: description.trim(),
-        bookingType,
+        bookingType: bookingType as unknown as any,
         bookingDateFrom: fromDate,
         bookingDateTo: toDate,
-        bookingTimeFrom: isFullDay ? null : fromTime,
-        bookingTimeTo: isFullDay ? null : toTime,
+        bookingTimeFrom: isFullDay ? undefined : fromTime,
+        bookingTimeTo: isFullDay ? undefined : toTime,
         isFullDay,
-        organisation: orgId,
+        organisation: orgId as unknown as any,
       });
       setIsSubmitting(false);
       Alert.alert('Success', 'Booking created successfully', [

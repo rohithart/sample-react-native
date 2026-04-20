@@ -15,6 +15,7 @@ import { downloadAndSharePdf } from '@/utils/pdf-download';
 import { useInformation } from '@/services/information';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { EntityType } from '@/enums';
 
 const I = ENTITY_ICONS;
 
@@ -64,7 +65,7 @@ export default function InformationDetailScreen() {
       color: 'warning' as const,
     }] : []),
     { id: 'attachments', label: 'Attachments', icon: <I.attachment size={24} color={colors.primary} />, onPress: () => setShowAttachments(true), color: 'primary' as const },
-    { id: 'pdf', label: 'Download PDF', icon: <I.fileDown size={24} color={colors.success} />, onPress: () => downloadAndSharePdf('information', id || ''), color: 'success' as const },
+    { id: 'pdf', label: 'Download PDF', icon: <I.fileDown size={24} color={colors.success} />, onPress: () => downloadAndSharePdf(EntityType.INFORMATION, id || ''), color: 'success' as const },
     { id: 'audit', label: 'Audit Info', icon: <I.information size={24} color={colors.secondary} />, onPress: () => setShowAudit(true), color: 'primary' as const },
     {
       id: 'share',
@@ -86,7 +87,7 @@ export default function InformationDetailScreen() {
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
       <Stack.Screen options={{ headerShown: false }} />
       <PageHeader icon="information"
-        title={item?.title || item?.title || item?.name || 'Loading...'}
+        title={item?.title || 'Loading...'}
         rightAction={
           <Pressable onPress={() => setIsBottomSheetOpen(true)} style={{ padding: 8 }}>
             <I.moreVertical size={20} color={colors.primary} />
@@ -113,7 +114,7 @@ export default function InformationDetailScreen() {
       <ConfirmationDialog isOpen={confirmationType === 'delete'} onClose={() => setConfirmationType(null)} onConfirm={handleDelete} type="delete" isLoading={isProcessing} />
       <ConfirmationDialog isOpen={confirmationType === 'archive'} onClose={() => setConfirmationType(null)} onConfirm={handleArchive} type="archive" isLoading={isProcessing} />
       <AuditInfo isVisible={showAudit} onClose={() => setShowAudit(false)} createdBy={item?.createdBy} updatedBy={item?.updatedBy} createdAt={item?.createdAt} updatedAt={item?.updatedAt} />
-      <EntityAttachments isVisible={showAttachments} onClose={() => setShowAttachments(false)} entity={'information'} entityId={id || ''} orgId={orgId || ''} />
+      <EntityAttachments isVisible={showAttachments} onClose={() => setShowAttachments(false)} entity={EntityType.INFORMATION} entityId={id || ''} orgId={orgId || ''} />
     </SafeAreaView>
   );
 }

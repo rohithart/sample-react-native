@@ -83,7 +83,7 @@ export default function AssetTypeDetailScreen() {
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
       <Stack.Screen options={{ headerShown: false }} />
       <PageHeader icon="assetType"
-        title={item?.title || item?.title || item?.name || 'Loading...'}
+        title={item?.title || 'Loading...'}
         rightAction={
           <Pressable onPress={() => setIsBottomSheetOpen(true)} style={{ padding: 8 }}>
             <I.moreVertical size={20} color={colors.primary} />

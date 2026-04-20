@@ -1,11 +1,10 @@
+import { EntityType } from '@/enums';
 import { pdfApi } from '@/services/pdf';
 import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import { Alert } from 'react-native';
 
-type PdfEntity = 'workflow' | 'task' | 'quote' | 'invoice' | 'workorder' | 'evidence' | 'meeting' | 'document' | 'asset' | 'information' | 'balance-sheet' | 'income-expense';
-
-export async function downloadAndSharePdf(entity: PdfEntity, entityId: string, fileName?: string): Promise<void> {
+export async function downloadAndSharePdf(entity: EntityType, entityId: string, fileName?: string): Promise<void> {
   try {
     const blob = await pdfApi.get(entity, entityId);
     const name = fileName || `${entity}-${entityId}.pdf`;

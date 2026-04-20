@@ -17,8 +17,8 @@ export function WallCard({ wall, orgId, onRefresh, isLiked }: { wall: Wall; orgI
   const colors = useThemeColors();
   const likeMutation = useLikeWall(orgId);
   const deleteMutation = useDeleteWall(orgId);
-  const createComment = useCreateComment(orgId, 'wall', wall._id);
-  const deleteCommentMutation = useDeleteComment('wall', wall._id);
+  const createComment = useCreateComment(orgId, EntityType.WALL, wall._id);
+  const deleteCommentMutation = useDeleteComment(EntityType.WALL, wall._id);
   const reportMutation = useReportComment();
   const { showToast } = useToast();
   const [deleting, setDeleting] = useState(false);
@@ -70,7 +70,7 @@ export function WallCard({ wall, orgId, onRefresh, isLiked }: { wall: Wall; orgI
       comment: commentText.trim(),
       entityType: EntityType.WALL,
       entityId: wall._id,
-      organisation: orgId,
+      organisation: orgId as unknown as any,
     }, {
       onSuccess: () => {
         setCommentText('');

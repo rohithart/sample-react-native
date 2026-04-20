@@ -4,16 +4,17 @@ import { DetailField, DetailSection, AuditInfo } from '@/components/details';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 
 import React, { useState } from 'react';
-import { ActivityIndicator, ScrollView, Text, View, Pressable, Alert } from 'react-native';
+import { ActivityIndicator, ScrollView, Text, View, Pressable, Alert, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ActionBottomSheet } from '@/components/sheets/action-bottom-sheet';
 import { ActionItem } from '@/types/actionItem';
 import { ConfirmationDialog } from '@/components/dialogs/confirmation-dialog';
 import { useOrganisationContext } from '@/context/organisation-context';
 
-import { useUserRole } from '@/services/user';
+import { useUser } from '@/services/user';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { Box } from '@/components/ui/box';
 
 const I = ENTITY_ICONS;
 
@@ -27,7 +28,7 @@ export default function UserDetailScreen() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [showAudit, setShowAudit] = useState(false);
 
-  const { data: item, isLoading: isLoadingItem, refetch, isRefetching } = useUserRole(id || '');
+  const { data: item, isLoading: isLoadingItem, refetch, isRefetching } = useUser(id || '');
   const refreshControl = useRefreshControl(refetch, isRefetching);
 
   const handleDelete = async () => {
@@ -83,7 +84,7 @@ export default function UserDetailScreen() {
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
       <Stack.Screen options={{ headerShown: false }} />
       <PageHeader icon="user"
-        title={item.user?.name || item.user?.email || 'User' || 'Loading...'}
+        title={item?.user?.name || item?.user?.email || 'User' || 'Loading...'}
         rightAction={
           <Pressable onPress={() => setIsBottomSheetOpen(true)} style={{ padding: 8 }}>
             <I.moreVertical size={20} color={colors.primary} />
@@ -102,6 +103,27 @@ export default function UserDetailScreen() {
         contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 8, paddingBottom: 24, gap: 14 }}
         showsVerticalScrollIndicator={false}
       >
+        <Box className="items-center mb-8">
+          {item?.user?.image ? (
+            <Box
+              className="w-24 h-24 rounded-full items-center justify-center mb-4 overflow-hidden"
+              style={{ backgroundColor: colors.primary + '20' }}
+            >
+              <Image
+                source={{ uri: item.user.image }}
+                className="w-full h-full"
+                resizeMode="cover"
+              />
+            </Box>
+          ) : (
+            <Box
+              className="w-24 h-24 rounded-full items-center justify-center mb-4"
+              style={{ backgroundColor: colors.primary + '20' }}
+            >
+              <Text className="text-5xl">👤</Text>
+            </Box>
+          )}
+        </Box>
         <DetailSection title="User Info">
           <DetailField label="Name" value={item.user?.name} />
           <DetailField label="Email" value={item.user?.email} />
@@ -120,7 +142,7 @@ export default function UserDetailScreen() {
       <ActionBottomSheet isVisible={isBottomSheetOpen} onClose={() => setIsBottomSheetOpen(false)} actions={actions} />
       <ConfirmationDialog isOpen={confirmationType === 'delete'} onClose={() => setConfirmationType(null)} onConfirm={handleDelete} type="delete" isLoading={isProcessing} />
       <ConfirmationDialog isOpen={confirmationType === 'archive'} onClose={() => setConfirmationType(null)} onConfirm={handleArchive} type="archive" isLoading={isProcessing} />
-      <AuditInfo isVisible={showAudit} onClose={() => setShowAudit(false)} createdBy={item?.createdBy} updatedBy={item?.updatedBy} createdAt={item?.createdAt} updatedAt={item?.updatedAt} />
+      <AuditInfo isVisible={showAudit} onClose={() => setShowAudit(false)} createdAt={item?.createdAt} updatedAt={item?.updatedAt} />
 
     </SafeAreaView>
   );
