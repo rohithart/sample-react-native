@@ -1,3 +1,4 @@
+import { useThemeColors } from '@/hooks/use-theme-colors';
 import { RichText, Toolbar, useEditorBridge } from '@10play/tentap-editor';
 import React from 'react';
 import { KeyboardAvoidingView, Platform, StyleProp, View, ViewStyle } from 'react-native';
@@ -28,8 +29,11 @@ export const Wysiwyg: React.FC<WysiwygProps> = ({
     },
   });
 
+  const colors = useThemeColors();
+
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    
+    <SafeAreaView style={{ minHeight: 120, borderWidth: 1, borderColor: colors.border, borderRadius: 8, backgroundColor: colors.bg, marginBottom: 8 }}>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={[{ flex: 1, minHeight }, style]}

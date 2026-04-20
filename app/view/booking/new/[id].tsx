@@ -73,11 +73,12 @@ export default function AddBookingScreen() {
         title: title.trim(),
         description: description.trim(),
         bookingType,
-        fromDate: fromDate?.toISOString(),
-        toDate: toDate?.toISOString(),
-        fromTime: isFullDay ? undefined : fromTime?.toISOString(),
-        toTime: isFullDay ? undefined : toTime?.toISOString(),
+        bookingDateFrom: fromDate,
+        bookingDateTo: toDate,
+        bookingTimeFrom: isFullDay ? null : fromTime,
+        bookingTimeTo: isFullDay ? null : toTime,
         isFullDay,
+        organisation: orgId,
       });
       setIsSubmitting(false);
       Alert.alert('Success', 'Booking created successfully', [
@@ -106,7 +107,7 @@ export default function AddBookingScreen() {
         contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 16 }}
         showsVerticalScrollIndicator={false}
       >
-        <VStack space={16}>
+        <VStack space="md" className="flex-1">
           <FormField
             label="Title"
             required
@@ -115,7 +116,7 @@ export default function AddBookingScreen() {
             onChangeText={setTitle}
           />
 
-          <VStack space={8} style={{ zIndex: 10 }}>
+          <VStack space="md" className="flex-1" style={{ marginBottom: 10 }}>
             <Text style={{ fontWeight: '600', color: colors.text }}>Booking Type *</Text>
             <DropDownPicker
               open={dropdownOpen}
@@ -132,18 +133,17 @@ export default function AddBookingScreen() {
             />
           </VStack>
 
-          <VStack space={8}>
+          <VStack space="md" className="flex-1">
             <Text style={{ fontWeight: '600', color: colors.text }}>Description *</Text>
             <Wysiwyg
               value={description}
               onChange={setDescription}
               placeholder="Enter description..."
-              style={{ minHeight: 120, borderWidth: 1, borderColor: colors.border, borderRadius: 8, backgroundColor: colors.bg, marginBottom: 8 }}
             />
           </VStack>
 
-          <HStack space={16} style={{ alignItems: 'center' }}>
-            <VStack space={4} style={{ flex: 1 }}>
+          <HStack style={{ alignItems: 'center' }}>
+            <VStack  space="md" className="flex-1">
               <Text style={{ fontWeight: '600', color: colors.text }}>From Date *</Text>
               <Text
                 onPress={() => setShowFromDate(true)}
@@ -159,7 +159,7 @@ export default function AddBookingScreen() {
                 onCancel={() => setShowFromDate(false)}
               />
             </VStack>
-            <VStack space={4} style={{ flex: 1 }}>
+            <VStack  space="md" className="flex-1">
               <Text style={{ fontWeight: '600', color: colors.text }}>To Date *</Text>
               <Text
                 onPress={() => setShowToDate(true)}
@@ -177,14 +177,14 @@ export default function AddBookingScreen() {
             </VStack>
           </HStack>
 
-          <HStack space={12} style={{ alignItems: 'center', marginTop: 8, marginBottom: 8 }}>
+          <HStack style={{ alignItems: 'center', marginTop: 8, marginBottom: 8 }}>
             <Text style={{ fontWeight: '600', color: colors.text }}>Full day booking</Text>
             <Switch value={isFullDay} onValueChange={setIsFullDay} />
           </HStack>
 
           {!isFullDay && (
-            <HStack space={16} style={{ alignItems: 'center' }}>
-              <VStack space={4} style={{ flex: 1 }}>
+            <HStack style={{ alignItems: 'center' }}>
+              <VStack space="md" className="flex-1">
                 <Text style={{ fontWeight: '600', color: colors.text }}>From Time *</Text>
                 <Text
                   onPress={() => setShowFromTime(true)}
@@ -199,7 +199,7 @@ export default function AddBookingScreen() {
                   onCancel={() => setShowFromTime(false)}
                 />
               </VStack>
-              <VStack space={4} style={{ flex: 1 }}>
+              <VStack space="md" className="flex-1">
                 <Text style={{ fontWeight: '600', color: colors.text }}>To Time *</Text>
                 <Text
                   onPress={() => setShowToTime(true)}
