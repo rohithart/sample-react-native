@@ -6,7 +6,7 @@ export const commentKeys = {
   forEntity: (entity: string, id: string) => ['comments', entity, id] as const,
 };
 
-type Entity = 'workflow' | 'task' | 'quote' | 'invoice' | 'workorder' | 'evidence' | 'vendor' | 'document' | 'asset' | 'booking' | 'request' | 'meeting' | 'transaction' | 'financial-year';
+type Entity = 'workflow' | 'task' | 'quote' | 'invoice' | 'workorder' | 'evidence' | 'vendor' | 'document' | 'asset' | 'booking' | 'request' | 'meeting' | 'transaction' | 'financial-year' | 'wall' | 'user';
 
 const commentApi = {
   getForEntity: (entity: Entity, id: string) => api.get<Comment[]>(`/api/comment/${entity}/${id}`),
