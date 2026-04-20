@@ -1,4 +1,4 @@
-import type { WallPost } from '@/types';
+import type { Wall } from '@/types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from './api-client';
 
@@ -7,29 +7,29 @@ export const wallKeys = {
 };
 
 const wallApi = {
-  getAll: (orgId: string) => api.get<WallPost[]>(`/api/wall/org/${orgId}`),
-  getAllForUser: (orgId: string, userId: string) => api.get<WallPost[]>(`/api/wall/org/${orgId}/user/${userId}`),
-  create: (orgId: string, data: Partial<WallPost>) => api.post<WallPost>(`/api/wall/${orgId}`, data),
+  getAll: (orgId: string) => api.get<Wall[]>(`/api/wall/org/${orgId}`),
+  getAllForUser: (orgId: string, userId: string) => api.get<Wall[]>(`/api/wall/org/${orgId}/user/${userId}`),
+  create: (orgId: string, data: Partial<Wall>) => api.post<Wall>(`/api/wall/${orgId}`, data),
   delete: (id: string) => api.delete<boolean>(`/api/wall/${id}`),
-  like: (orgId: string, id: string) => api.patch<WallPost>(`/api/wall/like/${orgId}/${id}`, {}),
-  unlike: (orgId: string, id: string) => api.patch<WallPost>(`/api/wall/unlike/${orgId}/${id}`, {}),
+  like: (orgId: string, id: string) => api.patch<Wall>(`/api/wall/like/${orgId}/${id}`, {}),
+  unlike: (orgId: string, id: string) => api.patch<Wall>(`/api/wall/unlike/${orgId}/${id}`, {}),
 };
 
-export function useWallPosts(orgId: string) {
+export function useWalls(orgId: string) {
   return useQuery({ queryKey: wallKeys.all(orgId), queryFn: () => wallApi.getAll(orgId), enabled: !!orgId });
 }
 
-export function useCreateWallPost(orgId: string) {
+export function useCreateWall(orgId: string) {
   const qc = useQueryClient();
-  return useMutation({ mutationFn: (data: Partial<WallPost>) => wallApi.create(orgId, data), onSuccess: () => qc.invalidateQueries({ queryKey: wallKeys.all(orgId) }) });
+  return useMutation({ mutationFn: (data: Partial<Wall>) => wallApi.create(orgId, data), onSuccess: () => qc.invalidateQueries({ queryKey: wallKeys.all(orgId) }) });
 }
 
-export function useDeleteWallPost(orgId: string) {
+export function useDeleteWall(orgId: string) {
   const qc = useQueryClient();
   return useMutation({ mutationFn: (id: string) => wallApi.delete(id), onSuccess: () => qc.invalidateQueries({ queryKey: wallKeys.all(orgId) }) });
 }
 
-export function useLikeWallPost(orgId: string) {
+export function useLikeWall(orgId: string) {
   const qc = useQueryClient();
   return useMutation({ mutationFn: (id: string) => wallApi.like(orgId, id), onSuccess: () => qc.invalidateQueries({ queryKey: wallKeys.all(orgId) }) });
 }
