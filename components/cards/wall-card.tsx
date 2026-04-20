@@ -5,7 +5,7 @@ import { useToast } from '@/context/toast-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useCreateComment, useDeleteComment } from '@/services/comment';
 import { useDeleteWall, useLikeWall } from '@/services/wall';
-import { Comment, Wall } from '@/types';
+import { Comment } from '@/types';
 import React, { useState } from 'react';
 import { ActivityIndicator, Alert, FlatList, Pressable, Text, TextInput, View } from 'react-native';
 
@@ -46,10 +46,11 @@ export function WallCard({ wall, orgId, onRefresh, isLiked }: { wall: any; orgId
   };
 
   const handleDeleteComment = (id: string) => {
-      Alert.alert('Delete Comment', 'Are you sure you want to delete this comment?', [
-        { text: 'Delete', style: 'destructive', onPress: () => deleteCommentMutation.mutate(id) },
-      ]);
-    }, [deleteCommentMutation];
+    Alert.alert('Delete Comment', 'Are you sure you want to delete this comment?', [
+      { text: 'Cancel', style: 'cancel' },
+      { text: 'Delete', style: 'destructive', onPress: () => deleteCommentMutation.mutate(id, { onSuccess: onRefresh }) },
+    ]);
+  };
 
   const handleAddComment = () => {
     if (!commentText.trim()) return;
