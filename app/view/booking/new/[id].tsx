@@ -1,5 +1,7 @@
 import { FormField } from '@/components/ui/form-field';
 import { PageHeader } from '@/components/ui/page-header';
+import Wysiwyg from '@/components/wysiwyg';
+import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useBookingTypes } from '@/services/booking-type';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
@@ -8,7 +10,6 @@ import { Alert, Pressable, ScrollView, Switch, Text, View } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Wysiwyg from '@/components/wysiwyg';
 
 
 export default function AddBookingScreen() {
@@ -30,6 +31,20 @@ export default function AddBookingScreen() {
   const [showToTime, setShowToTime] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownItems, setDropdownItems] = useState<any[]>([]);
+
+  const I = ENTITY_ICONS;
+  const isFormValid =
+    !!title.trim() &&
+    !!bookingType &&
+    !!description.trim() &&
+    !!fromDate &&
+    !!toDate &&
+    (isFullDay || (!!fromTime && !!toTime));
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const minFromDate = today;
+  const minToDate = fromDate ? fromDate : today;
   const { data: bookingTypes, isLoading: loadingTypes } = useBookingTypes(orgId ?? '');
 
   React.useEffect(() => {
@@ -58,7 +73,15 @@ export default function AddBookingScreen() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
       <Stack.Screen options={{ headerShown: false }} />
-      <PageHeader icon="booking" title="Add New Booking" />
+      <PageHeader
+        icon="booking"
+        title="Add New Booking"
+        rightAction={
+          <Pressable onPress={handleSubmit} style={{ padding: 8 }} disabled={!isFormValid || isSubmitting}>
+            <I.save size={20} color={colors.primary} />
+          </Pressable>
+        }
+      />
 
       <ScrollView
         contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 16, gap: 16 }}
@@ -106,7 +129,8 @@ export default function AddBookingScreen() {
             <DateTimePickerModal
               isVisible={showFromDate}
               mode="date"
-              onConfirm={date => { setFromDate(date); setShowFromDate(false); }}
+              minimumDate={minFromDate}
+              onConfirm={date => { setFromDate(date); setShowFromDate(false); if (toDate && date > toDate) setToDate(null); }}
               onCancel={() => setShowFromDate(false)}
             />
           </View>
@@ -118,6 +142,7 @@ export default function AddBookingScreen() {
             <DateTimePickerModal
               isVisible={showToDate}
               mode="date"
+              minimumDate={minToDate}
               onConfirm={date => { setToDate(date); setShowToDate(false); }}
               onCancel={() => setShowToDate(false)}
             />
@@ -158,22 +183,6 @@ export default function AddBookingScreen() {
           </View>
         )}
 
-        <Pressable
-          onPress={handleSubmit}
-          disabled={isSubmitting}
-          style={({ pressed }) => ({
-            backgroundColor: colors.primary,
-            paddingVertical: 12,
-            borderRadius: 8,
-            alignItems: 'center',
-            opacity: pressed || isSubmitting ? 0.7 : 1,
-            marginTop: 8,
-          })}
-        >
-          <Text style={{ fontSize: 16, fontWeight: '600', color: '#ffffff' }}>
-            {isSubmitting ? 'Creating...' : 'Create Booking'}
-          </Text>
-        </Pressable>
       </ScrollView>
     </SafeAreaView>
   );

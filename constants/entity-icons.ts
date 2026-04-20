@@ -57,6 +57,7 @@ import {
     Receipt,
     RefreshCw,
     Rocket,
+    Save,
     Search,
     Send,
     Settings,
@@ -169,6 +170,7 @@ export type EntityIconKey =
   | 'trash'
   | 'userPlus'
   | 'usersRound'
+  | 'save'
   | 'warning';
 
 export const ENTITY_ICONS: Record<EntityIconKey, IconComponent> = {
@@ -257,5 +259,6 @@ export const ENTITY_ICONS: Record<EntityIconKey, IconComponent> = {
   trash: Trash2,
   userPlus: UserPlus,
   usersRound: UsersRound,
+  save: Save,
   warning: TriangleAlert,
 };
