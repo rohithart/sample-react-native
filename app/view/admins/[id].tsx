@@ -1,12 +1,21 @@
+import { AdminCard } from '@/components/cards/admin-card';
 import { useThemeColors } from '@/hooks/use-theme-colors';
+import { api } from '@/services/api-client';
+import { useQuery } from '@tanstack/react-query';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { Pressable, Text, View } from 'react-native';
+import React from 'react';
+import { ActivityIndicator, FlatList, Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function AdminsListScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const colors = useThemeColors();
   const router = useRouter();
+  const { data: admins, isLoading, refetch, isRefetching } = useQuery({
+    queryKey: ['admins', id],
+    queryFn: () => api.get(`/api/user/admins/${id}`),
+    enabled: !!id,
+  });
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
@@ -14,13 +23,27 @@ export default function AdminsListScreen() {
         <Pressable onPress={() => router.back()} style={{ padding: 4, marginRight: 12 }}>
           <Text style={{ fontSize: 24, color: colors.text }}>‹</Text>
         </Pressable>
-        <Text style={{ fontSize: 18, fontWeight: '700', color: colors.text }}>Security</Text>
+        <Text style={{ fontSize: 18, fontWeight: '700', color: colors.text }}>Admins</Text>
       </View>
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-        <Text style={{ fontSize: 48 }}>🚧</Text>
-        <Text style={{ fontSize: 20, fontWeight: '700', color: colors.text }}>Security</Text>
-        <Text style={{ fontSize: 14, color: colors.sub }}>Org ${id}</Text>
-      </View>
+      {isLoading ? (
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <ActivityIndicator size="large" color={colors.primary} />
+          <Text style={{ color: colors.sub, fontSize: 14, marginTop: 10 }}>Loading...</Text>
+        </View>
+      ) : (
+        <FlatList
+          data={Array.isArray(admins) ? admins : []}
+          renderItem={({ item }) => <AdminCard admin={item} />}
+          keyExtractor={item => item._id}
+          contentContainerStyle={{ paddingBottom: 12 }}
+          scrollIndicatorInsets={{ right: 1 }}
+          ListEmptyComponent={
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingTop: 60 }}>
+              <Text style={{ color: colors.sub, fontSize: 15 }}>No admins found</Text>
+            </View>
+          }
+        />
+      )}
     </SafeAreaView>
   );
 }
