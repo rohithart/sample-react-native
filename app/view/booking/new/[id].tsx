@@ -1,29 +1,57 @@
-import { useThemeColors } from '@/hooks/use-theme-colors';
-import { PageHeader } from '@/components/ui/page-header';
 import { FormField } from '@/components/ui/form-field';
+import { PageHeader } from '@/components/ui/page-header';
+import { useThemeColors } from '@/hooks/use-theme-colors';
+import { useBookingTypes } from '@/services/booking-type';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { ScrollView, Text, Pressable, Alert } from 'react-native';
+import { Alert, Pressable, ScrollView, Switch, Text, View } from 'react-native';
+import DropDownPicker from 'react-native-dropdown-picker';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import QuillEditor, { QuillToolbar } from 'react-native-quill';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+
 export default function AddBookingScreen() {
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const { id: orgId } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const colors = useThemeColors();
-  const [name, setName] = useState('');
+  const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [bookingType, setBookingType] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [fromDate, setFromDate] = useState<Date | null>(null);
+  const [toDate, setToDate] = useState<Date | null>(null);
+  const [fromTime, setFromTime] = useState<Date | null>(null);
+  const [toTime, setToTime] = useState<Date | null>(null);
+  const [isFullDay, setIsFullDay] = useState(false);
+  const [showFromDate, setShowFromDate] = useState(false);
+  const [showToDate, setShowToDate] = useState(false);
+  const [showFromTime, setShowFromTime] = useState(false);
+  const [showToTime, setShowToTime] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [dropdownItems, setDropdownItems] = useState<any[]>([]);
+  const { data: bookingTypes, isLoading: loadingTypes } = useBookingTypes(orgId ?? '');
+
+  React.useEffect(() => {
+    if (bookingTypes) {
+      setDropdownItems(bookingTypes.map((bt: any) => ({ label: bt.title, value: bt._id })));
+    }
+  }, [bookingTypes]);
 
   const handleSubmit = async () => {
-    if (!name.trim()) {
-      Alert.alert('Validation Error', 'Please enter a name');
+    if (!title.trim() || !bookingType || !description.trim() || !fromDate || !toDate) {
+      Alert.alert('Validation Error', 'Please fill all required fields');
+      return;
+    }
+    if (!isFullDay && (!fromTime || !toTime)) {
+      Alert.alert('Validation Error', 'Please select from and to time');
       return;
     }
     setIsSubmitting(true);
     await new Promise((resolve) => setTimeout(resolve, 1000));
     setIsSubmitting(false);
     Alert.alert('Success', 'Booking created successfully', [
-      { text: 'OK', onPress: () => router.push(`/view/bookings/${id}`) },
+      { text: 'OK', onPress: () => router.push(`/view/bookings/${orgId}`) },
     ]);
   };
 
@@ -37,21 +65,102 @@ export default function AddBookingScreen() {
         showsVerticalScrollIndicator={false}
       >
         <FormField
-          label="Name"
+          label="Title"
           required
-          placeholder="Enter name"
-          value={name}
-          onChangeText={setName}
+          placeholder="Enter booking title"
+          value={title}
+          onChangeText={setTitle}
         />
 
-        <FormField
-          label="Description"
-          placeholder="Enter description"
-          value={description}
-          onChangeText={setDescription}
-          multiline
-          numberOfLines={4}
-        />
+        <View style={{ zIndex: 10 }}>
+          <Text style={{ fontWeight: '600', color: colors.text, marginBottom: 6 }}>Booking Type *</Text>
+          <DropDownPicker
+            open={dropdownOpen}
+            value={bookingType}
+            items={dropdownItems}
+            setOpen={setDropdownOpen}
+            setValue={setBookingType}
+            setItems={setDropdownItems}
+            placeholder={loadingTypes ? 'Loading...' : 'Select booking type'}
+            style={{ borderColor: colors.border, marginBottom: 8 }}
+            dropDownContainerStyle={{ borderColor: colors.border }}
+            listMode="SCROLLVIEW"
+            disabled={loadingTypes}
+          />
+        </View>
+
+        <Text style={{ fontWeight: '600', color: colors.text, marginBottom: 6 }}>Description *</Text>
+        <View style={{ minHeight: 120, borderWidth: 1, borderColor: colors.border, borderRadius: 8, backgroundColor: colors.bg, marginBottom: 8 }}>
+          <QuillEditor
+            style={{ minHeight: 100, color: colors.text, backgroundColor: colors.bg, borderRadius: 8 }}
+            value={description}
+            onChange={setDescription}
+            theme="light"
+            placeholder="Enter description..."
+          />
+          <QuillToolbar editorId={undefined} options={[['bold', 'italic', 'underline'], ['list', 'bullet'], ['link'], ['undo', 'redo']]} />
+        </View>
+
+        <View style={{ flexDirection: 'row', gap: 16, alignItems: 'center' }}>
+          <View style={{ flex: 1 }}>
+            <Text style={{ fontWeight: '600', color: colors.text, marginBottom: 6 }}>From Date *</Text>
+            <Pressable onPress={() => setShowFromDate(true)} style={{ borderWidth: 1, borderColor: colors.border, borderRadius: 8, padding: 12, backgroundColor: colors.bg }}>
+              <Text style={{ color: fromDate ? colors.text : colors.sub }}>{fromDate ? fromDate.toLocaleDateString() : 'Select date'}</Text>
+            </Pressable>
+            <DateTimePickerModal
+              isVisible={showFromDate}
+              mode="date"
+              onConfirm={date => { setFromDate(date); setShowFromDate(false); }}
+              onCancel={() => setShowFromDate(false)}
+            />
+          </View>
+          <View style={{ flex: 1 }}>
+            <Text style={{ fontWeight: '600', color: colors.text, marginBottom: 6 }}>To Date *</Text>
+            <Pressable onPress={() => setShowToDate(true)} style={{ borderWidth: 1, borderColor: colors.border, borderRadius: 8, padding: 12, backgroundColor: colors.bg }}>
+              <Text style={{ color: toDate ? colors.text : colors.sub }}>{toDate ? toDate.toLocaleDateString() : 'Select date'}</Text>
+            </Pressable>
+            <DateTimePickerModal
+              isVisible={showToDate}
+              mode="date"
+              onConfirm={date => { setToDate(date); setShowToDate(false); }}
+              onCancel={() => setShowToDate(false)}
+            />
+          </View>
+        </View>
+
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 8, marginBottom: 8 }}>
+          <Text style={{ fontWeight: '600', color: colors.text, marginRight: 12 }}>Full day booking</Text>
+          <Switch value={isFullDay} onValueChange={setIsFullDay} />
+        </View>
+
+        {!isFullDay && (
+          <View style={{ flexDirection: 'row', gap: 16, alignItems: 'center' }}>
+            <View style={{ flex: 1 }}>
+              <Text style={{ fontWeight: '600', color: colors.text, marginBottom: 6 }}>From Time *</Text>
+              <Pressable onPress={() => setShowFromTime(true)} style={{ borderWidth: 1, borderColor: colors.border, borderRadius: 8, padding: 12, backgroundColor: colors.bg }}>
+                <Text style={{ color: fromTime ? colors.text : colors.sub }}>{fromTime ? fromTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Select time'}</Text>
+              </Pressable>
+              <DateTimePickerModal
+                isVisible={showFromTime}
+                mode="time"
+                onConfirm={date => { setFromTime(date); setShowFromTime(false); }}
+                onCancel={() => setShowFromTime(false)}
+              />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={{ fontWeight: '600', color: colors.text, marginBottom: 6 }}>To Time *</Text>
+              <Pressable onPress={() => setShowToTime(true)} style={{ borderWidth: 1, borderColor: colors.border, borderRadius: 8, padding: 12, backgroundColor: colors.bg }}>
+                <Text style={{ color: toTime ? colors.text : colors.sub }}>{toTime ? toTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Select time'}</Text>
+              </Pressable>
+              <DateTimePickerModal
+                isVisible={showToTime}
+                mode="time"
+                onConfirm={date => { setToTime(date); setShowToTime(false); }}
+                onCancel={() => setShowToTime(false)}
+              />
+            </View>
+          </View>
+        )}
 
         <Pressable
           onPress={handleSubmit}
