@@ -1,6 +1,6 @@
+import { TentapEditor, TentapToolbar, useTentapEditor } from '@10play/tentap-editor';
 import React from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
-import { EditorContent, Toolbar, useEditor } from 'tiptap-react-native';
 
 export interface WysiwygProps {
   value: string;
@@ -21,7 +21,7 @@ export const Wysiwyg: React.FC<WysiwygProps> = ({
   toolbarProps = {},
   editorProps = {},
 }) => {
-  const editor = useEditor({
+  const editor = useTentapEditor({
     content: value,
     onUpdate: ({ editor }) => onChange(editor.getHTML()),
     extensions: [], // Add extensions as needed
@@ -29,8 +29,8 @@ export const Wysiwyg: React.FC<WysiwygProps> = ({
 
   return (
     <View style={[{ minHeight, borderWidth: 1, borderRadius: 8, padding: 8 }, style]}>
-      <Toolbar editor={editor} {...toolbarProps} />
-      <EditorContent
+      <TentapToolbar editor={editor} {...toolbarProps} />
+      <TentapEditor
         editor={editor}
         style={{ minHeight, borderRadius: 8 }}
         placeholder={placeholder}
