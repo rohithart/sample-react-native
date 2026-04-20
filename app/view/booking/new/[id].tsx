@@ -1,14 +1,15 @@
 import { FormField } from '@/components/ui/form-field';
+import { HStack } from '@/components/ui/hstack';
 import { PageHeader } from '@/components/ui/page-header';
+import { VStack } from '@/components/ui/vstack';
 import Wysiwyg from '@/components/wysiwyg';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { useThemeColors } from '@/hooks/use-theme-colors';
+import { useCreateBooking } from '@/services/booking';
 import { useBookingTypes } from '@/services/booking-type';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { Alert, Pressable, ScrollView, Switch, Text } from 'react-native';
-import { HStack } from '@/components/ui/hstack';
-import { VStack } from '@/components/ui/vstack';
 import DropDownPicker from 'react-native-dropdown-picker';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -33,6 +34,7 @@ export default function AddBookingScreen() {
   const [showToTime, setShowToTime] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownItems, setDropdownItems] = useState<any[]>([]);
+  const createBooking = useCreateBooking(orgId ?? '');
 
   const I = ENTITY_ICONS;
   const isFormValid =
@@ -55,6 +57,7 @@ export default function AddBookingScreen() {
     }
   }, [bookingTypes]);
 
+
   const handleSubmit = async () => {
     if (!title.trim() || !bookingType || !description.trim() || !fromDate || !toDate) {
       Alert.alert('Validation Error', 'Please fill all required fields');
@@ -65,11 +68,25 @@ export default function AddBookingScreen() {
       return;
     }
     setIsSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    setIsSubmitting(false);
-    Alert.alert('Success', 'Booking created successfully', [
-      { text: 'OK', onPress: () => router.push(`/view/bookings/${orgId}`) },
-    ]);
+    try {
+      await createBooking.mutateAsync({
+        title: title.trim(),
+        description: description.trim(),
+        bookingType,
+        fromDate: fromDate?.toISOString(),
+        toDate: toDate?.toISOString(),
+        fromTime: isFullDay ? undefined : fromTime?.toISOString(),
+        toTime: isFullDay ? undefined : toTime?.toISOString(),
+        isFullDay,
+      });
+      setIsSubmitting(false);
+      Alert.alert('Success', 'Booking created successfully', [
+        { text: 'OK', onPress: () => router.push(`/view/bookings/${orgId}`) },
+      ]);
+    } catch (e: any) {
+      setIsSubmitting(false);
+      Alert.alert('Error', e?.message || 'Failed to create booking');
+    }
   };
 
   return (
