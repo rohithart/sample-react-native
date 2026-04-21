@@ -9,7 +9,26 @@ interface StatusBadgeProps {
 
 export function StatusBadge({ status, color }: StatusBadgeProps) {
   const { primary } = useThemeColors();
-  const badgeColor = color ?? primary;
+  let badgeColor = color ?? primary;
+  switch (status.toLowerCase()) {
+    case 'active':
+    case 'approved':
+      badgeColor = '#22c55e';
+      break;
+    case 'inactive':
+      badgeColor = '#6b7280';
+      break;
+    case 'pending':
+      badgeColor = '#f59e0b';
+      break;
+    case 'archived':
+      badgeColor = '#6b7280';
+      break;
+    case 'error':
+    case 'rejected':
+      badgeColor = '#ef4444';
+      break;
+  }
 
   return (
     <View
