@@ -7,12 +7,14 @@ import { useThemeColors } from '@/hooks/use-theme-colors';
 import { Stack, useLocalSearchParams } from 'expo-router';
 import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSendFeedback } from '@/services/email';
 
 export default function SupportScreen() {
   const { orgId } = useLocalSearchParams<{ orgId: string }>();
   const colors = useThemeColors();
   const { userRole } = useOrganisationContext();
   const userEmail = userRole?.user?.email || 'john@example.com';
+  const sendMutation = useSendFeedback();
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>

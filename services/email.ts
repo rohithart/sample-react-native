@@ -13,10 +13,18 @@ export function useSendReport(orgId: string) {
   return useMutation({ mutationFn: (data: any) => emailApi.sendReport(orgId, data) });
 }
 
+export function useSendContact(orgId: string) {
+  return useMutation({ mutationFn: (data: any) => emailApi.sendContact(orgId, data) });
+}
+
 export function useSendFeedback() {
   return useMutation({ mutationFn: (data: any) => emailApi.sendFeedback(data) });
 }
 
 export function useReportComment() {
   return useMutation({ mutationFn: ({ id, data }: { id: string; data: any }) => emailApi.sendReportComment(id, data) });
+}
+
+export function useReportWall() {
+  return useMutation({ mutationFn: ({ id, data }: { id: string; data: any }) => emailApi.sendReportWall(id, data) });
 }

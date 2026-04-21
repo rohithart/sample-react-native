@@ -7,11 +7,13 @@ import { useThemeColors } from '@/hooks/use-theme-colors';
 import { Stack, useLocalSearchParams } from 'expo-router';
 import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSendContact } from '@/services/email';
 
 export default function ContactScreen() {
   const { orgId } = useLocalSearchParams<{ orgId: string }>();
   const colors = useThemeColors();
   const { organisation } = useOrganisationContext();
+  const sendMutation = useSendContact(organisation?._id || orgId);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>

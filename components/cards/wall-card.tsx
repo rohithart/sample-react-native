@@ -5,7 +5,7 @@ import { useToast } from '@/context/toast-context';
 import { EntityType } from '@/enums';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useCreateComment, useDeleteComment } from '@/services/comment';
-import { useReportComment } from '@/services/email';
+import { useReportWall } from '@/services/email';
 import { useDeleteWall, useLikeWall } from '@/services/wall';
 import { Comment, Wall } from '@/types';
 import { convertToLocalDateTimeString } from '@/utils/date';
@@ -20,7 +20,7 @@ export function WallCard({ wall, orgId, onRefresh, isLiked }: { wall: Wall; orgI
   const deleteMutation = useDeleteWall(orgId);
   const createComment = useCreateComment(orgId, EntityType.WALL, wall._id);
   const deleteCommentMutation = useDeleteComment(EntityType.WALL, wall._id);
-  const reportMutation = useReportComment();
+  const reportMutation = useReportWall();
   const { showToast } = useToast();
   const [deleting, setDeleting] = useState(false);
   const [commentText, setCommentText] = useState('');
