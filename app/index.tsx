@@ -168,7 +168,7 @@ export default function SplashScreen() {
     AsyncStorage.getItem(TERMS_AND_CONDITIONS_KEY).then((value) => {
       timer = setTimeout(() => {
         if (value === 'true') {
-          router.replace('/home');
+          router.replace('/home2');
         } else {
           router.replace('/terms-and-conditions');
         }
