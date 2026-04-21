@@ -49,5 +49,5 @@ export const calculateDuration = (from: string | Date | undefined | null, to: st
 const convertToString = (dateString: string | Date | undefined | null, format: Intl.DateTimeFormatOptions) => {
   if (!dateString) return '—';
   const date = typeof dateString === 'string' ? new Date(dateString) : dateString;
-  return date.toLocaleString(undefined, format);
+  return date.toLocaleString('en-AU', format);
 }
