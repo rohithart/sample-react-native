@@ -7,6 +7,7 @@ import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useCreateBooking } from '@/services/booking';
 import { useBookingTypes } from '@/services/booking-type';
+import { convertToLocalDateTimeString } from '@/utils/date';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { Alert, Pressable, ScrollView, Switch, Text } from 'react-native';
@@ -149,13 +150,13 @@ export default function AddBookingScreen() {
                 onPress={() => setShowFromDate(true)}
                 style={{ borderWidth: 1, borderColor: colors.border, borderRadius: 8, padding: 12, backgroundColor: colors.bg, color: fromDate ? colors.text : colors.sub }}
               >
-                {fromDate ? fromDate.toLocaleDateString() : 'Select date'}
+                {fromDate ? convertToLocalDateTimeString(fromDate) : 'Select date'}
               </Text>
               <DateTimePickerModal
                 isVisible={showFromDate}
                 mode="date"
                 minimumDate={minFromDate}
-                onConfirm={date => { setFromDate(date); setShowFromDate(false); if (toDate && date > toDate) setToDate(null); }}
+                onConfirm={(date: any) => { setFromDate(date); setShowFromDate(false); if (toDate && date > toDate) setToDate(null); }}
                 onCancel={() => setShowFromDate(false)}
               />
             </VStack>
@@ -165,13 +166,13 @@ export default function AddBookingScreen() {
                 onPress={() => setShowToDate(true)}
                 style={{ borderWidth: 1, borderColor: colors.border, borderRadius: 8, padding: 12, backgroundColor: colors.bg, color: toDate ? colors.text : colors.sub }}
               >
-                {toDate ? toDate.toLocaleDateString() : 'Select date'}
+                {toDate ? convertToLocalDateTimeString(toDate) : 'Select date'}
               </Text>
               <DateTimePickerModal
                 isVisible={showToDate}
                 mode="date"
                 minimumDate={minToDate}
-                onConfirm={date => { setToDate(date); setShowToDate(false); }}
+                onConfirm={(date: any) => { setToDate(date); setShowToDate(false); }}
                 onCancel={() => setShowToDate(false)}
               />
             </VStack>
@@ -195,7 +196,7 @@ export default function AddBookingScreen() {
                 <DateTimePickerModal
                   isVisible={showFromTime}
                   mode="time"
-                  onConfirm={date => { setFromTime(date); setShowFromTime(false); }}
+                  onConfirm={(date: any) => { setFromTime(date); setShowFromTime(false); }}
                   onCancel={() => setShowFromTime(false)}
                 />
               </VStack>
@@ -210,7 +211,7 @@ export default function AddBookingScreen() {
                 <DateTimePickerModal
                   isVisible={showToTime}
                   mode="time"
-                  onConfirm={date => { setToTime(date); setShowToTime(false); }}
+                  onConfirm={(date: any) => { setToTime(date); setShowToTime(false); }}
                   onCancel={() => setShowToTime(false)}
                 />
               </VStack>

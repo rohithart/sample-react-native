@@ -15,10 +15,9 @@ import { useBudget } from '@/services/budget';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
 import { resolveId, isPopulated } from '@/utils/resolve-ref';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { convertToLocalDateTimeString } from '@/utils/date';
 
 const I = ENTITY_ICONS;
-
-function fmt(d: string | Date | undefined | null) { if (!d) return '—'; return new Date(d).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }); }
 
 export default function BudgetDetailScreen() {
   const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
@@ -111,7 +110,7 @@ export default function BudgetDetailScreen() {
         </DetailSection>
         <DetailSection title="Relationships">
           <LinkedField label="Chart of Account" icon="chartOfAccount" value={item.chartOfAccount?.title} route={`/admin/coa/${orgId}/${resolveId(item.chartOfAccount)}`} />
-          <LinkedField label="Financial Year" icon="financialYear" value={isPopulated(item.financialYear) ? fmt(item.financialYear.from) + ' – ' + fmt(item.financialYear.to) : null} route={`/admin/fy/${orgId}/${resolveId(item.financialYear)}`} />
+          <LinkedField label="Financial Year" icon="financialYear" value={isPopulated(item.financialYear) ? convertToLocalDateTimeString(item.financialYear.from) + ' – ' + convertToLocalDateTimeString(item.financialYear.to) : null} route={`/admin/fy/${orgId}/${resolveId(item.financialYear)}`} />
         </DetailSection>
       </ScrollView>
       )}

@@ -1,5 +1,6 @@
 import type { EntityIconKey } from '@/constants/entity-icons';
 import type { EntityCardConfig } from './entity-card';
+import { convertToLocalDateTimeString } from '@/utils/date';
 
 function cfg(
   icon: EntityIconKey,
@@ -51,7 +52,7 @@ export const ADMIN_CONFIGS = {
     subtitleField: (item: any) => (item.group?.title ?? 'Everyone'),
   }),
   meeting: cfg('meeting', (o, i) => `/admin/meeting/${o}/${i}`, {
-    subtitleField: (item) => item.meetingDate ? new Date(item.meetingDate).toLocaleDateString() : '',
+    subtitleField: (item) => item.meetingDate ? convertToLocalDateTimeString(item.meetingDate) : '',
   }),
   vote: cfg('vote', (o, i) => `/admin/vote/${o}/${i}`, {
     titleField: 'question',
@@ -64,8 +65,8 @@ export const ADMIN_CONFIGS = {
   }),
   booking: cfg('booking', (o, i) => `/admin/booking/${o}/${i}`, {
     subtitleField: (item: any) => {
-      const from = item.bookingDateFrom ? new Date(item.bookingDateFrom).toLocaleDateString() : '';
-      const to = item.bookingDateTo ? new Date(item.bookingDateTo).toLocaleDateString() : '';
+      const from = item.bookingDateFrom ? convertToLocalDateTimeString(item.bookingDateFrom) : '';
+      const to = item.bookingDateTo ? convertToLocalDateTimeString(item.bookingDateTo) : '';
       return from && to ? `${from} – ${to}` : from || to || 'Event';
     },
     statusField: (item: any) =>
@@ -77,14 +78,14 @@ export const ADMIN_CONFIGS = {
   document: cfg('document', (o, i) => `/admin/document/${o}/${i}`),
   event: cfg('event', (o, i) => `/admin/event/${o}/${i}`, {
     subtitleField(item) {
-      const from = item.eventDateFrom ? new Date(item.eventDateFrom).toLocaleDateString() : '';
-      const to = item.eventDateTo ? new Date(item.eventDateTo).toLocaleDateString() : '';
+      const from = item.eventDateFrom ? convertToLocalDateTimeString(item.eventDateFrom) : '';
+      const to = item.eventDateTo ? convertToLocalDateTimeString(item.eventDateTo) : '';
       return from && to ? `${from} – ${to}` : from || to || 'Event';
     },
   }),
   eventType: cfg('eventType', (o, i) => `/admin/event-type/${o}/${i}`),
   information: cfg('information', (o, i) => `/admin/information/${o}/${i}`, {
-    subtitleField: (item: any) => new Date(item.createdAt).toLocaleDateString(),
+    subtitleField: (item: any) => convertToLocalDateTimeString(item.createdAt),
   }),
   group: cfg('group', (o, i) => `/admin/group/${o}/${i}`),
   user: cfg('user', (o, i) => `/admin/user/${o}/${i}`, {
@@ -94,8 +95,8 @@ export const ADMIN_CONFIGS = {
   }),
   financialYear: cfg('financialYear', (o, i) => `/admin/fy/${o}/${i}`, {
     titleField: (item: any) => {
-      const from = item.from ? new Date(item.from).getFullYear() : '';
-      const to = item.to ? new Date(item.to).getFullYear() : '';
+      const from = item.from ? convertToLocalDateTimeString(item.from) : '';
+      const to = item.to ? convertToLocalDateTimeString(item.to) : '';
       return from && to ? `FY ${from} – ${to}` : 'Financial Year';
     },
     subtitleField: undefined,
@@ -126,7 +127,7 @@ export const VIEW_CONFIGS = {
     subtitleField: (item: any) => (item.group?.title ?? 'Everyone'),
   }),
   meeting: cfg('meeting', (o, i) => `/view/meeting/${o}/${i}`, {
-    subtitleField: (item) => item.meetingDate ? new Date(item.meetingDate).toLocaleDateString() : '',
+    subtitleField: (item) => item.meetingDate ? convertToLocalDateTimeString(item.meetingDate) : '',
   }),
   vote: cfg('vote', (o, i) => `/view/vote/${o}/${i}`, {
     titleField: 'question',
@@ -134,19 +135,19 @@ export const VIEW_CONFIGS = {
     statusField: (item: any) => (item.closed ? 'CLOSED' : 'OPEN'),
   }),
   information: cfg('information', (o, i) => `/view/information/${o}/${i}`, {
-    subtitleField: (item: any) => new Date(item.createdAt).toLocaleDateString(),
+    subtitleField: (item: any) => convertToLocalDateTimeString(item.createdAt),
   }),
   event: cfg('event', (o, i) => `/view/event/${o}/${i}`, {
     subtitleField: (item: any) => {
-      const from = item.eventDateFrom ? new Date(item.eventDateFrom).toLocaleDateString() : '';
-      const to = item.eventDateTo ? new Date(item.eventDateTo).toLocaleDateString() : '';
+      const from = item.eventDateFrom ? convertToLocalDateTimeString(item.eventDateFrom) : '';
+      const to = item.eventDateTo ? convertToLocalDateTimeString(item.eventDateTo) : '';
       return from && to ? `${from} – ${to}` : from || to || 'Event';
     }
   }),
   booking: cfg('booking', (o, i) => `/view/booking/${o}/${i}`, {
     subtitleField: (item: any) => {
-      const from = item.bookingDateFrom ? new Date(item.bookingDateFrom).toLocaleDateString() : '';
-      const to = item.bookingDateTo ? new Date(item.bookingDateTo).toLocaleDateString() : '';
+      const from = item.bookingDateFrom ? convertToLocalDateTimeString(item.bookingDateFrom) : '';
+      const to = item.bookingDateTo ? convertToLocalDateTimeString(item.bookingDateTo) : '';
       return from && to ? `${from} – ${to}` : from || to || 'Event';
     },
     statusField: (item: any) =>

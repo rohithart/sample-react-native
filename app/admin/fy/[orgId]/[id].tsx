@@ -14,10 +14,9 @@ import { useOrganisationContext } from '@/context/organisation-context';
 import { useFinancialYear } from '@/services/financial-year';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { convertToLocalDateTimeString } from '@/utils/date';
 
 const I = ENTITY_ICONS;
-
-function fmt(d: string | Date | undefined | null) { if (!d) return '—'; return new Date(d).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }); }
 
 export default function FinancialYearDetailScreen() {
   const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
@@ -105,8 +104,8 @@ export default function FinancialYearDetailScreen() {
         showsVerticalScrollIndicator={false}
       >
         <DetailSection title="Period">
-          <DetailField label="From" value={fmt(item.from)} />
-          <DetailField label="To" value={fmt(item.to)} />
+          <DetailField label="From" value={convertToLocalDateTimeString(item.from)} />
+          <DetailField label="To" value={convertToLocalDateTimeString(item.to)} />
           <DetailField label="Current" value={item.isCurrent ? 'Yes' : 'No'} />
         </DetailSection>
       </ScrollView>

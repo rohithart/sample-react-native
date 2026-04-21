@@ -15,10 +15,9 @@ import { useBooking } from '@/services/booking';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
 import { resolveId } from '@/utils/resolve-ref';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { convertToLocalDateTimeString, convertToTimeString } from '@/utils/date';
 
 const I = ENTITY_ICONS;
-
-function fmt(d: string | Date | undefined | null) { if (!d) return '—'; return new Date(d).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }); }
 
 export default function BookingDetailScreen() {
   const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
@@ -107,10 +106,10 @@ export default function BookingDetailScreen() {
       >
         {item.description ? <HtmlContent label="Description" html={item.description} /> : null}
         <DetailSection title="Schedule">
-          <DetailField label="From" value={fmt(item.bookingDateFrom)} />
-          <DetailField label="Time From" value={fmt(item.bookingTimeFrom)} />
-          <DetailField label="To" value={fmt(item.bookingDateTo)} />
-          <DetailField label="Time To" value={fmt(item.bookingTimeTo)} />
+          <DetailField label="From" value={convertToLocalDateTimeString(item.bookingDateFrom)} />
+          <DetailField label="Time From" value={convertToTimeString(item.bookingTimeFrom)} />
+          <DetailField label="To" value={convertToLocalDateTimeString(item.bookingDateTo)} />
+          <DetailField label="Time To" value={convertToTimeString(item.bookingTimeTo)} />
           <DetailField label="Full Day" value={item.isFullDay ? 'Yes' : 'No'} />
         </DetailSection>
         <DetailSection title="Approval">

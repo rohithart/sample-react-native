@@ -15,10 +15,9 @@ import { useEvent } from '@/services/event';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
 import { resolveId } from '@/utils/resolve-ref';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { convertToLocalDateTimeString, convertToTimeString } from '@/utils/date';
 
 const I = ENTITY_ICONS;
-
-function fmt(d: string | Date | undefined | null) { if (!d) return '—'; return new Date(d).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }); }
 
 export default function EventDetailScreen() {
   const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
@@ -107,10 +106,10 @@ export default function EventDetailScreen() {
       >
         {item.description ? <HtmlContent label="Description" html={item.description} /> : null}
         <DetailSection title="Schedule">
-          <DetailField label="From" value={fmt(item.eventDateFrom)} />
-          <DetailField label="Time From" value={fmt(item.eventTimeFrom)} />
-          <DetailField label="To" value={fmt(item.eventDateTo)} />
-          <DetailField label="Time To" value={fmt(item.eventTimeTo)} />
+          <DetailField label="From" value={convertToLocalDateTimeString(item.eventDateFrom)} />
+          <DetailField label="Time From" value={convertToTimeString(item.eventTimeFrom)} />
+          <DetailField label="To" value={convertToLocalDateTimeString(item.eventDateTo)} />
+          <DetailField label="Time To" value={convertToTimeString(item.eventTimeTo)} />
           <DetailField label="Full Day" value={item.isFullDay ? 'Yes' : 'No'} />
         </DetailSection>
         <DetailSection title="Recurrence">

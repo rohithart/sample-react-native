@@ -11,6 +11,7 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { useReportComment } from '@/services/email';
 import { EntityType } from '@/enums';
+import { convertToRelativeTime } from '@/utils/date';
 
 const I = ENTITY_ICONS;
 
@@ -20,20 +21,6 @@ interface EntityCommentsProps {
   entity: EntityType;
   entityId: string;
   orgId: string;
-}
-
-function fmtTime(d: string) {
-  const date = new Date(d);
-  const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
-  const diffMins = Math.floor(diffMs / 60000);
-  if (diffMins < 1) return 'Just now';
-  if (diffMins < 60) return `${diffMins}m ago`;
-  const diffHours = Math.floor(diffMins / 60);
-  if (diffHours < 24) return `${diffHours}h ago`;
-  const diffDays = Math.floor(diffHours / 24);
-  if (diffDays < 7) return `${diffDays}d ago`;
-  return date.toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
 export function EntityComments({ isVisible, onClose, entity, entityId, orgId }: EntityCommentsProps) {
@@ -78,7 +65,7 @@ export function EntityComments({ isVisible, onClose, entity, entityId, orgId }: 
         <HStack className="justify-between" style={{ backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border, borderRadius: 12, padding: 10, flex: 1}}>
           <View>
             <Text style={{ fontSize: 13, fontWeight: '600', color: colors.text }}>{commentText}</Text>
-            <Text style={{ fontSize: 11, color: colors.sub, marginTop: 4 }}>{fmtTime(item.createdAt)}</Text>
+            <Text style={{ fontSize: 11, color: colors.sub, marginTop: 4 }}>{convertToRelativeTime(item.createdAt)}</Text>
           </View>
           <HStack space="sm" className="items-center">
             <Pressable onPress={() => handleReport(item._id, item.organisation)} style={{ padding: 4 }} disabled={reportMutation.isPending}>

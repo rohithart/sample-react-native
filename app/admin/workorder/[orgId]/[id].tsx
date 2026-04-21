@@ -22,10 +22,9 @@ import { ActivityIndicator, Alert, Pressable, ScrollView, Text, View } from 'rea
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { EntityType } from '@/enums';
+import { convertToLocalDateTimeString } from '@/utils/date';
 
 const I = ENTITY_ICONS;
-
-function fmt(d: string | Date | undefined | null) { if (!d) return '—'; return new Date(d).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }); }
 
 export default function WorkOrderDetailScreen() {
   const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
@@ -131,8 +130,8 @@ export default function WorkOrderDetailScreen() {
         />
         {item.description ? <HtmlContent label="Description" html={item.description} /> : null}
         <DetailSection title="Schedule">
-          <DetailField label="Start Date" value={fmt(item.startDate)} />
-          <DetailField label="End Date" value={fmt(item.endDate)} />
+          <DetailField label="Start Date" value={convertToLocalDateTimeString(item.startDate)} />
+          <DetailField label="End Date" value={convertToLocalDateTimeString(item.endDate)} />
         </DetailSection>
         <DetailSection title="Details">
           <DetailField label="Archived" value={item.archived ? 'Yes' : 'No'} />

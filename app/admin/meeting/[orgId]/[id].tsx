@@ -17,10 +17,9 @@ import { ActivityIndicator, Alert, Pressable, ScrollView, Text, View } from 'rea
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { EntityType } from '@/enums';
+import { convertToLocalDateTimeString } from '@/utils/date';
 
 const I = ENTITY_ICONS;
-
-function fmt(d: string | Date | undefined | null) { if (!d) return '—'; return new Date(d).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }); }
 
 export default function MeetingDetailScreen() {
   const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
@@ -115,8 +114,8 @@ export default function MeetingDetailScreen() {
         {item.details ? <HtmlContent label="Details" html={item.details} /> : null}
         {item.mom ? <HtmlContent label="Minutes of Meeting" html={item.mom} /> : null}
         <DetailSection title="Schedule">
-          <DetailField label="Date" value={fmt(item.meetingDate)} />
-          <DetailField label="Time" value={fmt(item.meetingTime)} />
+          <DetailField label="Date" value={convertToLocalDateTimeString(item.meetingDate)} />
+          <DetailField label="Time" value={convertToLocalDateTimeString(item.meetingTime)} />
           <DetailField label="Duration" value={item.duration ? item.duration + ' min' : null} />
         </DetailSection>
         <DetailSection title="Links">

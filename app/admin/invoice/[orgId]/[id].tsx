@@ -22,10 +22,9 @@ import { ActivityIndicator, Alert, Pressable, ScrollView, Text, View } from 'rea
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { EntityType } from '@/enums';
+import { convertToLocalDateTimeString } from '@/utils/date';
 
 const I = ENTITY_ICONS;
-
-function fmt(d: string | Date | undefined | null) { if (!d) return '—'; return new Date(d).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }); }
 
 export default function InvoiceDetailScreen() {
   const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
@@ -133,8 +132,8 @@ export default function InvoiceDetailScreen() {
         <DetailSection title="Financial">
           <DetailField label="Total Amount" value={item.totalAmount != null ? '$' + Number(item.totalAmount).toLocaleString() : null} />
           <DetailField label="Is Expense" value={item.isExpense ? 'Yes' : 'No'} />
-          <DetailField label="Due Date" value={fmt(item.dueDate)} />
-          <DetailField label="Paid At" value={fmt(item.paidAt)} />
+          <DetailField label="Due Date" value={convertToLocalDateTimeString(item.dueDate)} />
+          <DetailField label="Paid At" value={convertToLocalDateTimeString(item.paidAt)} />
           <DetailField label="Link" value={item.link} />
         </DetailSection>
         <DetailSection title="Details">

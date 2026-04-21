@@ -20,10 +20,9 @@ import { useRefreshControl } from '@/hooks/use-refresh-control';
 import { resolveId } from '@/utils/resolve-ref';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { EntityType } from '@/enums';
+import { convertToLocalDateTimeString } from '@/utils/date';
 
 const I = ENTITY_ICONS;
-
-function fmt(d: string | Date | undefined | null) { if (!d) return '—'; return new Date(d).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }); }
 
 export default function AssetDetailScreen() {
   const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
@@ -125,8 +124,8 @@ export default function AssetDetailScreen() {
           <DetailField label="Model" value={item.model} />
           <DetailField label="Serial" value={item.serial} />
           <DetailField label="Lifespan" value={item.lifespan} />
-          <DetailField label="Mfg Date" value={fmt(item.mfgDate)} />
-          <DetailField label="Expiry Date" value={fmt(item.expiryDate)} />
+          <DetailField label="Mfg Date" value={convertToLocalDateTimeString(item.mfgDate)} />
+          <DetailField label="Expiry Date" value={convertToLocalDateTimeString(item.expiryDate)} />
           <DetailField label="Other" value={item.other} />
         </DetailSection>
         <DetailSection title="Details">

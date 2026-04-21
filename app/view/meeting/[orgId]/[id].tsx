@@ -11,28 +11,9 @@ import { ActionItem } from '@/types/actionItem';
 import { useMeeting } from '@/services/meeting';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { convertToLocalDateString, convertToTimeString } from '@/utils/date';
 
 const I = ENTITY_ICONS;
-
-function fmtDate(d: string | Date | undefined | null) {
-  if (!d) return '—';
-  return new Date(d).toLocaleDateString('en-AU', {
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric',
-  });
-}
-
-function fmtTime(d: string | Date | undefined | null) {
-  if (!d) return '—';
-  if (typeof d === 'string') {
-    return d;
-  }
-  return new Date(d).toLocaleTimeString('en-AU', {
-    hour: '2-digit',
-    minute: '2-digit',
-  });
-}
 
 export default function MeetingDetailScreen() {
   const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
@@ -74,8 +55,8 @@ export default function MeetingDetailScreen() {
         {item.details ? <HtmlContent label="Details" html={item.details} /> : null}
         {item.mom ? <HtmlContent label="Minutes of Meeting" html={item.mom} /> : null}
         <DetailSection title="Schedule">
-          <DetailField label="Date" value={fmtDate(item.meetingDate)} />
-          <DetailField label="Time" value={fmtTime(item.meetingTime)} />
+          <DetailField label="Date" value={convertToLocalDateString(item.meetingDate)} />
+          <DetailField label="Time" value={convertToTimeString(item.meetingTime)} />
           <DetailField label="Duration" value={item.duration ? item.duration + ' min' : null} />
         </DetailSection>
         <DetailSection title="Links">

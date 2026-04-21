@@ -22,10 +22,9 @@ import { ActivityIndicator, Alert, Pressable, ScrollView, Text, View } from 'rea
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { EntityType } from '@/enums';
+import { convertToLocalDateTimeString } from '@/utils/date';
 
 const I = ENTITY_ICONS;
-
-function fmt(d: string | Date | undefined | null) { if (!d) return '—'; return new Date(d).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }); }
 
 export default function QuoteDetailScreen() {
   const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
@@ -134,8 +133,8 @@ export default function QuoteDetailScreen() {
         <DetailSection title="Financial">
           <DetailField label="Budget" value={item.budget != null ? '$' + Number(item.budget).toLocaleString() : null} />
           <DetailField label="Amount" value={item.amount != null ? '$' + Number(item.amount).toLocaleString() : null} />
-          <DetailField label="Submitted" value={fmt(item.submittedAt)} />
-          <DetailField label="Approved" value={fmt(item.approvedAt)} />
+          <DetailField label="Submitted" value={convertToLocalDateTimeString(item.submittedAt)} />
+          <DetailField label="Approved" value={convertToLocalDateTimeString(item.approvedAt)} />
           <DetailField label="Approved By" value={item.approvedBy} />
         </DetailSection>
         <DetailSection title="Details">

@@ -9,6 +9,7 @@ import { ActivityIndicator, Alert, Dimensions, FlatList, Image, Modal, Pressable
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { EntityType } from '@/enums';
+import { convertToLocalDateString } from '@/utils/date';
 
 const I = ENTITY_ICONS;
 
@@ -164,7 +165,7 @@ export function EntityImages({ isVisible, onClose, entity, entityId, orgId }: En
                 </Pressable>
                 <View style={{ alignItems: 'center', justifyContent: 'center' }}>
                   <Text style={{ color: 'rgba(255,255,255,0.6)', fontSize: 11 }}>
-                    {new Date(viewerImage.createdAt).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' })}
+                    {convertToLocalDateString(viewerImage.createdAt)}
                   </Text>
                 </View>
                 <Pressable

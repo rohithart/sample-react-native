@@ -9,6 +9,7 @@ import { ActivityIndicator, FlatList, Modal, Pressable, Text, View } from 'react
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { EntityType } from '@/enums';
+import { convertToLocalDateTimeString } from '@/utils/date';
 
 const I = ENTITY_ICONS;
 
@@ -21,13 +22,6 @@ interface EntityTimelineProps {
 
 const DOT_SIZE = 12;
 const LINE_WIDTH = 2;
-
-function fmtDate(d: string) {
-  return new Date(d).toLocaleDateString('en-AU', { day: 'numeric', month: 'short' });
-}
-function fmtTime(d: string) {
-  return new Date(d).toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit' });
-}
 
 export function EntityTimeline({ isVisible, onClose, entity, entityId }: EntityTimelineProps) {
   const colors = useThemeColors();
@@ -87,10 +81,7 @@ export function EntityTimeline({ isVisible, onClose, entity, entityId }: EntityT
             }}
           >
             <Text style={{ fontSize: 9, fontWeight: '600', color: colors.sub, textAlign: 'center' }}>
-              {fmtDate(item.createdAt)}
-            </Text>
-            <Text style={{ fontSize: 8, color: colors.sub, textAlign: 'center' }}>
-              {fmtTime(item.createdAt)}
+              {convertToLocalDateTimeString(item.createdAt)}
             </Text>
           </View>
           {!isLast && (

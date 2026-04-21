@@ -11,10 +11,9 @@ import { ActionItem } from '@/types/actionItem';
 import { useEvent } from '@/services/event';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { convertToLocalDateString, convertToTimeString } from '@/utils/date';
 
 const I = ENTITY_ICONS;
-
-function fmt(d: string | Date | undefined | null) { if (!d) return '—'; return new Date(d).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }); }
 
 export default function EventDetailScreen() {
   const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
@@ -54,8 +53,11 @@ export default function EventDetailScreen() {
       >
         {item.description ? <HtmlContent label="Description" html={item.description} /> : null}
         <DetailSection title="Schedule">
-          <DetailField label="From" value={fmt(item.eventDateFrom)} />
-          <DetailField label="To" value={fmt(item.eventDateTo)} />
+          <DetailField label="From" value={convertToLocalDateString(item.eventDateFrom)} />
+          {!item.isFullDay ? <DetailField label="Time" value={convertToTimeString(item.eventTimeFrom)} /> : null }
+
+          <DetailField label="To" value={convertToLocalDateString(item.eventDateTo)} />
+          {!item.isFullDay ? <DetailField label="Time" value={convertToTimeString(item.eventTimeTo)} /> : null }
           <DetailField label="Full Day" value={item.isFullDay ? 'Yes' : 'No'} />
         </DetailSection>
       </ScrollView>

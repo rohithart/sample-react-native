@@ -13,19 +13,9 @@ import { useRefreshControl } from '@/hooks/use-refresh-control';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { EntityComments } from '@/components/entity/entity-comments';
 import { EntityType } from '@/enums';
+import { calculateDuration, convertToLocalDateTimeString } from '@/utils/date';
 
 const I = ENTITY_ICONS;
-
-function fmt(d: string | Date | undefined | null) { if (!d) return '—'; return new Date(d).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }); }
-
-function calculateDuration(from: string | Date | undefined | null, to: string | Date | undefined | null) {
-  if (!from || !to) return '—';
-  const fromDate = new Date(from);
-  const toDate = new Date(to);
-  const diffTime = Math.abs(toDate.getTime() - fromDate.getTime());
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
-  return `${diffDays} day${diffDays !== 1 ? 's' : ''}`;
-}
 
 export default function BookingDetailScreen() {
   const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
@@ -67,8 +57,8 @@ export default function BookingDetailScreen() {
       >
         {item.description ? <HtmlContent label="Description" html={item.description} /> : null}
         <DetailSection title="Schedule">
-          <DetailField label="From" value={fmt(item.bookingDateFrom)} />
-          <DetailField label="To" value={fmt(item.bookingDateTo)} />
+          <DetailField label="From" value={convertToLocalDateTimeString(item.bookingDateFrom)} />
+          <DetailField label="To" value={convertToLocalDateTimeString(item.bookingDateTo)} />
           <DetailField label="Full Day" value={item.isFullDay ? 'Yes' : 'No'} />
           <DetailField label="Duration" value={calculateDuration(item.bookingDateFrom, item.bookingDateTo)} />
         </DetailSection>

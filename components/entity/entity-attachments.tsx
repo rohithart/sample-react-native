@@ -10,6 +10,7 @@ import { ActivityIndicator, Alert, FlatList, Linking, Modal, Pressable, Text, Te
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { EntityType } from '@/enums';
+import { convertToLocalDateTimeString } from '@/utils/date';
 
 const I = ENTITY_ICONS;
 
@@ -38,10 +39,6 @@ function formatSize(bytes: string | number | undefined): string | null {
   if (n < 1024) return `${n} B`;
   if (n < 1024 * 1024) return `${(n / 1024).toFixed(1)} KB`;
   return `${(n / (1024 * 1024)).toFixed(1)} MB`;
-}
-
-function fmtDate(d: string) {
-  return new Date(d).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
 export function EntityAttachments({ isVisible, onClose, entity, entityId, orgId }: EntityAttachmentsProps) {
@@ -105,7 +102,7 @@ export function EntityAttachments({ isVisible, onClose, entity, entityId, orgId 
                   <Text style={{ fontSize: 11, color: colors.primary, fontWeight: '500' }}>{size}</Text>
                 </View>
               )}
-              <Text style={{ fontSize: 11, color: colors.sub }}>{fmtDate(item.createdAt)}</Text>
+              <Text style={{ fontSize: 11, color: colors.sub }}>{convertToLocalDateTimeString(item.createdAt)}</Text>
             </HStack>
           </VStack>
         </HStack>

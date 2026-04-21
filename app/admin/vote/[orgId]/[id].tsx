@@ -16,10 +16,9 @@ import { ActivityIndicator, Alert, Pressable, ScrollView, Text, View } from 'rea
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { EntityType } from '@/enums';
+import { convertToLocalDateTimeString } from '@/utils/date';
 
 const I = ENTITY_ICONS;
-
-function fmt(d: string | Date | undefined | null) { if (!d) return '—'; return new Date(d).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }); }
 
 export default function VoteDetailScreen() {
   const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
@@ -111,7 +110,7 @@ export default function VoteDetailScreen() {
           <DetailField label="Options" value={item.options} />
           <DetailField label="Status" value={item.closed ? 'Closed' : 'Open'} />
           <DetailField label="All Users" value={item.allUsers ? 'Yes' : 'No'} />
-          <DetailField label="End Date" value={fmt(item.endDate)} />
+          <DetailField label="End Date" value={convertToLocalDateTimeString(item.endDate)} />
         </DetailSection>
         <DetailSection title="Relationships">
           <GroupRelationship orgId={orgId || ''} item={item} />

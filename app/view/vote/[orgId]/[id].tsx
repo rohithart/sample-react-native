@@ -11,10 +11,9 @@ import { ActionItem } from '@/types/actionItem';
 import { useVote, useCastedVote, useCastVote } from '@/services/vote';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { convertToLocalDateTimeString } from '@/utils/date';
 
 const I = ENTITY_ICONS;
-
-function fmt(d: string | Date | undefined | null) { if (!d) return '—'; return new Date(d).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }); }
 
 function isVoteExpired(endDate: string | Date | undefined | null) {
   if (!endDate) return false;
@@ -73,7 +72,7 @@ export default function VoteDetailScreen() {
         <DetailSection title="Vote Status">
           <DetailField label="Status" value={item.closed ? 'Closed' : 'Open'} />
           <DetailField label="All Users" value={item.allUsers ? 'Yes' : 'No'} />
-          <DetailField label="End Date" value={fmt(item.endDate)} />
+          <DetailField label="End Date" value={convertToLocalDateTimeString(item.endDate)} />
         </DetailSection>
 
         
@@ -90,7 +89,7 @@ export default function VoteDetailScreen() {
         )}
 
         <DetailSection title="Options">
-          {item.options.split(',').map((option, index) => {
+          {item.options.split(',').map((option: string, index: number) => {
             const isUserVote = userCastedVote?.voteIndex === index;
 
             return (

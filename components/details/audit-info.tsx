@@ -5,6 +5,7 @@ import { useThemeColors } from '@/hooks/use-theme-colors';
 import React from 'react';
 import { Modal, Pressable, Text, View } from 'react-native';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { convertToLocalDateString } from '@/utils/date';
 
 const I = ENTITY_ICONS;
 
@@ -15,18 +16,6 @@ interface AuditInfoProps {
   updatedBy?: unknown;
   createdAt?: string | Date;
   updatedAt?: string | Date;
-}
-
-function formatDate(d?: string | Date): string {
-  if (!d) return '—';
-  const date = typeof d === 'string' ? new Date(d) : d;
-  return date.toLocaleDateString('en-AU', {
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  });
 }
 
 /** Safely resolve a user ref that may be a string name, a I.user object, or nullish */
@@ -48,9 +37,9 @@ export function AuditInfo({ isVisible, onClose, createdBy, updatedBy, createdAt,
 
   const rows: { icon: React.ReactNode; label: string; value: string }[] = [
     { icon: <I.user size={16} color={primary} />, label: 'Created by', value: resolveUserName(createdBy) },
-    { icon: <I.calendar size={16} color={primary} />, label: 'Created at', value: formatDate(createdAt) },
+    { icon: <I.calendar size={16} color={primary} />, label: 'Created at', value: convertToLocalDateString(createdAt) },
     { icon: <I.user size={16} color={secondary} />, label: 'Updated by', value: resolveUserName(updatedBy) },
-    { icon: <I.refresh size={16} color={secondary} />, label: 'Updated at', value: formatDate(updatedAt) },
+    { icon: <I.refresh size={16} color={secondary} />, label: 'Updated at', value: convertToLocalDateString(updatedAt) },
   ];
 
   return (
