@@ -18,6 +18,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { EntityType } from '@/enums';
 import { convertToLocalDateTimeString } from '@/utils/date';
+import { onShare } from '@/utils/share';
 
 const I = ENTITY_ICONS;
 
@@ -75,7 +76,7 @@ export default function MeetingDetailScreen() {
       id: 'share',
       label: 'Share',
       icon: <I.share size={24} color={colors.success} />,
-      onPress: () => Alert.alert('Share', 'Share functionality coming soon'),
+      onPress: () => onShare(`Meeting on DarthVader: ${item?.title}` , `/view/meeting/${orgId}/${id}`),
       color: 'success' as const,
     },
     ...(isAdmin ? [{

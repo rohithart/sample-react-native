@@ -24,6 +24,7 @@ import { ActivityIndicator, Alert, Pressable, ScrollView, Text, View } from 'rea
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { EntityType } from '@/enums';
+import { onShare } from '@/utils/share';
 
 const I = ENTITY_ICONS;
 
@@ -92,7 +93,7 @@ export default function WorkflowDetailScreen() {
       id: 'share',
       label: 'Share',
       icon: <I.share size={24} color={colors.success} />,
-      onPress: () => Alert.alert('Share', 'Share functionality coming soon'),
+     onPress: () => onShare(`Workflow on DarthVader: ${item?.title}` , `/admin/workflow/${orgId}/${id}`),
       color: 'success' as const,
     },
     ...(isAdmin ? [{

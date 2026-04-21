@@ -14,6 +14,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
 import { useAnnouncement } from '@/services/announcement';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { onShare } from '@/utils/share';
 
 const I = ENTITY_ICONS;
 
@@ -67,7 +68,7 @@ export default function AnnouncementDetailScreen() {
       id: 'share',
       label: 'Share',
       icon: <I.share size={24} color={colors.success} />,
-      onPress: () => Alert.alert('Share', 'Share functionality coming soon'),
+      onPress: () => onShare(`Announcement on DarthVader: ${item?.title}` , `/view/announcement/${orgId}/${id}`),
       color: 'success' as const,
     },
     ...(isAdmin ? [{

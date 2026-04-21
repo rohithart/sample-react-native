@@ -16,6 +16,7 @@ import { useRefreshControl } from '@/hooks/use-refresh-control';
 import { resolveId } from '@/utils/resolve-ref';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { convertToLocalDateTimeString, convertToTimeString } from '@/utils/date';
+import { onShare } from '@/utils/share';
 
 const I = ENTITY_ICONS;
 
@@ -69,7 +70,7 @@ export default function EventDetailScreen() {
       id: 'share',
       label: 'Share',
       icon: <I.share size={24} color={colors.success} />,
-      onPress: () => Alert.alert('Share', 'Share functionality coming soon'),
+      onPress: () => onShare(`Event on DarthVader: ${item?.title}` , `/view/event/${orgId}/${id}`),
       color: 'success' as const,
     },
     ...(isAdmin ? [{

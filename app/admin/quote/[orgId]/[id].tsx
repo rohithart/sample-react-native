@@ -83,13 +83,6 @@ export default function QuoteDetailScreen() {
     { id: 'timeline', label: 'Timeline', icon: <I.clock size={24} color={colors.secondary} />, onPress: () => setShowTimeline(true), color: 'primary' as const },
     { id: 'history', label: 'History', icon: <I.history size={24} color={colors.secondary} />, onPress: () => setShowHistory(true), color: 'primary' as const },
     { id: 'audit', label: 'Audit Info', icon: <I.information size={24} color={colors.secondary} />, onPress: () => setShowAudit(true), color: 'primary' as const },
-    {
-      id: 'share',
-      label: 'Share',
-      icon: <I.share size={24} color={colors.success} />,
-      onPress: () => Alert.alert('Share', 'Share functionality coming soon'),
-      color: 'success' as const,
-    },
     ...(isAdmin ? [{
       id: 'delete',
       label: 'Delete',

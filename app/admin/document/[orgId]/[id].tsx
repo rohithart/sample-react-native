@@ -19,6 +19,7 @@ import { useDocument } from '@/services/document';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { EntityType } from '@/enums';
+import { onShare } from '@/utils/share';
 
 const I = ENTITY_ICONS;
 
@@ -80,7 +81,7 @@ export default function DocumentDetailScreen() {
       id: 'share',
       label: 'Share',
       icon: <I.share size={24} color={colors.success} />,
-      onPress: () => Alert.alert('Share', 'Share functionality coming soon'),
+      onPress: () => onShare(`Document on DarthVader: ${item?.title}` , `/view/document/${orgId}/${id}`),
       color: 'success' as const,
     },
     ...(isAdmin ? [{

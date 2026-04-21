@@ -16,6 +16,7 @@ import { useInformation } from '@/services/information';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { EntityType } from '@/enums';
+import { onShare } from '@/utils/share';
 
 const I = ENTITY_ICONS;
 
@@ -71,7 +72,7 @@ export default function InformationDetailScreen() {
       id: 'share',
       label: 'Share',
       icon: <I.share size={24} color={colors.success} />,
-      onPress: () => Alert.alert('Share', 'Share functionality coming soon'),
+      onPress: () => onShare(`Information on DarthVader: ${item?.title}` , `/view/information/${orgId}/${id}`),
       color: 'success' as const,
     },
     ...(isAdmin ? [{
