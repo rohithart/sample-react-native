@@ -10,7 +10,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Constants from 'expo-constants';
 import { Stack, useRouter } from 'expo-router';
 import { useEffect, useRef } from 'react';
-import { Animated, BackHandler, Easing, Platform, Text as RNText, ScrollView, View } from 'react-native';
+import { Animated, BackHandler, Easing, Platform, Text, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function SplashScreen() {
@@ -244,7 +244,7 @@ export default function SplashScreen() {
                 </View>
               </Animated.View>
 
-              <RNText
+              <Text
                 style={{
                   fontSize: 48,
                   fontWeight: '800',
@@ -254,10 +254,10 @@ export default function SplashScreen() {
                 }}
               >
                 Darth
-                <RNText style={{ color: primary }}>Vader</RNText>
-              </RNText>
+                <Text style={{ color: primary }}>Vader</Text>
+              </Text>
 
-              <RNText
+              <Text
                 style={{
                   fontSize: 14,
                   color: textSecondary,
@@ -267,7 +267,7 @@ export default function SplashScreen() {
                 }}
               >
                 Enterprise Management Platform{'\n'}For Modern Teams
-              </RNText>
+              </Text>
             </View>
 
             <View style={{ gap: 12, marginVertical: 32 }}>
