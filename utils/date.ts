@@ -1,7 +1,5 @@
 export const convertToLocalDateTimeString = (dateString: string | Date | undefined) => {
-  if (!dateString) return '—';
-  const date = typeof dateString === 'string' ? new Date(dateString) : dateString;
-  return date.toLocaleString(undefined, {
+  return convertToString(dateString, {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
@@ -11,9 +9,7 @@ export const convertToLocalDateTimeString = (dateString: string | Date | undefin
 };
 
 export const convertToLocalDateString = (dateString: string | Date | undefined) => {
-  if (!dateString) return '—';
-  const date = typeof dateString === 'string' ? new Date(dateString) : dateString;
-  return date.toLocaleString(undefined, {
+  return convertToString(dateString, {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
@@ -35,11 +31,7 @@ export const convertToRelativeTime = (d: string) => {
 }
 
 export const convertToTimeString = (d: string | Date | undefined | null) => {
-  if (!d) return '—';
-  if (typeof d === 'string') {
-    return d;
-  }
-  return new Date(d).toLocaleTimeString('en-AU', {
+  return convertToString(d, {
     hour: '2-digit',
     minute: '2-digit',
   });
@@ -52,4 +44,10 @@ export const calculateDuration = (from: string | Date | undefined | null, to: st
   const diffTime = Math.abs(toDate.getTime() - fromDate.getTime());
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
   return `${diffDays} day${diffDays !== 1 ? 's' : ''}`;
+}
+
+const convertToString = (dateString: string | Date | undefined | null, format: Intl.DateTimeFormatOptions) => {
+  if (!dateString) return '—';
+  const date = typeof dateString === 'string' ? new Date(dateString) : dateString;
+  return date.toLocaleString(undefined, format);
 }
