@@ -105,7 +105,7 @@ export default function BudgetDetailScreen() {
         showsVerticalScrollIndicator={false}
       >
         <DetailSection title="Financial">
-          <DetailField label="Amount" value={item.amount != null ? '$' + Number(item.amount).toLocaleString() : null} />
+          <DetailField label="Amount" value={item.amount != null ? '$' + Number(item.amount) : null} />
           <DetailField label="Approved" value={item.isApproved ? 'Yes' : 'No'} />
         </DetailSection>
         <DetailSection title="Relationships">

@@ -104,7 +104,7 @@ export const ADMIN_CONFIGS = {
   }),
   budget: cfg('budget', (o, i) => `/admin/budget/${o}/${i}`, {
     subtitleField: (item: any) =>
-      item.amount != null ? `$${Number(item.amount).toLocaleString()}` : undefined,
+      item.amount != null ? `$${Number(item.amount)}` : undefined,
     statusField: (item: any) => (item.isApproved ? 'APPROVED' : 'PENDING'),
   }),
   chartOfAccount: cfg('chartOfAccount', (o, i) => `/admin/coa/${o}/${i}`, {

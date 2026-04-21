@@ -8,6 +8,7 @@ import { useCreateComment, useDeleteComment } from '@/services/comment';
 import { useReportComment } from '@/services/email';
 import { useDeleteWall, useLikeWall } from '@/services/wall';
 import { Comment, Wall } from '@/types';
+import { convertToLocalDateTimeString } from '@/utils/date';
 import React, { useCallback, useState } from 'react';
 import { ActivityIndicator, Alert, FlatList, Pressable, Text, TextInput, View } from 'react-native';
 
@@ -87,7 +88,7 @@ export function WallCard({ wall, orgId, onRefresh, isLiked }: { wall: Wall; orgI
       <View style={{ marginLeft: 8, flex: 1, backgroundColor: colors.bg, borderRadius: 8, padding: 8, borderWidth: 1, borderColor: colors.border, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
         <View style={{ flex: 1 }}>
           <Text style={{ color: colors.text, fontSize: 13 }}>{item.comment}</Text>
-          <Text style={{ color: colors.sub, fontSize: 11, marginTop: 2 }}>{new Date(item.createdAt).toLocaleString()}</Text>
+          <Text style={{ color: colors.sub, fontSize: 11, marginTop: 2 }}>{convertToLocalDateTimeString(item.createdAt)}</Text>
         </View>
         <Pressable onPress={() => handleReport(item._id, item.organisation)} style={{ padding: 4 }} disabled={reportMutation.isPending}>
           {reportMutation.isPending ? <ActivityIndicator size="small" color={colors.danger} /> : <I.warning size={14} color={colors.warning} />}
@@ -105,7 +106,7 @@ export function WallCard({ wall, orgId, onRefresh, isLiked }: { wall: Wall; orgI
     <View style={{ backgroundColor: colors.card, borderRadius: 14, marginVertical: 8, marginHorizontal: 8, padding: 14, shadowColor: colors.text, shadowOpacity: 0.08, shadowRadius: 8, elevation: 2 }}>
       <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8, justifyContent: 'space-between' }}>
         <UserAvatar userRole={wall.user} />
-        <Text style={{ color: colors.sub, fontSize: 12 }}>{new Date(wall.createdAt).toLocaleString()}</Text>
+        <Text style={{ color: colors.sub, fontSize: 12 }}>{convertToLocalDateTimeString(wall.createdAt)}</Text>
       </View>
       <Text style={{ color: colors.text, fontSize: 15, marginBottom: 10 }}>{wall.message}</Text>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>

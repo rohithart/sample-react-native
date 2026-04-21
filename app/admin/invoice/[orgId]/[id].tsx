@@ -130,7 +130,7 @@ export default function InvoiceDetailScreen() {
         />
         {item.description ? <HtmlContent label="Description" html={item.description} /> : null}
         <DetailSection title="Financial">
-          <DetailField label="Total Amount" value={item.totalAmount != null ? '$' + Number(item.totalAmount).toLocaleString() : null} />
+          <DetailField label="Total Amount" value={item.totalAmount != null ? '$' + Number(item.totalAmount) : null} />
           <DetailField label="Is Expense" value={item.isExpense ? 'Yes' : 'No'} />
           <DetailField label="Due Date" value={convertToLocalDateTimeString(item.dueDate)} />
           <DetailField label="Paid At" value={convertToLocalDateTimeString(item.paidAt)} />

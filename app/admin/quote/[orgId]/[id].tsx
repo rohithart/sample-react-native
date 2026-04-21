@@ -131,8 +131,8 @@ export default function QuoteDetailScreen() {
         {item.description ? <HtmlContent label="Description" html={item.description} /> : null}
         {item.vendorDescription ? <HtmlContent label="Vendor Description" html={item.vendorDescription} /> : null}
         <DetailSection title="Financial">
-          <DetailField label="Budget" value={item.budget != null ? '$' + Number(item.budget).toLocaleString() : null} />
-          <DetailField label="Amount" value={item.amount != null ? '$' + Number(item.amount).toLocaleString() : null} />
+          <DetailField label="Budget" value={item.budget != null ? '$' + Number(item.budget): null} />
+          <DetailField label="Amount" value={item.amount != null ? '$' + Number(item.amount): null} />
           <DetailField label="Submitted" value={convertToLocalDateTimeString(item.submittedAt)} />
           <DetailField label="Approved" value={convertToLocalDateTimeString(item.approvedAt)} />
           <DetailField label="Approved By" value={item.approvedBy} />

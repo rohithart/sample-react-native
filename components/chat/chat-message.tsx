@@ -6,6 +6,7 @@ import { Alert, Modal, Pressable, Text, View } from 'react-native';
 import { UserAvatar } from '../user-avatar';
 import { HStack } from '../ui/hstack';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { convertToLocalDateTimeString } from '@/utils/date';
 
 interface ChatMessageProps {
   message: Message;
@@ -42,10 +43,6 @@ export function ChatMessage({ message, currentUser, conversationId, orgId }: Cha
   };
 
   const textColor = isMine ? '#fff' : colors.text;
-  const createdAt = new Date(message.createdAt).toLocaleString('en-AU', {
-    dateStyle: 'medium',
-    timeStyle: 'short',
-  });
 
   const reactions = message.reactions
     ? message.reactions instanceof Map
@@ -73,7 +70,7 @@ export function ChatMessage({ message, currentUser, conversationId, orgId }: Cha
   };
 
   const renderReadByItem = (item: any) => {
-    const readAt = item.readAt ? new Date(item.readAt).toLocaleString('en-AU', { dateStyle: 'medium', timeStyle: 'short' }) : 'Unknown';
+    const readAt = convertToLocalDateTimeString(item.readAt) || 'Unknown';
     return (
       <View key={`${item.email}-${readAt}`} style={{ marginBottom: 10 }}>
         <Text style={{ color: colors.text, fontWeight: '700' }}>{item.email || item.name || 'Unknown reader'}</Text>
@@ -96,7 +93,7 @@ export function ChatMessage({ message, currentUser, conversationId, orgId }: Cha
             )}
 
             <Text style={{ color: textColor, fontSize: 11, marginTop: 8, textAlign: 'right', opacity: 0.8 }}>
-              {createdAt}{message.isEdited ? ' · edited' : ''}
+              {convertToLocalDateTimeString(message.createdAt)}{message.isEdited ? ' · edited' : ''}
             </Text>
           </Pressable>
 

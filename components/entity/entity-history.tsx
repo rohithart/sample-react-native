@@ -9,6 +9,7 @@ import { ActivityIndicator, FlatList, Modal, Pressable, Text, View } from 'react
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { EntityType } from '@/enums';
+import { convertToLocalDateTimeString } from '@/utils/date';
 
 const I = ENTITY_ICONS;
 
@@ -54,7 +55,7 @@ export function EntityHistory({ isVisible, onClose, entity, entityId }: EntityHi
           {item.changes.map(renderChange)}
         </VStack>
       )}
-      <Text style={{ color: colors.sub, fontSize: 10 }}>{new Date(item.createdAt).toLocaleString()}</Text>
+      <Text style={{ color: colors.sub, fontSize: 10 }}>{convertToLocalDateTimeString(item.createdAt)}</Text>
     </VStack>
   );
 
