@@ -13,6 +13,7 @@ import {
     ChartBar,
     ChartPie,
     Check,
+    CheckCheck,
     CheckCircle2,
     ChevronDown,
     ChevronLeft,
@@ -64,6 +65,7 @@ import {
     Share2,
     Shield,
     Smile,
+    SmilePlus,
     Sparkles,
     Sun,
     Tag,
@@ -130,6 +132,7 @@ export type EntityIconKey =
   | 'lock'
   | 'back'
   | 'smile'
+  | 'smilePlus'
   | 'eye'
   | 'moon'
   | 'sun'
@@ -137,6 +140,7 @@ export type EntityIconKey =
   | 'archiveRestore'
   | 'calendar'
   | 'check'
+  | 'checkCheck'
   | 'checkCircle'
   | 'chevronDown'
   | 'chevronRight'
@@ -225,6 +229,7 @@ export const ENTITY_ICONS: Record<EntityIconKey, IconComponent> = {
   archiveRestore: ArchiveRestore,
   calendar: Calendar,
   check: Check,
+  checkCheck: CheckCheck,
   checkCircle: CheckCircle2,
   chevronDown: ChevronDown,
   chevronRight: ChevronRight,
@@ -256,6 +261,7 @@ export const ENTITY_ICONS: Record<EntityIconKey, IconComponent> = {
   settings: Settings,
   share: Share2,
   smile: Smile,
+  smilePlus: SmilePlus,
   trash: Trash2,
   userPlus: UserPlus,
   usersRound: UsersRound,

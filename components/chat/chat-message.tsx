@@ -85,40 +85,54 @@ export function ChatMessage({ message, currentUser, conversationId, orgId }: Cha
         {!isMine ? <UserAvatar userRole={message.sender} /> : null}
 
         <View style={bubbleStyle}>
-          <Pressable onPress={() => setShowReadByModal(true)}>
             {message.isDeleted ? (
               <Text style={{ color: colors.sub, fontStyle: 'italic', fontSize: 14 }}>This message was deleted</Text>
             ) : (
               <Text style={{ color: textColor, fontSize: 14, lineHeight: 20 }}>{message.content}</Text>
             )}
 
-            <Text style={{ color: textColor, fontSize: 11, marginTop: 8, textAlign: 'right', opacity: 0.8 }}>
-              {convertToLocalDateTimeString(message.createdAt)}{message.isEdited ? ' · edited' : ''}
-            </Text>
-          </Pressable>
-
             <HStack space="sm" className="flex-wrap" style={{ marginTop: 8 }}>
                <Pressable onPress={() => setShowEmojiPicker((prev) => !prev)} style={{ paddingVertical: 6, paddingHorizontal: 6, borderRadius: 16, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border }}>
-                <I.smile size={15} color={colors.success} />
+                <I.smilePlus size={15} color={colors.text} />
               </Pressable>
               {reactions?.filter(([_, users]) => users.length > 0).map(([emoji, users]) => (
-                <Pressable key={emoji} onPress={() => onToggleEmoji(emoji)} style={{ backgroundColor: colors.inputBg, borderRadius: 16, paddingHorizontal: 8, paddingVertical: 4, flexDirection: 'row', alignItems: 'center' }}>
-                  <View  style={{ backgroundColor: colors.inputBg, borderRadius: 16, paddingHorizontal: 8, paddingVertical: 4, flexDirection: 'row', alignItems: 'center' }}>
-                  <Text style={{ fontSize: 14, marginRight: 4 }}>{emoji}</Text>
-                  <Text style={{ color: colors.text, fontSize: 12 }}>{Array.isArray(users) ? users.length : users}</Text>
+                <Pressable key={emoji} onPress={() => onToggleEmoji(emoji)} style={{ backgroundColor: colors.inputBg, borderRadius: 16, paddingHorizontal: 4, paddingVertical: 4, flexDirection: 'row', alignItems: 'center' }}>
+                  <View  style={{ backgroundColor: colors.inputBg, borderRadius: 10, paddingHorizontal: 4, paddingVertical: 4, flexDirection: 'row', alignItems: 'center' }}>
+                  <Text style={{ fontSize: 12, marginRight: 1 }}>{emoji}</Text>
+                  <Text style={{ color: colors.text, fontSize: 10 }}>{Array.isArray(users) ? users.length : users}</Text>
                 </View>
                 </Pressable>
               ))}
-              {isMine ? (
-              <Pressable onPress={handleDelete} style={{ paddingVertical: 6, paddingHorizontal: 10, borderRadius: 16, backgroundColor: colors.dangerBg, borderWidth: 1, borderColor: colors.danger }}>
-                <I.trash size={20} color={colors.danger} />
+              
+            </HStack>
+            <HStack space="md" className="justify-end items-center">
+               {isMine ? (
+              <Pressable onPress={handleDelete} style={{ paddingVertical: 6, paddingHorizontal: 6, borderRadius: 16, backgroundColor: colors.dangerBg, borderWidth: 1, borderColor: colors.danger }}>
+                <I.trash size={14} color={colors.danger} />
               </Pressable>
             ) : null}
+              <Text style={{ color: textColor, fontSize: 11, marginTop: 4, textAlign: 'right', opacity: 0.8 }}>
+                {convertToLocalDateTimeString(message.createdAt)}{message.isEdited ? ' · edited' : ''}
+              </Text>
+              <Pressable onPress={() => setShowReadByModal(true)} >
+                <Text style={{ color: textColor, fontSize: 11, marginTop: 4, textAlign: 'right', opacity: 0.8 }}>
+                <I.checkCheck size={10} color={textColor} />
+              </Text>
+              </Pressable>
             </HStack>
+            
         </View>
       </HStack>
 
-      {showEmojiPicker ? (
+      <Modal transparent animationType="slide" visible={showEmojiPicker} onRequestClose={() => setShowEmojiPicker(false)}>
+        <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.35)', justifyContent: 'center', padding: 20 }}>
+          <View style={{ backgroundColor: colors.bg, borderRadius: 18, padding: 18, maxHeight: '80%' }}>
+            <HStack className="justify-between items-center" style={{ marginBottom: 12 }}>
+              <Text style={{ color: colors.text, fontSize: 16, fontWeight: '700' }}>Select a reaction</Text>
+              <Pressable onPress={() => setShowEmojiPicker(false)} style={{ padding: 6 }}>
+                <Text style={{ color: colors.primary, fontSize: 14 }}>Close</Text>
+              </Pressable>
+            </HStack>
         <View style={{ marginTop: 8, padding: 10, borderRadius: 14, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border, flexWrap: 'wrap', flexDirection: 'row' }}>
           {COMMON_EMOJIS.map((emoji) => (
             <Pressable key={emoji} onPress={() => handleAddEmoji(emoji)} style={{ padding: 8, margin: 4, borderRadius: 12, backgroundColor: colors.inputBg }}>
@@ -126,7 +140,9 @@ export function ChatMessage({ message, currentUser, conversationId, orgId }: Cha
             </Pressable>
           ))}
         </View>
-      ) : null}
+        </View>
+        </View>
+      </Modal>
 
       <Modal transparent animationType="slide" visible={showReadByModal} onRequestClose={() => setShowReadByModal(false)}>
         <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.35)', justifyContent: 'center', padding: 20 }}>

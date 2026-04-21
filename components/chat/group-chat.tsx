@@ -80,6 +80,7 @@ export function GroupChat({ orgId, groupId, group }: GroupChatProps) {
               ref={listRef}
               data={messages || []}
               keyExtractor={(item) => item._id}
+              contentContainerStyle={{ padding: 20, gap: 1 }}
               renderItem={({ item }) => (
                 <ChatMessage
                   message={item}
