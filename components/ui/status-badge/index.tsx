@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 import { useThemeColors } from '@/hooks/use-theme-colors';
+import { statusColors } from '@/constants/status';
 
 interface StatusBadgeProps {
   status: string;
@@ -8,27 +9,67 @@ interface StatusBadgeProps {
 }
 
 export function StatusBadge({ status, color }: StatusBadgeProps) {
-  const { primary } = useThemeColors();
-  let badgeColor = color ?? primary;
+  const { primary, success, danger, inactive } = useThemeColors();
+  let badgeColor;
   switch (status.toLowerCase()) {
-    case 'active':
-    case 'approved':
-      badgeColor = '#22c55e';
-      break;
-    case 'inactive':
-      badgeColor = '#6b7280';
+    case 'draft':
+      badgeColor = statusColors.draft;
       break;
     case 'pending':
-      badgeColor = '#f59e0b';
+      badgeColor = statusColors.pending;
       break;
-    case 'archived':
-      badgeColor = '#6b7280';
+    case 'progress':
+    case 'in progress':
+      badgeColor = statusColors.progress;
       break;
-    case 'error':
+    case 'requested':
+      badgeColor = statusColors.requested;
+      break;
+    case 'received':
+      badgeColor = statusColors.received;
+      break;
+    case 'verified':
+      badgeColor = statusColors.verified;
+      break;
+    case 'blocked':
+      badgeColor = statusColors.blocked;
+      break;
+    case 'review':
+      badgeColor = statusColors.review;
+      break;
+    case 'complete':
+      badgeColor = statusColors.complete;
+      break;
+    case 'uploaded':
+      badgeColor = statusColors.uploaded;
+      break;
+    case 'paid':
+      badgeColor = statusColors.paid;
+      break;
+    case 'approved':
+    case 'active':
+      badgeColor = success;
+      break;
     case 'rejected':
-      badgeColor = '#ef4444';
+    case 'error':
+      badgeColor = danger;
+      break;
+    case 'expired':
+      badgeColor = statusColors.expired;
+      break;
+    case 'cancelled':
+      badgeColor = statusColors.cancelled;
+      break;
+    case 'inactive':
+    case 'archived':
+      badgeColor = inactive;
+      break;
+    default:
+      badgeColor = primary;
       break;
   }
+
+  badgeColor = color ?? badgeColor;
 
   return (
     <View
