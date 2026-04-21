@@ -68,6 +68,8 @@ export function EntityCard({ item, config, orgId, onPress }: EntityCardProps) {
         })}
       >
       <HStack space="md" className="items-stretch">
+        <VStack space="xs" className="flex-1">
+          <HStack space="md" className="items-stretch">
         {image ? (
           <Image
             source={{ uri: image }}
@@ -96,6 +98,8 @@ export function EntityCard({ item, config, orgId, onPress }: EntityCardProps) {
               {subtitle}
             </Text>
           ) : null}
+        </VStack>
+      </HStack>
           {status ? (
             <HStack style={{ marginTop: 4 }}>
               <StatusBadge status={status} />
