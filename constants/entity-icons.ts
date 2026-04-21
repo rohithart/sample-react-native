@@ -35,6 +35,7 @@ import {
     Globe,
     Hand,
     HelpCircle,
+    HelpingHand,
     History as HistoryIcon,
     Home,
     ImageIcon,
@@ -120,6 +121,7 @@ export type EntityIconKey =
   | 'dashboard'
   | 'home'
   | 'help'
+  | 'support'
   | 'mySpace'
   | 'gallery'
   | 'attachment'
@@ -211,6 +213,7 @@ export const ENTITY_ICONS: Record<EntityIconKey, IconComponent> = {
   dashboard: ChartPie,
   home: Home,
   help: HelpCircle,
+  support: HelpingHand,
   mySpace: User,
   gallery: ImageIcon,
   attachment: Paperclip,

@@ -22,7 +22,7 @@ export function UserNavigationDrawer({
   topInset,
   orgId,
 }: UserNavigationDrawerProps) {
-  const { primary: c } = useThemeColors();
+  const { primary: c, secondary } = useThemeColors();
   const router = useRouter();
   const { hasAccess } = useOrganisationContext();
   const I = ENTITY_ICONS;
@@ -66,6 +66,13 @@ export function UserNavigationDrawer({
       <DrawerItem icon={<I.event size={16} color={c} />} label="Organisation events" onPress={() => go(`/view/events/${orgId}`)} />
       <DrawerItem icon={<I.information size={16} color={c} />} label="Other information" onPress={() => go(`/view/informations/${orgId}`)} />
       <DrawerItem icon={<I.help size={16} color={c} />} label="Help" onPress={() => go('/view/help')} />
+
+      <DrawerDivider />
+      <DrawerSectionHeading title='Contact organisation' />
+      <DrawerItem icon={<I.zap size={16} color={secondary} />} label="Report Issue" onPress={() => go('/help/report')} />
+      <DrawerItem icon={<I.mail size={16} color={secondary} />} label="Contact Admin" onPress={() => go('/help/contact')} />
+      <DrawerSectionHeading title="DarthVader" />
+      <DrawerItem icon={<I.support size={16} color={secondary} />} label="Support" onPress={() => go('/help/support')} />
     </NavigationDrawer>
   );
 }

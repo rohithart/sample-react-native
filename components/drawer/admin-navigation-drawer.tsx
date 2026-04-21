@@ -24,7 +24,7 @@ export function AdminNavigationDrawer({
   orgId,
   orgName = 'Organisation',
 }: AdminNavigationDrawerProps) {
-  const { primary: c } = useThemeColors();
+  const { primary: c, secondary } = useThemeColors();
   const router = useRouter();
   const { hasAccess } = useOrganisationContext();
   const I = ENTITY_ICONS;
@@ -131,6 +131,10 @@ export function AdminNavigationDrawer({
       <DrawerItem icon={<I.eventType size={16} color={c} />} label="Event types" onPress={() => go(`/admin/event-types/${orgId}`)} indent />
       <DrawerItem icon={<I.information size={16} color={c} />} label="Other information" onPress={() => go(`/admin/informations/${orgId}`)} />
       <DrawerItem icon={<I.help size={16} color={c} />} label="Help" onPress={() => go('/admin/help')} />
+
+      <DrawerDivider />
+      <DrawerSectionHeading title="Contact DarthVader" />
+      <DrawerItem icon={<I.support size={16} color={secondary} />} label="Support" onPress={() => go('/help/support')} />
     </NavigationDrawer>
   );
 }
