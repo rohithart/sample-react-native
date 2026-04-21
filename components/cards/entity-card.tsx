@@ -52,9 +52,9 @@ export function EntityCard({ item, config, orgId, onPress }: EntityCardProps) {
         backgroundColor: card,
         shadowColor: text,
         shadowOffset: { width: 0, height: 6 },
-        shadowOpacity: isDark ? 0.35 : 0.15,
+        shadowOpacity: 0.15,
         shadowRadius: 8,
-        elevation: 8, 
+        elevation: 1, 
       }}
     >
       <Pressable

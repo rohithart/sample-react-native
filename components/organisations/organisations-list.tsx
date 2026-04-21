@@ -39,7 +39,7 @@ export function OrganisationsList() {
           No Organisations Yet
         </Text>
         <Text style={{ fontSize: 14, textAlign: 'center', color: colors.sub }}>
-          Tap "Add New" below to create your first organisation.
+          Tap &quot;Add New&quot; below to create your first organisation.
         </Text>
       </View>
     );
@@ -48,7 +48,7 @@ export function OrganisationsList() {
   return (
     <ScrollView
       style={{ flex: 1 }}
-      contentContainerStyle={{ padding: 20, gap: 16 }}
+      contentContainerStyle={{ gap: 6 }}
       showsVerticalScrollIndicator={false}
     >
       {organisations.map((org) => (

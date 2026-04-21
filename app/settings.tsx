@@ -3,12 +3,11 @@ import { useCallback } from 'react';
 import {
   Alert,
   Pressable,
-  Text as RNText,
+  Text,
   ScrollView,
   Switch,
   View,
 } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { useDisplaySettings } from '@/context/display-settings-context';
@@ -17,7 +16,6 @@ import { useThemeColors } from '@/hooks/use-theme-colors';
 
 
 export default function SettingsScreen() {
-  const { top, bottom } = useSafeAreaInsets();
   const { isDark, toggleDarkMode } = useTheme();
   const colors = useThemeColors();
   const router = useRouter();
@@ -62,7 +60,7 @@ export default function SettingsScreen() {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.bg, paddingTop: top, paddingBottom: bottom }}>
+    <View style={{ flex: 1, backgroundColor: colors.bg }}>
       <Stack.Screen
         options={{
           title: 'Settings',
@@ -94,25 +92,25 @@ export default function SettingsScreen() {
         contentContainerStyle={{ padding: 20, gap: 16 }}
         showsVerticalScrollIndicator={false}
       >
-        <View style={{ marginBottom: 24, alignItems: 'flex-end' }}>
+        <View style={{ marginBottom: 8, alignItems: 'flex-end' }}>
           <Pressable
             onPress={resetSettings}
             style={({ pressed }) => ({
               opacity: pressed ? 0.7 : 1,
             })}
           >
-            <RNText style={{ fontSize: 14, fontWeight: '600', color: colors.danger }}>
+            <Text style={{ fontSize: 14, fontWeight: '600', color: colors.danger }}>
               Reset Settings
-            </RNText>
+            </Text>
           </Pressable>
         </View>
 
-        <View style={{ marginBottom: 32 }}>
+        <View style={{ marginBottom: 8 }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 16 }}>
             <I.eye size={20} color={colors.primary} />
-            <RNText style={{ fontSize: 18, fontWeight: '600', color: colors.text }}>
+            <Text style={{ fontSize: 18, fontWeight: '600', color: colors.text }}>
               Display
-            </RNText>
+            </Text>
           </View>
 
           <SettingItem
@@ -141,9 +139,9 @@ export default function SettingsScreen() {
             ) : (
               <I.sun size={20} color={colors.primary} />
             )}
-            <RNText style={{ fontSize: 18, fontWeight: '600', color: colors.text }}>
+            <Text style={{ fontSize: 18, fontWeight: '600', color: colors.text }}>
               App
-            </RNText>
+            </Text>
           </View>
 
           <SettingItem
@@ -164,22 +162,22 @@ export default function SettingsScreen() {
 
         <View
           style={{
-            marginTop: 48,
+            marginTop: 10,
             paddingHorizontal: 16,
             paddingVertical: 16,
             borderRadius: 8,
             backgroundColor: colors.card,
           }}
         >
-          <RNText
+          <Text
             style={{
               fontSize: 14,
               textAlign: 'center',
-              color: colors.sub,
+              color: colors.warning,
             }}
           >
             Your preferences are saved automatically
-          </RNText>
+          </Text>
         </View>
       </ScrollView>
     </View>
@@ -217,12 +215,12 @@ function SettingItem({
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12, flex: 1 }}>
         <View>{icon}</View>
         <View style={{ flex: 1 }}>
-          <RNText style={{ fontSize: 16, fontWeight: '600', color: colors.text, marginBottom: 4 }}>
+          <Text style={{ fontSize: 16, fontWeight: '600', color: colors.text, marginBottom: 4 }}>
             {label}
-          </RNText>
-          <RNText style={{ fontSize: 14, color: colors.sub }}>
+          </Text>
+          <Text style={{ fontSize: 14, color: colors.sub }}>
             {description}
-          </RNText>
+          </Text>
         </View>
       </View>
       <Switch
