@@ -33,7 +33,7 @@ export default function Screen() {
       <PageHeader icon="event" title="New Event" />
 
       <ScrollView
-        contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 16, gap: 16 }}
+        contentContainerStyle={{ padding: 20, gap: 16 }}
         showsVerticalScrollIndicator={false}
       >
         <View style={{ backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border, borderRadius: 8, padding: 12 }}>

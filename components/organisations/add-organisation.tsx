@@ -51,7 +51,7 @@ export function AddOrganisation({ onSuccess }: { onSuccess?: () => void }) {
     >
       <ScrollView
         style={{ flex: 1 }}
-        contentContainerStyle={{ padding: 20, gap: 20 }}
+        contentContainerStyle={{ padding: 20, gap: 16 }}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >

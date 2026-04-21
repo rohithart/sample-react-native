@@ -33,7 +33,7 @@ export default function AddDocumentScreen() {
       <PageHeader icon="document" title="Add New Document" />
 
       <ScrollView
-        contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 16, gap: 16 }}
+        contentContainerStyle={{ padding: 20, gap: 16 }}
         showsVerticalScrollIndicator={false}
       >
         <FormField

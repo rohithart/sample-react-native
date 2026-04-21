@@ -65,7 +65,7 @@ export function EntityHistory({ isVisible, onClose, entity, entityId }: EntityHi
     <Modal transparent animationType="slide" visible={isVisible} onRequestClose={onClose}>
       <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
         <HStack className="items-center justify-between" style={{ paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: colors.border }}>
-          <Text style={{ fontSize: 17, fontWeight: '700', color: colors.text }}>I.history</Text>
+          <Text style={{ fontSize: 17, fontWeight: '700', color: colors.text }}>History</Text>
           <Pressable onPress={onClose} style={{ padding: 4 }}>
             <I.close size={22} color={colors.sub} />
           </Pressable>
@@ -86,7 +86,7 @@ export function EntityHistory({ isVisible, onClose, entity, entityId }: EntityHi
             data={entries}
             keyExtractor={(i) => i._id}
             renderItem={renderItem}
-            contentContainerStyle={{ padding: 16, gap: 10, paddingBottom: bottom + 16 }}
+            contentContainerStyle={{ padding: 20, gap: 16 }}
             showsVerticalScrollIndicator={false}
           />
         )}

@@ -123,7 +123,7 @@ export function EntityTimeline({ isVisible, onClose, entity, entityId }: EntityT
             data={entries}
             keyExtractor={(i) => i._id}
             renderItem={renderItem}
-            contentContainerStyle={{ paddingHorizontal: 8, paddingTop: 16, paddingBottom: bottom + 16 }}
+            contentContainerStyle={{ padding: 20, gap: 16 }}
             showsVerticalScrollIndicator={false}
           />
         )}

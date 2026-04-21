@@ -48,7 +48,7 @@ export function OrganisationsList() {
   return (
     <ScrollView
       style={{ flex: 1 }}
-      contentContainerStyle={{ paddingVertical: 8 }}
+      contentContainerStyle={{ padding: 20, gap: 16 }}
       showsVerticalScrollIndicator={false}
     >
       {organisations.map((org) => (

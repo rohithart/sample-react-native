@@ -26,7 +26,7 @@ export default function Screen() {
       <Stack.Screen options={{ headerShown: false }} />
       <PageHeader icon="help" title="Help" />
 
-      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: 16 }}>
+      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: 20, gap: 16 }}>
         {helpData.map(renderHelpItem)}
       </ScrollView>
     </SafeAreaView>

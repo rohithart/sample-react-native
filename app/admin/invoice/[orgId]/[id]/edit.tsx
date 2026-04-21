@@ -59,7 +59,7 @@ export default function EditInvoiceScreen() {
       <PageHeader icon="invoice" title="Edit Invoice" />
 
       <ScrollView
-        contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 16, gap: 16 }}
+        contentContainerStyle={{ padding: 20, gap: 16 }}
         showsVerticalScrollIndicator={false}
       >
         <FormField

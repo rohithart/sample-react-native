@@ -15,7 +15,7 @@ export function LoadingList({ count = 6, style }: LoadingListProps) {
   return (
     <ScrollView
       style={style}
-      contentContainerStyle={{ gap: 12, padding: 16 }}
+      contentContainerStyle={{ padding: 20, gap: 16 }}
       scrollEnabled={false}
       showsVerticalScrollIndicator={false}
     >

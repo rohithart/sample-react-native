@@ -168,7 +168,7 @@ export default function SplashScreen() {
     AsyncStorage.getItem(TERMS_AND_CONDITIONS_KEY).then((value) => {
       timer = setTimeout(() => {
         if (value === 'true') {
-          router.replace('/home2');
+          router.replace('/home');
         } else {
           router.replace('/terms-and-conditions');
         }
@@ -193,7 +193,7 @@ export default function SplashScreen() {
       <Stack.Screen options={{ headerShown: false }} />
 
       <ScrollView 
-        contentContainerStyle={{ flexGrow: 1 }}
+        contentContainerStyle={{ padding: 20, gap: 16 }}
         showsVerticalScrollIndicator={false}
       >
         <Animated.View

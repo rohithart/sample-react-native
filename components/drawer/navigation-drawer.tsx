@@ -98,7 +98,7 @@ export function NavigationDrawer({
 
           <ScrollView
             style={{ flex: 1 }}
-            contentContainerStyle={{ gap: 4, paddingHorizontal: 12, paddingVertical: 16 }}
+            contentContainerStyle={{ padding: 20, gap: 16 }}
             showsVerticalScrollIndicator={false}
           >
             {children}

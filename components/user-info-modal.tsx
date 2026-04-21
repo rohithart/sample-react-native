@@ -44,7 +44,7 @@ export function UserInfoModal({ isVisible, onClose, userRole }: UserInfoModalPro
 
         <ScrollView
           style={{ flex: 1 }}
-          contentContainerStyle={{ paddingHorizontal: 16, paddingVertical: 20 }}
+          contentContainerStyle={{ padding: 20, gap: 16 }}
           showsVerticalScrollIndicator={false}
         >
           <VStack className="items-center mb-8">

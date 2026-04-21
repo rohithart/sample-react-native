@@ -73,7 +73,7 @@ export default function AdminDashboard() {
       ) : (
         <ScrollView
           style={{ flex: 1 }}
-          contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 16, paddingBottom: 24, gap: 16 }}
+          contentContainerStyle={{ padding: 20, gap: 16 }}
           showsVerticalScrollIndicator={false}
           scrollEnabled={!isDrawerOpen}
         >

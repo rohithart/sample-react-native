@@ -116,7 +116,7 @@ export function EntityComments({ isVisible, onClose, entity, entityId, orgId }: 
             data={comments}
             keyExtractor={(i) => i._id}
             renderItem={renderItem}
-            contentContainerStyle={{ padding: 16, gap: 12, paddingBottom: 16 }}
+            contentContainerStyle={{ padding: 20, gap: 16 }}
             showsVerticalScrollIndicator={false}
           />
         )}

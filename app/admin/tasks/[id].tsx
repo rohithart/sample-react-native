@@ -68,7 +68,6 @@ export default function TasksListScreen() {
           )}
           keyExtractor={(item) => item._id}
           refreshControl={refreshControl}
-          contentContainerStyle={{ paddingBottom: 12 }}
           scrollIndicatorInsets={{ right: 1 }}
           ListEmptyComponent={
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingTop: 60 }}>

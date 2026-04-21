@@ -48,7 +48,7 @@ export default function MeetingDetailScreen() {
       ) : (
       <ScrollView
         refreshControl={refreshControl}
-        contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 8, paddingBottom: 24, gap: 14 }}
+        contentContainerStyle={{ padding: 20, gap: 16 }}
         showsVerticalScrollIndicator={false}
       >
         {item.agenda ? <HtmlContent label="Agenda" html={item.agenda} /> : null}

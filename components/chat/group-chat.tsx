@@ -88,7 +88,6 @@ export function GroupChat({ orgId, groupId, group }: GroupChatProps) {
                   orgId={orgId}
                 />
               )}
-              contentContainerStyle={{ padding: 16, paddingBottom: 12 }}
               showsVerticalScrollIndicator={false}
               onContentSizeChange={() => listRef.current?.scrollToEnd({ animated: true })}
               ListEmptyComponent={

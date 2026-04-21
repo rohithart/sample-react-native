@@ -41,7 +41,7 @@ export default function TermsAndConditionsScreen() {
       <Stack.Screen options={{ headerShown: false }} />
 
       <ScrollView 
-        contentContainerStyle={{ paddingHorizontal: 24, paddingVertical: 24, paddingBottom: 120 }}
+        contentContainerStyle={{ padding: 20, gap: 16 }}
         showsVerticalScrollIndicator={false}
       >
         <View style={{ alignItems: 'center', marginBottom: 32 }}>

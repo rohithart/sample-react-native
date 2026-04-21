@@ -91,7 +91,7 @@ export default function SettingsScreen() {
 
       <ScrollView
         style={{ flex: 1 }}
-        contentContainerStyle={{ paddingHorizontal: 24, paddingVertical: 24 }}
+        contentContainerStyle={{ padding: 20, gap: 16 }}
         showsVerticalScrollIndicator={false}
       >
         <View style={{ marginBottom: 24, alignItems: 'flex-end' }}>

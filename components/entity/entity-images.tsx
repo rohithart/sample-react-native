@@ -120,7 +120,6 @@ export function EntityImages({ isVisible, onClose, entity, entityId, orgId }: En
             keyExtractor={(i) => i._id}
             renderItem={renderThumb}
             numColumns={3}
-            contentContainerStyle={{ padding: PADDING, gap: GAP, paddingBottom: bottom + 16 }}
             columnWrapperStyle={{ gap: GAP }}
             showsVerticalScrollIndicator={false}
           />

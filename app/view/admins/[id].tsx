@@ -35,7 +35,6 @@ export default function AdminsListScreen() {
           data={Array.isArray(admins) ? admins : []}
           renderItem={({ item }) => <AdminCard admin={item} />}
           keyExtractor={item => item._id}
-          contentContainerStyle={{ paddingBottom: 12 }}
           scrollIndicatorInsets={{ right: 1 }}
           ListEmptyComponent={
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingTop: 60 }}>

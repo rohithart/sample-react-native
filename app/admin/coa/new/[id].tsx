@@ -33,7 +33,7 @@ export default function AddChartofAccountScreen() {
       <PageHeader icon="chartOfAccount" title="Add New Chart of Account" />
 
       <ScrollView
-        contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 16, gap: 16 }}
+        contentContainerStyle={{ padding: 20, gap: 16 }}
         showsVerticalScrollIndicator={false}
       >
         <FormField

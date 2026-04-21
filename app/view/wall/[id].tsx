@@ -71,7 +71,6 @@ export default function WallScreen() {
             <WallCard wall={item} orgId={orgId ?? ''} onRefresh={refetch} isLiked={isLiked} />
           )}
           keyExtractor={item => item._id}
-          contentContainerStyle={{ paddingBottom: 24 }}
           scrollIndicatorInsets={{ right: 1 }}
           ListEmptyComponent={
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingTop: 60 }}>

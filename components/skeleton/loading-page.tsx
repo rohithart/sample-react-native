@@ -11,7 +11,7 @@ export function LoadingPage() {
   return (
     <ScrollView
       style={{ flex: 1, backgroundColor: bg }}
-      contentContainerStyle={{ paddingBottom: 32 }}
+      contentContainerStyle={{ padding: 20, gap: 16 }}
       showsVerticalScrollIndicator={false}
       scrollEnabled={false}
     >

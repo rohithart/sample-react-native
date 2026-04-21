@@ -136,7 +136,6 @@ export function WallCard({ wall, orgId, onRefresh, isLiked }: { wall: Wall; orgI
           renderItem={renderComment}
           keyExtractor={item => item._id}
           scrollEnabled={false}
-          contentContainerStyle={{ paddingBottom: 2 }}
           ListEmptyComponent={<Text style={{ color: colors.sub, fontSize: 13 }}>No comments yet</Text>}
         />
         <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 8 }}>
