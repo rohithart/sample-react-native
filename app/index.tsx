@@ -1,17 +1,17 @@
+import { AnimatedFeatureCard } from '@/components/cards/animated-card';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { TERMS_AND_CONDITIONS_KEY } from '@/constants/memory';
 import { useToast } from '@/context/toast-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useAlertsAndroid, useAlertsiOS } from '@/services/alert';
 import { useHealth } from '@/services/health';
+import { Alert } from '@/types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Constants from 'expo-constants';
 import { Stack, useRouter } from 'expo-router';
 import { useEffect, useRef } from 'react';
 import { Animated, BackHandler, Easing, Platform, Text as RNText, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Alert } from '@/types';
-
 
 export default function SplashScreen() {
   const colors = useThemeColors();
@@ -24,7 +24,7 @@ export default function SplashScreen() {
   const featureAnim2 = useRef(new Animated.Value(20)).current;
   const featureAnim3 = useRef(new Animated.Value(20)).current;
   const floatAnim = useRef(new Animated.Value(0)).current;
-  const { bg, card, text, sub: textSecondary, primary, secondary } = colors;
+  const { bg, text, sub: textSecondary, primary } = colors;
   const { showToast } = useToast();
   const alertsQuery = Platform.OS === 'android' ? useAlertsAndroid() : useAlertsiOS();
   const healthQuery = useHealth();
@@ -87,7 +87,36 @@ export default function SplashScreen() {
     ).start();
   }, [fadeAnim, slideAnim, logoScale, featureAnim1, featureAnim2, featureAnim3, floatAnim]);
 
-  // Alerts toast
+  const FEATURE_CARDS = [
+    {
+      key: 'fast',
+      icon: (I: any, colors: any) => <I.rocket size={28} color={colors.primary} />,
+      title: 'Lightning Fast',
+      description: 'Built on Expo 54 with Metro bundler for instant delivery',
+      getBg: (colors: any) => colors.card,
+      getBorder: (colors: any) => colors.primary + '20',
+      animValue: featureAnim1,
+    },
+    {
+      key: 'design',
+      icon: (I: any, colors: any) => <I.zap size={28} color={colors.secondary} />,
+      title: 'Beautifully Designed',
+      description: 'Premium UI with Gluestack components and Tailwind CSS',
+      getBg: (colors: any) => colors.card,
+      getBorder: (colors: any) => colors.secondary + '20',
+      animValue: featureAnim2,
+    },
+    {
+      key: 'prod',
+      icon: (I: any, colors: any) => <I.shield size={28} color={colors.success} />,
+      title: 'Production Ready',
+      description: 'Complete with authentication, error handling & deep linking',
+      getBg: (colors: any) => colors.card,
+      getBorder: (colors: any) => colors.success + '20',
+      animValue: featureAnim3,
+    }
+  ];
+
   useEffect(() => {
     if (alertsQuery.data && Array.isArray(alertsQuery.data)) {
       alertsQuery.data.forEach((alert: Alert) => {
@@ -101,7 +130,6 @@ export default function SplashScreen() {
     }
   }, [alertsQuery.data, showToast]);
 
-  // Health minVersion check and error handling
   useEffect(() => {
     if (healthQuery.isError || (healthQuery.data && healthQuery.data.status !== 'Ok')) {
       showToast({
@@ -243,132 +271,21 @@ export default function SplashScreen() {
             </View>
 
             <View style={{ gap: 12, marginVertical: 32 }}>
-              <Animated.View
-                style={{
-                  opacity: featureAnim1.interpolate({
-                    inputRange: [0, 20],
-                    outputRange: [1, 0],
-                  }),
-                  transform: [{ translateY: featureAnim1 }],
-                }}
-              >
-                <FeatureCard
-                  icon={<I.rocket size={28} color={primary} />}
-                  title="Lightning Fast"
-                  description="Built on Expo 54 with Metro bundler for instant delivery"
-                  bgColor={card}
-                  borderColor={primary + '20'}
+              {FEATURE_CARDS.map((feature, idx) => (
+                <AnimatedFeatureCard
+                  key={feature.key}
+                  animValue={feature.animValue}
+                  icon={feature.icon(I, colors)}
+                  title={feature.title}
+                  description={feature.description}
+                  bgColor={feature.getBg(colors)}
+                  borderColor={feature.getBorder(colors)}
                 />
-              </Animated.View>
-
-              <Animated.View
-                style={{
-                  opacity: featureAnim2.interpolate({
-                    inputRange: [0, 20],
-                    outputRange: [1, 0],
-                  }),
-                  transform: [{ translateY: featureAnim2 }],
-                }}
-              >
-                <FeatureCard
-                  icon={<I.zap size={28} color={secondary} />}
-                  title="Beautifully Designed"
-                  description="Premium UI with Gluestack components and Tailwind CSS"
-                  bgColor={card}
-                  borderColor={secondary + '20'}
-                />
-              </Animated.View>
-
-              <Animated.View
-                style={{
-                  opacity: featureAnim3.interpolate({
-                    inputRange: [0, 20],
-                    outputRange: [1, 0],
-                  }),
-                  transform: [{ translateY: featureAnim3 }],
-                }}
-              >
-                <FeatureCard
-                  icon={<I.shield size={28} color={colors.success} />}
-                  title="Production Ready"
-                  description="Complete with authentication, error handling & deep linking"
-                  bgColor={card}
-                  borderColor={colors.success + '20'}
-                />
-              </Animated.View>
+              ))}
             </View>
           </View>
         </Animated.View>
       </ScrollView>
     </SafeAreaView>
-  );
-}
-
-function FeatureCard({
-  icon,
-  title,
-  description,
-  bgColor,
-  borderColor,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-  bgColor: string;
-  borderColor: string;
-}) {
-  const featureColors = useThemeColors();
-  return (
-    <View
-      style={{
-        backgroundColor: bgColor,
-        borderRadius: 16,
-        padding: 16,
-        borderWidth: 1,
-        borderColor: borderColor,
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 16,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: featureColors.isDark ? 0.1 : 0.05,
-        shadowRadius: 8,
-        elevation: 3,
-      }}
-    >
-      <View
-        style={{
-          width: 56,
-          height: 56,
-          borderRadius: 14,
-          backgroundColor: borderColor,
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        {icon}
-      </View>
-      <View style={{ flex: 1, gap: 4 }}>
-        <RNText
-          style={{
-            fontSize: 16,
-            fontWeight: '700',
-            color: featureColors.text,
-            letterSpacing: 0.3,
-          }}
-        >
-          {title}
-        </RNText>
-        <RNText
-          style={{
-            fontSize: 13,
-            color: featureColors.sub,
-            lineHeight: 18,
-          }}
-        >
-          {description}
-        </RNText>
-      </View>
-    </View>
   );
 }
