@@ -1,4 +1,3 @@
-import type { ChartData } from '@/types';
 import { useQuery } from '@tanstack/react-query';
 import { api } from './api-client';
 
@@ -8,8 +7,8 @@ export const chartKeys = {
 };
 
 const chartApi = {
-  getAdmin: (orgId: string) => api.get<ChartData>(`/api/chart/org/${orgId}`),
-  getUser: (orgId: string) => api.get<ChartData>(`/api/chart/user/${orgId}`),
+  getAdmin: (orgId: string) => api.get<any>(`/api/chart/org/${orgId}`),
+  getUser: (orgId: string) => api.get<any>(`/api/chart/user/${orgId}`),
 };
 
 export function useAdminChart(orgId: string) {

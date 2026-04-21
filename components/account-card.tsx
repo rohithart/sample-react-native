@@ -26,7 +26,7 @@ export function AccountCard({ onPress }: AccountCardProps) {
     if (onPress) {
       onPress();
     }
-    router.push('/profile');
+    router.push('/profile' as any);
   };
 
   return (

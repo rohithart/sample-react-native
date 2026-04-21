@@ -1,4 +1,3 @@
-import type { AnalyticsData } from '@/types';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { api } from './api-client';
 
@@ -8,11 +7,11 @@ export const analyticsKeys = {
 };
 
 const analyticsApi = {
-  getForYear: (orgId: string) => api.get<AnalyticsData>(`/api/analytics/current/${orgId}`),
-  getForFinancialYear: (orgId: string) => api.get<AnalyticsData>(`/api/analytics/financial/${orgId}`),
-  getForRange: (orgId: string, data: any) => api.patch<AnalyticsData>(`/api/analytics/range/${orgId}`, data),
-  getFinancialStatement: (orgId: string, data: any) => api.patch<AnalyticsData>(`/api/analytics/income-expense/${orgId}`, data),
-  getBalanceSheet: (orgId: string, data: any) => api.patch<AnalyticsData>(`/api/analytics/balance-sheet/${orgId}`, data),
+  getForYear: (orgId: string) => api.get<any>(`/api/analytics/current/${orgId}`),
+  getForFinancialYear: (orgId: string) => api.get<any>(`/api/analytics/financial/${orgId}`),
+  getForRange: (orgId: string, data: any) => api.patch<any>(`/api/analytics/range/${orgId}`, data),
+  getFinancialStatement: (orgId: string, data: any) => api.patch<any>(`/api/analytics/income-expense/${orgId}`, data),
+  getBalanceSheet: (orgId: string, data: any) => api.patch<any>(`/api/analytics/balance-sheet/${orgId}`, data),
 };
 
 export function useAnalyticsForYear(orgId: string) {

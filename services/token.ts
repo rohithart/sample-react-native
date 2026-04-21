@@ -1,12 +1,12 @@
-import type { ApiToken } from '@/types';
+import type { Token } from '@/types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from './api-client';
 
 export const tokenKeys = { all: ['tokens'] as const };
 
 const tokenApi = {
-  get: () => api.get<ApiToken[]>('/api/token'),
-  create: (data: Partial<ApiToken>) => api.post<ApiToken>('/api/token', data),
+  get: () => api.get<Token[]>('/api/token'),
+  create: (data: Partial<Token>) => api.post<Token>('/api/token', data),
   delete: (id: string) => api.delete<boolean>(`/api/token/${id}`),
 };
 
@@ -16,7 +16,7 @@ export function useTokens() {
 
 export function useCreateToken() {
   const qc = useQueryClient();
-  return useMutation({ mutationFn: (data: Partial<ApiToken>) => tokenApi.create(data), onSuccess: () => qc.invalidateQueries({ queryKey: tokenKeys.all }) });
+  return useMutation({ mutationFn: (data: Partial<Token>) => tokenApi.create(data), onSuccess: () => qc.invalidateQueries({ queryKey: tokenKeys.all }) });
 }
 
 export function useDeleteToken() {

@@ -1,4 +1,3 @@
-import type { StatusConfig } from '@/types';
 import { useQuery } from '@tanstack/react-query';
 import { api } from './api-client';
 
@@ -8,8 +7,8 @@ export const statusKeys = {
 };
 
 const statusApi = {
-  getWorkflowStatuses: (id: string) => api.get<StatusConfig[]>(`/api/status/workflow/${id}`),
-  getVendorStatuses: (id: string) => api.get<StatusConfig[]>(`/api/status/vendor/${id}`),
+  getWorkflowStatuses: (id: string) => api.get<any[]>(`/api/status/workflow/${id}`),
+  getVendorStatuses: (id: string) => api.get<any[]>(`/api/status/vendor/${id}`),
 };
 
 export function useWorkflowStatuses(id: string) {

@@ -1,4 +1,4 @@
-import type { Notification } from '@/types';
+import type { AppNotification } from '@/types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from './api-client';
 
@@ -7,8 +7,8 @@ export const notificationKeys = {
 };
 
 const notificationApi = {
-  getAll: (orgId: string) => api.get<Notification[]>(`/api/notification/${orgId}`),
-  markRead: (id: string) => api.patch<Notification>(`/api/notification/read/${id}`, {}),
+  getAll: (orgId: string) => api.get<AppNotification[]>(`/api/notification/${orgId}`),
+  markRead: (id: string) => api.patch<AppNotification>(`/api/notification/read/${id}`, {}),
   markReadAll: (orgId: string) => api.patch<void>(`/api/notification/readAll/${orgId}`, {}),
   delete: (id: string) => api.delete<boolean>(`/api/notification/${id}`),
   deleteAll: (orgId: string) => api.delete<boolean>(`/api/notification/all/${orgId}`),
