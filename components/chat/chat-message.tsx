@@ -2,11 +2,12 @@ import type { Message, UserRole } from '@/types';
 import { useToggleReaction, useDeleteMessage } from '@/services/message';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import React, { useState } from 'react';
-import { Alert, Modal, Pressable, Text, View } from 'react-native';
+import { Alert, Modal, Pressable, Text, View, StyleSheet } from 'react-native';
 import { UserAvatar } from '../user-avatar';
 import { HStack } from '../ui/hstack';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { convertToLocalDateTimeString } from '@/utils/date';
+import { VStack } from '../ui/vstack';
 
 interface ChatMessageProps {
   message: Message;
@@ -22,105 +23,98 @@ export function ChatMessage({ message, currentUser, conversationId, orgId }: Cha
   const colors = useThemeColors();
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [showReadByModal, setShowReadByModal] = useState(false);
+  const [showOptionModal, setShowOptionModal] = useState(false);
   const deleteMutation = useDeleteMessage(conversationId);
   const reactionMutation = useToggleReaction(message._id, conversationId);
   const isMine = currentUser?._id === message.sender?._id;
 
-  const bubbleStyle: any = {
-    alignSelf: isMine ? 'flex-end' as const : 'flex-start' as const,
-    backgroundColor: isMine ? colors.primary : colors.card,
-    borderColor: isMine ? colors.primary : colors.border,
-    borderWidth: 1,
-    borderRadius: 18,
-    padding: 12,
-    minWidth: '75%',
-    maxWidth: 280,
-    shadowColor: '#000',
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    shadowOffset: { width: 0, height: 2 },
-    elevation: 1,
-  };
-
-  const textColor = isMine ? '#fff' : colors.text;
-
-  const reactions = message.reactions
-    ? message.reactions instanceof Map
-      ? Array.from(message.reactions.entries())
-      : Object.entries(message.reactions as Record<string, any[]>)
-    : [];
-
   const handleAddEmoji = (emoji: string) => {
-    if (!conversationId) return;
     reactionMutation.mutate({ emoji, organisation: orgId });
     setShowEmojiPicker(false);
   };
 
-  const onToggleEmoji = (emoji: string) => {
-    if (!conversationId) return;
-    reactionMutation.mutate({ emoji, organisation: orgId });
-  }
+  const renderReadByItem = (item: any) => {
+    const readAt = convertToLocalDateTimeString(item.readAt) || 'Unknown';
+     return (
+       <View key={`${item.email}-${readAt}`} style={{ marginBottom: 10 }}>
+         <Text style={{ color: colors.text, fontWeight: '700' }}>{item.email || item.name || 'Unknown reader'}</Text>
+         <Text style={{ color: colors.sub, fontSize: 12 }}>{readAt}</Text>
+       </View>
+     );
+   };
 
   const handleDelete = () => {
-    if (!isMine) return;
-    Alert.alert('Delete message', 'Are you sure you want to delete this message?', [
+    Alert.alert('Delete?', 'This cannot be undone.', [
       { text: 'Cancel', style: 'cancel' },
       { text: 'Delete', style: 'destructive', onPress: () => deleteMutation.mutate(message._id) },
     ]);
   };
 
-  const renderReadByItem = (item: any) => {
-    const readAt = convertToLocalDateTimeString(item.readAt) || 'Unknown';
-    return (
-      <View key={`${item.email}-${readAt}`} style={{ marginBottom: 10 }}>
-        <Text style={{ color: colors.text, fontWeight: '700' }}>{item.email || item.name || 'Unknown reader'}</Text>
-        <Text style={{ color: colors.sub, fontSize: 12 }}>{readAt}</Text>
-      </View>
-    );
-  };
+  const reactions = message.reactions
+    ? Object.entries(message.reactions as Record<string, any[]>).filter(([_, users]) => users.length > 0)
+    : [];
 
   return (
-    <View style={{ alignSelf: isMine ? 'flex-end' : 'flex-start', marginVertical: 6, width: '100%' }}>
-      <HStack space="sm" className="items-center" style={{ alignSelf: isMine ? 'flex-end' : 'flex-start' }}>
-        {!isMine ? <UserAvatar userRole={message.sender} /> : null}
+    <View style={[styles.container, { alignItems: isMine ? 'flex-end' : 'flex-start' }]}>
+      <HStack space="xs" style={{ alignItems: 'flex-end', maxWidth: '85%' }}>
+        {!isMine && (
+          <View style={{ marginBottom: 4 }}>
+            <UserAvatar userRole={message.sender} />
+          </View>
+        )}
 
-        <View style={bubbleStyle}>
+        <View>
+          <Pressable 
+            onLongPress={() => setShowOptionModal(true)}
+            style={[
+              styles.bubble, 
+              { 
+                backgroundColor: isMine ? colors.primary : colors.card,
+                borderBottomRightRadius: isMine ? 4 : 20,
+                borderBottomLeftRadius: isMine ? 20 : 4,
+              }
+            ]}
+          >
             {message.isDeleted ? (
-              <Text style={{ color: colors.sub, fontStyle: 'italic', fontSize: 14 }}>This message was deleted</Text>
+              <Text style={[styles.deletedText, { color: isMine ? '#eee' : colors.sub }]}>
+                This message was deleted
+              </Text>
             ) : (
-              <Text style={{ color: textColor, fontSize: 14, lineHeight: 20 }}>{message.content}</Text>
+              <Text style={[styles.messageText, { color: isMine ? '#fff' : colors.text }]}>
+                {message.content}
+              </Text>
             )}
 
-            <HStack space="sm" className="flex-wrap" style={{ marginTop: 8 }}>
-               <Pressable onPress={() => setShowEmojiPicker((prev) => !prev)} style={{ paddingVertical: 6, paddingHorizontal: 6, borderRadius: 16, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border }}>
-                <I.smilePlus size={15} color={colors.text} />
-              </Pressable>
-              {reactions?.filter(([_, users]) => users.length > 0).map(([emoji, users]) => (
-                <Pressable key={emoji} onPress={() => onToggleEmoji(emoji)} style={{ backgroundColor: colors.inputBg, borderRadius: 16, paddingHorizontal: 4, paddingVertical: 4, flexDirection: 'row', alignItems: 'center' }}>
-                  <View  style={{ backgroundColor: colors.inputBg, borderRadius: 10, paddingHorizontal: 4, paddingVertical: 4, flexDirection: 'row', alignItems: 'center' }}>
-                  <Text style={{ fontSize: 12, marginRight: 1 }}>{emoji}</Text>
-                  <Text style={{ color: colors.text, fontSize: 10 }}>{Array.isArray(users) ? users.length : users}</Text>
-                </View>
+            <View style={styles.metaRow}>
+              <Text style={[styles.timeText, { color: isMine ? 'rgba(255,255,255,0.7)' : colors.sub }]}>
+                {convertToLocalDateTimeString(message.createdAt)}
+                {message.isEdited && ' • edited'}
+              </Text>
+              {isMine && (
+                <Pressable onPress={() => setShowReadByModal(true)} style={{ marginLeft: 4 }}>
+                  <I.checkCheck size={12} color={message.readBy?.length ? '#4ADE80' : 'rgba(255,255,255,0.5)'} />
+                </Pressable>
+              )}
+            </View>
+          </Pressable>
+
+          {/* Floating Reactions */}
+          {reactions.length > 0 && (
+            <HStack space="xs" style={[styles.reactionContainer, { alignSelf: isMine ? 'flex-end' : 'flex-start' }]}>
+              {reactions.map(([emoji, users]) => (
+                <Pressable 
+                  key={emoji} 
+                  onPress={() => reactionMutation.mutate({ emoji, organisation: orgId })}
+                  style={[styles.reactionBadge, { backgroundColor: colors.bg, borderColor: colors.border }]}
+                >
+                  <Text style={{ fontSize: 11 }}>{emoji} {users.length}</Text>
                 </Pressable>
               ))}
-              
-            </HStack>
-            <HStack space="md" className="justify-end items-center">
-               {isMine ? (
-              <Pressable onPress={handleDelete} style={{ paddingVertical: 6, paddingHorizontal: 6, borderRadius: 16, backgroundColor: colors.dangerBg, borderWidth: 1, borderColor: colors.danger }}>
-                <I.trash size={14} color={colors.danger} />
-              </Pressable>
-            ) : null}
-              <Text style={{ color: textColor, fontSize: 11, marginTop: 4, textAlign: 'right', opacity: 0.8 }}>
-                {convertToLocalDateTimeString(message.createdAt)}{message.isEdited ? ' · edited' : ''}
-              </Text>
-              <Pressable onPress={() => setShowReadByModal(true)} >
-                <Text style={{ color: textColor, fontSize: 11, marginTop: 4, textAlign: 'right', opacity: 0.8 }}>
-                <I.checkCheck size={10} color={textColor} />
-              </Text>
+              <Pressable onPress={() => setShowEmojiPicker(true)} style={[styles.reactionBadge, { backgroundColor: colors.bg, borderColor: colors.border }]}>
+                <I.smilePlus size={12} color={colors.sub} />
               </Pressable>
             </HStack>
-            
+          )}
         </View>
       </HStack>
 
@@ -162,6 +156,108 @@ export function ChatMessage({ message, currentUser, conversationId, orgId }: Cha
           </View>
         </View>
       </Modal>
+
+      <Modal transparent animationType="slide" visible={showOptionModal} onRequestClose={() => setShowOptionModal(false)}>
+        <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.35)', justifyContent: 'center', padding: 20 }}>
+          <View style={{ backgroundColor: colors.bg, borderRadius: 18, padding: 18, maxHeight: '80%' }}>
+            <HStack className="justify-between items-center" style={{ marginBottom: 12 }}>
+              <Text style={{ color: colors.text, fontSize: 16, fontWeight: '700' }}>Options</Text>
+              <Pressable onPress={() => setShowOptionModal(false)} style={{ padding: 6 }}>
+                <Text style={{ color: colors.primary, fontSize: 14 }}>Close</Text>
+              </Pressable>
+            </HStack>
+
+            <VStack space="md">
+              <Pressable onPress={() => setShowReadByModal(true)} style={{ padding: 6 }}>
+                <Text style={{ color: colors.primary, fontSize: 14 }}>Read by</Text>
+              </Pressable>
+              <Pressable onPress={() => setShowEmojiPicker(true)} style={{ padding: 6 }}>
+                <Text style={{ color: colors.primary, fontSize: 14 }}>Add reaction</Text>
+              </Pressable>
+              { isMine && (
+              <Pressable onPress={handleDelete} style={{ padding: 6 }}>
+                <Text style={{ color: colors.primary, fontSize: 14 }}>Delete</Text>
+              </Pressable>
+              )}
+            </VStack>
+          </View>
+        </View>
+      </Modal>
+
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    marginVertical: 4,
+    paddingHorizontal: 12,
+    width: '100%',
+  },
+  bubble: {
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 20,
+    minWidth: 80,
+    shadowColor: '#000',
+    shadowOpacity: 0.03,
+    shadowRadius: 2,
+    elevation: 1,
+  },
+  messageText: {
+    fontSize: 15,
+    lineHeight: 20,
+  },
+  deletedText: {
+    fontSize: 14,
+    fontStyle: 'italic',
+  },
+  metaRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    marginTop: 2,
+  },
+  timeText: {
+    fontSize: 10,
+  },
+  reactionContainer: {
+    marginTop: -8, // Pulls reactions slightly onto the bubble
+    marginHorizontal: 8,
+  },
+  reactionBadge: {
+    borderWidth: 1,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    justifyContent: 'flex-end',
+  },
+  emojiSheet: {
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    padding: 24,
+    paddingBottom: 40,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    marginBottom: 16,
+    textAlign: 'center',
+  },
+  emojiGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  emojiItem: {
+    width: '22%',
+    alignItems: 'center',
+    marginBottom: 15,
+  },
+});
