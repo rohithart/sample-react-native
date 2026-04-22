@@ -9,7 +9,7 @@ import { useThemeColors } from '@/hooks/use-theme-colors';
 import { ActionItem } from '@/types/actionItem';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Animated, Image, Pressable, Text as RNText, ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -20,7 +20,7 @@ export default function UserDashboard() {
   const { top, bottom } = useSafeAreaInsets();
   const colors = useThemeColors();
   const router = useRouter();
-  const { organisation, userRole, canAccessAdmin, isLoadingAccess, hydrateFromOrgId } = useOrganisationContext();
+  const { organisation, canAccessAdmin, isLoadingAccess, hydrateFromOrgId } = useOrganisationContext();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const drawerAnim = useRef(new Animated.Value(-300)).current;
 
@@ -37,6 +37,13 @@ export default function UserDashboard() {
   }, [isDrawerOpen, drawerAnim]);
 
   const { bg: bgColor, text: textColor, sub: secondaryText, primary, secondary, border, card: cardBg, success, danger } = colors;
+
+  const SectionHeader = ({ title }: { title: string }) => (
+    <RNText style={{ fontSize: 13, fontWeight: '800', color: secondaryText, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8, marginLeft: 4 }}>
+      {title}
+    </RNText>
+  );
+
 
   const org = organisation;
 
@@ -170,37 +177,27 @@ export default function UserDashboard() {
               {org?.description ? <HtmlContent label="Description" html={org.description} /> : null}
             </View>
           </View>
-
-          {userRole?.user && (
-            <View style={{ borderRadius: 14, backgroundColor: cardBg, borderWidth: 1, borderColor: border, padding: 14, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-              {userRole.user.image ? (
-                <Image source={{ uri: userRole.user.image }} style={{ width: 44, height: 44, borderRadius: 22, borderWidth: 1, borderColor: border }} />
-              ) : (
-                <View style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: secondary + '15', alignItems: 'center', justifyContent: 'center' }}>
-                  <I.user size={20} color={secondary} />
-                </View>
-              )}
-              <View style={{ flex: 1, gap: 2 }}>
-                <RNText style={{ fontSize: 15, fontWeight: '700', color: textColor }} numberOfLines={1}>
-                  {userRole.user.name || 'User'}
-                </RNText>
-                {userRole.user.email ? (
-                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                    <I.mail size={11} color={secondaryText} />
-                    <RNText style={{ fontSize: 12, color: secondaryText }} numberOfLines={1}>{userRole.user.email}</RNText>
-                  </View>
-                ) : null}
-                {userRole.user.phone ? (
-                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                    <I.phone size={11} color={secondaryText} />
-                    <RNText style={{ fontSize: 12, color: secondaryText }}>{userRole.user.phone}</RNText>
-                  </View>
-                ) : null}
-              </View>
+          <View>
+            <SectionHeader title="Community" />
+            <View style={{ backgroundColor: cardBg, borderRadius: 24, paddingVertical: 16, borderWidth: 1, borderColor: border }}>
+              <Matrix 
+                row={infoLinks} 
+                onClose={() => {}} 
+                index={0} 
+              />
             </View>
-          )}
-          <Matrix row={infoLinks} index={1} onClose={() => {}} />
-          <Matrix row={communityLinks} index={0} onClose={() => {}} />
+          </View>
+
+          <View>
+            <SectionHeader title="Services & Info" />
+            <View style={{ backgroundColor: cardBg, borderRadius: 24, paddingVertical: 16, borderWidth: 1, borderColor: border }}>
+              <Matrix 
+                row={communityLinks} 
+                onClose={() => {}} 
+                index={1} 
+              />
+            </View>
+          </View>
 
         </ScrollView>
       )}

@@ -18,7 +18,7 @@ export default function AdminDashboard() {
   const { top, bottom } = useSafeAreaInsets();
   const colors = useThemeColors();
   const router = useRouter();
-  const { organisation, orgAccess, userRole, isLoadingAccess, hydrateFromOrgId } = useOrganisationContext();
+  const { organisation, orgAccess, isLoadingAccess, hydrateFromOrgId } = useOrganisationContext();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const drawerAnim = useRef(new Animated.Value(-300)).current;
   const { card, text, isDark } = useThemeColors();
@@ -171,38 +171,6 @@ export default function AdminDashboard() {
               </View>
             </View>
           </View>
-
-          {userRole?.user && (
-            <View style={{ borderRadius: 14, backgroundColor: cardBg, borderWidth: 1, borderColor: border, padding: 14, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-              {userRole.user.image ? (
-                <Image source={{ uri: userRole.user.image }} style={{ width: 44, height: 44, borderRadius: 22, borderWidth: 1, borderColor: border }} />
-              ) : (
-                <View style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: primary + '15', alignItems: 'center', justifyContent: 'center' }}>
-                  <I.user size={20} color={primary} />
-                </View>
-              )}
-              <View style={{ flex: 1, gap: 2 }}>
-                <RNText style={{ fontSize: 15, fontWeight: '700', color: textColor }} numberOfLines={1}>
-                  {userRole.user.name || 'User'}
-                </RNText>
-                {userRole.user.email ? (
-                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                    <I.mail size={11} color={secondaryText} />
-                    <RNText style={{ fontSize: 12, color: secondaryText }} numberOfLines={1}>{userRole.user.email}</RNText>
-                  </View>
-                ) : null}
-                {userRole.user.phone ? (
-                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                    <I.phone size={11} color={secondaryText} />
-                    <RNText style={{ fontSize: 12, color: secondaryText }}>{userRole.user.phone}</RNText>
-                  </View>
-                ) : null}
-              </View>
-              <View style={{ paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6, backgroundColor: primary + '15' }}>
-                <RNText style={{ fontSize: 10, fontWeight: '700', color: primary }}>{userRole.role}</RNText>
-              </View>
-            </View>
-          )}
 
           {orgAccess && (
             <View style={{ gap: 8 }}>
