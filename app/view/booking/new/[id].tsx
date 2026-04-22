@@ -2,7 +2,7 @@ import { FormField } from '@/components/ui/form-field';
 import { HStack } from '@/components/ui/hstack';
 import { PageHeader } from '@/components/ui/page-header';
 import { VStack } from '@/components/ui/vstack';
-import Wysiwyg from '@/components/wysiwyg';
+import { Wysiwyg } from '@/components/wysiwyg';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useCreateBooking } from '@/services/booking';

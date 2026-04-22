@@ -5,54 +5,77 @@ import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { ScrollView, Text, Pressable, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { VStack } from '@/components/ui/vstack';
+import { Wysiwyg } from '@/components/wysiwyg';
+import { useCreateUserRequest } from '@/services/user-request';
+import { ENTITY_ICONS } from '@/constants/entity-icons';
 
 export default function AddRequestScreen() {
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const { id: orgId } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const colors = useThemeColors();
-  const [name, setName] = useState('');
+  const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const createRequest= useCreateUserRequest(orgId ?? '');
+  const I = ENTITY_ICONS;
+
+  const isFormValid =
+    !!title.trim() &&
+    !!description.trim();
 
   const handleSubmit = async () => {
-    if (!name.trim()) {
-      Alert.alert('Validation Error', 'Please enter a name');
-      return;
-    }
-    setIsSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    setIsSubmitting(false);
-    Alert.alert('Success', 'Request created successfully', [
-      { text: 'OK', onPress: () => router.push(`/view/user-requests/${id}`) },
-    ]);
-  };
+      if (!title.trim() || !description.trim() ) {
+        Alert.alert('Validation Error', 'Please fill all required fields');
+        return;
+      }
+      setIsSubmitting(true);
+      try {
+        await createRequest.mutateAsync({
+          title: title.trim(),
+          description: description.trim(),
+          organisation: orgId as unknown as any,
+        });
+        setIsSubmitting(false);
+        Alert.alert('Success', 'Request created successfully', [
+          { text: 'OK', onPress: () => router.push(`/view/user-requests/${orgId}`) },
+        ]);
+      } catch (e: any) {
+        setIsSubmitting(false);
+        Alert.alert('Error', e?.message || 'Failed to create request');
+      }
+    };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
       <Stack.Screen options={{ headerShown: false }} />
-      <PageHeader icon="userRequest" title="Add New Request" />
+      <PageHeader icon="userRequest" title="Add New Request" 
+      rightAction={
+        <Pressable onPress={handleSubmit} style={{ padding: 8 }} disabled={!isFormValid || isSubmitting}>
+          <I.save size={20} color={colors.primary} />
+        </Pressable>
+      }/>
 
       <ScrollView
         contentContainerStyle={{ padding: 20, gap: 16 }}
         showsVerticalScrollIndicator={false}
       >
         <FormField
-          label="Name"
+          label="Title"
           required
-          placeholder="Enter name"
-          value={name}
-          onChangeText={setName}
+          placeholder="Enter title"
+          value={title}
+          onChangeText={setTitle}
         />
 
-        <FormField
-          label="Description"
-          placeholder="Enter description"
-          value={description}
-          onChangeText={setDescription}
-          multiline
-          numberOfLines={4}
-        />
-
+        <VStack space="md" className="flex-1">
+          <Text style={{ fontWeight: '600', color: colors.text }}>Description *</Text>
+          <Wysiwyg
+            value={description}
+            onChange={setDescription}
+            placeholder="Enter description..."
+          />
+        </VStack>
         <Pressable
           onPress={handleSubmit}
           disabled={isSubmitting}

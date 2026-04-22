@@ -47,5 +47,3 @@ export const Wysiwyg: React.FC<WysiwygProps> = ({
     </SafeAreaView>
   );
 };
-
-export default Wysiwyg;

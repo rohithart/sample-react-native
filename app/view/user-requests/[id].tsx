@@ -8,6 +8,9 @@ import { ActivityIndicator, FlatList, Pressable, Text, View } from 'react-native
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useUserRequests } from '@/services/user-request';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
+import { ENTITY_ICONS } from '@/constants/entity-icons';
+
+const I = ENTITY_ICONS;
 
 export default function MyRequestsListScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -16,10 +19,22 @@ export default function MyRequestsListScreen() {
   const { data: items, isLoading, refetch, isRefetching } = useUserRequests(id);
   const refreshControl = useRefreshControl(refetch, isRefetching);
 
+  const handleAdd = () => {
+    router.push(`/view/user-request/new/${id}`);
+  };
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
       <Stack.Screen options={{ headerShown: false }} />
-      <PageHeader icon="userRequest" title="User Requests" />
+      <PageHeader icon="userRequest" title="Your Requests" 
+      rightAction={
+        <Pressable
+          onPress={handleAdd}
+          style={{ padding: 8, backgroundColor: colors.primary, borderRadius: 8 }}
+        >
+          <I.plus size={20} color="#ffffff" />
+        </Pressable>
+      }/>
 
       {isLoading ? (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
