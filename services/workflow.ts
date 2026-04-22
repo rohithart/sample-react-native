@@ -90,3 +90,18 @@ export function useUpdateWorkflowStatus(orgId: string) {
   const qc = useQueryClient();
   return useMutation({ mutationFn: ({ id, status }: { id: string; status: string }) => workflowApi.updateStatus(id, { status }), onSuccess: (_, { id }) => { qc.invalidateQueries({ queryKey: workflowKeys.all(orgId) }); qc.invalidateQueries({ queryKey: workflowKeys.detail(id) }); } });
 }
+
+export function useUpdateWorkflowPriority(orgId: string) {
+  const qc = useQueryClient();
+  return useMutation({ mutationFn: ({ id, priority }: { id: string; priority: string }) => workflowApi.updatePriority(id, { priority }), onSuccess: (_, { id }) => { qc.invalidateQueries({ queryKey: workflowKeys.all(orgId) }); qc.invalidateQueries({ queryKey: workflowKeys.detail(id) }); } });
+}
+
+export function useFlagWorkflow(orgId: string) {
+  const qc = useQueryClient();
+  return useMutation({ mutationFn: ({ id, reason }: { id: string; reason: string }) => workflowApi.flag(id, { reason }), onSuccess: (_, { id }) => { qc.invalidateQueries({ queryKey: workflowKeys.all(orgId) }); qc.invalidateQueries({ queryKey: workflowKeys.detail(id) }); } });
+}
+
+export function useUnflagWorkflow(orgId: string) {
+  const qc = useQueryClient();
+  return useMutation({ mutationFn: (id: string) => workflowApi.unflag(id), onSuccess: (_, id) => { qc.invalidateQueries({ queryKey: workflowKeys.all(orgId) }); qc.invalidateQueries({ queryKey: workflowKeys.detail(id) }); } });      
+}

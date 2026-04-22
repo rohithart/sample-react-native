@@ -1,4 +1,4 @@
-import { AuditInfo, DetailField, DetailSection, GroupSelect, HtmlContent, LinkedField, StatusSelect, UserSelect } from '@/components/details';
+import { AuditInfo, GroupSelect, HtmlContent, LinkedField, StatusSelect, UserSelect } from '@/components/details';
 import { ConfirmationDialog } from '@/components/dialogs/confirmation-dialog';
 import { EntityAttachments } from '@/components/entity/entity-attachments';
 import { EntityComments } from '@/components/entity/entity-comments';
@@ -14,7 +14,7 @@ import { useRefreshControl } from '@/hooks/use-refresh-control';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useGroups } from '@/services/group';
 import { useAssignableUsers } from '@/services/user';
-import { useUpdateWorkflowGroup, useUpdateWorkflowStatus, useUpdateWorkflowUser, useWorkflow } from '@/services/workflow';
+import { useFlagWorkflow, useUnflagWorkflow, useUpdateWorkflowGroup, useUpdateWorkflowPriority, useUpdateWorkflowStatus, useUpdateWorkflowUser, useWorkflow } from '@/services/workflow';
 import { downloadAndSharePdf } from '@/utils/pdf-download';
 import { resolveId } from '@/utils/resolve-ref';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
@@ -23,10 +23,12 @@ import React, { useState } from 'react';
 import { ActivityIndicator, Alert, Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
-import { EntityType, WorkFlowPriority } from '@/enums';
+import { EntityType } from '@/enums';
 import { onShare } from '@/utils/share';
 import { HStack } from '@/components/ui/hstack';
 import { VStack } from '@/components/ui/vstack';
+import { FlagButton } from '@/components/details/flag';
+import { PrioritySelect } from '@/components/details/priority';
 
 const I = ENTITY_ICONS;
 
@@ -51,6 +53,9 @@ export default function WorkflowDetailScreen() {
   const updateUser = useUpdateWorkflowUser(orgId || '');
   const updateGroup = useUpdateWorkflowGroup(orgId || '');
   const updateStatus = useUpdateWorkflowStatus(orgId || '');
+  const updatePriority = useUpdateWorkflowPriority(orgId || '');
+  const flagFn = useFlagWorkflow(orgId || '');    
+  const unflagFn = useUnflagWorkflow(orgId || '');
   const refreshControl = useRefreshControl(refetch, isRefetching);
 
   const handleDelete = async () => {
@@ -143,20 +148,21 @@ export default function WorkflowDetailScreen() {
               
               <HStack space="md" style={{ marginTop: 16 }}>
                 <View style={{ flex: 1, padding: 12, borderRadius: 16, backgroundColor: colors.bg, borderWidth: 1, borderColor: colors.border }}>
-                  <HStack space="xs" style={{ alignItems: 'center', marginTop: 2 }}>
-                    <Text style={{ fontSize: 10, color: colors.sub, fontWeight: '700', textTransform: 'uppercase' }}>Priority</Text>
-                    <Text style={{ fontSize: 14, fontWeight: '700', color: item.priority === WorkFlowPriority.HIGH ? colors.danger : colors.text, marginStart: 4}}>
-                      {item.priority || 'Normal'}
-                    </Text>
-                  </HStack>
+                  <PrioritySelect 
+                    priority={item.priority} 
+                    onSelect={(val: string) => {
+                      updatePriority.mutate({ id: item._id, priority: val });
+                    }}
+                    disabled={!isAdmin}
+                  />
                 </View>
+                
                 <View style={{ flex: 1, padding: 12, borderRadius: 16, backgroundColor: colors.bg, borderWidth: 1, borderColor: colors.border }}>
-                  <HStack space="xs" style={{ alignItems: 'center', marginTop: 2 }}>
-                    <I.flag size={14} color={item.isFlagged ? colors.danger : colors.sub} />
-                    <Text style={{ fontSize: 12, fontWeight: '700', color: colors.sub }}>
-                      {item.isFlagged ? item.flagComment : 'Not flagged'}
-                    </Text>
-                  </HStack>
+                  <FlagButton 
+                  item={item} 
+                  flagFn={(comment: any) => flagFn.mutate({ id: item._id, reason: comment })}
+                  unflagFn={() => unflagFn.mutate(item._id)}
+                />
                 </View>
               </HStack>
           </View>
