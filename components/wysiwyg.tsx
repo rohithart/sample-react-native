@@ -1,7 +1,7 @@
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { RichText, Toolbar, useEditorBridge } from '@10play/tentap-editor';
 import React from 'react';
-import { KeyboardAvoidingView, Platform, StyleProp, View, ViewStyle } from 'react-native';
+import { KeyboardAvoidingView, StyleProp, ViewStyle } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export interface WysiwygProps {
@@ -16,7 +16,6 @@ export const Wysiwyg: React.FC<WysiwygProps> = ({
   value,
   onChange,
   placeholder = 'Enter text...',
-  style,
   minHeight = 150,
 }) => {
   const editor = useEditorBridge({
@@ -32,16 +31,17 @@ export const Wysiwyg: React.FC<WysiwygProps> = ({
   const colors = useThemeColors();
 
   return (
-    
-    <SafeAreaView style={{ minHeight: 120, borderWidth: 1, borderColor: colors.border, borderRadius: 8, backgroundColor: colors.bg, marginBottom: 8 }}>
+    <SafeAreaView style={{ flex: 1, minHeight: 120, borderWidth: 1, borderColor: colors.border, borderRadius: 8, backgroundColor: colors.bg, marginBottom: 8 }}>
+      <RichText editor={editor} />
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={[{ flex: 1, minHeight }, style]}
+        behavior={'padding'}
+        style={{
+          minHeight,
+          position: 'absolute',
+          width: '100%',
+          bottom: 0,
+        }}
       >
-        <View style={{ flex: 1, borderWidth: 1, borderRadius: 8, overflow: 'hidden' }}>
-          <RichText editor={editor} />
-        </View>
-        
         <Toolbar editor={editor} />
       </KeyboardAvoidingView>
     </SafeAreaView>

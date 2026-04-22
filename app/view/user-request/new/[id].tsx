@@ -76,22 +76,6 @@ export default function AddRequestScreen() {
             placeholder="Enter description..."
           />
         </VStack>
-        <Pressable
-          onPress={handleSubmit}
-          disabled={isSubmitting}
-          style={({ pressed }) => ({
-            backgroundColor: colors.primary,
-            paddingVertical: 12,
-            borderRadius: 8,
-            alignItems: 'center',
-            opacity: pressed || isSubmitting ? 0.7 : 1,
-            marginTop: 8,
-          })}
-        >
-          <Text style={{ fontSize: 16, fontWeight: '600', color: '#ffffff' }}>
-            {isSubmitting ? 'Creating...' : 'Create Request'}
-          </Text>
-        </Pressable>
       </ScrollView>
     </SafeAreaView>
   );
