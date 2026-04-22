@@ -1,39 +1,72 @@
+import { Button } from '@/components/ui/button';
 import { FormField } from '@/components/ui/form-field';
-import { HStack } from '@/components/ui/hstack';
 import { PageHeader } from '@/components/ui/page-header';
 import { VStack } from '@/components/ui/vstack';
 import { useOrganisationContext } from '@/context/organisation-context';
-import { useThemeColors } from '@/hooks/use-theme-colors';
-import { Stack, useLocalSearchParams } from 'expo-router';
-import { Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useSendContact } from '@/services/email';
+import { useLocalSearchParams } from 'expo-router';
+import { useState } from 'react';
+import { Alert, ScrollView } from 'react-native';
 
-export default function ContactScreen() {
+export default function ContactHelpScreen() {
   const { orgId } = useLocalSearchParams<{ orgId: string }>();
-  const colors = useThemeColors();
   const { organisation } = useOrganisationContext();
-  const sendMutation = useSendContact(organisation?._id || orgId);
+  const [subject, setSubject] = useState('');
+  const [message, setMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+   const sendMutation = useSendContact(organisation?._id || orgId);
+
+  const handleSubmit = async () => {
+
+    if (!subject.trim() || !message.trim()) {
+      Alert.alert('Validation Error', 'Please fill all required fields');
+      return;
+    }
+    setIsSubmitting(true);
+    await sendMutation.mutateAsync({ subject, message, organisation: organisation?._id || orgId });
+    setIsSubmitting(false);
+    Alert.alert('Success', 'Your message has been sent!');
+    setSubject('');
+    setMessage('');
+  };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
-      <Stack.Screen options={{ headerShown: false }} />
-      <PageHeader icon="mail"
-        title="Contact organisation admin"
-      />
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-        <Text style={{ fontSize: 48 }}>👤</Text>
-        <Text style={{ fontSize: 20, fontWeight: '700', color: colors.text }}>Contact organisation admin</Text>
-        <Text style={{ fontSize: 14, color: colors.sub }}>Coming soon</Text>
-      </View>
-      
-       { /* this.form = this.fb.group({
-      subject: ['', Validators.required],
-      message: ['', Validators.required],
-      organisation: ['', Validators.required],
-      organisationName: ['', Validators.required]
-    });
-    */}
-    </SafeAreaView>
+    <ScrollView contentContainerStyle={{ padding: 20 }}>
+      <PageHeader title="Contact Support" />
+      <VStack space={16}>
+        <FormField
+          label="Organisation"
+          value={organisation?.name || ''}
+          editable={false}
+          placeholder="Organisation"
+        />
+        <FormField
+          label="Organisation ID"
+          value={organisation?._id || ''}
+          editable={false}
+          placeholder="Organisation ID"
+        />
+        <FormField
+          label="Subject"
+          value={subject}
+          onChangeText={setSubject}
+          placeholder="Enter subject"
+          required
+        />
+        <FormField
+          label="Message"
+          value={message}
+          onChangeText={setMessage}
+          placeholder="Enter your message"
+          multiline
+          numberOfLines={5}
+          required
+          style={{ minHeight: 100, textAlignVertical: 'top' }}
+        />
+        <Button onPress={handleSubmit} disabled={isSubmitting || !subject.trim() || !message.trim()}>
+          {isSubmitting ? 'Sending...' : 'Send'}
+        </Button>
+      </VStack>
+    </ScrollView>
   );
 }
