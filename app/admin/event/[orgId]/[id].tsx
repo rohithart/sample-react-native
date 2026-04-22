@@ -15,7 +15,7 @@ import { useEvent } from '@/services/event';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
 import { resolveId } from '@/utils/resolve-ref';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
-import { convertToLocalDateTimeString, convertToTimeString } from '@/utils/date';
+import { convertToLocalDateString, convertToTimeString } from '@/utils/date';
 import { onShare } from '@/utils/share';
 import { VStack } from '@/components/ui/vstack';
 
@@ -125,9 +125,9 @@ export default function EventDetailScreen() {
               More information
             </Text>
             <VStack space="lg">
-              <DetailField label="From" value={convertToLocalDateTimeString(item.eventDateFrom)} />
+              <DetailField label="From" value={convertToLocalDateString(item.eventDateFrom)} />
               <DetailField label="Time From" value={convertToTimeString(item.eventTimeFrom)} />
-              <DetailField label="To" value={convertToLocalDateTimeString(item.eventDateTo)} />
+              <DetailField label="To" value={convertToLocalDateString (item.eventDateTo)} />
               <DetailField label="Time To" value={convertToTimeString(item.eventTimeTo)} />
               <DetailField label="Full Day" value={item.isFullDay ? 'Yes' : 'No'} />
               <DetailField label="Recurring" value={item.isRecurring ? 'Yes' : 'No'} />

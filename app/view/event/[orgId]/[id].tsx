@@ -1,6 +1,6 @@
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { PageHeader } from '@/components/ui/page-header';
-import { DetailField, DetailSection, HtmlContent, AuditInfo } from '@/components/details';
+import { DetailField, HtmlContent, AuditInfo } from '@/components/details';
 import { Stack, useLocalSearchParams } from 'expo-router';
 
 import React, { useState } from 'react';
@@ -11,7 +11,7 @@ import { ActionItem } from '@/types/actionItem';
 import { useEvent } from '@/services/event';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
-import { convertToLocalDateString, convertToLocalDateTimeString, convertToTimeString } from '@/utils/date';
+import { convertToLocalDateString, convertToTimeString } from '@/utils/date';
 import { VStack } from '@/components/ui/vstack';
 
 const I = ENTITY_ICONS;
@@ -64,9 +64,9 @@ export default function EventDetailScreen() {
               More information
             </Text>
             <VStack space="lg">
-              <DetailField label="From" value={convertToLocalDateTimeString(item.eventDateFrom)} />
+              <DetailField label="From" value={convertToLocalDateString(item.eventDateFrom)} />
               <DetailField label="Time From" value={convertToTimeString(item.eventTimeFrom)} />
-              <DetailField label="To" value={convertToLocalDateTimeString(item.eventDateTo)} />
+              <DetailField label="To" value={convertToLocalDateString(item.eventDateTo)} />
               <DetailField label="Time To" value={convertToTimeString(item.eventTimeTo)} />
               <DetailField label="Full Day" value={item.isFullDay ? 'Yes' : 'No'} />
               <DetailField label="Recurring" value={item.isRecurring ? 'Yes' : 'No'} />
