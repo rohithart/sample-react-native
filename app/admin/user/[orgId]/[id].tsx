@@ -1,6 +1,6 @@
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { PageHeader } from '@/components/ui/page-header';
-import { DetailField, DetailSection, AuditInfo } from '@/components/details';
+import { DetailField, AuditInfo } from '@/components/details';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 
 import React, { useState } from 'react';
@@ -15,6 +15,7 @@ import { useUser } from '@/services/user';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { Box } from '@/components/ui/box';
+import { VStack } from '@/components/ui/vstack';
 
 const I = ENTITY_ICONS;
 
@@ -93,42 +94,61 @@ export default function UserDetailScreen() {
       ) : (
       <ScrollView
         refreshControl={refreshControl}
-        contentContainerStyle={{ padding: 20, gap: 16 }}
+        contentContainerStyle={{ paddingBottom: 40 }}
         showsVerticalScrollIndicator={false}
       >
-        <Box className="items-center mb-8">
-          {item?.user?.image ? (
-            <Box
-              className="w-24 h-24 rounded-full items-center justify-center mb-4 overflow-hidden"
-              style={{ backgroundColor: colors.primary + '20' }}
-            >
-              <Image
-                source={{ uri: item.user.image }}
-                className="w-full h-full"
-                resizeMode="cover"
-              />
-            </Box>
-          ) : (
-            <Box
-              className="w-24 h-24 rounded-full items-center justify-center mb-4"
-              style={{ backgroundColor: colors.primary + '20' }}
-            >
-              <Text className="text-5xl">👤</Text>
-            </Box>
-          )}
-        </Box>
-        <DetailSection title="User Info">
-          <DetailField label="Name" value={item.user?.name} />
-          <DetailField label="Email" value={item.user?.email} />
-          <DetailField label="Phone" value={item.user?.phone} />
-          <DetailField label="Address" value={item.user?.address} />
-        </DetailSection>
-        <DetailSection title="Role">
-          <DetailField label="Role" value={item.role} />
-          <DetailField label="Description" value={item.description} />
-          <DetailField label="Reference" value={item.reference} />
-          <DetailField label="Archived" value={item.archived ? 'Yes' : 'No'} />
-        </DetailSection>
+
+        <View style={{ padding: 16, gap: 20 }}>
+          <Box className="items-center mb-8">
+            {item?.user?.image ? (
+              <Box
+                className="w-24 h-24 rounded-full items-center justify-center mb-4 overflow-hidden"
+                style={{ backgroundColor: colors.primary + '20' }}
+              >
+                <Image
+                  source={{ uri: item.user.image }}
+                  className="w-full h-full"
+                  resizeMode="cover"
+                />
+              </Box>
+            ) : (
+              <Box
+                className="w-24 h-24 rounded-full items-center justify-center mb-4"
+                style={{ backgroundColor: colors.primary + '20' }}
+              >
+                <Text className="text-5xl">👤</Text>
+              </Box>
+            )}
+          </Box>
+
+          <View style={{ backgroundColor: colors.card, borderRadius: 24, padding: 16, borderWidth: 1, borderColor: colors.border }}>
+            <Text style={{ fontSize: 13, fontWeight: '800', color: colors.sub, marginBottom: 4, textTransform: 'uppercase', letterSpacing: 1 }}>
+              User information
+            </Text>
+            <VStack space="lg">
+               <DetailField label="Name" value={item.user?.name} />
+              <DetailField label="Email" value={item.user?.email} />
+              <DetailField label="Phone" value={item.user?.phone} />
+              <DetailField label="Address" value={item.user?.address} />
+            </VStack>
+          </View>
+
+          <View style={{ backgroundColor: colors.card, borderRadius: 24, padding: 16, borderWidth: 1, borderColor: colors.border }}>
+            <Text style={{ fontSize: 13, fontWeight: '800', color: colors.sub, marginBottom: 4, textTransform: 'uppercase', letterSpacing: 1 }}>
+              Role
+            </Text>
+            <VStack space="lg">
+              <DetailField label="Role" value={item.role} />
+              {isAdmin && (
+                <DetailField label="Description" value={item.description} />
+              )}
+              {isAdmin && (
+                <DetailField label="Reference" value={item.reference} />
+              )}
+              <DetailField label="Archived" value={item.archived ? 'Yes' : 'No'} />
+            </VStack>
+          </View>
+        </View>
       </ScrollView>
       )}
 
