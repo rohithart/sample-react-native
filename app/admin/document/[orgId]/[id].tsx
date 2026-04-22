@@ -15,11 +15,13 @@ import { EntityComments } from '@/components/entity/entity-comments';
 import { EntityImages } from '@/components/entity/entity-images';
 import { downloadAndSharePdf } from '@/utils/pdf-download';
 import { EntityTimeline } from '@/components/entity/entity-timeline';
-import { useDocument } from '@/services/document';
+import { useDocument, useFlagDocument, useUnflagDocument } from '@/services/document';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { EntityType } from '@/enums';
 import { onShare } from '@/utils/share';
+import { HStack } from '@/components/ui/hstack';
+import { FlagButton } from '@/components/details/flag';
 
 const I = ENTITY_ICONS;
 
@@ -36,6 +38,8 @@ export default function DocumentDetailScreen() {
   const [showComments, setShowComments] = useState(false);
   const [showImages, setShowImages] = useState(false);
   const [showTimeline, setShowTimeline] = useState(false);
+  const flagFn = useFlagDocument(orgId || '');    
+  const unflagFn = useUnflagDocument(orgId || '');
 
   const { data: item, isLoading: isLoadingItem, refetch, isRefetching } = useDocument(id || '');
   const refreshControl = useRefreshControl(refetch, isRefetching);
@@ -113,17 +117,38 @@ export default function DocumentDetailScreen() {
       ) : (
       <ScrollView
         refreshControl={refreshControl}
-        contentContainerStyle={{ padding: 20, gap: 16 }}
+        contentContainerStyle={{ paddingBottom: 40 }}
         showsVerticalScrollIndicator={false}
       >
-        {item.description ? <HtmlContent label="Description" html={item.description} /> : null}
-        <DetailSection title="Details">
-          <DetailField label="Archived" value={item.archived ? 'Yes' : 'No'} />
-          <DetailField label="Flagged" value={item.isFlagged ? 'Yes' : 'No'} />
-        </DetailSection>
-        <DetailSection title="Relationships">
-          <LinkedField label="Folder" icon="document" value={item.folder?.name}  />
-        </DetailSection>
+        <View style={{ padding: 16, backgroundColor: colors.card, borderBottomWidth: 1, borderColor: colors.border }}>
+          <HStack space="md">
+            <View style={{ flex: 1, }}>
+              
+            </View>
+            
+            <View style={{ flex: 1, padding: 12, borderRadius: 16, backgroundColor: colors.bg, borderWidth: 1, borderColor: colors.border }}>
+              <FlagButton 
+              item={item} 
+              flagFn={(comment: any) => flagFn.mutate({ id: item._id, reason: comment })}
+              unflagFn={() => unflagFn.mutate(item._id)}
+            />
+            </View>
+          </HStack>
+        </View>
+        <View style={{ padding: 16, gap: 20 }}>
+          {item.description && (
+            <View style={{ backgroundColor: colors.card, padding: 16, borderRadius: 20, borderWidth: 1, borderColor: colors.border }}>
+              <HtmlContent label="Task Description" html={item.description} />
+            </View>
+          )}
+
+          <View style={{ backgroundColor: colors.card, borderRadius: 24, padding: 16, borderWidth: 1, borderColor: colors.border }}>
+            <Text style={{ fontSize: 13, fontWeight: '800', color: colors.sub, marginBottom: 4, textTransform: 'uppercase', letterSpacing: 1 }}>
+              Classification
+            </Text>
+            <LinkedField label="Folder" icon="document" value={item.folder?.name}  />
+          </View>
+        </View>
       </ScrollView>
       )}
 

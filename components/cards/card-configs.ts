@@ -81,7 +81,9 @@ export const ADMIN_CONFIGS = {
   assetType: cfg('assetType', (o, i) => `/admin/asset-type/${o}/${i}`, {
     subtitleField: undefined,
   }),
-  document: cfg('document', (o, i) => `/admin/document/${o}/${i}`),
+  document: cfg('file', (o, i) => `/admin/document/${o}/${i}`, {
+    subtitleField: undefined,
+  }),
   event: cfg('event', (o, i) => `/admin/event/${o}/${i}`, {
     subtitleField(item) {
       const from = item.eventDateFrom ? convertToLocalDateString(item.eventDateFrom) : '';

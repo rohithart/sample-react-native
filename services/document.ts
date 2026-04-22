@@ -60,3 +60,13 @@ export function useUnarchiveDocument(orgId: string) {
   const qc = useQueryClient();
   return useMutation({ mutationFn: (id: string) => documentApi.unarchive(id), onSuccess: () => { qc.invalidateQueries({ queryKey: documentKeys.all(orgId) }); } });
 }
+
+export function useFlagDocument(orgId: string) {
+  const qc = useQueryClient();
+  return useMutation({ mutationFn: ({ id, reason }: { id: string; reason: string }) => documentApi.flag(id, { reason }), onSuccess: () => { qc.invalidateQueries({ queryKey: documentKeys.all(orgId) }); } });
+}
+
+export function useUnflagDocument(orgId: string) {
+  const qc = useQueryClient();
+  return useMutation({ mutationFn: (id: string) => documentApi.unflag(id), onSuccess: () => { qc.invalidateQueries({ queryKey: documentKeys.all(orgId) }); } });  
+}
