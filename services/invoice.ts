@@ -74,3 +74,13 @@ export function useUpdateInvoiceStatus(orgId: string) {
   const qc = useQueryClient();
   return useMutation({ mutationFn: ({ id, status }: { id: string; status: string }) => invoiceApi.updateStatus(id, { status }), onSuccess: (_, { id }) => { qc.invalidateQueries({ queryKey: invoiceKeys.all(orgId) }); qc.invalidateQueries({ queryKey: invoiceKeys.detail(id) }); } });
 }
+
+export function useFlagInvoice(orgId: string) {
+  const qc = useQueryClient();
+  return useMutation({ mutationFn: ({ id, reason }: { id: string; reason: string }) => invoiceApi.flag(id, { reason }), onSuccess: (_, { id }) => { qc.invalidateQueries({ queryKey: invoiceKeys.all(orgId) }); qc.invalidateQueries({ queryKey: invoiceKeys.detail(id) }); } });
+}
+
+export function useUnflagInvoice(orgId: string) {
+  const qc = useQueryClient();
+  return useMutation({ mutationFn: (id: string) => invoiceApi.unflag(id), onSuccess: (_, id) => { qc.invalidateQueries({ queryKey: invoiceKeys.all(orgId) }); qc.invalidateQueries({ queryKey: invoiceKeys.detail(id) }); } });
+}

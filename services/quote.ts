@@ -69,3 +69,13 @@ export function useUpdateQuoteStatus(orgId: string) {
   const qc = useQueryClient();
   return useMutation({ mutationFn: ({ id, status }: { id: string; status: string }) => quoteApi.updateStatus(id, { status }), onSuccess: (_, { id }) => { qc.invalidateQueries({ queryKey: quoteKeys.all(orgId) }); qc.invalidateQueries({ queryKey: quoteKeys.detail(id) }); } });
 }
+
+export function useFlagQuote(orgId: string) {
+  const qc = useQueryClient();
+  return useMutation({ mutationFn: ({ id, reason }: { id: string; reason: string }) => quoteApi.flag(id, { reason }), onSuccess: (_, { id }) => { qc.invalidateQueries({ queryKey: quoteKeys.all(orgId) }); qc.invalidateQueries({ queryKey: quoteKeys.detail(id) }); } });
+}
+
+export function useUnflagQuote(orgId: string) {
+  const qc = useQueryClient();
+  return useMutation({ mutationFn: (id: string) => quoteApi.unflag(id), onSuccess: (_, id) => { qc.invalidateQueries({ queryKey: quoteKeys.all(orgId) }); qc.invalidateQueries({ queryKey: quoteKeys.detail(id) }); } });
+}

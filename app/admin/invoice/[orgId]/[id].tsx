@@ -1,4 +1,4 @@
-import { AuditInfo, DetailField, DetailSection, HtmlContent, LinkedField, StatusSelect, VendorRelationship } from '@/components/details';
+import { AuditInfo, DetailField, HtmlContent, LinkedField, StatusSelect, VendorRelationship } from '@/components/details';
 import { ConfirmationDialog } from '@/components/dialogs/confirmation-dialog';
 import { EntityAttachments } from '@/components/entity/entity-attachments';
 import { EntityComments } from '@/components/entity/entity-comments';
@@ -12,7 +12,7 @@ import { invoiceStatuses } from '@/constants/status';
 import { useOrganisationContext } from '@/context/organisation-context';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
 import { useThemeColors } from '@/hooks/use-theme-colors';
-import { useInvoice, useUpdateInvoiceStatus } from '@/services/invoice';
+import { useFlagInvoice, useInvoice, useUnflagInvoice, useUpdateInvoiceStatus } from '@/services/invoice';
 import { downloadAndSharePdf } from '@/utils/pdf-download';
 import { resolveId } from '@/utils/resolve-ref';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
@@ -23,6 +23,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { EntityType } from '@/enums';
 import { convertToLocalDateTimeString } from '@/utils/date';
+import { HStack } from '@/components/ui/hstack';
+import { FlagButton } from '@/components/details/flag';
+import { VStack } from '@/components/ui/vstack';
 
 const I = ENTITY_ICONS;
 
@@ -43,6 +46,8 @@ export default function InvoiceDetailScreen() {
 
   const { data: item, isLoading: isLoadingItem, refetch, isRefetching } = useInvoice(id || '');
   const updateStatus = useUpdateInvoiceStatus(orgId || '');
+  const flagFn = useFlagInvoice(orgId || '');    
+  const unflagFn = useUnflagInvoice(orgId || '');
   const refreshControl = useRefreshControl(refetch, isRefetching);
 
   const handleDelete = async () => {
@@ -113,34 +118,64 @@ export default function InvoiceDetailScreen() {
       ) : (
       <ScrollView
         refreshControl={refreshControl}
-        contentContainerStyle={{ padding: 20, gap: 16 }}
+        contentContainerStyle={{ paddingBottom: 40 }}
         showsVerticalScrollIndicator={false}
       >
-        <StatusSelect
-          statuses={invoiceStatuses}
-          selectedValue={item.status}
-          onSelect={(status) => updateStatus.mutate({ id: id!, status })}
-          disabled={!isAdmin}
-        />
-        {item.description ? <HtmlContent label="Description" html={item.description} /> : null}
-        <DetailSection title="Financial">
-          <DetailField label="Total Amount" value={item.totalAmount != null ? '$' + Number(item.totalAmount) : null} />
-          <DetailField label="Is Expense" value={item.isExpense ? 'Yes' : 'No'} />
-          <DetailField label="Due Date" value={convertToLocalDateTimeString(item.dueDate)} />
-          <DetailField label="Paid At" value={convertToLocalDateTimeString(item.paidAt)} />
-          <DetailField label="Link" value={item.link} />
-        </DetailSection>
-        <DetailSection title="Details">
-          <DetailField label="Archived" value={item.archived ? 'Yes' : 'No'} />
-          <DetailField label="Flagged" value={item.isFlagged ? 'Yes' : 'No'} />
-        </DetailSection>
-        <DetailSection title="Relationships">
-          <VendorRelationship orgId={orgId || ''} item={item} />
-          <LinkedField label="Quote" icon="quote" value={item.quote?.title} route={`/admin/quote/${orgId}/${resolveId(item.quote)}`} />
-          <LinkedField label="Work Order" icon="workorder" value={item.workorder?.title} route={`/admin/workorder/${orgId}/${resolveId(item.workorder)}`} />
-          <LinkedField label="Workflow" icon="workflow" value={item.workflow?.title} route={`/admin/workflow/${orgId}/${resolveId(item.workflow)}`} />
-          <LinkedField label="Transaction" icon="financialYear" value={item.transaction?.description}  />
-        </DetailSection>
+        <View style={{ padding: 16, backgroundColor: colors.card, borderBottomWidth: 1, borderColor: colors.border }}>
+          <StatusSelect
+            statuses={invoiceStatuses}
+            selectedValue={item.status}
+            onSelect={(status) => updateStatus.mutate({ id: id!, status })}
+            disabled={!isAdmin}
+          />
+          <HStack space="md" style={{ marginTop: 16 }}>
+            <View style={{ flex: 1, }}>
+              
+            </View>
+            
+            <View style={{ flex: 1, padding: 12, borderRadius: 16, backgroundColor: colors.bg, borderWidth: 1, borderColor: colors.border }}>
+              <FlagButton 
+              item={item} 
+              flagFn={(comment: any) => flagFn.mutate({ id: item._id, reason: comment })}
+              unflagFn={() => unflagFn.mutate(item._id)}
+            />
+            </View>
+          </HStack>
+        </View>
+
+        <View style={{ padding: 16, gap: 20 }}>
+          {item.description && (
+            <View style={{ backgroundColor: colors.card, padding: 16, borderRadius: 20, borderWidth: 1, borderColor: colors.border }}>
+              <HtmlContent label="Invoice Description" html={item.description} />
+            </View>
+          )}
+
+          <View style={{ backgroundColor: colors.card, borderRadius: 24, padding: 16, borderWidth: 1, borderColor: colors.border }}>
+            <Text style={{ fontSize: 13, fontWeight: '800', color: colors.sub, marginBottom: 4, textTransform: 'uppercase', letterSpacing: 1 }}>
+              Classification
+            </Text>
+            <VStack space="lg">
+              <LinkedField label="Workflow" icon="workflow" value={item.workflow?.title} route={`/admin/workflow/${orgId}/${resolveId(item.workflow)}`} />
+              <LinkedField label="Quote" icon="quote" value={item.quote?.title} route={`/admin/quote/${orgId}/${resolveId(item.quote)}`} />
+              <LinkedField label="Work Order" icon="workorder" value={item.workorder?.title} route={`/admin/workorder/${orgId}/${resolveId(item.workorder)}`} />
+              <LinkedField label="Transaction" icon="financialYear" value={item.transaction?.description}  />
+              <VendorRelationship orgId={orgId || ''} item={item} />
+            </VStack>
+          </View>
+
+          <View style={{ backgroundColor: colors.card, borderRadius: 24, padding: 16, borderWidth: 1, borderColor: colors.border }}>
+            <Text style={{ fontSize: 13, fontWeight: '800', color: colors.sub, marginBottom: 4, textTransform: 'uppercase', letterSpacing: 1 }}>
+              More information
+            </Text>
+            <VStack space="lg">
+              <DetailField label="Total Amount" value={item.totalAmount != null ? '$' + Number(item.totalAmount) : null} />
+              <DetailField label="Is Expense" value={item.isExpense ? 'Yes' : 'No'} />
+              <DetailField label="Due Date" value={convertToLocalDateTimeString(item.dueDate)} />
+              <DetailField label="Paid At" value={convertToLocalDateTimeString(item.paidAt)} />
+              <DetailField label="Link" value={item.link} />
+            </VStack>
+          </View>
+        </View>
       </ScrollView>
       )}
 

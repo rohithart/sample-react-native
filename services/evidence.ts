@@ -70,3 +70,13 @@ export function useUpdateEvidenceStatus(orgId: string) {
   const qc = useQueryClient();
   return useMutation({ mutationFn: ({ id, status }: { id: string; status: string }) => evidenceApi.updateStatus(id, { status }), onSuccess: (_, { id }) => { qc.invalidateQueries({ queryKey: evidenceKeys.all(orgId) }); qc.invalidateQueries({ queryKey: evidenceKeys.detail(id) }); } });
 }
+
+export function useFlagEvidence(orgId: string) {
+  const qc = useQueryClient();
+  return useMutation({ mutationFn: ({ id, reason }: { id: string; reason: string }) => evidenceApi.flag(id, { reason }), onSuccess: (_, { id }) => { qc.invalidateQueries({ queryKey: evidenceKeys.all(orgId) }); qc.invalidateQueries({ queryKey: evidenceKeys.detail(id) }); } });
+}
+
+export function useUnflagEvidence(orgId: string) {
+  const qc = useQueryClient();
+  return useMutation({ mutationFn: (id: string) => evidenceApi.unflag(id), onSuccess: (_, id) => { qc.invalidateQueries({ queryKey: evidenceKeys.all(orgId) }); qc.invalidateQueries({ queryKey: evidenceKeys.detail(id) }); } });
+}

@@ -71,3 +71,13 @@ export function useUpdateWorkorderStatus(orgId: string) {
   const qc = useQueryClient();
   return useMutation({ mutationFn: ({ id, status }: { id: string; status: string }) => workorderApi.updateStatus(id, { status }), onSuccess: (_, { id }) => { qc.invalidateQueries({ queryKey: workorderKeys.all(orgId) }); qc.invalidateQueries({ queryKey: workorderKeys.detail(id) }); } });
 }
+
+export function useFlagWorkorder(orgId: string) {
+  const qc = useQueryClient();
+  return useMutation({ mutationFn: ({ id, reason }: { id: string; reason: string }) => workorderApi.flag(id, { reason }), onSuccess: (_, { id }) => { qc.invalidateQueries({ queryKey: workorderKeys.all(orgId) }); qc.invalidateQueries({ queryKey: workorderKeys.detail(id) }); } });
+}
+
+export function useUnflagWorkorder(orgId: string) {
+  const qc = useQueryClient();
+  return useMutation({ mutationFn: (id: string) => workorderApi.unflag(id), onSuccess: (_, id) => { qc.invalidateQueries({ queryKey: workorderKeys.all(orgId) }); qc.invalidateQueries({ queryKey: workorderKeys.detail(id) }); } });
+}

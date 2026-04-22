@@ -1,4 +1,4 @@
-import { AuditInfo, DetailField, DetailSection, HtmlContent, LinkedField, StatusSelect, UserSelect } from '@/components/details';
+import { AuditInfo, HtmlContent, LinkedField, StatusSelect, UserSelect } from '@/components/details';
 import { ConfirmationDialog } from '@/components/dialogs/confirmation-dialog';
 import { EntityAttachments } from '@/components/entity/entity-attachments';
 import { EntityComments } from '@/components/entity/entity-comments';
@@ -12,7 +12,7 @@ import { taskStatuses } from '@/constants/status';
 import { useOrganisationContext } from '@/context/organisation-context';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
 import { useThemeColors } from '@/hooks/use-theme-colors';
-import { useAssignTaskUser, useTask, useUpdateTaskStatus } from '@/services/task';
+import { useAssignTaskUser, useFlagTask, useTask, useUnflagTask, useUpdateTaskStatus } from '@/services/task';
 import { useAssignableUsers } from '@/services/user';
 import { downloadAndSharePdf } from '@/utils/pdf-download';
 import { resolveId } from '@/utils/resolve-ref';
@@ -23,6 +23,9 @@ import { ActivityIndicator, Alert, Pressable, ScrollView, Text, View } from 'rea
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { EntityType } from '@/enums';
+import { FlagButton } from '@/components/details/flag';
+import { HStack } from '@/components/ui/hstack';
+import { VStack } from '@/components/ui/vstack';
 
 const I = ENTITY_ICONS;
 
@@ -45,6 +48,8 @@ export default function TaskDetailScreen() {
   const { data: assignableUsers = [], isLoading: isLoadingUsers } = useAssignableUsers(orgId || '');
   const assignUser = useAssignTaskUser(orgId || '');
   const updateStatus = useUpdateTaskStatus(orgId || '');
+  const flagFn = useFlagTask(orgId || '');    
+  const unflagFn = useUnflagTask(orgId || '');
   const refreshControl = useRefreshControl(refetch, isRefetching);
 
   const handleDelete = async () => {
@@ -114,30 +119,61 @@ export default function TaskDetailScreen() {
       ) : (
       <ScrollView
         refreshControl={refreshControl}
-        contentContainerStyle={{ padding: 20, gap: 16 }}
+        contentContainerStyle={{ paddingBottom: 40 }}
         showsVerticalScrollIndicator={false}
       >
-        <StatusSelect
-          statuses={taskStatuses}
-          selectedValue={item.status}
-          onSelect={(status) => updateStatus.mutate({ id: id!, status })}
-          disabled={!isAdmin}
-        />
-        {item.description ? <HtmlContent label="Description" html={item.description} /> : null}
-        <DetailSection title="Details">
-          <DetailField label="Archived" value={item.archived ? 'Yes' : 'No'} />
-          <DetailField label="Flagged" value={item.isFlagged ? 'Yes' : 'No'} />
-        </DetailSection>
-        <DetailSection title="Relationships">
-          <UserSelect
-            users={assignableUsers}
-            selectedId={resolveId(item.user)}
-            onSelect={(userId) => assignUser.mutate({ id: id!, userId })}
-            isLoading={isLoadingUsers}
+        <View style={{ padding: 16, backgroundColor: colors.card, borderBottomWidth: 1, borderColor: colors.border }}>
+          <StatusSelect
+            statuses={taskStatuses}
+            selectedValue={item.status}
+            onSelect={(status) => updateStatus.mutate({ id: id!, status })}
             disabled={!isAdmin}
           />
-          <LinkedField label="Workflow" icon="workflow" value={item.workflow?.title} route={`/admin/workflow/${orgId}/${resolveId(item.workflow)}`} />
-        </DetailSection>
+          
+          <HStack space="md" style={{ marginTop: 16 }}>
+            <View style={{ flex: 1, }}>
+              
+            </View>
+            
+            <View style={{ flex: 1, padding: 12, borderRadius: 16, backgroundColor: colors.bg, borderWidth: 1, borderColor: colors.border }}>
+              <FlagButton 
+              item={item} 
+              flagFn={(comment: any) => flagFn.mutate({ id: item._id, reason: comment })}
+              unflagFn={() => unflagFn.mutate(item._id)}
+            />
+            </View>
+          </HStack>
+        </View>
+        <View style={{ padding: 16, gap: 20 }}>
+            {item.description && (
+              <View style={{ backgroundColor: colors.card, padding: 16, borderRadius: 20, borderWidth: 1, borderColor: colors.border }}>
+                <HtmlContent label="Task Description" html={item.description} />
+              </View>
+            )}
+
+            <View style={{ backgroundColor: colors.card, padding: 16, borderRadius: 24, borderWidth: 1, borderColor: colors.border }}>
+              <Text style={{ fontSize: 13, fontWeight: '800', color: colors.sub, marginBottom: 12, textTransform: 'uppercase', letterSpacing: 1 }}>
+                Assignment
+              </Text>
+              <VStack space="lg">
+                <UserSelect
+                  users={assignableUsers}
+                  selectedId={resolveId(item.user)}
+                  onSelect={(userId) => assignUser.mutate({ id: id!, userId })}
+                  isLoading={isLoadingUsers}
+                  disabled={!isAdmin}
+                />
+              </VStack>
+            </View>
+
+            <View style={{ backgroundColor: colors.card, borderRadius: 24, padding: 16, borderWidth: 1, borderColor: colors.border }}>
+            <Text style={{ fontSize: 13, fontWeight: '800', color: colors.sub, marginBottom: 4, textTransform: 'uppercase', letterSpacing: 1 }}>
+              Classification
+            </Text>
+            <LinkedField label="Workflow" icon="workflow" value={item.workflow?.title} route={`/admin/workflow/${orgId}/${resolveId(item.workflow)}`} />
+          </View>
+          </View>
+          
       </ScrollView>
       )}
 
