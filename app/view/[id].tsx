@@ -47,11 +47,8 @@ export default function UserDashboard() {
   ];
 
   const infoLinks: ActionItem[] = [
-    { id: 'wall', label: 'Announcements', icon: <I.announcement size={24} color={colors.secondary} />, onPress: () => router.push(`/view/announcements/${id}`), color: 'primary' as const },
+    { id: 'announcements', label: 'Announcements', icon: <I.announcement size={24} color={colors.secondary} />, onPress: () => router.push(`/view/announcements/${id}`), color: 'primary' as const },
     { id: 'information', label: 'Information', icon: <I.information size={24} color={colors.secondary} />, onPress: () => router.push(`/view/informations/${id}`), color: 'primary' as const },
-  ];
-
-  const resourceLinks: ActionItem[] = [
     { id: 'user-request', label: 'My Requests', icon: <I.userRequest size={24} color={colors.secondary} />, onPress: () => router.push(`/view/user-requests/${id}`), color: 'primary' as const },
     { id: 'booking', label: 'Bookings', icon: <I.booking size={24} color={colors.secondary} />, onPress: () => router.push(`/view/bookings/${id}`), color: 'primary' as const },
   ];
@@ -202,9 +199,9 @@ export default function UserDashboard() {
               </View>
             </View>
           )}
-          <Matrix row={communityLinks} index={0} onClose={() => {}} />
           <Matrix row={infoLinks} index={1} onClose={() => {}} />
-          <Matrix row={resourceLinks} index={2} onClose={() => {}} />
+          <Matrix row={communityLinks} index={0} onClose={() => {}} />
+
         </ScrollView>
       )}
     </View>

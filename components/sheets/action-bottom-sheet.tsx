@@ -37,8 +37,8 @@ export function ActionBottomSheet({
   }, [isVisible, slideAnim]);
 
   const rows: ActionItem[][] = [];
-  for (let i = 0; i < actions.length; i += 3) {
-    rows.push(actions.slice(i, i + 3));
+  for (let i = 0; i < actions.length; i += 4) {
+    rows.push(actions.slice(i, i + 4));
   }
 
   if (!isVisible) return null;

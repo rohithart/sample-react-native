@@ -7,32 +7,34 @@ import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useCreateComment, useDeleteComment } from '@/services/comment';
 import { useReportWall } from '@/services/email';
 import { useDeleteWall, useLikeWall } from '@/services/wall';
-import { Comment, Wall } from '@/types';
+import { Wall } from '@/types';
 import { convertToLocalDateTimeString } from '@/utils/date';
 import React, { useCallback, useState } from 'react';
-import { ActivityIndicator, Alert, FlatList, Pressable, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, Alert, FlatList, Pressable, Text, TextInput, View, LayoutAnimation, Platform, UIManager } from 'react-native';
 import { CommentCard } from './comment-card';
 import { HStack } from '../ui/hstack';
+
+if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
 
 const I = ENTITY_ICONS;
 
 export function WallCard({ wall, orgId, onRefresh, isLiked }: { wall: Wall; orgId: string; onRefresh: () => void; isLiked: (id: string) => boolean }) {
   const colors = useThemeColors();
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [commentText, setCommentText] = useState('');
+  const [posting, setPosting] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  
+  const { isAdmin } = useOrganisationContext();
+  const { showToast } = useToast();
+
   const likeMutation = useLikeWall(orgId);
   const deleteMutation = useDeleteWall(orgId);
   const createComment = useCreateComment(orgId, EntityType.WALL, wall._id);
   const deleteCommentMutation = useDeleteComment(EntityType.WALL, wall._id);
   const reportMutation = useReportWall();
-  const { showToast } = useToast();
-  const [deleting, setDeleting] = useState(false);
-  const [commentText, setCommentText] = useState('');
-  const [posting, setPosting] = useState(false);
-  const { isAdmin } = useOrganisationContext();
-
-  const handleLike = () => {
-    if (likeMutation.isPending) return;
-    likeMutation.mutate(wall._id, { onSuccess: onRefresh });
-  };
 
   const handleDelete = () => {
     Alert.alert('Delete Post', 'Are you sure you want to delete this post?', [
@@ -66,6 +68,16 @@ export function WallCard({ wall, orgId, onRefresh, isLiked }: { wall: Wall; orgI
     ]);
   };
 
+  const toggleAccordion = () => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    setIsExpanded(!isExpanded);
+  };
+
+  const handleLike = () => {
+    if (likeMutation.isPending) return;
+    likeMutation.mutate(wall._id, { onSuccess: onRefresh });
+  };
+
   const handleAddComment = () => {
     if (!commentText.trim()) return;
     setPosting(true);
@@ -73,7 +85,7 @@ export function WallCard({ wall, orgId, onRefresh, isLiked }: { wall: Wall; orgI
       comment: commentText.trim(),
       entityType: EntityType.WALL,
       entityId: wall._id,
-      organisation: orgId as unknown as any,
+      organisation: orgId as any,
     }, {
       onSuccess: () => {
         setCommentText('');
@@ -84,76 +96,138 @@ export function WallCard({ wall, orgId, onRefresh, isLiked }: { wall: Wall; orgI
     });
   };
 
-    const renderComment = ({ item }: { item: Comment }) => {
-      return (
-        <CommentCard item={item} handleDelete={handleDeleteComment} />
-      );
-    };
-
   return (
-    <View style={{ backgroundColor: colors.card, borderRadius: 14, marginVertical: 8, marginHorizontal: 8, padding: 14, shadowColor: colors.text, shadowOpacity: 0.08, shadowRadius: 8, elevation: 2 }}>
-      <HStack space="md" className='justify-between' style={{ marginBottom: 10 }}>
-        <UserAvatar userRole={wall.user} />
-        <HStack space="sm" className="items-center">
-          <Text style={{ color: colors.sub, fontSize: 12 }}>{convertToLocalDateTimeString(wall.createdAt)}</Text>
-          <Pressable onPress={() => handleReport(wall._id, wall.organisation)} style={{ padding: 4 }} disabled={reportMutation.isPending}>
-            {reportMutation.isPending ? <ActivityIndicator size="small" color={colors.danger} /> : <I.warning size={14} color={colors.warning} />}
+    <View style={{ 
+      backgroundColor: colors.card, 
+      borderRadius: 16, 
+      marginVertical: 10, 
+      marginHorizontal: 12, 
+      padding: 16, 
+      borderWidth: 1, 
+      borderColor: colors.border,
+      shadowColor: "#000",
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.05,
+      shadowRadius: 8,
+      elevation: 3 
+    }}>
+      {/* Header */}
+      <HStack space="md" style={{ justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+        <HStack space="sm" style={{ alignItems: 'center' }}>
+          <UserAvatar userRole={wall.user} />
+          <View>
+            <Text style={{ color: colors.text, fontWeight: '700', fontSize: 14 }}>{wall.user?.user.email || 'User'}</Text>
+            <Text style={{ color: colors.sub, fontSize: 11 }}>{convertToLocalDateTimeString(wall.createdAt)}</Text>
+          </View>
+        </HStack>
+        
+        <Pressable 
+          onPress={() => handleReport(wall._id, wall.organisation)}
+          style={{ padding: 6, opacity: 0.6 }}
+        >
+          <I.warning size={16} color={colors.sub} />
+        </Pressable>
+      </HStack>
+
+      <Text style={{ color: colors.text, fontSize: 15, lineHeight: 22, marginBottom: 16 }}>
+        {wall.message}
+      </Text>
+
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingTop: 12, borderTopWidth: 1, borderTopColor: colors.border }}>
+        <HStack space="md">
+          <Pressable
+            onPress={handleLike}
+            style={{ 
+              flexDirection: 'row', 
+              alignItems: 'center', 
+              paddingVertical: 6, 
+              paddingHorizontal: 12, 
+              borderRadius: 20, 
+              backgroundColor: isLiked(wall._id) ? colors.primary : colors.inputBg,
+            }}
+          >
+            <I.vote size={14} color={isLiked(wall._id) ? '#fff' : colors.sub} />
+            <Text style={{ color: isLiked(wall._id) ? '#fff' : colors.sub, marginLeft: 6, fontSize: 13, fontWeight: '600' }}>
+              {wall.likedByUsers?.length || 0}
+            </Text>
+          </Pressable>
+
+          <Pressable
+            onPress={toggleAccordion}
+            style={{ 
+              flexDirection: 'row', 
+              alignItems: 'center', 
+              paddingVertical: 6, 
+              paddingHorizontal: 12, 
+              borderRadius: 20, 
+              backgroundColor: colors.inputBg 
+            }}
+          >
+            <I.comment size={14} color={colors.sub} />
+            <Text style={{ color: colors.sub, marginLeft: 6, fontSize: 13, fontWeight: '600' }}>
+              {wall.comments?.length || 0}
+            </Text>
           </Pressable>
         </HStack>
-      </HStack>
-      <Text style={{ color: colors.text, fontSize: 15, marginBottom: 10 }}>{wall.message}</Text>
-      <HStack space="md" className='justify-between' style={{ marginTop: 10 }}>
-        <Pressable
-          onPress={handleLike}
-          style={{ flexDirection: 'row', alignItems: 'center', padding: 6, borderRadius: 8, backgroundColor: isLiked(wall._id) ? colors.primary + '22' : colors.bg, borderWidth: 1, borderColor: isLiked(wall._id) ? colors.primary : colors.border, marginRight: 10 }}
-        >
-          <I.vote size={12} color={isLiked(wall._id) ? colors.primary : colors.sub} />
-          <Text style={{ color: isLiked(wall._id) ? colors.primary : colors.sub, marginLeft: 6, fontWeight: '600' }}>{wall.likedByUsers?.length || 0}</Text>
-        </Pressable>
-        
 
         {isAdmin && (
-          <Pressable
-            onPress={handleDelete}
-            style={{ padding: 6}}
-            disabled={deleting || deleteMutation.isPending}
-          >
-            <I.trash size={12} color={colors.danger} />
+          <Pressable onPress={handleDelete} style={{ padding: 6 }}>
+            <I.trash size={16} color={colors.danger} />
           </Pressable>
         )}
-      </HStack>
-
-      <View style={{ marginTop: 16, borderTopWidth: 1, borderTopColor: colors.border, paddingTop: 10 }}>
-        <Text style={{ fontWeight: '700', color: colors.sub, marginBottom: 6, fontSize: 13 }}>
-          Comments ({wall.comments?.length || 0})
-        </Text>
-        <FlatList
-          data={wall.comments ?? []}
-          renderItem={renderComment}
-          keyExtractor={item => item._id}
-          scrollEnabled={false}
-          ListEmptyComponent={<Text style={{ color: colors.sub, fontSize: 13 }}>No comments yet</Text>}
-        />
-        <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 8 }}>
-          <TextInput
-            value={commentText}
-            onChangeText={setCommentText}
-            placeholder="Write a comment..."
-            placeholderTextColor={colors.sub}
-            style={{ flex: 1, backgroundColor: colors.bg, borderRadius: 8, padding: 8, color: colors.text, fontSize: 14, borderWidth: 1, borderColor: colors.border, marginRight: 8 }}
-            editable={!posting}
-            onSubmitEditing={handleAddComment}
-            returnKeyType="send"
-          />
-          <Pressable
-            onPress={handleAddComment}
-            style={{ backgroundColor: colors.primary, borderRadius: 8, padding: 10 }}
-            disabled={!commentText.trim() || posting}
-          >
-            <I.plus size={18} color="#fff" />
-          </Pressable>
-        </View>
       </View>
+
+      {isExpanded && (
+        <View style={{ marginTop: 12 }}>
+          <FlatList
+            data={wall.comments ?? []}
+            renderItem={({ item }) => <CommentCard item={item} handleDelete={handleDeleteComment} />}
+            keyExtractor={item => item._id}
+            scrollEnabled={false}
+            ListEmptyComponent={
+              <Text style={{ color: colors.sub, fontSize: 12, textAlign: 'center', marginVertical: 10 }}>
+                Be the first to comment
+              </Text>
+            }
+          />
+          
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 12, gap: 8 }}>
+            <TextInput
+              value={commentText}
+              onChangeText={setCommentText}
+              placeholder="Add a comment..."
+              placeholderTextColor={colors.sub}
+              style={{ 
+                flex: 1, 
+                backgroundColor: colors.bg, 
+                borderRadius: 20, 
+                paddingHorizontal: 16, 
+                paddingVertical: 8, 
+                color: colors.text, 
+                fontSize: 14, 
+                borderWidth: 1, 
+                borderColor: colors.border 
+              }}
+              editable={!posting}
+            />
+            <Pressable
+              onPress={handleAddComment}
+              disabled={!commentText.trim() || posting}
+              style={{ 
+                backgroundColor: colors.primary, 
+                width: 36, 
+                height: 36, 
+                borderRadius: 18, 
+                justifyContent: 'center', 
+                alignItems: 'center',
+                opacity: !commentText.trim() ? 0.5 : 1
+              }}
+            >
+              {posting ? <ActivityIndicator size="small" color="#fff" /> : <I.send size={16} color="#fff" />}
+            </Pressable>
+          </View>
+        </View>
+      )}
     </View>
   );
 }

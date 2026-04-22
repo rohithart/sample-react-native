@@ -9,14 +9,16 @@ interface MatrixProps {
   onClose: () => void;
 }
 
-export function Matrix({row, index, onClose}: MatrixProps) {
+export function Matrix({ row, index, onClose }: MatrixProps) {
+
   return (
     <HStack
       key={index}
-      className="justify-around items-center"
       style={{
-        paddingHorizontal: 4,
-        paddingBottom: 8,
+        paddingHorizontal: 8,
+        paddingVertical: 12,
+        justifyContent: 'flex-start',
+        alignItems: 'flex-start',
       }}
     >
       {row.map((action) => (
@@ -24,23 +26,26 @@ export function Matrix({row, index, onClose}: MatrixProps) {
           key={action.id}
           style={{
             flex: 1,
-            maxWidth: '33.33%',
+            maxWidth: '25%',
             alignItems: 'center',
             justifyContent: 'center',
+            paddingHorizontal: 4,
           }}
         >
-          <IconButton
-            icon={action.icon}
-            text={action.label}
-            onPress={() => {
-              action.onPress();
-              onClose();
-            }}
-            color={action.color}
-            disabled={action.disabled}
-          />
+          <View style={{ width: '100%', alignItems: 'center' }}>
+            <IconButton
+              icon={action.icon}
+              text={action.label}
+              onPress={() => {
+                action.onPress();
+                onClose();
+              }}
+              color={action.color}
+              disabled={action.disabled}
+            />
+          </View>
         </View>
       ))}
     </HStack>
-  )
+  );
 }

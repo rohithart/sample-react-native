@@ -34,7 +34,7 @@ function resolveField(item: any, field: string | ((item: any) => any) | undefine
 
 export function EntityCard({ item, config, orgId, onPress }: EntityCardProps) {
   const router = useRouter();
-  const { card, text, sub, border, primary, pressed, isDark } = useThemeColors();
+  const { card, text, sub, border, primary, pressed } = useThemeColors();
 
   const Icon = ENTITY_ICONS[config.icon];
   const title = resolveField(item, config.titleField) || 'Untitled';
@@ -67,50 +67,55 @@ export function EntityCard({ item, config, orgId, onPress }: EntityCardProps) {
           borderColor: border,
         })}
       >
-      <HStack space="md" className="items-stretch">
-        <VStack space="xs" className="flex-1">
-          <HStack space="md" className="items-stretch">
-        {image ? (
-          <Image
-            source={{ uri: image }}
-            style={{ width: 48, borderRadius: 10, aspectRatio: 1, alignSelf: 'center' }}
-          />
-        ) : (
-          <View
-            style={{
-              width: 48,
-              borderRadius: 10,
-              backgroundColor: primary + '15',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <Icon size={22} color={primary} />
+        <HStack space="md" style={{ padding: 2, alignItems: 'center' }}>
+          {/* Leading Section */}
+          <View>
+            {image ? (
+              <Image
+                source={{ uri: image }}
+                style={{ width: 50, height: 50, borderRadius: 12 }}
+              />
+            ) : (
+              <View
+                style={{
+                  width: 50,
+                  height: 50,
+                  borderRadius: 12,
+                  backgroundColor: primary + '10',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <Icon size={22} color={primary} />
+              </View>
+            )}
           </View>
-        )}
 
-        <VStack space="xs" className="flex-1">
-          <Text numberOfLines={1} style={{ fontSize: 15, fontWeight: '600', color: text }}>
-            {title}
-          </Text>
-          {subtitle ? (
-            <Text numberOfLines={1} style={{ fontSize: 13, color: sub }}>
-              {subtitle}
+          {/* Middle Section */}
+          <VStack style={{ flex: 1 }}>
+            <Text 
+              numberOfLines={1} 
+              style={{ fontSize: 16, fontWeight: '700', color: text, marginBottom: 2 }}
+            >
+              {title}
             </Text>
-          ) : null}
-        </VStack>
-      </HStack>
-          {status ? (
-            <HStack style={{ marginTop: 4 }}>
-              <StatusBadge status={status} />
-            </HStack>
-          ) : null}
-        </VStack>
+            
+            {subtitle && (
+              <Text numberOfLines={1} style={{ fontSize: 13, color: sub, marginBottom: 6 }}>
+                {subtitle}
+              </Text>
+            )}
 
-        <HStack space="md" className='items-center'>
+            {status && (
+              <View style={{ alignSelf: 'flex-start' }}>
+                <StatusBadge status={status} />
+              </View>
+            )}
+          </VStack>
+
+          {/* Trailing Icon */}
           <I.chevronRight size={18} color={sub} />
         </HStack>
-      </HStack>
     </Pressable>
     </View>
   );
