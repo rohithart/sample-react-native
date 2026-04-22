@@ -3,14 +3,17 @@ import { FormField } from '@/components/ui/form-field';
 import { PageHeader } from '@/components/ui/page-header';
 import { VStack } from '@/components/ui/vstack';
 import { useOrganisationContext } from '@/context/organisation-context';
+import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useSendContact } from '@/services/email';
-import { useLocalSearchParams } from 'expo-router';
+import { Stack, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
-import { Alert, ScrollView } from 'react-native';
+import { Alert, ScrollView, Text } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-export default function ContactHelpScreen() {
+export default function ContactScreen() {
   const { orgId } = useLocalSearchParams<{ orgId: string }>();
   const { organisation } = useOrganisationContext();
+  const colors = useThemeColors();
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -23,50 +26,44 @@ export default function ContactHelpScreen() {
       return;
     }
     setIsSubmitting(true);
-    await sendMutation.mutateAsync({ subject, message, organisation: organisation?._id || orgId });
+    await sendMutation.mutateAsync({ subject, message, organisation: organisation?._id || orgId, organisationName: organisation?.name || 'Unknown' } as any);
     setIsSubmitting(false);
-    Alert.alert('Success', 'Your message has been sent!');
+    Alert.alert('Success', 'Your message has been sent to admin!');
     setSubject('');
     setMessage('');
   };
 
   return (
-    <ScrollView contentContainerStyle={{ padding: 20 }}>
-      <PageHeader title="Contact Support" />
-      <VStack space={16}>
-        <FormField
-          label="Organisation"
-          value={organisation?.name || ''}
-          editable={false}
-          placeholder="Organisation"
-        />
-        <FormField
-          label="Organisation ID"
-          value={organisation?._id || ''}
-          editable={false}
-          placeholder="Organisation ID"
-        />
-        <FormField
-          label="Subject"
-          value={subject}
-          onChangeText={setSubject}
-          placeholder="Enter subject"
-          required
-        />
-        <FormField
-          label="Message"
-          value={message}
-          onChangeText={setMessage}
-          placeholder="Enter your message"
-          multiline
-          numberOfLines={5}
-          required
-          style={{ minHeight: 100, textAlignVertical: 'top' }}
-        />
-        <Button onPress={handleSubmit} disabled={isSubmitting || !subject.trim() || !message.trim()}>
-          {isSubmitting ? 'Sending...' : 'Send'}
-        </Button>
-      </VStack>
-    </ScrollView>
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
+      <Stack.Screen options={{ headerShown: false }} />
+      <PageHeader icon="mail" title="Contact Support" />
+      <ScrollView 
+        contentContainerStyle={{ padding: 20, gap: 16 }}
+        showsVerticalScrollIndicator={false}
+      >
+        <VStack space="md">
+          <FormField
+            label="Subject"
+            value={subject}
+            onChangeText={setSubject}
+            placeholder="Enter subject"
+            required
+          />
+          <FormField
+            label="Message"
+            value={message}
+            onChangeText={setMessage}
+            placeholder="Enter your message"
+            multiline
+            numberOfLines={5}
+            required
+            style={{ minHeight: 100, textAlignVertical: 'top' }}
+          />
+          <Button onPress={handleSubmit} disabled={isSubmitting || !subject.trim() || !message.trim()}>
+            <Text>{isSubmitting ? 'Sending...' : 'Send message'}</Text>
+          </Button>
+        </VStack>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
