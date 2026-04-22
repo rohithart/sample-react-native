@@ -145,34 +145,34 @@ export default function TaskDetailScreen() {
           </HStack>
         </View>
         <View style={{ padding: 16, gap: 20 }}>
-            {item.description && (
-              <View style={{ backgroundColor: colors.card, padding: 16, borderRadius: 20, borderWidth: 1, borderColor: colors.border }}>
-                <HtmlContent label="Task Description" html={item.description} />
-              </View>
-            )}
-
-            <View style={{ backgroundColor: colors.card, padding: 16, borderRadius: 24, borderWidth: 1, borderColor: colors.border }}>
-              <Text style={{ fontSize: 13, fontWeight: '800', color: colors.sub, marginBottom: 12, textTransform: 'uppercase', letterSpacing: 1 }}>
-                Assignment
-              </Text>
-              <VStack space="lg">
-                <UserSelect
-                  users={assignableUsers}
-                  selectedId={resolveId(item.user)}
-                  onSelect={(userId) => assignUser.mutate({ id: id!, userId })}
-                  isLoading={isLoadingUsers}
-                  disabled={!isAdmin}
-                />
-              </VStack>
+          {item.description && (
+            <View style={{ backgroundColor: colors.card, padding: 16, borderRadius: 20, borderWidth: 1, borderColor: colors.border }}>
+              <HtmlContent label="Task Description" html={item.description} />
             </View>
+          )}
 
-            <View style={{ backgroundColor: colors.card, borderRadius: 24, padding: 16, borderWidth: 1, borderColor: colors.border }}>
+          <View style={{ backgroundColor: colors.card, padding: 16, borderRadius: 24, borderWidth: 1, borderColor: colors.border }}>
+            <Text style={{ fontSize: 13, fontWeight: '800', color: colors.sub, marginBottom: 12, textTransform: 'uppercase', letterSpacing: 1 }}>
+              Assignment
+            </Text>
+            <VStack space="lg">
+              <UserSelect
+                users={assignableUsers}
+                selectedId={resolveId(item.user)}
+                onSelect={(userId) => assignUser.mutate({ id: id!, userId })}
+                isLoading={isLoadingUsers}
+                disabled={!isAdmin}
+              />
+            </VStack>
+          </View>
+
+          <View style={{ backgroundColor: colors.card, borderRadius: 24, padding: 16, borderWidth: 1, borderColor: colors.border }}>
             <Text style={{ fontSize: 13, fontWeight: '800', color: colors.sub, marginBottom: 4, textTransform: 'uppercase', letterSpacing: 1 }}>
               Classification
             </Text>
             <LinkedField label="Workflow" icon="workflow" value={item.workflow?.title} route={`/admin/workflow/${orgId}/${resolveId(item.workflow)}`} />
           </View>
-          </View>
+        </View>
           
       </ScrollView>
       )}

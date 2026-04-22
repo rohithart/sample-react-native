@@ -28,7 +28,9 @@ export const ADMIN_CONFIGS = {
   evidence: cfg('evidence', (o, i) => `/admin/evidence/${o}/${i}`, {
     statusField: 'status',
   }),
-  category: cfg('category', (o, i) => `/admin/category/${o}/${i}`),
+  category: cfg('category', (o, i) => `/admin/category/${o}/${i}`, {
+    subtitleField: undefined,
+  }),
   vendor: cfg('vendor', (o, i) => `/admin/vendor/${o}/${i}`, {
     titleField: 'name',
     subtitleField: (item: any) => item.contactPerson || item.email,
@@ -73,8 +75,12 @@ export const ADMIN_CONFIGS = {
       item.isApproved ? 'APPROVED' : item.isRejected ? 'REJECTED' : 'PENDING',
   }),
   bookingType: cfg('bookingType', (o, i) => `/admin/booking-type/${o}/${i}`),
-  asset: cfg('asset', (o, i) => `/admin/asset/${o}/${i}`),
-  assetType: cfg('assetType', (o, i) => `/admin/asset-type/${o}/${i}`),
+  asset: cfg('asset', (o, i) => `/admin/asset/${o}/${i}`, {
+    subtitleField: (item: any) => (item.assetType?.title ?? ''),
+  }),
+  assetType: cfg('assetType', (o, i) => `/admin/asset-type/${o}/${i}`, {
+    subtitleField: undefined,
+  }),
   document: cfg('document', (o, i) => `/admin/document/${o}/${i}`),
   event: cfg('event', (o, i) => `/admin/event/${o}/${i}`, {
     subtitleField(item) {
@@ -83,7 +89,9 @@ export const ADMIN_CONFIGS = {
       return from && to ? `${from} – ${to}` : from || to || 'Event';
     },
   }),
-  eventType: cfg('eventType', (o, i) => `/admin/event-type/${o}/${i}`),
+  eventType: cfg('eventType', (o, i) => `/admin/event-type/${o}/${i}`, {
+    subtitleField: undefined,
+  }),
   information: cfg('information', (o, i) => `/admin/information/${o}/${i}`, {
     subtitleField: (item: any) => convertToLocalDateString(item.createdAt),
   }),

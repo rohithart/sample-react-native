@@ -58,3 +58,13 @@ export function useUnarchiveAsset(orgId: string) {
   const qc = useQueryClient();
   return useMutation({ mutationFn: (id: string) => assetApi.unarchive(id), onSuccess: () => { qc.invalidateQueries({ queryKey: assetKeys.all(orgId) }); } });
 }
+
+export function useFlagAsset(orgId: string) {
+  const qc = useQueryClient();
+  return useMutation({ mutationFn: ({ id, reason }: { id: string; reason: string }) => assetApi.flag(id, { reason }), onSuccess: (_, { id }) => { qc.invalidateQueries({ queryKey: assetKeys.all(orgId) }); qc.invalidateQueries({ queryKey: assetKeys.detail(id) }); } });
+}
+
+export function useUnflagAsset(orgId: string) {
+  const qc = useQueryClient();
+  return useMutation({ mutationFn: (id: string) => assetApi.unflag(id), onSuccess: (_, id) => { qc.invalidateQueries({ queryKey: assetKeys.all(orgId) }); qc.invalidateQueries({ queryKey: assetKeys.detail(id) }); } });
+}
