@@ -98,7 +98,7 @@ export default function QuoteDetailScreen() {
       <PageHeader icon="quote"
         title={item?.title || 'Loading...'}
         rightAction={
-          <Pressable onPress={() => setIsBottomSheetOpen(true)} style={{ padding: 8 }}>
+          <Pressable onPress={() => setIsBottomSheetOpen(true)} style={{ padding: 8, backgroundColor: colors.primary + '10', borderRadius: 12 }}>
             <I.moreVertical size={20} color={colors.primary} />
           </Pressable>
         }
