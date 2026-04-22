@@ -23,8 +23,10 @@ import React, { useState } from 'react';
 import { ActivityIndicator, Alert, Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
-import { EntityType } from '@/enums';
+import { EntityType, WorkFlowPriority } from '@/enums';
 import { onShare } from '@/utils/share';
+import { HStack } from '@/components/ui/hstack';
+import { VStack } from '@/components/ui/vstack';
 
 const I = ENTITY_ICONS;
 
@@ -108,10 +110,14 @@ export default function WorkflowDetailScreen() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
       <Stack.Screen options={{ headerShown: false }} />
-      <PageHeader icon="workflow"
+      <PageHeader 
+        icon="workflow"
         title={item?.title || 'Loading...'}
         rightAction={
-          <Pressable onPress={() => setIsBottomSheetOpen(true)} style={{ padding: 8 }}>
+          <Pressable 
+            onPress={() => setIsBottomSheetOpen(true)} 
+            style={{ padding: 8, backgroundColor: colors.primary + '10', borderRadius: 12 }}
+          >
             <I.moreVertical size={20} color={colors.primary} />
           </Pressable>
         }
@@ -120,44 +126,83 @@ export default function WorkflowDetailScreen() {
       {isLoadingItem || !item ? (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
           <ActivityIndicator size="large" color={colors.primary} />
-          <Text style={{ color: colors.sub, fontSize: 14, marginTop: 10 }}>Loading...</Text>
         </View>
       ) : (
-      <ScrollView
-        refreshControl={refreshControl}
-        contentContainerStyle={{ padding: 20, gap: 16 }}
-        showsVerticalScrollIndicator={false}
-      >
-        <StatusSelect
-          statuses={workflowStatuses}
-          selectedValue={item.status}
-          onSelect={(status) => updateStatus.mutate({ id: id!, status })}
-          disabled={!isAdmin}
-        />
-        {item.description ? <HtmlContent label="Description" html={item.description} /> : null}
-        <DetailSection title="Details">
-          <DetailField label="Priority" value={item.priority} />
-          <DetailField label="Archived" value={item.archived ? 'Yes' : 'No'} />
-          <DetailField label="Flagged" value={item.isFlagged ? 'Yes' : 'No'} />
-        </DetailSection>
-        <DetailSection title="Relationships">
-          <LinkedField label="Category" icon="category" value={item.category?.title} route={`/admin/category/${orgId}/${resolveId(item.category)}`} />
-          <UserSelect
-            users={assignableUsers}
-            selectedId={resolveId(item.user)}
-            onSelect={(userId) => updateUser.mutate({ id: id!, userId })}
-            isLoading={isLoadingUsers}
-            disabled={!isAdmin}
-          />
-          <GroupSelect
-            groups={groups}
-            selectedId={resolveId(item.group)}
-            onSelect={(groupId) => updateGroup.mutate({ id: id!, groupId })}
-            isLoading={isLoadingGroups}
-            disabled={!isAdmin}
-          />
-        </DetailSection>
-      </ScrollView>
+        <ScrollView
+          refreshControl={refreshControl}
+          contentContainerStyle={{ paddingBottom: 40 }}
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={{ padding: 16, backgroundColor: colors.card, borderBottomWidth: 1, borderColor: colors.border }}>
+             <StatusSelect
+                statuses={workflowStatuses}
+                selectedValue={item.status}
+                onSelect={(status) => updateStatus.mutate({ id: id!, status })}
+                disabled={!isAdmin}
+              />
+              
+              <HStack space="md" style={{ marginTop: 16 }}>
+                <View style={{ flex: 1, padding: 12, borderRadius: 16, backgroundColor: colors.bg, borderWidth: 1, borderColor: colors.border }}>
+                  <HStack space="xs" style={{ alignItems: 'center', marginTop: 2 }}>
+                    <Text style={{ fontSize: 10, color: colors.sub, fontWeight: '700', textTransform: 'uppercase' }}>Priority</Text>
+                    <Text style={{ fontSize: 14, fontWeight: '700', color: item.priority === WorkFlowPriority.HIGH ? colors.danger : colors.text, marginStart: 4}}>
+                      {item.priority || 'Normal'}
+                    </Text>
+                  </HStack>
+                </View>
+                <View style={{ flex: 1, padding: 12, borderRadius: 16, backgroundColor: colors.bg, borderWidth: 1, borderColor: colors.border }}>
+                  <HStack space="xs" style={{ alignItems: 'center', marginTop: 2 }}>
+                    <I.flag size={14} color={item.isFlagged ? colors.danger : colors.sub} />
+                    <Text style={{ fontSize: 12, fontWeight: '700', color: colors.sub }}>
+                      {item.isFlagged ? item.flagComment : 'Not flagged'}
+                    </Text>
+                  </HStack>
+                </View>
+              </HStack>
+          </View>
+
+          <View style={{ padding: 16, gap: 20 }}>
+            {item.description && (
+              <View style={{ backgroundColor: colors.card, padding: 16, borderRadius: 20, borderWidth: 1, borderColor: colors.border }}>
+                <HtmlContent label="Workflow Description" html={item.description} />
+              </View>
+            )}
+
+            <View style={{ backgroundColor: colors.card, padding: 16, borderRadius: 24, borderWidth: 1, borderColor: colors.border }}>
+              <Text style={{ fontSize: 13, fontWeight: '800', color: colors.sub, marginBottom: 12, textTransform: 'uppercase', letterSpacing: 1 }}>
+                Assignment
+              </Text>
+              <VStack space="lg">
+                <UserSelect
+                  users={assignableUsers}
+                  selectedId={resolveId(item.user)}
+                  onSelect={(userId) => updateUser.mutate({ id: id!, userId })}
+                  isLoading={isLoadingUsers}
+                  disabled={!isAdmin}
+                />
+                <GroupSelect
+                  groups={groups}
+                  selectedId={resolveId(item.group)}
+                  onSelect={(groupId) => updateGroup.mutate({ id: id!, groupId })}
+                  isLoading={isLoadingGroups}
+                  disabled={!isAdmin}
+                />
+              </VStack>
+            </View>
+
+            <View style={{ backgroundColor: colors.card, borderRadius: 24, padding: 16, borderWidth: 1, borderColor: colors.border }}>
+              <Text style={{ fontSize: 13, fontWeight: '800', color: colors.sub, marginBottom: 4, textTransform: 'uppercase', letterSpacing: 1 }}>
+                Classification
+              </Text>
+              <LinkedField 
+                label="Category" 
+                icon="category" 
+                value={item.category?.title} 
+                route={`/admin/category/${orgId}/${resolveId(item.category)}`} 
+              />
+            </View>
+          </View>
+        </ScrollView>
       )}
 
       <ActionBottomSheet isVisible={isBottomSheetOpen} onClose={() => setIsBottomSheetOpen(false)} actions={actions} />

@@ -30,6 +30,7 @@ import {
     FileSpreadsheet,
     FileText,
     FileVideo,
+    Flag,
     Folder,
     GitBranch,
     Globe,
@@ -138,6 +139,7 @@ export type EntityIconKey =
   | 'eye'
   | 'moon'
   | 'sun'
+  | 'flag'
   | 'alertCircle'
   | 'archiveRestore'
   | 'calendar'
@@ -228,6 +230,7 @@ export const ENTITY_ICONS: Record<EntityIconKey, IconComponent> = {
   eye: Eye,
   moon: Moon,
   sun: Sun,
+  flag: Flag,
   alertCircle: AlertCircle,
   archiveRestore: ArchiveRestore,
   calendar: Calendar,
