@@ -1,16 +1,19 @@
 import { WallCard } from '@/components/cards/wall-card';
+import { FormField } from '@/components/ui/form-field';
+import { HStack } from '@/components/ui/hstack';
 import { useToast } from '@/context/toast-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useCreateWall, useWalls } from '@/services/wall';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useCallback, useState } from 'react';
 import { ActivityIndicator, FlatList, Pressable, Text, TextInput, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function WallScreen() {
   const { id: orgId } = useLocalSearchParams<{ id: string }>();
   const colors = useThemeColors();
   const router = useRouter();
+  const { bottom } = useSafeAreaInsets();
   const { data: walls, isLoading, refetch, isRefetching } = useWalls(orgId ?? '');
   const createWall = useCreateWall(orgId ?? '');
   const { showToast } = useToast();
@@ -40,16 +43,17 @@ export default function WallScreen() {
         <Text style={{ fontSize: 18, fontWeight: '700', color: colors.text }}>Wall</Text>
       </View>
 
-      <View style={{ padding: 14, backgroundColor: colors.card, margin: 10, borderRadius: 12, marginBottom: 0 }}>
+      <HStack space="md" className='items-center' style={{ padding: 14, backgroundColor: colors.card, margin: 10, borderRadius: 12, marginBottom: 0 }}>
         <TextInput
           value={newPost}
           onChangeText={setNewPost}
           placeholder="What's on your mind?"
           placeholderTextColor={colors.sub}
-          style={{ backgroundColor: colors.bg, borderRadius: 8, padding: 10, color: colors.text, fontSize: 15, borderWidth: 1, borderColor: colors.border, marginBottom: 8 }}
+          style={{ flex: 1, backgroundColor: colors.inputBg, borderWidth: 1, borderColor: colors.inputBorder, borderRadius: 10, paddingHorizontal: 12, paddingVertical: 8, color: colors.text, fontSize: 14, maxHeight: 100 }}
           multiline
           numberOfLines={5}
         />
+
         <Pressable
           onPress={handleAddPost}
           style={{ alignSelf: 'flex-end', backgroundColor: colors.primary, borderRadius: 8, paddingHorizontal: 18, paddingVertical: 8 }}
@@ -57,7 +61,7 @@ export default function WallScreen() {
         >
           <Text style={{ color: '#fff', fontWeight: '700', fontSize: 15 }}>Post</Text>
         </Pressable>
-      </View>
+      </HStack>
 
       {isLoading ? (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>

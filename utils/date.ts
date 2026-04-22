@@ -27,7 +27,7 @@ export const convertToRelativeTime = (d: string) => {
   if (diffHours < 24) return `${diffHours}h ago`;
   const diffDays = Math.floor(diffHours / 24);
   if (diffDays < 7) return `${diffDays}d ago`;
-  return convertToLocalDateString(date);
+  return convertToLocalDateTimeString(date);
 }
 
 export const convertToTimeString = (d: string | Date | undefined | null) => {

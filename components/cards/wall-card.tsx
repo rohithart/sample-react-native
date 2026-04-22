@@ -11,6 +11,8 @@ import { Comment, Wall } from '@/types';
 import { convertToLocalDateTimeString } from '@/utils/date';
 import React, { useCallback, useState } from 'react';
 import { ActivityIndicator, Alert, FlatList, Pressable, Text, TextInput, View } from 'react-native';
+import { CommentCard } from './comment-card';
+import { HStack } from '../ui/hstack';
 
 const I = ENTITY_ICONS;
 
@@ -51,7 +53,7 @@ export function WallCard({ wall, orgId, onRefresh, isLiked }: { wall: Wall; orgI
 
   const handleReport = useCallback((id: string, org: any) => {
       const data: any = {organisation: org}
-      Alert.alert('Report Comment', 'Are you sure you want to report this comment?', [
+      Alert.alert('Report Discussion', 'Are you sure you want to report this discussion?', [
         { text: 'Cancel', style: 'cancel' },
         { text: 'Report', style: 'destructive', onPress: () => reportMutation.mutateAsync({ id, data }) },
       ]);
@@ -82,51 +84,45 @@ export function WallCard({ wall, orgId, onRefresh, isLiked }: { wall: Wall; orgI
     });
   };
 
-  const renderComment = ({ item }: { item: Comment }) => (
-    <View style={{ flexDirection: 'row', alignItems: 'flex-start', marginBottom: 8 }}>
-      <UserAvatar userRole={item.user} />
-      <View style={{ marginLeft: 8, flex: 1, backgroundColor: colors.bg, borderRadius: 8, padding: 8, borderWidth: 1, borderColor: colors.border, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-        <View style={{ flex: 1 }}>
-          <Text style={{ color: colors.text, fontSize: 13 }}>{item.comment}</Text>
-          <Text style={{ color: colors.sub, fontSize: 11, marginTop: 2 }}>{convertToLocalDateTimeString(item.createdAt)}</Text>
-        </View>
-        <Pressable onPress={() => handleReport(item._id, item.organisation)} style={{ padding: 4 }} disabled={reportMutation.isPending}>
-          {reportMutation.isPending ? <ActivityIndicator size="small" color={colors.danger} /> : <I.warning size={14} color={colors.warning} />}
-        </Pressable>
-        {isAdmin && (
-        <Pressable onPress={() => handleDeleteComment(item._id)} style={{ padding: 4 }} disabled={deleteMutation.isPending}>
-            {deleteMutation.isPending ? <ActivityIndicator size="small" color={colors.danger} /> : <I.trash size={14} color={colors.danger} />}
-        </Pressable>
-        )}
-      </View>
-    </View>
-  );
+    const renderComment = ({ item }: { item: Comment }) => {
+      return (
+        <CommentCard item={item} handleDelete={handleDeleteComment} />
+      );
+    };
 
   return (
     <View style={{ backgroundColor: colors.card, borderRadius: 14, marginVertical: 8, marginHorizontal: 8, padding: 14, shadowColor: colors.text, shadowOpacity: 0.08, shadowRadius: 8, elevation: 2 }}>
-      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8, justifyContent: 'space-between' }}>
+      <HStack space="md" className='justify-between' style={{ marginBottom: 10 }}>
         <UserAvatar userRole={wall.user} />
-        <Text style={{ color: colors.sub, fontSize: 12 }}>{convertToLocalDateTimeString(wall.createdAt)}</Text>
-      </View>
+        <HStack space="sm" className="items-center">
+          <Text style={{ color: colors.sub, fontSize: 12 }}>{convertToLocalDateTimeString(wall.createdAt)}</Text>
+          <Pressable onPress={() => handleReport(wall._id, wall.organisation)} style={{ padding: 4 }} disabled={reportMutation.isPending}>
+            {reportMutation.isPending ? <ActivityIndicator size="small" color={colors.danger} /> : <I.warning size={14} color={colors.warning} />}
+          </Pressable>
+        </HStack>
+      </HStack>
       <Text style={{ color: colors.text, fontSize: 15, marginBottom: 10 }}>{wall.message}</Text>
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+      <HStack space="md" className='justify-between' style={{ marginTop: 10 }}>
         <Pressable
           onPress={handleLike}
           style={{ flexDirection: 'row', alignItems: 'center', padding: 6, borderRadius: 8, backgroundColor: isLiked(wall._id) ? colors.primary + '22' : colors.bg, borderWidth: 1, borderColor: isLiked(wall._id) ? colors.primary : colors.border, marginRight: 10 }}
         >
-          <I.vote size={18} color={isLiked(wall._id) ? colors.primary : colors.sub} />
+          <I.vote size={12} color={isLiked(wall._id) ? colors.primary : colors.sub} />
           <Text style={{ color: isLiked(wall._id) ? colors.primary : colors.sub, marginLeft: 6, fontWeight: '600' }}>{wall.likedByUsers?.length || 0}</Text>
         </Pressable>
-        <Pressable
-          onPress={handleDelete}
-          style={{ padding: 6, borderRadius: 8, backgroundColor: colors.dangerBg, borderWidth: 1, borderColor: colors.danger }}
-          disabled={deleting || deleteMutation.isPending}
-        >
-          <I.trash size={18} color={colors.danger} />
-        </Pressable>
-      </View>
+        
 
-      {/* Comments Section */}
+        {isAdmin && (
+          <Pressable
+            onPress={handleDelete}
+            style={{ padding: 6}}
+            disabled={deleting || deleteMutation.isPending}
+          >
+            <I.trash size={12} color={colors.danger} />
+          </Pressable>
+        )}
+      </HStack>
+
       <View style={{ marginTop: 16, borderTopWidth: 1, borderTopColor: colors.border, paddingTop: 10 }}>
         <Text style={{ fontWeight: '700', color: colors.sub, marginBottom: 6, fontSize: 13 }}>
           Comments ({wall.comments?.length || 0})
