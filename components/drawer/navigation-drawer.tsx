@@ -1,13 +1,11 @@
-import { Box } from '@/components/ui/box';
-import { Button, ButtonText } from '@/components/ui/button';
 import { Text } from '@/components/ui/text';
 import { AccountCard } from '@/components/account-card';
 import { useAuth } from '@/context/auth-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useRouter } from 'expo-router';
-
-import { Alert, Animated, ScrollView, View } from 'react-native';
+import { Alert, Animated, ScrollView, View, Pressable } from 'react-native';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { DrawerItem } from './drawer-items';
 
 const I = ENTITY_ICONS;
 
@@ -19,20 +17,14 @@ interface NavigationDrawerProps {
   children: React.ReactNode;
 }
 
-export function NavigationDrawer({
-  isOpen,
-  onClose,
-  drawerAnim,
-  topInset,
-  children,
-}: NavigationDrawerProps) {
+export function NavigationDrawer({ isOpen, onClose, drawerAnim, topInset, children }: NavigationDrawerProps) {
   const colors = useThemeColors();
   const { logout } = useAuth();
   const router = useRouter();
 
-  const handleSettings = () => {
+  const handleAction = (route: string) => {
     onClose();
-    router.push('/settings');
+    router.push(route as any);
   };
 
   const handleLogout = () => {
@@ -53,85 +45,68 @@ export function NavigationDrawer({
   return (
     <>
       {isOpen && (
-        <Box
-          className="absolute inset-0 bg-black/30 z-40"
-          onTouchEnd={onClose}
+        <Pressable 
+          style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(0,0,0,0.4)', zIndex: 40 }} 
+          onPress={onClose} 
         />
       )}
 
       <Animated.View
-        style={[
-          {
-            transform: [{ translateX: drawerAnim }],
-            position: 'absolute',
-            left: 0,
-            top: 0,
-            bottom: 0,
-            width: 300,
-            zIndex: 50,
-            backgroundColor: colors.bg,
-            shadowColor: '#000',
-            shadowOffset: { width: 2, height: 0 },
-            shadowOpacity: 0.25,
-            shadowRadius: 8,
-            elevation: 16,
-          },
-        ]}
+        style={{
+          transform: [{ translateX: drawerAnim }],
+          position: 'absolute',
+          left: 0,
+          top: 0,
+          bottom: 0,
+          width: 280,
+          zIndex: 50,
+          backgroundColor: colors.card,
+          borderTopRightRadius: 20,
+          borderBottomRightRadius: 20,
+          shadowColor: '#000',
+          shadowOffset: { width: 4, height: 0 },
+          shadowOpacity: 0.1,
+          shadowRadius: 10,
+          elevation: 16,
+        }}
       >
-        <View style={{ flex: 1, backgroundColor: colors.bg }}>
-          <Box
-            className="px-6 py-4"
-            style={{ borderBottomWidth: 1, borderColor: colors.border }}
-          >
-            <Box className="flex-row items-center justify-between mb-4">
-              <Text className="text-lg font-bold">Account</Text>
-              <Button
-                size="md"
-                className="bg-transparent"
-                onPress={onClose}
-              >
-                <I.close size={24} color={colors.icon} />
-              </Button>
-            </Box>
+        <View style={{ flex: 1, paddingTop: topInset }}>
+          <View style={{ paddingHorizontal: 20, paddingVertical: 16 }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+              <Text style={{ fontSize: 22, fontWeight: '800', color: colors.text }}>Menu</Text>
+              <Pressable onPress={onClose} style={{ padding: 4 }}>
+                <I.close size={22} color={colors.sub} />
+              </Pressable>
+            </View>
             <AccountCard onPress={onClose} />
-          </Box>
+          </View>
 
           <ScrollView
             style={{ flex: 1 }}
-            contentContainerStyle={{ gap: 4, paddingHorizontal: 12, paddingVertical: 16 }}
+            contentContainerStyle={{ paddingHorizontal: 12, gap: 4 }}
             showsVerticalScrollIndicator={false}
           >
             {children}
           </ScrollView>
 
-          <Box className="px-4 pb-6 gap-3">
-            <Button
-              action="secondary"
-              className="w-full"
-              style={{ borderColor: colors.border }}
-              onPress={handleSettings}
-            >
-              <I.settings size={20} color={colors.skeleton} />
-              <ButtonText style={{ color: colors.skeleton }}>
-                Settings
-              </ButtonText>
-            </Button>
-
-            <Button
-              className="w-full"
-              style={{
-                backgroundColor: colors.dangerBg,
-                borderWidth: 1,
-                borderColor: colors.danger,
-              }}
-              onPress={handleLogout}
-            >
-              <I.logOut size={20} color={colors.danger} />
-              <ButtonText style={{ color: colors.danger }}>
-                Logout
-              </ButtonText>
-            </Button>
-          </Box>
+          <View style={{ 
+            padding: 16, 
+            borderTopWidth: 1, 
+            borderColor: colors.border,
+            gap: 4,
+            marginBottom: 20 
+          }}>
+            <DrawerItem 
+              label="Settings"
+              onPress={() => handleAction('/settings')}
+              icon={<I.settings size={16} color={colors.primary} />}
+            />
+            <DrawerItem 
+              icon={<I.logOut size={16} color={colors.danger} />}
+              label="Logout" 
+              onPress={handleLogout} 
+            />
+          </View>
         </View>
       </Animated.View>
     </>

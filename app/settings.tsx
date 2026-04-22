@@ -1,4 +1,4 @@
-import { Stack, useRouter } from 'expo-router';
+import { Stack } from 'expo-router';
 import { useCallback } from 'react';
 import {
   Alert,
@@ -13,12 +13,13 @@ import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { useDisplaySettings } from '@/context/display-settings-context';
 import { useTheme } from '@/context/theme-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
+import { PageHeader } from '@/components/ui/page-header';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 export default function SettingsScreen() {
   const { isDark, toggleDarkMode } = useTheme();
   const colors = useThemeColors();
-  const router = useRouter();
   const I = ENTITY_ICONS;
   const {
     showCompleted,
@@ -60,32 +61,9 @@ export default function SettingsScreen() {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.bg }}>
-      <Stack.Screen
-        options={{
-          title: 'Settings',
-          headerShown: true,
-          headerLeft: () => (
-            <Pressable
-              onPress={() => router.back()}
-              style={({ pressed }) => ({
-                opacity: pressed ? 0.7 : 1,
-                paddingHorizontal: 8,
-              })}
-            >
-              <I.back size={24} color={colors.text} />
-            </Pressable>
-          ),
-          headerTintColor: colors.text,
-          headerTitleStyle: {
-            color: colors.text,
-            fontWeight: '600',
-          },
-          headerStyle: {
-            backgroundColor: colors.bg,
-          },
-        }}
-      />
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
+      <Stack.Screen options={{ headerShown: false }} />
+      <PageHeader icon="settings" title="Settings" />
 
       <ScrollView
         style={{ flex: 1 }}
@@ -180,7 +158,7 @@ export default function SettingsScreen() {
           </Text>
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 }
 

@@ -1,19 +1,44 @@
 import React from 'react';
-import { ScrollView, Image } from 'react-native';
+import { ScrollView, Image, Pressable, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Stack } from 'expo-router';
-import { Box } from '@/components/ui/box';
-import { Button, ButtonText } from '@/components/ui/button';
 import { Text } from '@/components/ui/text';
 import { useOrganisationContext } from '@/context/organisation-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { PageHeader } from '@/components/ui/page-header';
 
 const I = ENTITY_ICONS;
 
 export default function ProfileScreen() {
   const colors = useThemeColors();
   const { userRole, organisation, isAdmin, canAccessAdmin } = useOrganisationContext();
+
+  const InfoRow = ({ icon: Icon, label, value, isLast = false }: any) => (
+    <View style={{ 
+      flexDirection: 'row', 
+      alignItems: 'center', 
+      paddingVertical: 12,
+      borderBottomWidth: isLast ? 0 : 1,
+      borderBottomColor: colors.border,
+    }}>
+      <View style={{ 
+        width: 36, 
+        height: 36, 
+        borderRadius: 10, 
+        backgroundColor: colors.primary + '10', 
+        alignItems: 'center', 
+        justifyContent: 'center',
+        marginRight: 12 
+      }}>
+        <Icon size={18} color={colors.primary} />
+      </View>
+      <View style={{ flex: 1 }}>
+        <Text style={{ fontSize: 11, color: colors.sub, fontWeight: '600', textTransform: 'uppercase' }}>{label}</Text>
+        <Text style={{ fontSize: 15, fontWeight: '500', color: colors.text }}>{value}</Text>
+      </View>
+    </View>
+  );
 
   const userName = userRole?.user?.name || 'John Doe';
   const userEmail = userRole?.user?.email || 'john@example.com';
@@ -36,151 +61,117 @@ export default function ProfileScreen() {
         }}
       />
 
-      <ScrollView
-        style={{ flex: 1 }}
-        contentContainerStyle={{ padding: 20, gap: 16 }}
-        showsVerticalScrollIndicator={false}
-      >
-        <Box className="items-center mb-8">
-          {userRole?.user?.image ? (
-            <Box
-              className="w-24 h-24 rounded-full items-center justify-center mb-4 overflow-hidden"
-              style={{ backgroundColor: colors.primary + '20' }}
-            >
+      <Stack.Screen options={{ headerShown: false }} />
+      <PageHeader icon="user" title="Profile" />
+
+      <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+        <View style={{ 
+          backgroundColor: colors.primary + '08', 
+          paddingTop: 80, 
+          paddingBottom: 30, 
+          alignItems: 'center',
+          borderBottomLeftRadius: 32,
+          borderBottomRightRadius: 32,
+        }}>
+          <View style={{ 
+            shadowColor: '#000', 
+            shadowOffset: { width: 0, height: 10 }, 
+            shadowOpacity: 0.1, 
+            shadowRadius: 15,
+            elevation: 5 
+          }}>
+            {userRole?.user?.image ? (
               <Image
                 source={{ uri: userRole.user.image }}
-                className="w-full h-full"
-                resizeMode="cover"
+                style={{ width: 110, height: 110, borderRadius: 55, borderWidth: 4, borderColor: colors.bg }}
               />
-            </Box>
-          ) : (
-            <Box
-              className="w-24 h-24 rounded-full items-center justify-center mb-4"
-              style={{ backgroundColor: colors.primary + '20' }}
-            >
-              <Text className="text-5xl">👤</Text>
-            </Box>
+            ) : (
+              <View style={{ 
+                width: 110, 
+                height: 110, 
+                borderRadius: 55, 
+                backgroundColor: colors.card, 
+                alignItems: 'center', 
+                justifyContent: 'center',
+                borderWidth: 4,
+                borderColor: colors.bg 
+              }}>
+                <Text style={{ fontSize: 40 }}>👤</Text>
+              </View>
+            )}
+            <Pressable style={{ 
+              position: 'absolute', 
+              bottom: 0, 
+              right: 0, 
+              backgroundColor: colors.primary, 
+              padding: 8, 
+              borderRadius: 20,
+              borderWidth: 3,
+              borderColor: colors.bg
+            }}>
+              <I.edit size={14} color="#fff" />
+            </Pressable>
+          </View>
+
+          <Text style={{ fontSize: 24, fontWeight: '800', color: colors.text, marginTop: 16 }}>{userName}</Text>
+          <View style={{ 
+            marginTop: 8, 
+            paddingHorizontal: 12, 
+            paddingVertical: 4, 
+            backgroundColor: colors.primary + '15', 
+            borderRadius: 20 
+          }}>
+            <Text style={{ fontSize: 12, fontWeight: '700', color: colors.primary }}>{userRole_name.toUpperCase()}</Text>
+          </View>
+        </View>
+
+        <View style={{ padding: 20, gap: 20 }}>
+          <View style={{ 
+            backgroundColor: colors.card, 
+            borderRadius: 20, 
+            padding: 16,
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.05,
+            shadowRadius: 10,
+            elevation: 2,
+            borderWidth: 1,
+            borderColor: colors.border
+          }}>
+            <Text style={{ fontSize: 16, fontWeight: '700', color: colors.text, marginBottom: 8 }}>Details</Text>
+            <InfoRow icon={I.mail} label="Email" value={userEmail} />
+            <InfoRow icon={I.phone} label="Phone" value={userPhone} />
+            <InfoRow icon={I.shield} label="Bio" value={userDescription} isLast={true} />
+          </View>
+
+          {organisation && (
+            <View style={{ 
+              backgroundColor: colors.card, 
+              borderRadius: 20, 
+              padding: 16,
+              borderWidth: 1,
+              borderColor: colors.border
+            }}>
+              <InfoRow icon={I.organisation} label="Organisation" value={orgName} isLast={true} />
+            </View>
           )}
 
-          <Text className="text-2xl font-bold text-center">{userName}</Text>
-          <Text className="text-sm mt-2" style={{ color: colors.primary }}>
-            {userRole_name}
-          </Text>
-        </Box>
-
-        <Box
-          className="rounded-xl p-4 mb-6"
-          style={{ backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border }}
-        >
-          <Text className="font-semibold mb-4" style={{ fontSize: 16 }}>
-            Personal Information
-          </Text>
-
-          <Box className="flex-row items-center mb-4">
-            <Box
-              className="w-10 h-10 rounded-lg items-center justify-center mr-3"
-              style={{ backgroundColor: colors.primary + '10' }}
-            >
-              <I.mail size={20} color={colors.primary} />
-            </Box>
-            <Box className="flex-1">
-              <Text className="text-xs" style={{ color: colors.sub }}>
-                Email
+          <View style={{ 
+            flexDirection: 'row', 
+            alignItems: 'center', 
+            backgroundColor: isAdmin ? colors.dangerBg : colors.successBg,
+            padding: 14,
+            borderRadius: 16,
+            gap: 12
+          }}>
+            <I.shield size={20} color={isAdmin ? colors.danger : colors.success} />
+            <View>
+              <Text style={{ fontSize: 13, fontWeight: '700', color: isAdmin ? colors.danger : colors.success }}>
+                {canAccessAdmin ? (isAdmin ? 'Admin Access' : 'Management Access') : 'Standard Access'}
               </Text>
-              <Text className="font-medium">{userEmail}</Text>
-            </Box>
-          </Box>
-
-          <Box className="flex-row items-center mb-4">
-            <Box
-              className="w-10 h-10 rounded-lg items-center justify-center mr-3"
-              style={{ backgroundColor: colors.primary + '10' }}
-            >
-              <I.phone size={20} color={colors.primary} />
-            </Box>
-            <Box className="flex-1">
-              <Text className="text-xs" style={{ color: colors.sub }}>
-                Phone
-              </Text>
-              <Text className="font-medium">{userPhone}</Text>
-            </Box>
-          </Box>
-
-          <Box className="flex-row items-center">
-            <Box
-              className="w-10 h-10 rounded-lg items-center justify-center mr-3"
-              style={{ backgroundColor: colors.primary + '10' }}
-            >
-              <I.shield size={20} color={colors.primary} />
-            </Box>
-            <Box className="flex-1">
-              <Text className="text-xs" style={{ color: colors.sub }}>
-                Description
-              </Text>
-              <Text className="font-medium">{userDescription}</Text>
-            </Box>
-          </Box>
-        </Box>
-
-        {organisation && (
-          <Box
-            className="rounded-xl p-4 mb-6"
-            style={{ backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border }}
-          >
-            <Text className="font-semibold mb-4" style={{ fontSize: 16 }}>
-              Organization
-            </Text>
-
-            <Box className="flex-row items-center mb-4">
-              <Box
-                className="w-10 h-10 rounded-lg items-center justify-center mr-3"
-                style={{ backgroundColor: colors.primary + '10' }}
-              >
-                <I.organisation size={20} color={colors.primary} />
-              </Box>
-              <Box className="flex-1">
-                <Text className="text-xs" style={{ color: colors.sub }}>
-                  Organization Name
-                </Text>
-                <Text className="font-medium">{orgName}</Text>
-              </Box>
-            </Box>
-          </Box>
-        )}
-
-        <Box className="mb-6">
-          <Box
-            className="rounded-lg p-3"
-            style={{
-              backgroundColor: isAdmin ? colors.dangerBg : colors.successBg,
-            }}
-          >
-            <Box className="flex-row items-center gap-2">
-              <I.shield size={18} color={isAdmin ? colors.danger : colors.success} />
-              <Text
-                className="font-semibold text-sm"
-                style={{ color: isAdmin ? colors.danger : colors.success }}
-              >
-                {canAccessAdmin
-                  ? isAdmin
-                    ? 'Administrator Access'
-                    : 'Admin Panel Access'
-                  : 'Limited Access'}
-              </Text>
-            </Box>
-          </Box>
-        </Box>
-
-        <Box className="gap-3 mt-4">
-          <Button
-            size="lg"
-            className="w-full"
-            style={{ backgroundColor: colors.primary }}
-          >
-            <I.edit size={20} color="#ffffff" />
-            <ButtonText style={{ color: '#ffffff' }}>Edit Profile</ButtonText>
-          </Button>
-        </Box>
+            </View>
+          </View>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );

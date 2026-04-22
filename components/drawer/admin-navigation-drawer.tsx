@@ -135,6 +135,7 @@ export function AdminNavigationDrawer({
       <DrawerDivider />
       <DrawerSectionHeading title="Contact DarthVader" />
       <DrawerItem icon={<I.support size={16} color={secondary} />} label="Support" onPress={() => go('/help/support')} />
+      <DrawerDivider />
     </NavigationDrawer>
   );
 }

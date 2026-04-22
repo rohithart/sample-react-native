@@ -73,6 +73,7 @@ export function UserNavigationDrawer({
       <DrawerItem icon={<I.mail size={16} color={secondary} />} label="Contact Admin" onPress={() => go('/help/contact')} />
       <DrawerSectionHeading title="DarthVader" />
       <DrawerItem icon={<I.support size={16} color={secondary} />} label="Support" onPress={() => go('/help/support')} />
+      <DrawerDivider />
     </NavigationDrawer>
   );
 }

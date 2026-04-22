@@ -1,4 +1,3 @@
-
 import { HStack } from '@/components/ui/hstack';
 import { useDisplaySettings } from '@/context/display-settings-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
@@ -8,71 +7,66 @@ import { Pressable, Text, View } from 'react-native';
 export function DisplaySettingsIndicator() {
   const router = useRouter();
   const { showArchived, showCompleted } = useDisplaySettings();
-  const { card, text, primary, sub, isDark, success, warning } = useThemeColors();
+  const { card, primary, sub, isDark, success, warning, border } = useThemeColors();
 
   return (
-    <View
-      style={{
-        margin: 10,
-        borderRadius: 12,
-        padding: 5,
-        backgroundColor: card,
-        shadowColor: text,
-        shadowOffset: { width: 0, height: 6 },
-        shadowOpacity: isDark ? 0.35 : 0.15,
-        shadowRadius: 8,
-        elevation: 8, 
-      }}
-    >
-    <Pressable
-      onPress={() => router.push('/settings')}
-    >
-      <HStack className="items-center justify-between">
-        <HStack className="items-center" space="md" style={{ flex: 1, minWidth: 0 }}>
-          <View
-            style={{
-              paddingVertical: 4,
-              paddingHorizontal: 10,
-              borderRadius: 999,
-              backgroundColor: showArchived 
-                ? (isDark ? warning + '20' : warning + '10') 
-                : (isDark ? '#111827' : '#f8fafc'),
-              borderWidth: 1,
-              borderColor: showArchived ? warning : (isDark ? '#374151' : '#e2e8f0'),
-            }}
-          >
-            <Text style={{ 
-              color: showArchived ? warning : sub, 
-              fontSize: 11, 
-              fontWeight: '600' 
-            }}>
-              Archived {showArchived ? 'On' : 'Off'}
+    <View style={{ marginHorizontal: 16, marginVertical: 8 }}>
+      <Pressable
+        onPress={() => router.push('/settings')}
+        style={({ pressed }) => ({
+          backgroundColor: pressed ? (isDark ? '#1f2937' : '#f1f5f9') : card,
+          borderRadius: 100,
+          paddingHorizontal: 12,
+          paddingVertical: 6,
+          borderWidth: 1,
+          borderColor: border,
+        
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: isDark ? 0.3 : 0.05,
+          shadowRadius: 4,
+          elevation: 2,
+        })}
+      >
+        <HStack style={{ alignItems: 'center', justifyContent: 'space-between' }}>
+          <HStack space="xs" style={{ alignItems: 'center', flex: 1 }}>
+            <Text style={{ color: sub, fontSize: 11, fontWeight: '700', marginRight: 4, textTransform: 'uppercase' }}>
+              Filters:
             </Text>
-          </View>
-          <View
-            style={{
-              paddingVertical: 4,
-              paddingHorizontal: 10,
-              borderRadius: 999,
-              backgroundColor: showCompleted 
-                ? (isDark ? success + '20' : success + '10') 
-                : (isDark ? '#111827' : '#f8fafc'),
+
+            <View style={{
+              paddingVertical: 3,
+              paddingHorizontal: 8,
+              borderRadius: 12,
+              backgroundColor: showArchived ? warning + '15' : 'transparent',
               borderWidth: 1,
-              borderColor: showCompleted ? success : (isDark ? '#374151' : '#e2e8f0'),
-            }}
-          >
-            <Text style={{ 
-              color: showCompleted ? success : sub, 
-              fontSize: 11, 
-              fontWeight: '600' 
+              borderColor: showArchived ? warning : 'transparent',
             }}>
-              Completed {showCompleted ? 'On' : 'Off'}
-            </Text>
-          </View>
+              <Text style={{ color: showArchived ? warning : sub, fontSize: 11, fontWeight: '600' }}>
+                Archived {showArchived ? '•' : ''}
+              </Text>
+            </View>
+
+            <View style={{
+              paddingVertical: 3,
+              paddingHorizontal: 8,
+              borderRadius: 12,
+              backgroundColor: showCompleted ? success + '15' : 'transparent',
+              borderWidth: 1,
+              borderColor: showCompleted ? success : 'transparent',
+            }}>
+              <Text style={{ color: showCompleted ? success : sub, fontSize: 11, fontWeight: '600' }}>
+                Completed {showCompleted ? '•' : ''}
+              </Text>
+            </View>
+          </HStack>
+
+          <HStack space="xs" style={{ alignItems: 'center' }}>
+             <Text style={{ color: primary, fontSize: 12, fontWeight: '600' }}>Edit</Text>
+             <Text style={{ color: primary, fontWeight: '700', fontSize: 16 }}>›</Text>
+          </HStack>
         </HStack>
-        <Text style={{ color: primary, fontWeight: '700', fontSize: 18, marginHorizontal: 10 }}>›</Text>
-      </HStack>
-    </Pressable>
-  </View>
+      </Pressable>
+    </View>
   );
 }
