@@ -1,6 +1,6 @@
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { PageHeader } from '@/components/ui/page-header';
-import { DetailField, DetailSection, LinkedField, HtmlContent, AuditInfo } from '@/components/details';
+import { DetailField, LinkedField, HtmlContent, AuditInfo } from '@/components/details';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 
 import React, { useState } from 'react';
@@ -17,6 +17,7 @@ import { resolveId } from '@/utils/resolve-ref';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { convertToLocalDateTimeString, convertToTimeString } from '@/utils/date';
 import { onShare } from '@/utils/share';
+import { VStack } from '@/components/ui/vstack';
 
 const I = ENTITY_ICONS;
 
@@ -102,25 +103,39 @@ export default function EventDetailScreen() {
       ) : (
       <ScrollView
         refreshControl={refreshControl}
-        contentContainerStyle={{ padding: 20, gap: 16 }}
+        contentContainerStyle={{ paddingBottom: 40 }}
         showsVerticalScrollIndicator={false}
       >
-        {item.description ? <HtmlContent label="Description" html={item.description} /> : null}
-        <DetailSection title="Schedule">
-          <DetailField label="From" value={convertToLocalDateTimeString(item.eventDateFrom)} />
-          <DetailField label="Time From" value={convertToTimeString(item.eventTimeFrom)} />
-          <DetailField label="To" value={convertToLocalDateTimeString(item.eventDateTo)} />
-          <DetailField label="Time To" value={convertToTimeString(item.eventTimeTo)} />
-          <DetailField label="Full Day" value={item.isFullDay ? 'Yes' : 'No'} />
-        </DetailSection>
-        <DetailSection title="Recurrence">
-          <DetailField label="Recurring" value={item.isRecurring ? 'Yes' : 'No'} />
-          <DetailField label="Frequency" value={item.frequency} />
-          <DetailField label="Interval" value={item.interval ? String(item.interval) : null} />
-        </DetailSection>
-        <DetailSection title="Relationships">
-          <LinkedField label="Event Type" icon="eventType" value={item.eventType?.title} route={`/admin/event-type/${orgId}/${resolveId(item.eventType)}`} />
-        </DetailSection>
+        <View style={{ padding: 16, gap: 20 }}>
+          {item.description && (
+            <View style={{ backgroundColor: colors.card, padding: 16, borderRadius: 20, borderWidth: 1, borderColor: colors.border }}>
+              <HtmlContent label="Description" html={item.description} />
+            </View>
+          )}
+
+          <View style={{ backgroundColor: colors.card, borderRadius: 24, padding: 16, borderWidth: 1, borderColor: colors.border }}>
+            <Text style={{ fontSize: 13, fontWeight: '800', color: colors.sub, marginBottom: 4, textTransform: 'uppercase', letterSpacing: 1 }}>
+              Classification
+            </Text>
+            <LinkedField label="Event Type" icon="eventType" value={item.eventType?.title} route={`/admin/event-type/${orgId}/${resolveId(item.eventType)}`} />
+          </View>
+
+          <View style={{ backgroundColor: colors.card, borderRadius: 24, padding: 16, borderWidth: 1, borderColor: colors.border }}>
+            <Text style={{ fontSize: 13, fontWeight: '800', color: colors.sub, marginBottom: 4, textTransform: 'uppercase', letterSpacing: 1 }}>
+              More information
+            </Text>
+            <VStack space="lg">
+              <DetailField label="From" value={convertToLocalDateTimeString(item.eventDateFrom)} />
+              <DetailField label="Time From" value={convertToTimeString(item.eventTimeFrom)} />
+              <DetailField label="To" value={convertToLocalDateTimeString(item.eventDateTo)} />
+              <DetailField label="Time To" value={convertToTimeString(item.eventTimeTo)} />
+              <DetailField label="Full Day" value={item.isFullDay ? 'Yes' : 'No'} />
+              <DetailField label="Recurring" value={item.isRecurring ? 'Yes' : 'No'} />
+              <DetailField label="Frequency" value={item.frequency} />
+              <DetailField label="Interval" value={item.interval ? String(item.interval) : null} />
+            </VStack>
+          </View>
+        </View>
       </ScrollView>
       )}
 

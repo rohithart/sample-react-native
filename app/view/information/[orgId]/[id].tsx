@@ -47,10 +47,16 @@ export default function InformationDetailScreen() {
       ) : (
       <ScrollView
         refreshControl={refreshControl}
-        contentContainerStyle={{ padding: 20, gap: 16 }}
+        contentContainerStyle={{ paddingBottom: 40 }}
         showsVerticalScrollIndicator={false}
       >
-        {item.description ? <HtmlContent label="Description" html={item.description} /> : null}
+        <View style={{ padding: 16, gap: 20 }}>
+          {item.description && (
+            <View style={{ backgroundColor: colors.card, padding: 16, borderRadius: 20, borderWidth: 1, borderColor: colors.border }}>
+              <HtmlContent label="Description" html={item.description} />
+            </View>
+          )}
+        </View>
       </ScrollView>
       )}
 

@@ -11,7 +11,8 @@ import { ActionItem } from '@/types/actionItem';
 import { useEvent } from '@/services/event';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
-import { convertToLocalDateString, convertToTimeString } from '@/utils/date';
+import { convertToLocalDateString, convertToLocalDateTimeString, convertToTimeString } from '@/utils/date';
+import { VStack } from '@/components/ui/vstack';
 
 const I = ENTITY_ICONS;
 
@@ -48,18 +49,32 @@ export default function EventDetailScreen() {
       ) : (
       <ScrollView
         refreshControl={refreshControl}
-        contentContainerStyle={{ padding: 20, gap: 16 }}
+        contentContainerStyle={{ paddingBottom: 40 }}
         showsVerticalScrollIndicator={false}
       >
-        {item.description ? <HtmlContent label="Description" html={item.description} /> : null}
-        <DetailSection title="Schedule">
-          <DetailField label="From" value={convertToLocalDateString(item.eventDateFrom)} />
-          {!item.isFullDay ? <DetailField label="Time" value={convertToTimeString(item.eventTimeFrom)} /> : null }
+        <View style={{ padding: 16, gap: 20 }}>
+          {item.description && (
+            <View style={{ backgroundColor: colors.card, padding: 16, borderRadius: 20, borderWidth: 1, borderColor: colors.border }}>
+              <HtmlContent label="Description" html={item.description} />
+            </View>
+          )}
 
-          <DetailField label="To" value={convertToLocalDateString(item.eventDateTo)} />
-          {!item.isFullDay ? <DetailField label="Time" value={convertToTimeString(item.eventTimeTo)} /> : null }
-          <DetailField label="Full Day" value={item.isFullDay ? 'Yes' : 'No'} />
-        </DetailSection>
+          <View style={{ backgroundColor: colors.card, borderRadius: 24, padding: 16, borderWidth: 1, borderColor: colors.border }}>
+            <Text style={{ fontSize: 13, fontWeight: '800', color: colors.sub, marginBottom: 4, textTransform: 'uppercase', letterSpacing: 1 }}>
+              More information
+            </Text>
+            <VStack space="lg">
+              <DetailField label="From" value={convertToLocalDateTimeString(item.eventDateFrom)} />
+              <DetailField label="Time From" value={convertToTimeString(item.eventTimeFrom)} />
+              <DetailField label="To" value={convertToLocalDateTimeString(item.eventDateTo)} />
+              <DetailField label="Time To" value={convertToTimeString(item.eventTimeTo)} />
+              <DetailField label="Full Day" value={item.isFullDay ? 'Yes' : 'No'} />
+              <DetailField label="Recurring" value={item.isRecurring ? 'Yes' : 'No'} />
+              <DetailField label="Frequency" value={item.frequency} />
+              <DetailField label="Interval" value={item.interval ? String(item.interval) : null} />
+            </VStack>
+          </View>
+        </View>
       </ScrollView>
       )}
 
