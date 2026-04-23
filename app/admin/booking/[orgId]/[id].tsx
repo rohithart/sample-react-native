@@ -1,6 +1,6 @@
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { PageHeader } from '@/components/ui/page-header';
-import { DetailField, DetailSection, LinkedField, HtmlContent, AuditInfo } from '@/components/details';
+import { DetailField, LinkedField, HtmlContent, AuditInfo } from '@/components/details';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 
 import React, { useState } from 'react';
@@ -15,7 +15,8 @@ import { useBooking } from '@/services/booking';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
 import { resolveId } from '@/utils/resolve-ref';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
-import { convertToLocalDateTimeString, convertToTimeString } from '@/utils/date';
+import { convertToLocalDateString, convertToTimeString } from '@/utils/date';
+import { VStack } from '@/components/ui/vstack';
 
 const I = ENTITY_ICONS;
 
@@ -94,26 +95,48 @@ export default function BookingDetailScreen() {
       ) : (
       <ScrollView
         refreshControl={refreshControl}
-        contentContainerStyle={{ padding: 20, gap: 16 }}
+        contentContainerStyle={{ paddingBottom: 40 }}
         showsVerticalScrollIndicator={false}
       >
-        {item.description ? <HtmlContent label="Description" html={item.description} /> : null}
-        <DetailSection title="Schedule">
-          <DetailField label="From" value={convertToLocalDateTimeString(item.bookingDateFrom)} />
-          <DetailField label="Time From" value={convertToTimeString(item.bookingTimeFrom)} />
-          <DetailField label="To" value={convertToLocalDateTimeString(item.bookingDateTo)} />
-          <DetailField label="Time To" value={convertToTimeString(item.bookingTimeTo)} />
-          <DetailField label="Full Day" value={item.isFullDay ? 'Yes' : 'No'} />
-        </DetailSection>
-        <DetailSection title="Approval">
-          <DetailField label="Approved" value={item.isApproved ? 'Yes' : 'No'} />
-          <DetailField label="Approved By" value={item.approvedBy} />
-          <DetailField label="Rejected" value={item.isRejected ? 'Yes' : 'No'} />
-          <DetailField label="Rejected By" value={item.rejectedBy} />
-        </DetailSection>
-        <DetailSection title="Relationships">
-          <LinkedField label="Booking Type" icon="bookingType" value={item.bookingType?.title} route={`/admin/booking-type/${orgId}/${resolveId(item.bookingType)}`} />
-        </DetailSection>
+        <View style={{ padding: 16, gap: 20 }}>
+          {item.description && (
+            <View style={{ backgroundColor: colors.card, padding: 16, borderRadius: 20, borderWidth: 1, borderColor: colors.border }}>
+              <HtmlContent label="Description" html={item.description} />
+            </View>
+          )}
+
+          <View style={{ backgroundColor: colors.card, borderRadius: 24, padding: 16, borderWidth: 1, borderColor: colors.border }}>
+            <Text style={{ fontSize: 13, fontWeight: '800', color: colors.sub, marginBottom: 4, textTransform: 'uppercase', letterSpacing: 1 }}>
+              Classification
+            </Text>
+            <LinkedField label="Booking Type" icon="bookingType" value={item.bookingType?.title} route={`/admin/booking-type/${orgId}/${resolveId(item.bookingType)}`} />
+          </View>
+
+          <View style={{ backgroundColor: colors.card, borderRadius: 24, padding: 16, borderWidth: 1, borderColor: colors.border }}>
+            <Text style={{ fontSize: 13, fontWeight: '800', color: colors.sub, marginBottom: 4, textTransform: 'uppercase', letterSpacing: 1 }}>
+              Booking information
+            </Text>
+            <VStack space="lg">
+              <DetailField label="From" value={convertToLocalDateString(item.bookingDateFrom)} />
+              <DetailField label="Time From" value={convertToTimeString(item.bookingTimeFrom)} />
+              <DetailField label="To" value={convertToLocalDateString(item.bookingDateTo)} />
+              <DetailField label="Time To" value={convertToTimeString(item.bookingTimeTo)} />
+              <DetailField label="Full Day" value={item.isFullDay ? 'Yes' : 'No'} />
+            </VStack>
+          </View>
+
+          <View style={{ backgroundColor: colors.card, borderRadius: 24, padding: 16, borderWidth: 1, borderColor: colors.border }}>
+            <Text style={{ fontSize: 13, fontWeight: '800', color: colors.sub, marginBottom: 4, textTransform: 'uppercase', letterSpacing: 1 }}>
+              More information
+            </Text>
+            <VStack space="lg">
+              <DetailField label="Approved" value={item.isApproved ? 'Yes' : 'No'} />
+              <DetailField label="Approved By" value={item.approvedBy} />
+              <DetailField label="Rejected" value={item.isRejected ? 'Yes' : 'No'} />
+              <DetailField label="Rejected By" value={item.rejectedBy} />
+            </VStack>
+          </View>
+        </View>
       </ScrollView>
       )}
 

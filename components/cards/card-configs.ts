@@ -61,6 +61,7 @@ export const ADMIN_CONFIGS = {
     subtitleField: (item: any) => (item.group?.title ?? 'Everyone'),
   }),
   userRequest: cfg('userRequest', (o, i) => `/admin/user-request/${o}/${i}`, {
+    subtitleField: () => undefined,
     statusField: (item: any) =>
       item.isApproved ? 'APPROVED' : item.isRejected ? 'REJECTED' : 'PENDING',
   }),
@@ -73,7 +74,9 @@ export const ADMIN_CONFIGS = {
     statusField: (item: any) =>
       item.isApproved ? 'APPROVED' : item.isRejected ? 'REJECTED' : 'PENDING',
   }),
-  bookingType: cfg('bookingType', (o, i) => `/admin/booking-type/${o}/${i}`),
+  bookingType: cfg('bookingType', (o, i) => `/admin/booking-type/${o}/${i}`, {
+    subtitleField: undefined,
+  }),
   asset: cfg('asset', (o, i) => `/admin/asset/${o}/${i}`, {
     subtitleField: (item: any) => (item.assetType?.title ?? ''),
   }),

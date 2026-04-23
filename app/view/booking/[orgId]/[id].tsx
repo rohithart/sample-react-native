@@ -1,6 +1,6 @@
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { PageHeader } from '@/components/ui/page-header';
-import { DetailField, DetailSection, HtmlContent, AuditInfo } from '@/components/details';
+import { DetailField, HtmlContent, AuditInfo } from '@/components/details';
 import { Stack, useLocalSearchParams } from 'expo-router';
 
 import React, { useState } from 'react';
@@ -13,7 +13,8 @@ import { useRefreshControl } from '@/hooks/use-refresh-control';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { EntityComments } from '@/components/entity/entity-comments';
 import { EntityType } from '@/enums';
-import { calculateDuration, convertToLocalDateTimeString } from '@/utils/date';
+import { convertToLocalDateString, convertToTimeString } from '@/utils/date';
+import { VStack } from '@/components/ui/vstack';
 
 const I = ENTITY_ICONS;
 
@@ -52,19 +53,42 @@ export default function BookingDetailScreen() {
       ) : (
       <ScrollView
         refreshControl={refreshControl}
-        contentContainerStyle={{ padding: 20, gap: 16 }}
+        contentContainerStyle={{ paddingBottom: 40 }}
         showsVerticalScrollIndicator={false}
       >
-        {item.description ? <HtmlContent label="Description" html={item.description} /> : null}
-        <DetailSection title="Schedule">
-          <DetailField label="From" value={convertToLocalDateTimeString(item.bookingDateFrom)} />
-          <DetailField label="To" value={convertToLocalDateTimeString(item.bookingDateTo)} />
-          <DetailField label="Full Day" value={item.isFullDay ? 'Yes' : 'No'} />
-          <DetailField label="Duration" value={calculateDuration(item.bookingDateFrom, item.bookingDateTo)} />
-        </DetailSection>
-        <DetailSection title="Status">
-          <DetailField label="Status" value={item.isApproved ? 'Approved' : item.isRejected ? 'Rejected' : 'Pending'} />
-        </DetailSection>
+        <View style={{ padding: 16, gap: 20 }}>
+          {item.description && (
+            <View style={{ backgroundColor: colors.card, padding: 16, borderRadius: 20, borderWidth: 1, borderColor: colors.border }}>
+              <HtmlContent label="Description" html={item.description} />
+            </View>
+          )}
+
+          <View style={{ backgroundColor: colors.card, borderRadius: 24, padding: 16, borderWidth: 1, borderColor: colors.border }}>
+            <Text style={{ fontSize: 13, fontWeight: '800', color: colors.sub, marginBottom: 4, textTransform: 'uppercase', letterSpacing: 1 }}>
+              Booking information
+            </Text>
+            <VStack space="lg">
+              <DetailField label="Type" value={item.bookingType?.title} />
+              <DetailField label="From" value={convertToLocalDateString(item.bookingDateFrom)} />
+              <DetailField label="Time From" value={convertToTimeString(item.bookingTimeFrom)} />
+              <DetailField label="To" value={convertToLocalDateString(item.bookingDateTo)} />
+              <DetailField label="Time To" value={convertToTimeString(item.bookingTimeTo)} />
+              <DetailField label="Full Day" value={item.isFullDay ? 'Yes' : 'No'} />
+            </VStack>
+          </View>
+
+          <View style={{ backgroundColor: colors.card, borderRadius: 24, padding: 16, borderWidth: 1, borderColor: colors.border }}>
+            <Text style={{ fontSize: 13, fontWeight: '800', color: colors.sub, marginBottom: 4, textTransform: 'uppercase', letterSpacing: 1 }}>
+              More information
+            </Text>
+            <VStack space="lg">
+              <DetailField label="Approved" value={item.isApproved ? 'Yes' : 'No'} />
+              <DetailField label="Approved By" value={item.approvedBy} />
+              <DetailField label="Rejected" value={item.isRejected ? 'Yes' : 'No'} />
+              <DetailField label="Rejected By" value={item.rejectedBy} />
+            </VStack>
+          </View>
+        </View>
       </ScrollView>
       )}
 
