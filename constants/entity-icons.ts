@@ -66,6 +66,7 @@ import {
     Settings,
     Share2,
     Shield,
+    Shuffle,
     Smile,
     SmilePlus,
     Sparkles,
@@ -131,6 +132,7 @@ export type EntityIconKey =
   | 'sparkles'
   | 'zap'
   | 'shield'
+  | 'shuffle'
   | 'archive'
   | 'lock'
   | 'back'
@@ -224,6 +226,7 @@ export const ENTITY_ICONS: Record<EntityIconKey, IconComponent> = {
   sparkles: Sparkles,
   zap: Zap,
   shield: Shield,
+  shuffle: Shuffle,
   archive: Archive,
   lock: Lock,
   back: ChevronLeft,

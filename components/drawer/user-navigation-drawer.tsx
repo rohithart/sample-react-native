@@ -38,10 +38,7 @@ export function UserNavigationDrawer({
     >
 
       { canAccessAdmin   && (
-        <>
-          <DrawerSectionHeading title="Admin" />
-          <DrawerItem icon={<I.shield size={16} color={secondary} />} label="Admin mode" onPress={() => go(`/admin/${orgId}`)} />
-        </>
+        <DrawerItem icon={<I.shuffle size={16} color={secondary} />} label="Switch to admin mode" onPress={() => go(`/admin/${orgId}`)} />
       )}
 
       <DrawerSectionHeading title="Main" />
