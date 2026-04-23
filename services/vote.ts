@@ -60,7 +60,12 @@ export function useAllCastedVotes(id: string) {
 }
 
 export function useCastedVote(orgId: string, id: string) {
-  return useQuery({ queryKey: [...voteKeys.casted(id), 'user', orgId], queryFn: () => voteApi.getCasted(orgId, id), enabled: !!orgId && !!id });
+  return useQuery({ queryKey: [...voteKeys.casted(id), 'user', orgId],
+    queryFn: async () => {
+      const data = await voteApi.getCasted(orgId, id);
+      return data ?? null;
+    }
+  });
 }
 
 export function useCastVote(orgId: string, id: string) {

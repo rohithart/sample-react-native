@@ -12,6 +12,7 @@ import { useVote, useCastedVote, useCastVote } from '@/services/vote';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { convertToLocalDateTimeString } from '@/utils/date';
+import { VStack } from '@/components/ui/vstack';
 
 const I = ENTITY_ICONS;
 
@@ -66,69 +67,83 @@ export default function VoteDetailScreen() {
       ) : (
       <ScrollView
         refreshControl={refreshControl}
-        contentContainerStyle={{ padding: 20, gap: 16 }}
+        contentContainerStyle={{ paddingBottom: 40 }}
         showsVerticalScrollIndicator={false}
       >
-        <DetailSection title="Vote Status">
-          <DetailField label="Status" value={item.closed ? 'Closed' : 'Open'} />
-          <DetailField label="All Users" value={item.allUsers ? 'Yes' : 'No'} />
-          <DetailField label="End Date" value={convertToLocalDateTimeString(item.endDate)} />
-        </DetailSection>
-
-        
-        {(item.closed || isVoteExpired(item.endDate)) && (
-          <View style={{ padding: 16, backgroundColor: colors.dangerBg, borderRadius: 8, alignItems: 'center' }}>
-            <I.lock size={24} color={colors.danger} />
-            <Text style={{ fontSize: 16, fontWeight: '600', color: colors.danger, marginTop: 8 }}>
-              {item.closed ? 'Voting Closed' : 'Voting Expired'}
+        <View style={{ padding: 16, gap: 20 }}>
+          <View style={{ backgroundColor: colors.card, borderRadius: 24, padding: 16, borderWidth: 1, borderColor: colors.border }}>
+            <Text style={{ fontSize: 13, fontWeight: '800', color: colors.sub, marginBottom: 4, textTransform: 'uppercase', letterSpacing: 1 }}>
+              Classification
             </Text>
-            <Text style={{ fontSize: 14, color: colors.danger, textAlign: 'center', marginTop: 4 }}>
-              {item.closed ? 'This vote has been closed and no more votes can be cast.' : 'This vote has ended and no more votes can be cast.'}
-            </Text>
+            <VStack space="lg">
+              <DetailField label="Group" value={item.group?.title ?? 'N/A'} />
+              <DetailField label="All Users" value={item.allUsers ? 'Yes' : 'No'} />
+            </VStack>
           </View>
-        )}
+          <View style={{ backgroundColor: colors.card, borderRadius: 24, padding: 16, borderWidth: 1, borderColor: colors.border }}>
+            <Text style={{ fontSize: 13, fontWeight: '800', color: colors.sub, marginBottom: 4, textTransform: 'uppercase', letterSpacing: 1 }}>
+              Vote Status
+            </Text>
+            <VStack space="lg">
+              <DetailField label="Status" value={item.closed ? 'Closed' : 'Open'} />
+              <DetailField label="End Date" value={convertToLocalDateTimeString(item.endDate)} />
+            </VStack>
+          </View>
+          
+          {(item.closed || isVoteExpired(item.endDate)) && (
+            <View style={{ padding: 16, backgroundColor: colors.dangerBg, borderRadius: 8, alignItems: 'center' }}>
+              <I.lock size={24} color={colors.danger} />
+              <Text style={{ fontSize: 16, fontWeight: '600', color: colors.danger, marginTop: 8 }}>
+                {item.closed ? 'Voting Closed' : 'Voting Expired'}
+              </Text>
+              <Text style={{ fontSize: 14, color: colors.danger, textAlign: 'center', marginTop: 4 }}>
+                {item.closed ? 'This vote has been closed and no more votes can be cast.' : 'This vote has ended and no more votes can be cast.'}
+              </Text>
+            </View>
+          )}
 
-        <DetailSection title="Options">
-          {item.options.split(',').map((option: string, index: number) => {
-            const isUserVote = userCastedVote?.voteIndex === index;
+          <DetailSection title="Options">
+            {item.options.split(',').map((option: string, index: number) => {
+              const isUserVote = userCastedVote&& userCastedVote?.voteIndex === index;
 
-            return (
-              <Pressable
-                key={index}
-                onPress={() => !item.closed && !isVoteExpired(item.endDate) && handleCastVote(index)}
-                disabled={item.closed || isVoteExpired(item.endDate) || castVoteMutation.isPending}
-                style={{
-                  padding: 16,
-                  borderRadius: 8,
-                  borderWidth: 2,
-                  borderColor: isUserVote ? colors.primary : colors.border,
-                  backgroundColor: isUserVote ? colors.primary + '10' : colors.card,
-                  marginBottom: 8,
-                }}
-              >
-                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
-                  <Text style={{ fontSize: 16, fontWeight: '600', color: colors.text }}>
-                    {option}
-                  </Text>
-                  {isUserVote && (
-                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                      <I.checkCircle size={16} color={colors.primary} />
-                      <Text style={{ fontSize: 12, color: colors.primary, fontWeight: '600' }}>
-                        Your Vote
-                      </Text>
-                    </View>
+              return (
+                <Pressable
+                  key={index}
+                  onPress={() => !item.closed && !isVoteExpired(item.endDate) && handleCastVote(index)}
+                  disabled={item.closed || isVoteExpired(item.endDate) || castVoteMutation.isPending}
+                  style={{
+                    padding: 16,
+                    borderRadius: 8,
+                    borderWidth: 2,
+                    borderColor: isUserVote ? colors.primary : colors.border,
+                    backgroundColor: isUserVote ? colors.primary + '10' : colors.card,
+                    marginBottom: 8,
+                  }}
+                >
+                  <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+                    <Text style={{ fontSize: 16, fontWeight: '600', color: colors.text }}>
+                      {option}
+                    </Text>
+                    {isUserVote && (
+                      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                        <I.checkCircle size={16} color={colors.primary} />
+                        <Text style={{ fontSize: 12, color: colors.primary, fontWeight: '600' }}>
+                          Your Vote
+                        </Text>
+                      </View>
+                    )}
+                  </View>
+
+                  {!item.closed && !isVoteExpired(item.endDate) && (
+                    <Text style={{ fontSize: 12, color: colors.sub, marginTop: 4, textAlign: 'center' }}>
+                      {isUserVote ? 'Tap to change vote' : 'Tap to vote'}
+                    </Text>
                   )}
-                </View>
-
-                {!item.closed && !isVoteExpired(item.endDate) && (
-                  <Text style={{ fontSize: 12, color: colors.sub, marginTop: 4, textAlign: 'center' }}>
-                    {isUserVote ? 'Tap to change vote' : 'Tap to vote'}
-                  </Text>
-                )}
-              </Pressable>
-            );
-          })}
-        </DetailSection>
+                </Pressable>
+              );
+            })}
+          </DetailSection>
+        </View>
       </ScrollView>
       )}
 

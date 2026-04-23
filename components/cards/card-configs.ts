@@ -59,7 +59,6 @@ export const ADMIN_CONFIGS = {
   vote: cfg('vote', (o, i) => `/admin/vote/${o}/${i}`, {
     titleField: 'question',
     subtitleField: (item: any) => (item.group?.title ?? 'Everyone'),
-    statusField: (item: any) => (item.closed ? 'CLOSED' : 'OPEN'),
   }),
   userRequest: cfg('userRequest', (o, i) => `/admin/user-request/${o}/${i}`, {
     statusField: (item: any) =>
@@ -142,7 +141,6 @@ export const VIEW_CONFIGS = {
   vote: cfg('vote', (o, i) => `/view/vote/${o}/${i}`, {
     titleField: 'question',
     subtitleField: (item: any) => (item.group?.title ?? 'Everyone'),
-    statusField: (item: any) => (item.closed ? 'CLOSED' : 'OPEN'),
   }),
   information: cfg('information', (o, i) => `/view/information/${o}/${i}`, {
     subtitleField: (item: any) => convertToLocalDateString(item.createdAt),
