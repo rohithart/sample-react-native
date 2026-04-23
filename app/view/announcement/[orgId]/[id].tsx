@@ -11,6 +11,7 @@ import { ActionItem } from '@/types/actionItem';
 import { useAnnouncement } from '@/services/announcement';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { VStack } from '@/components/ui/vstack';
 
 const I = ENTITY_ICONS;
 
@@ -47,13 +48,26 @@ export default function AnnouncementDetailScreen() {
       ) : (
       <ScrollView
         refreshControl={refreshControl}
-        contentContainerStyle={{ padding: 20, gap: 16 }}
+        contentContainerStyle={{ paddingBottom: 40 }}
         showsVerticalScrollIndicator={false}
       >
-        {item.description ? <HtmlContent label="Description" html={item.description} /> : null}
-        <DetailSection title="Details">
-          <DetailField label="All Users" value={item.allUsers ? 'Yes' : 'No'} />
-        </DetailSection>
+        <View style={{ padding: 16, gap: 20 }}>
+          {item.description && (
+            <View style={{ backgroundColor: colors.card, padding: 16, borderRadius: 20, borderWidth: 1, borderColor: colors.border }}>
+              <HtmlContent label="Description" html={item.description} />
+            </View>
+          )}
+
+          <View style={{ backgroundColor: colors.card, borderRadius: 24, padding: 16, borderWidth: 1, borderColor: colors.border }}>
+            <Text style={{ fontSize: 13, fontWeight: '800', color: colors.sub, marginBottom: 4, textTransform: 'uppercase', letterSpacing: 1 }}>
+              Other information
+            </Text>
+            <VStack space="lg">
+              <DetailField label="Group" value={item.group?.title ?? 'N/A'} />
+              <DetailField label="All Users" value={item.allUsers ? 'Yes' : 'No'} />
+            </VStack>
+          </View>
+        </View>
       </ScrollView>
       )}
 

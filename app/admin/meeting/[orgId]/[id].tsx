@@ -1,4 +1,4 @@
-import { AuditInfo, DetailField, DetailSection, GroupRelationship, HtmlContent } from '@/components/details';
+import { AuditInfo, DetailField, GroupRelationship, HtmlContent } from '@/components/details';
 import { ConfirmationDialog } from '@/components/dialogs/confirmation-dialog';
 import { EntityAttachments } from '@/components/entity/entity-attachments';
 import { EntityComments } from '@/components/entity/entity-comments';
@@ -17,8 +17,9 @@ import { ActivityIndicator, Alert, Pressable, ScrollView, Text, View } from 'rea
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { EntityType } from '@/enums';
-import { convertToLocalDateTimeString } from '@/utils/date';
+import { convertToLocalDateString } from '@/utils/date';
 import { onShare } from '@/utils/share';
+import { VStack } from '@/components/ui/vstack';
 
 const I = ENTITY_ICONS;
 
@@ -108,28 +109,46 @@ export default function MeetingDetailScreen() {
       ) : (
       <ScrollView
         refreshControl={refreshControl}
-        contentContainerStyle={{ padding: 20, gap: 16 }}
+        contentContainerStyle={{ paddingBottom: 40 }}
         showsVerticalScrollIndicator={false}
       >
-        {item.agenda ? <HtmlContent label="Agenda" html={item.agenda} /> : null}
-        {item.details ? <HtmlContent label="Details" html={item.details} /> : null}
-        {item.mom ? <HtmlContent label="Minutes of Meeting" html={item.mom} /> : null}
-        <DetailSection title="Schedule">
-          <DetailField label="Date" value={convertToLocalDateTimeString(item.meetingDate)} />
-          <DetailField label="Time" value={convertToLocalDateTimeString(item.meetingTime)} />
-          <DetailField label="Duration" value={item.duration ? item.duration + ' min' : null} />
-        </DetailSection>
-        <DetailSection title="Links">
-          <DetailField label="Teams Link" value={item.teamsLink} />
-          <DetailField label="Meet Link" value={item.meetLink} />
-        </DetailSection>
-        <DetailSection title="Details">
-          <DetailField label="All Users" value={item.allUsers ? 'Yes' : 'No'} />
-          <DetailField label="Archived" value={item.archived ? 'Yes' : 'No'} />
-        </DetailSection>
-        <DetailSection title="Relationships">
-          <GroupRelationship orgId={orgId || ''} item={item} />
-        </DetailSection>
+
+        <View style={{ padding: 16, gap: 20 }}>
+          {item.details && (
+            <View style={{ backgroundColor: colors.card, padding: 16, borderRadius: 20, borderWidth: 1, borderColor: colors.border }}>
+              <HtmlContent label="Details" html={item.details} />
+            </View>
+          )}
+
+          {item.agenda && (
+            <View style={{ backgroundColor: colors.card, padding: 16, borderRadius: 20, borderWidth: 1, borderColor: colors.border }}>
+              <HtmlContent label="Agenda" html={item.agenda} />
+            </View>
+          )}
+
+          <View style={{ backgroundColor: colors.card, borderRadius: 24, padding: 16, borderWidth: 1, borderColor: colors.border }}>
+            <Text style={{ fontSize: 13, fontWeight: '800', color: colors.sub, marginBottom: 4, textTransform: 'uppercase', letterSpacing: 1 }}>
+              Classification
+            </Text>
+            <VStack space="lg">
+              <GroupRelationship orgId={orgId || ''} item={item} />
+              <DetailField label="All Users" value={item.allUsers ? 'Yes' : 'No'} />
+            </VStack>
+          </View>
+
+          <View style={{ backgroundColor: colors.card, borderRadius: 24, padding: 16, borderWidth: 1, borderColor: colors.border }}>
+            <Text style={{ fontSize: 13, fontWeight: '800', color: colors.sub, marginBottom: 4, textTransform: 'uppercase', letterSpacing: 1 }}>
+              Role
+            </Text>
+            <VStack space="lg">
+              <DetailField label="Date" value={convertToLocalDateString(item.meetingDate)} />
+              <DetailField label="Time" value={item.meetingTime.toString()} />
+              <DetailField label="Duration" value={item.duration ? item.duration + ' hr' : null} />
+              <DetailField label="Teams Link" value={item.teamsLink} />
+              <DetailField label="Meet Link" value={item.meetLink} />
+            </VStack>
+          </View>
+        </View>
       </ScrollView>
       )}
 

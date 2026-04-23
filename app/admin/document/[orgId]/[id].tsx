@@ -1,6 +1,6 @@
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { PageHeader } from '@/components/ui/page-header';
-import { DetailField, DetailSection, LinkedField, HtmlContent, AuditInfo } from '@/components/details';
+import { LinkedField, HtmlContent, AuditInfo } from '@/components/details';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 
 import React, { useState } from 'react';
