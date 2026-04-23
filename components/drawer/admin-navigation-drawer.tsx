@@ -38,6 +38,9 @@ export function AdminNavigationDrawer({
       drawerAnim={drawerAnim}
       topInset={topInset}
     >
+      <DrawerSectionHeading title="Admin" />
+      <DrawerItem icon={<I.shield size={16} color={secondary} />} label="User mode" onPress={() => go(`/view/${orgId}`)} />
+
       <DrawerSectionHeading title={orgName} />
       <DrawerItem icon={<I.dashboard size={16} color={c} />} label="Dashboard" onPress={() => go(`/admin/${orgId}`)} />
       <DrawerItem icon={<I.mySpace size={16} color={c} />} label="My space" onPress={() => go(`/admin/me/${orgId}`)} />

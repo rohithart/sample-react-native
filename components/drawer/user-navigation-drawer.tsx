@@ -24,7 +24,7 @@ export function UserNavigationDrawer({
 }: UserNavigationDrawerProps) {
   const { primary: c, secondary } = useThemeColors();
   const router = useRouter();
-  const { hasAccess } = useOrganisationContext();
+  const { hasAccess, canAccessAdmin } = useOrganisationContext();
   const I = ENTITY_ICONS;
 
   const go = (url: string) => { onClose(); router.push(url as any); };
@@ -36,6 +36,14 @@ export function UserNavigationDrawer({
       drawerAnim={drawerAnim}
       topInset={topInset}
     >
+
+      { canAccessAdmin   && (
+        <>
+          <DrawerSectionHeading title="Admin" />
+          <DrawerItem icon={<I.shield size={16} color={secondary} />} label="Admin mode" onPress={() => go(`/admin/${orgId}`)} />
+        </>
+      )}
+
       <DrawerSectionHeading title="Main" />
       <DrawerItem icon={<I.dashboard size={16} color={c} />} label="Dashboard" onPress={() => go(`/view/${orgId}`)} />
       <DrawerItem icon={<I.wall size={16} color={c} />} label="Discussions" onPress={() => go(`/view/wall/${orgId}`)} />
