@@ -65,6 +65,11 @@ export const ADMIN_CONFIGS = {
     statusField: (item: any) =>
       item.isApproved ? 'APPROVED' : item.isRejected ? 'REJECTED' : 'PENDING',
   }),
+  reminder: cfg('reminder', (o, i) => `/admin/reminder/${o}/${i}`, {
+    subtitleField: (item: any) => item.frequency,
+    statusField: (item: any) =>
+      item.isActive ? 'Active' : 'Inactive',
+  }),
   booking: cfg('booking', (o, i) => `/admin/booking/${o}/${i}`, {
     subtitleField: (item: any) => {
       const from = item.bookingDateFrom ? convertToLocalDateString(item.bookingDateFrom) : '';

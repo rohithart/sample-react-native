@@ -1,26 +1,70 @@
 import { useThemeColors } from '@/hooks/use-theme-colors';
-import { useLocalSearchParams, useRouter } from 'expo-router';
-import { Pressable, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { PageHeader } from '@/components/ui/page-header';
+import { EntityCard } from '@/components/cards/entity-card';
+import { ADMIN_CONFIGS } from '@/components/cards/card-configs';
+import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 
-export default function Screen() {
+import React from 'react';
+import { ActivityIndicator, FlatList, Pressable, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useBookingTypes } from '@/services/booking-type';
+import { useRefreshControl } from '@/hooks/use-refresh-control';
+import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { useReminders } from '@/services/reminder';
+
+const I = ENTITY_ICONS;
+
+export default function ReminderTypesListScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const colors = useThemeColors();
   const router = useRouter();
+  const colors = useThemeColors();
+  const { data: items, isLoading, refetch, isRefetching } = useReminders(id);
+  const refreshControl = useRefreshControl(refetch, isRefetching);
+
+  const handleAdd = () => {
+    router.push(`/admin/reminder/new/${id}`);
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
-      <View style={{ flexDirection: 'row', alignItems: 'center', padding: 16, borderBottomWidth: 1, borderColor: colors.border, backgroundColor: colors.card }}>
-        <Pressable onPress={() => router.back()} style={{ padding: 4, marginRight: 12 }}>
-          <Text style={{ fontSize: 24, color: colors.text }}>‹</Text>
-        </Pressable>
-        <Text style={{ fontSize: 18, fontWeight: '700', color: colors.text }}>Reminders</Text>
-      </View>
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-        <Text style={{ fontSize: 48 }}>🚧</Text>
-        <Text style={{ fontSize: 20, fontWeight: '700', color: colors.text }}>Reminders</Text>
-        <Text style={{ fontSize: 14, color: colors.sub }}>Org ${id}</Text>
-      </View>
+      <Stack.Screen options={{ headerShown: false }} />
+      <PageHeader icon="reminder"
+        title="Reminders"
+        rightAction={
+          <Pressable
+            onPress={handleAdd}
+            style={{ padding: 8, backgroundColor: colors.primary, borderRadius: 8 }}
+          >
+            <I.plus size={20} color="#ffffff" />
+          </Pressable>
+        }
+      />
+
+      {isLoading ? (
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <ActivityIndicator size="large" color={colors.primary} />
+          <Text style={{ color: colors.sub, fontSize: 14, marginTop: 10 }}>Loading...</Text>
+        </View>
+      ) : (
+        <FlatList
+          data={items ?? []}
+          renderItem={({ item }) => (
+            <EntityCard
+              item={item}
+              config={ADMIN_CONFIGS.reminder}
+              orgId={id}
+            />
+          )}
+          keyExtractor={(item) => item._id}
+          refreshControl={refreshControl}
+          scrollIndicatorInsets={{ right: 1 }}
+          ListEmptyComponent={
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingTop: 60 }}>
+              <Text style={{ color: colors.sub, fontSize: 15 }}>No reminders found</Text>
+            </View>
+          }
+        />
+      )}
     </SafeAreaView>
   );
 }
