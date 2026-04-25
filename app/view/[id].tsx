@@ -6,11 +6,12 @@ import { HStack } from '@/components/ui/hstack';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { useOrganisationContext } from '@/context/organisation-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
+import { useUserDashboard } from '@/services/dashboard';
 import { ActionItem } from '@/types/actionItem';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Animated, Image, Pressable, Text as RNText, ScrollView, View } from 'react-native';
+import { ActivityIndicator, Animated, Image, Pressable, Text, ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const I = ENTITY_ICONS;
@@ -23,6 +24,7 @@ export default function UserDashboard() {
   const { organisation, canAccessAdmin, isLoadingAccess, hydrateFromOrgId } = useOrganisationContext();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const drawerAnim = useRef(new Animated.Value(-300)).current;
+  const {data: dashboard} = useUserDashboard(id || '');
 
   useEffect(() => { if (id) hydrateFromOrgId(id); }, [id, hydrateFromOrgId]);
 
@@ -39,11 +41,54 @@ export default function UserDashboard() {
   const { bg: bgColor, text: textColor, sub: secondaryText, primary, secondary, border, card: cardBg, success, danger } = colors;
 
   const SectionHeader = ({ title }: { title: string }) => (
-    <RNText style={{ fontSize: 13, fontWeight: '800', color: secondaryText, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8, marginLeft: 4 }}>
+    <Text style={{ fontSize: 13, fontWeight: '800', color: secondaryText, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8, marginLeft: 4 }}>
       {title}
-    </RNText>
+    </Text>
   );
 
+  const StatusCard = ({ title, icon: Icon, data, route }: any) => {
+    const counts = {
+      approved: data?.approved || 0,
+      pending: data?.pending || 0,
+      rejected: data?.rejected || 0,
+    };
+
+    return (
+      <View style={{ 
+        backgroundColor: colors.card, 
+        borderRadius: 24, 
+        padding: 16, 
+        borderWidth: 1, 
+        borderColor: colors.border,
+        marginBottom: 16
+      }}>
+        <HStack space="md" style={{ alignItems: 'center', marginBottom: 16 }}>
+          <View style={{ padding: 8, backgroundColor: colors.primary + '10', borderRadius: 10 }}>
+            <Icon size={18} color={colors.primary} />
+          </View>
+          <Text style={{ fontSize: 16, fontWeight: '700', color: colors.text, flex: 1 }}>{title}</Text>
+          <I.chevronRight size={16} color={colors.sub}  onPress={() => router.push(route)} />
+        </HStack>
+
+        <HStack space="sm">
+          <View style={{ flex: 1, alignItems: 'center', padding: 10, backgroundColor: colors.successBg, borderRadius: 14 }}>
+            <Text style={{ fontSize: 18, fontWeight: '800', color: colors.success }}>{counts.approved}</Text>
+            <Text style={{ fontSize: 10, fontWeight: '700', color: colors.success, textTransform: 'uppercase' }}>Approved</Text>
+          </View>
+
+          <View style={{ flex: 1, alignItems: 'center', padding: 10, backgroundColor: colors.primary + '10', borderRadius: 14 }}>
+            <Text style={{ fontSize: 18, fontWeight: '800', color: colors.primary }}>{counts.pending}</Text>
+            <Text style={{ fontSize: 10, fontWeight: '700', color: colors.primary, textTransform: 'uppercase' }}>Pending</Text>
+          </View>
+
+          <View style={{ flex: 1, alignItems: 'center', padding: 10, backgroundColor: colors.dangerBg, borderRadius: 14 }}>
+            <Text style={{ fontSize: 18, fontWeight: '800', color: colors.danger }}>{counts.rejected}</Text>
+            <Text style={{ fontSize: 10, fontWeight: '700', color: colors.danger, textTransform: 'uppercase' }}>Rejected</Text>
+          </View>
+        </HStack>
+      </View>
+    );
+  };
 
   const org = organisation;
 
@@ -88,7 +133,7 @@ export default function UserDashboard() {
       {isLoadingAccess ? (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
           <ActivityIndicator size="large" color={primary} />
-          <RNText style={{ color: secondaryText, fontSize: 14, marginTop: 10 }}>Loading organisation...</RNText>
+          <Text style={{ color: secondaryText, fontSize: 14, marginTop: 10 }}>Loading organisation...</Text>
         </View>
       ) : (
         <ScrollView
@@ -109,13 +154,13 @@ export default function UserDashboard() {
                   </View>
                 )}
                 <View style={{ flex: 1 }}>
-                  <RNText style={{ fontSize: 18, fontWeight: '700', color: textColor }} numberOfLines={1}>
+                  <Text style={{ fontSize: 18, fontWeight: '700', color: textColor }} numberOfLines={1}>
                     {org?.name || 'Organisation'}
-                  </RNText>
+                  </Text>
                   {org?.address ? (
                     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
                       <I.mapPin size={13} color={secondaryText} />
-                      <RNText style={{ fontSize: 12, color: secondaryText }} numberOfLines={1}>{org.address}</RNText>
+                      <Text style={{ fontSize: 12, color: secondaryText }} numberOfLines={1}>{org.address}</Text>
                     </View>
                   ) : null}
                 </View>
@@ -123,9 +168,9 @@ export default function UserDashboard() {
                   paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8,
                   backgroundColor: org?.isActive ? success + '15' : danger + '15',
                 }}>
-                  <RNText style={{ fontSize: 11, fontWeight: '600', color: org?.isActive ? success : danger }}>
+                  <Text style={{ fontSize: 11, fontWeight: '600', color: org?.isActive ? success : danger }}>
                     {org?.isActive ? 'Active' : 'Inactive'}
-                  </RNText>
+                  </Text>
                 </View>
               </View>
 
@@ -162,8 +207,8 @@ export default function UserDashboard() {
                     <HStack space="lg" style={{ justifyContent: 'space-between', paddingHorizontal: 14, paddingVertical: 12 }}>
                       <HStack space="md" style={{ flex: 1 }}>
                         <View style={{ flex: 1 }}>
-                          <RNText style={{ fontSize: 13, fontWeight: '600', color: primary }}>Switch to Admin Mode</RNText>
-                          <RNText style={{ fontSize: 11, color: secondaryText, marginTop: 2 }}>View admin options</RNText>
+                          <Text style={{ fontSize: 13, fontWeight: '600', color: primary }}>Switch to Admin Mode</Text>
+                          <Text style={{ fontSize: 11, color: secondaryText, marginTop: 2 }}>View admin options</Text>
                         </View>
                       </HStack>
                       <View style={{ alignItems: 'center', justifyContent: 'center' }}>
@@ -197,6 +242,24 @@ export default function UserDashboard() {
                 index={1} 
               />
             </View>
+          </View>
+
+          <View>
+            <SectionHeader title="Your activity" />
+            
+            <StatusCard 
+              title="Bookings" 
+              icon={I.booking} 
+              data={dashboard?.bookings} 
+              route={`/view/bookings/${id}`}
+            />
+            
+            <StatusCard 
+              title="My Requests" 
+              icon={I.userRequest} 
+              data={dashboard?.requests} 
+              route={`/view/user-requests/${id}`}
+            />
           </View>
 
         </ScrollView>
