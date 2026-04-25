@@ -1,3 +1,4 @@
+import { DashboardCard } from '@/components/cards/dashboard-card';
 import { HtmlContent } from '@/components/details/html-content';
 import { UserNavigationDrawer } from '@/components/drawer/user-navigation-drawer';
 import { Matrix } from '@/components/matrix';
@@ -45,50 +46,6 @@ export default function UserDashboard() {
       {title}
     </Text>
   );
-
-  const StatusCard = ({ title, icon: Icon, data, route }: any) => {
-    const counts = {
-      approved: data?.approved || 0,
-      pending: data?.pending || 0,
-      rejected: data?.rejected || 0,
-    };
-
-    return (
-      <View style={{ 
-        backgroundColor: colors.card, 
-        borderRadius: 24, 
-        padding: 16, 
-        borderWidth: 1, 
-        borderColor: colors.border,
-        marginBottom: 16
-      }}>
-        <HStack space="md" style={{ alignItems: 'center', marginBottom: 16 }}>
-          <View style={{ padding: 8, backgroundColor: colors.primary + '10', borderRadius: 10 }}>
-            <Icon size={18} color={colors.primary} />
-          </View>
-          <Text style={{ fontSize: 16, fontWeight: '700', color: colors.text, flex: 1 }}>{title}</Text>
-          <I.chevronRight size={16} color={colors.sub}  onPress={() => router.push(route)} />
-        </HStack>
-
-        <HStack space="sm">
-          <View style={{ flex: 1, alignItems: 'center', padding: 10, backgroundColor: colors.successBg, borderRadius: 14 }}>
-            <Text style={{ fontSize: 18, fontWeight: '800', color: colors.success }}>{counts.approved}</Text>
-            <Text style={{ fontSize: 10, fontWeight: '700', color: colors.success, textTransform: 'uppercase' }}>Approved</Text>
-          </View>
-
-          <View style={{ flex: 1, alignItems: 'center', padding: 10, backgroundColor: colors.primary + '10', borderRadius: 14 }}>
-            <Text style={{ fontSize: 18, fontWeight: '800', color: colors.primary }}>{counts.pending}</Text>
-            <Text style={{ fontSize: 10, fontWeight: '700', color: colors.primary, textTransform: 'uppercase' }}>Pending</Text>
-          </View>
-
-          <View style={{ flex: 1, alignItems: 'center', padding: 10, backgroundColor: colors.dangerBg, borderRadius: 14 }}>
-            <Text style={{ fontSize: 18, fontWeight: '800', color: colors.danger }}>{counts.rejected}</Text>
-            <Text style={{ fontSize: 10, fontWeight: '700', color: colors.danger, textTransform: 'uppercase' }}>Rejected</Text>
-          </View>
-        </HStack>
-      </View>
-    );
-  };
 
   const org = organisation;
 
@@ -247,17 +204,23 @@ export default function UserDashboard() {
           <View>
             <SectionHeader title="Your activity" />
             
-            <StatusCard 
+            <DashboardCard 
               title="Bookings" 
               icon={I.booking} 
-              data={dashboard?.bookings} 
+              labels={['Approved', 'Pending', 'Rejected']}
+              values= {[dashboard?.bookings?.approved || 0, dashboard?.bookings?.pending || 0, dashboard?.bookings?.rejected || 0]}
+              textColors={[success, primary, danger]}
+              backgroundColors={[success + '15', primary + '15', danger + '15']}
               route={`/view/bookings/${id}`}
             />
             
-            <StatusCard 
+            <DashboardCard 
               title="My Requests" 
               icon={I.userRequest} 
-              data={dashboard?.requests} 
+              labels={['Approved', 'Pending', 'Rejected']}
+              values= {[dashboard?.requests?.approved || 0, dashboard?.requests?.pending || 0, dashboard?.requests?.rejected || 0]}
+              textColors={[success, primary, danger]}
+              backgroundColors={[success + '15', primary + '15', danger + '15']}
               route={`/view/user-requests/${id}`}
             />
           </View>
