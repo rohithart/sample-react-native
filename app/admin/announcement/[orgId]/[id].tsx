@@ -1,4 +1,4 @@
-import { AuditInfo, DetailField, DetailSection, GroupRelationship, HtmlContent } from '@/components/details';
+import { AuditInfo, DetailField, GroupRelationship, HtmlContent } from '@/components/details';
 import { ConfirmationDialog } from '@/components/dialogs/confirmation-dialog';
 import { ActionBottomSheet } from '@/components/sheets/action-bottom-sheet';
 import { ActionItem } from '@/types/actionItem';
@@ -8,7 +8,7 @@ import { useThemeColors } from '@/hooks/use-theme-colors';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 
 import React, { useState } from 'react';
-import { ActivityIndicator, Alert, Pressable, ScrollView, Text, View } from 'react-native';
+import { ActivityIndicator, Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useRefreshControl } from '@/hooks/use-refresh-control';
@@ -16,6 +16,7 @@ import { useAnnouncement } from '@/services/announcement';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { onShare } from '@/utils/share';
 import { VStack } from '@/components/ui/vstack';
+import { useToast } from '@/context/toast-context';
 
 const I = ENTITY_ICONS;
 
@@ -28,6 +29,7 @@ export default function AnnouncementDetailScreen() {
   const [confirmationType, setConfirmationType] = useState<'delete' | 'archive' | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [showAudit, setShowAudit] = useState(false);
+  const { showToast } = useToast();
 
   const { data: item, isLoading: isLoadingItem, refetch, isRefetching } = useAnnouncement(id || '');
   const refreshControl = useRefreshControl(refetch, isRefetching);
@@ -45,7 +47,7 @@ export default function AnnouncementDetailScreen() {
     await new Promise((r) => setTimeout(r, 800));
     setIsProcessing(false);
     setConfirmationType(null);
-    Alert.alert('Success', 'Announcement archived successfully');
+    showToast({ type: 'success', title: 'Announcement archived successfully' });
   };
 
   const actions: ActionItem[] = [

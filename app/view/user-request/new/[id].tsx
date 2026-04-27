@@ -3,12 +3,13 @@ import { PageHeader } from '@/components/ui/page-header';
 import { FormField } from '@/components/ui/form-field';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { ScrollView, Text, Pressable, Alert } from 'react-native';
+import { ScrollView, Text, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { VStack } from '@/components/ui/vstack';
 import { Wysiwyg } from '@/components/wysiwyg';
 import { useCreateUserRequest } from '@/services/user-request';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { useToast } from '@/context/toast-context';
 
 export default function AddRequestScreen() {
   const { id: orgId } = useLocalSearchParams<{ id: string }>();
@@ -18,6 +19,7 @@ export default function AddRequestScreen() {
   const [description, setDescription] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const createRequest= useCreateUserRequest(orgId ?? '');
+  const { showToast } = useToast();
   const I = ENTITY_ICONS;
 
   const isFormValid =
@@ -26,7 +28,7 @@ export default function AddRequestScreen() {
 
   const handleSubmit = async () => {
       if (!title.trim() || !description.trim() ) {
-        Alert.alert('Validation Error', 'Please fill all required fields');
+        showToast({ type: 'error', title: 'Validation Error', message: 'Please fill all required fields' });
         return;
       }
       setIsSubmitting(true);
@@ -37,12 +39,10 @@ export default function AddRequestScreen() {
           organisation: orgId as unknown as any,
         });
         setIsSubmitting(false);
-        Alert.alert('Success', 'Request created successfully', [
-          { text: 'OK', onPress: () => router.push(`/view/user-requests/${orgId}`) },
-        ]);
+        showToast({ type: 'success', title: 'Success', message: 'Request created successfully' });
       } catch (e: any) {
         setIsSubmitting(false);
-        Alert.alert('Error', e?.message || 'Failed to create request');
+        showToast({ type: 'error', title: 'Error', message: e?.message || 'Failed to create request' });
       }
     };
 

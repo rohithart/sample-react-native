@@ -11,6 +11,7 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { EntityType } from '@/enums';
 import { convertToLocalDateTimeString } from '@/utils/date';
+import { useToast } from '@/context/toast-context';
 
 const I = ENTITY_ICONS;
 
@@ -50,6 +51,7 @@ export function EntityAttachments({ isVisible, onClose, entity, entityId, orgId 
   const deleteMutation = useDeleteAttachment(entity, entityId);
   const [showAdd, setShowAdd] = useState(false);
   const [name, setName] = useState('');
+  const { showToast } = useToast();
 
   const handleAdd = () => {
     if (!name.trim()) return;
@@ -61,7 +63,7 @@ export function EntityAttachments({ isVisible, onClose, entity, entityId, orgId 
   const handleDownload = useCallback(async (item: Attachment) => {
     const url = (item as any).location || (item as any).url || (item as any).key;
     if (!url) {
-      Alert.alert('No URL', 'This attachment does not have a download URL.');
+      showToast({ type: 'error', title: 'No URL', message: 'This attachment does not have a download URL.' });
       return;
     }
     try {
@@ -69,10 +71,10 @@ export function EntityAttachments({ isVisible, onClose, entity, entityId, orgId 
       if (supported) {
         await Linking.openURL(url);
       } else {
-        Alert.alert('Cannot open', 'Unable to open this file.');
+        showToast({ type: 'error', title: 'Cannot open', message: 'Unable to open this file.' });
       }
     } catch {
-      Alert.alert('Error', 'Failed to open the file.');
+      showToast({ type: 'error', title: 'Error', message: 'Failed to open the file.' });
     }
   }, []);
 

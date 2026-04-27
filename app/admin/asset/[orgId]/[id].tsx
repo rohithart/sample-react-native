@@ -4,7 +4,7 @@ import { DetailField, LinkedField, HtmlContent, AuditInfo } from '@/components/d
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 
 import React, { useState } from 'react';
-import { ActivityIndicator, ScrollView, Text, View, Pressable, Alert } from 'react-native';
+import { ActivityIndicator, ScrollView, Text, View, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ActionBottomSheet } from '@/components/sheets/action-bottom-sheet';
 import { ActionItem } from '@/types/actionItem';
@@ -24,6 +24,7 @@ import { convertToLocalDateTimeString } from '@/utils/date';
 import { HStack } from '@/components/ui/hstack';
 import { FlagButton } from '@/components/details/flag';
 import { VStack } from '@/components/ui/vstack';
+import { useToast } from '@/context/toast-context';
 
 const I = ENTITY_ICONS;
 
@@ -42,6 +43,7 @@ export default function AssetDetailScreen() {
   const [showTimeline, setShowTimeline] = useState(false);
   const flagFn = useFlagAsset(orgId || '');    
   const unflagFn = useUnflagAsset(orgId || '');
+  const { showToast } = useToast();
 
   const { data: item, isLoading: isLoadingItem, refetch, isRefetching } = useAsset(id || '');
   const refreshControl = useRefreshControl(refetch, isRefetching);
@@ -59,7 +61,7 @@ export default function AssetDetailScreen() {
     await new Promise((r) => setTimeout(r, 800));
     setIsProcessing(false);
     setConfirmationType(null);
-    Alert.alert('Success', 'Asset archived successfully');
+    showToast({ type: 'success', title: 'Asset archived successfully' });
   };
 
   const actions: ActionItem[] = [

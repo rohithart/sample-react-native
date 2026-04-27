@@ -4,7 +4,7 @@ import { DetailField, DetailSection, AuditInfo } from '@/components/details';
 import { Stack, useLocalSearchParams } from 'expo-router';
 
 import React, { useState } from 'react';
-import { ActivityIndicator, ScrollView, Text, View, Pressable, Alert } from 'react-native';
+import { ActivityIndicator, ScrollView, Text, View, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ActionBottomSheet } from '@/components/sheets/action-bottom-sheet';
 import { ActionItem } from '@/types/actionItem';
@@ -13,6 +13,7 @@ import { useRefreshControl } from '@/hooks/use-refresh-control';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { convertToLocalDateTimeString } from '@/utils/date';
 import { VStack } from '@/components/ui/vstack';
+import { useToast } from '@/context/toast-context';
 
 const I = ENTITY_ICONS;
 
@@ -26,6 +27,7 @@ export default function VoteDetailScreen() {
   const colors = useThemeColors();
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [showAudit, setShowAudit] = useState(false);
+  const { showToast } = useToast();
 
   const { data: item, isLoading: isLoadingItem, refetch, isRefetching } = useVote(id || '');
   const { data: userCastedVote } = useCastedVote(orgId || '', id || '');
@@ -37,9 +39,9 @@ export default function VoteDetailScreen() {
 
     try {
       await castVoteMutation.mutateAsync({ index });
-      Alert.alert('Success', 'Your vote has been cast!');
+      showToast({ type: 'success', title: 'Success', message: 'Your vote has been cast!' });
     } catch (error) {
-      Alert.alert('Error', 'Failed to cast vote. Please try again.');
+      showToast({ type: 'error', title: 'Error', message: 'Failed to cast vote. Please try again.' });
     }
   };
 

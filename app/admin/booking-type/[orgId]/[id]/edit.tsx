@@ -8,6 +8,7 @@ import { ScrollView, Text, Pressable, Alert } from 'react-native';
 import { useOrganisationContext } from '@/context/organisation-context';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { useToast } from '@/context/toast-context';
 
 const I = ENTITY_ICONS;
 
@@ -19,18 +20,18 @@ export default function EditBookingTypeScreen() {
   const [name, setName] = useState('Sample Booking Type');
   const [description, setDescription] = useState('This is a sample booking type description.');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { showToast } = useToast();
 
   const handleSubmit = async () => {
     if (!name.trim()) {
-      Alert.alert('Validation Error', 'Please enter a name');
+      showToast({ type: 'error', title: 'Validation Error', message: 'Please enter a name' });
       return;
     }
     setIsSubmitting(true);
     await new Promise((resolve) => setTimeout(resolve, 1000));
     setIsSubmitting(false);
-    Alert.alert('Success', 'Booking Type updated successfully', [
-      { text: 'OK', onPress: () => router.push(`/admin/booking-type/${orgId}/${id}`) },
-    ]);
+    showToast({ type: 'success', title: 'Booking Type updated successfully' });
+    router.push(`/admin/booking-type/${orgId}/${id}`);
   };
 
   const handleDelete = () => {

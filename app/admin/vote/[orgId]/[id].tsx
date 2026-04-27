@@ -11,13 +11,14 @@ import { useAllCastedVotes, useVote } from '@/services/vote';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 
 import React, { useMemo, useState } from 'react';
-import { ActivityIndicator, Alert, Pressable, ScrollView, Text, View } from 'react-native';
+import { ActivityIndicator, Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { EntityType } from '@/enums';
 import { convertToLocalDateTimeString } from '@/utils/date';
 import { VStack } from '@/components/ui/vstack';
 import { resolveId } from '@/utils/resolve-ref';
+import { useToast } from '@/context/toast-context';
 
 const I = ENTITY_ICONS;
 
@@ -31,6 +32,7 @@ export default function VoteDetailScreen() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [showAudit, setShowAudit] = useState(false);
   const [showTimeline, setShowTimeline] = useState(false);
+  const { showToast } = useToast(); 
 
   const { data: item, isLoading: isLoadingItem, refetch, isRefetching } = useVote(id || '');
   const refreshControl = useRefreshControl(refetch, isRefetching);
@@ -63,6 +65,7 @@ export default function VoteDetailScreen() {
     await new Promise((r) => setTimeout(r, 800));
     setIsProcessing(false);
     setConfirmationType(null);
+    showToast({ type: 'success', title: 'Success', message: 'Vote deleted successfully' });
     router.push(`/admin/votes/${orgId}`);
   };
 
@@ -71,7 +74,7 @@ export default function VoteDetailScreen() {
     await new Promise((r) => setTimeout(r, 800));
     setIsProcessing(false);
     setConfirmationType(null);
-    Alert.alert('Success', 'Vote archived successfully');
+    showToast({ type: 'success', title: 'Success', message: 'Vote archived successfully' });
   };
 
   const actions: ActionItem[] = [

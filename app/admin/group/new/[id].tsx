@@ -3,8 +3,9 @@ import { PageHeader } from '@/components/ui/page-header';
 import { FormField } from '@/components/ui/form-field';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { ScrollView, Text, Pressable, Alert } from 'react-native';
+import { ScrollView, Text, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useToast } from '@/context/toast-context';
 
 export default function AddGroupScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -13,18 +14,18 @@ export default function AddGroupScreen() {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { showToast } = useToast();
 
   const handleSubmit = async () => {
     if (!name.trim()) {
-      Alert.alert('Validation Error', 'Please enter a name');
+      showToast({ type: 'error', title: 'Validation Error', message: 'Please enter a name' });
       return;
     }
     setIsSubmitting(true);
     await new Promise((resolve) => setTimeout(resolve, 1000));
     setIsSubmitting(false);
-    Alert.alert('Success', 'Group created successfully', [
-      { text: 'OK', onPress: () => router.push(`/admin/groups/${id}`) },
-    ]);
+    showToast({ type: 'success', title: 'Success', message: 'Group created successfully' });
+    router.push(`/admin/groups/${id}`);
   };
 
   return (

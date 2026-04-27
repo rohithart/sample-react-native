@@ -1,13 +1,15 @@
 import { Button, ButtonText } from '@/components/ui/button';
 import { Text } from '@/components/ui/text';
+import { useToast } from '@/context/toast-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useCreateOrganisation } from '@/services/organisations';
 import { useState } from 'react';
-import { Alert, KeyboardAvoidingView, Platform, ScrollView, TextInput, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, TextInput, View } from 'react-native';
 
 export function AddOrganisation({ onSuccess }: { onSuccess?: () => void }) {
   const colors = useThemeColors();
   const { mutate: createOrg, isPending } = useCreateOrganisation();
+  const { showToast } = useToast();
 
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -25,7 +27,7 @@ export function AddOrganisation({ onSuccess }: { onSuccess?: () => void }) {
 
   const handleSubmit = () => {
     if (!name.trim()) {
-      Alert.alert('Required', 'Please enter an organisation name.');
+      showToast({ type: 'error', title: 'Required', message: 'Please enter an organisation name.' });
       return;
     }
     createOrg(
@@ -34,11 +36,11 @@ export function AddOrganisation({ onSuccess }: { onSuccess?: () => void }) {
         onSuccess: () => {
           setName('');
           setDescription('');
-          Alert.alert('Success', 'Organisation created successfully.');
+          showToast({ type: 'success', title: 'Success', message: 'Organisation created successfully.' });
           onSuccess?.();
         },
         onError: () => {
-          Alert.alert('Error', 'Failed to create organisation. Please try again.');
+          showToast({ type: 'error', title: 'Error', message: 'Failed to create organisation. Please try again.' });
         },
       }
     );

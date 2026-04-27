@@ -4,7 +4,7 @@ import { DetailField, DetailSection, HtmlContent, AuditInfo } from '@/components
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 
 import React, { useState } from 'react';
-import { ActivityIndicator, ScrollView, Text, View, Pressable, Alert } from 'react-native';
+import { ActivityIndicator, ScrollView, Text, View, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ActionBottomSheet } from '@/components/sheets/action-bottom-sheet';
 import { ActionItem } from '@/types/actionItem';
@@ -14,6 +14,7 @@ import { useOrganisationContext } from '@/context/organisation-context';
 import { useChartOfAccount } from '@/services/chart-of-account';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { useToast } from '@/context/toast-context';
 
 const I = ENTITY_ICONS;
 
@@ -26,6 +27,7 @@ export default function ChartofAccountDetailScreen() {
   const [confirmationType, setConfirmationType] = useState<'delete' | 'archive' | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [showAudit, setShowAudit] = useState(false);
+  const { showToast } = useToast();
 
   const { data: item, isLoading: isLoadingItem, refetch, isRefetching } = useChartOfAccount(id || '');
   const refreshControl = useRefreshControl(refetch, isRefetching);
@@ -35,6 +37,7 @@ export default function ChartofAccountDetailScreen() {
     await new Promise((r) => setTimeout(r, 800));
     setIsProcessing(false);
     setConfirmationType(null);
+    showToast({ type: 'success', title: 'Chart of Account deleted successfully' });
     router.push(`/admin/chart-of-accounts/${orgId}`);
   };
 
@@ -43,7 +46,7 @@ export default function ChartofAccountDetailScreen() {
     await new Promise((r) => setTimeout(r, 800));
     setIsProcessing(false);
     setConfirmationType(null);
-    Alert.alert('Success', 'Chart of Account archived successfully');
+    showToast({ type: 'success', title: 'Chart of Account archived successfully' });
   };
 
   const actions: ActionItem[] = [

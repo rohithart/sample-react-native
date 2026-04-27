@@ -4,7 +4,7 @@ import { DetailField, AuditInfo } from '@/components/details';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 
 import React, { useState } from 'react';
-import { ActivityIndicator, ScrollView, Text, View, Pressable, Alert, Image } from 'react-native';
+import { ActivityIndicator, ScrollView, Text, View, Pressable, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ActionBottomSheet } from '@/components/sheets/action-bottom-sheet';
 import { ActionItem } from '@/types/actionItem';
@@ -16,6 +16,7 @@ import { useRefreshControl } from '@/hooks/use-refresh-control';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { Box } from '@/components/ui/box';
 import { VStack } from '@/components/ui/vstack';
+import { useToast } from '@/context/toast-context';
 
 const I = ENTITY_ICONS;
 
@@ -28,6 +29,7 @@ export default function UserDetailScreen() {
   const [confirmationType, setConfirmationType] = useState<'delete' | 'archive' | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [showAudit, setShowAudit] = useState(false);
+  const { showToast } = useToast();
 
   const { data: item, isLoading: isLoadingItem, refetch, isRefetching } = useUser(id || '');
   const refreshControl = useRefreshControl(refetch, isRefetching);
@@ -37,6 +39,7 @@ export default function UserDetailScreen() {
     await new Promise((r) => setTimeout(r, 800));
     setIsProcessing(false);
     setConfirmationType(null);
+    showToast({ type: 'success', title: 'Success', message: 'User deleted successfully' });
     router.push(`/admin/users/${orgId}`);
   };
 
@@ -45,7 +48,7 @@ export default function UserDetailScreen() {
     await new Promise((r) => setTimeout(r, 800));
     setIsProcessing(false);
     setConfirmationType(null);
-    Alert.alert('Success', 'User archived successfully');
+    showToast({ type: 'success', title: 'Success', message: 'User archived successfully' });
   };
 
   const actions: ActionItem[] = [

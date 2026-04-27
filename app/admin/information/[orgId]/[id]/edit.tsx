@@ -8,6 +8,7 @@ import { ScrollView, Text, Pressable, Alert } from 'react-native';
 import { useOrganisationContext } from '@/context/organisation-context';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { useToast } from '@/context/toast-context';
 
 const I = ENTITY_ICONS;
 
@@ -19,18 +20,18 @@ export default function EditInformationScreen() {
   const [name, setName] = useState('Sample Information');
   const [description, setDescription] = useState('This is a sample information description.');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { showToast } = useToast();
 
   const handleSubmit = async () => {
     if (!name.trim()) {
-      Alert.alert('Validation Error', 'Please enter a name');
+      showToast({ type: 'error', title: 'Validation Error', message: 'Please enter a name' });
       return;
     }
     setIsSubmitting(true);
     await new Promise((resolve) => setTimeout(resolve, 1000));
     setIsSubmitting(false);
-    Alert.alert('Success', 'Information updated successfully', [
-      { text: 'OK', onPress: () => router.push(`/admin/information/${orgId}/${id}`) },
-    ]);
+    showToast({ type: 'success', title: 'Success', message: 'Information updated successfully' });
+    router.push(`/admin/information/${orgId}/${id}`);
   };
 
   const handleDelete = () => {

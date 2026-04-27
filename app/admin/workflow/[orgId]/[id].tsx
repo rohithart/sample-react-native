@@ -20,7 +20,7 @@ import { resolveId } from '@/utils/resolve-ref';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 
 import React, { useState } from 'react';
-import { ActivityIndicator, Alert, Pressable, ScrollView, Text, View } from 'react-native';
+import { ActivityIndicator, Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { EntityType } from '@/enums';
@@ -29,6 +29,7 @@ import { HStack } from '@/components/ui/hstack';
 import { VStack } from '@/components/ui/vstack';
 import { FlagButton } from '@/components/details/flag';
 import { PrioritySelect } from '@/components/details/priority';
+import { useToast } from '@/context/toast-context';
 
 const I = ENTITY_ICONS;
 
@@ -46,6 +47,7 @@ export default function WorkflowDetailScreen() {
   const [showImages, setShowImages] = useState(false);
   const [showTimeline, setShowTimeline] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
+  const { showToast } = useToast();
 
   const { data: item, isLoading: isLoadingItem, refetch, isRefetching } = useWorkflow(id || '');
   const { data: assignableUsers = [], isLoading: isLoadingUsers } = useAssignableUsers(orgId || '');
@@ -63,6 +65,7 @@ export default function WorkflowDetailScreen() {
     await new Promise((r) => setTimeout(r, 800));
     setIsProcessing(false);
     setConfirmationType(null);
+    showToast({ type: 'success', title: 'Success', message: 'Workflow deleted successfully' });
     router.push(`/admin/workflows/${orgId}`);
   };
 
@@ -71,7 +74,7 @@ export default function WorkflowDetailScreen() {
     await new Promise((r) => setTimeout(r, 800));
     setIsProcessing(false);
     setConfirmationType(null);
-    Alert.alert('Success', 'Workflow archived successfully');
+    showToast({ type: 'success', title: 'Success', message: 'Workflow archived successfully' });
   };
 
   const actions: ActionItem[] = [

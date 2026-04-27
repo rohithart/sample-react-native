@@ -13,13 +13,14 @@ import { downloadAndSharePdf } from '@/utils/pdf-download';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 
 import React, { useState } from 'react';
-import { ActivityIndicator, Alert, Pressable, ScrollView, Text, View } from 'react-native';
+import { ActivityIndicator, Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { EntityType } from '@/enums';
 import { convertToLocalDateString } from '@/utils/date';
 import { onShare } from '@/utils/share';
 import { VStack } from '@/components/ui/vstack';
+import { useToast } from '@/context/toast-context';
 
 const I = ENTITY_ICONS;
 
@@ -34,6 +35,7 @@ export default function MeetingDetailScreen() {
   const [showAudit, setShowAudit] = useState(false);
   const [showAttachments, setShowAttachments] = useState(false);
   const [showComments, setShowComments] = useState(false);
+  const { showToast } = useToast();
 
   const { data: item, isLoading: isLoadingItem, refetch, isRefetching } = useMeeting(id || '');
   const refreshControl = useRefreshControl(refetch, isRefetching);
@@ -43,6 +45,7 @@ export default function MeetingDetailScreen() {
     await new Promise((r) => setTimeout(r, 800));
     setIsProcessing(false);
     setConfirmationType(null);
+    showToast({ type: 'success', title: 'Success', message: 'Meeting deleted successfully' });
     router.push(`/admin/meetings/${orgId}`);
   };
 
@@ -51,7 +54,7 @@ export default function MeetingDetailScreen() {
     await new Promise((r) => setTimeout(r, 800));
     setIsProcessing(false);
     setConfirmationType(null);
-    Alert.alert('Success', 'Meeting archived successfully');
+    showToast({ type: 'success', title: 'Success', message: 'Meeting archived successfully' });
   };
 
   const actions: ActionItem[] = [

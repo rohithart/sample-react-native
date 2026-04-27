@@ -4,7 +4,7 @@ import { DetailField, DetailSection, AuditInfo } from '@/components/details';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 
 import React, { useState } from 'react';
-import { ActivityIndicator, ScrollView, Text, View, Pressable, Alert } from 'react-native';
+import { ActivityIndicator, ScrollView, Text, View, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ActionBottomSheet } from '@/components/sheets/action-bottom-sheet';
 import { ActionItem } from '@/types/actionItem';
@@ -16,6 +16,7 @@ import { useVendor } from '@/services/vendor';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { EntityType } from '@/enums';
+import { useToast } from '@/context/toast-context';
 
 const I = ENTITY_ICONS;
 
@@ -30,6 +31,7 @@ export default function VendorDetailScreen() {
   const [showAudit, setShowAudit] = useState(false);
   const [showComments, setShowComments] = useState(false);
   const [showTimeline, setShowTimeline] = useState(false);
+  const { showToast } = useToast();
 
   const { data: item, isLoading: isLoadingItem, refetch, isRefetching } = useVendor(id || '');
   const refreshControl = useRefreshControl(refetch, isRefetching);
@@ -39,6 +41,7 @@ export default function VendorDetailScreen() {
     await new Promise((r) => setTimeout(r, 800));
     setIsProcessing(false);
     setConfirmationType(null);
+    showToast({ type: 'success', title: 'Success', message: 'Vendor deleted successfully' });
     router.push(`/admin/vendors/${orgId}`);
   };
 
@@ -47,7 +50,7 @@ export default function VendorDetailScreen() {
     await new Promise((r) => setTimeout(r, 800));
     setIsProcessing(false);
     setConfirmationType(null);
-    Alert.alert('Success', 'Vendor archived successfully');
+    showToast({ type: 'success', title: 'Success', message: 'Vendor archived successfully' });
   };
 
   const actions: ActionItem[] = [

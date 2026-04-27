@@ -3,11 +3,12 @@ import { FormField } from '@/components/ui/form-field';
 import { PageHeader } from '@/components/ui/page-header';
 import { VStack } from '@/components/ui/vstack';
 import { useOrganisationContext } from '@/context/organisation-context';
+import { useToast } from '@/context/toast-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useSendReport } from '@/services/email';
 import { Stack, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
-import { Alert, ScrollView, Text } from 'react-native';
+import { ScrollView, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function ReportScreen() {
@@ -18,17 +19,18 @@ export default function ReportScreen() {
   const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
    const sendMutation = useSendReport(organisation?._id || orgId);
+   const { showToast } = useToast();
 
   const handleSubmit = async () => {
 
     if (!subject.trim() || !message.trim()) {
-      Alert.alert('Validation Error', 'Please fill all required fields');
+      showToast({ type: 'error', title: 'Validation Error', message: 'Please fill all required fields' });
       return;
     }
     setIsSubmitting(true);
     await sendMutation.mutateAsync({ subject, message, organisation: organisation?._id || orgId, organisationName: organisation?.name || 'Unknown' } as any);
     setIsSubmitting(false);
-    Alert.alert('Success', 'Your message has been sent to admin!');
+    showToast({ type: 'success', title: 'Success', message: 'Your message has been sent to admin!' });
     setSubject('');
     setMessage('');
   };

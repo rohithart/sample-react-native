@@ -18,13 +18,14 @@ import { resolveId } from '@/utils/resolve-ref';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 
 import React, { useState } from 'react';
-import { ActivityIndicator, Alert, Pressable, ScrollView, Text, View } from 'react-native';
+import { ActivityIndicator, Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { EntityType } from '@/enums';
 import { VStack } from '@/components/ui/vstack';
 import { HStack } from '@/components/ui/hstack';
 import { FlagButton } from '@/components/details/flag';
+import { useToast } from '@/context/toast-context';
 
 const I = ENTITY_ICONS;
 
@@ -42,6 +43,7 @@ export default function EvidenceDetailScreen() {
   const [showImages, setShowImages] = useState(false);
   const [showTimeline, setShowTimeline] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
+  const { showToast } = useToast();
 
   const { data: item, isLoading: isLoadingItem, refetch, isRefetching } = useEvidence(id || '');
   const updateStatus = useUpdateEvidenceStatus(orgId || '');
@@ -54,6 +56,7 @@ export default function EvidenceDetailScreen() {
     await new Promise((r) => setTimeout(r, 800));
     setIsProcessing(false);
     setConfirmationType(null);
+    showToast({ type: 'success', title: 'Evidence deleted successfully' });
     router.push(`/admin/evidences/${orgId}`);
   };
 
@@ -62,7 +65,7 @@ export default function EvidenceDetailScreen() {
     await new Promise((r) => setTimeout(r, 800));
     setIsProcessing(false);
     setConfirmationType(null);
-    Alert.alert('Success', 'Evidence archived successfully');
+    showToast({ type: 'success', title: 'Evidence archived successfully' });
   };
 
   const actions: ActionItem[] = [

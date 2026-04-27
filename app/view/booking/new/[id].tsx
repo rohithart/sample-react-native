@@ -4,13 +4,14 @@ import { PageHeader } from '@/components/ui/page-header';
 import { VStack } from '@/components/ui/vstack';
 import { Wysiwyg } from '@/components/wysiwyg';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { useToast } from '@/context/toast-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useCreateBooking } from '@/services/booking';
 import { useBookingTypes } from '@/services/booking-type';
 import { convertToLocalDateTimeString } from '@/utils/date';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { Alert, Pressable, ScrollView, Switch, Text } from 'react-native';
+import { Pressable, ScrollView, Switch, Text } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -36,6 +37,7 @@ export default function AddBookingScreen() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownItems, setDropdownItems] = useState<any[]>([]);
   const createBooking = useCreateBooking(orgId ?? '');
+  const { showToast } = useToast();
 
   const I = ENTITY_ICONS;
   const isFormValid =
@@ -61,11 +63,11 @@ export default function AddBookingScreen() {
 
   const handleSubmit = async () => {
     if (!title.trim() || !bookingType || !description.trim() || !fromDate || !toDate) {
-      Alert.alert('Validation Error', 'Please fill all required fields');
+      showToast({ type: 'error', title: 'Validation Error', message: 'Please fill all required fields' });
       return;
     }
     if (!isFullDay && (!fromTime || !toTime)) {
-      Alert.alert('Validation Error', 'Please select from and to time');
+      showToast({ type: 'error', title: 'Validation Error', message: 'Please select from and to time' });
       return;
     }
     setIsSubmitting(true);
@@ -82,12 +84,10 @@ export default function AddBookingScreen() {
         organisation: orgId as unknown as any,
       });
       setIsSubmitting(false);
-      Alert.alert('Success', 'Booking created successfully', [
-        { text: 'OK', onPress: () => router.push(`/view/bookings/${orgId}`) },
-      ]);
+      showToast({ type: 'success', title: 'Success', message: 'Booking created successfully' });
     } catch (e: any) {
       setIsSubmitting(false);
-      Alert.alert('Error', e?.message || 'Failed to create booking');
+      showToast({ type: 'error', title: 'Error', message: e?.message || 'Failed to create booking' });
     }
   };
 

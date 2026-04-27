@@ -4,7 +4,7 @@ import { DetailField, LinkedField, HtmlContent, AuditInfo } from '@/components/d
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 
 import React, { useState } from 'react';
-import { ActivityIndicator, ScrollView, Text, View, Pressable, Alert } from 'react-native';
+import { ActivityIndicator, ScrollView, Text, View, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ActionBottomSheet } from '@/components/sheets/action-bottom-sheet';
 import { ActionItem } from '@/types/actionItem';
@@ -18,6 +18,7 @@ import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { convertToLocalDateString, convertToTimeString } from '@/utils/date';
 import { onShare } from '@/utils/share';
 import { VStack } from '@/components/ui/vstack';
+import { useToast } from '@/context/toast-context';
 
 const I = ENTITY_ICONS;
 
@@ -30,6 +31,7 @@ export default function EventDetailScreen() {
   const [confirmationType, setConfirmationType] = useState<'delete' | 'archive' | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [showAudit, setShowAudit] = useState(false);
+  const { showToast } = useToast();
 
   const { data: item, isLoading: isLoadingItem, refetch, isRefetching } = useEvent(id || '');
   const refreshControl = useRefreshControl(refetch, isRefetching);
@@ -39,6 +41,7 @@ export default function EventDetailScreen() {
     await new Promise((r) => setTimeout(r, 800));
     setIsProcessing(false);
     setConfirmationType(null);
+    showToast({ type: 'success', title: 'Event deleted successfully' });
     router.push(`/admin/events/${orgId}`);
   };
 
@@ -47,7 +50,7 @@ export default function EventDetailScreen() {
     await new Promise((r) => setTimeout(r, 800));
     setIsProcessing(false);
     setConfirmationType(null);
-    Alert.alert('Success', 'Event archived successfully');
+    showToast({ type: 'success', title: 'Event archived successfully' });
   };
 
   const actions: ActionItem[] = [

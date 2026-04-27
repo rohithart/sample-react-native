@@ -8,6 +8,7 @@ import { ScrollView, Text, Pressable, Alert } from 'react-native';
 import { useOrganisationContext } from '@/context/organisation-context';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { useToast } from '@/context/toast-context';
 
 const I = ENTITY_ICONS;
 
@@ -19,18 +20,18 @@ export default function EditEvidenceScreen() {
   const [name, setName] = useState('Sample Evidence');
   const [description, setDescription] = useState('This is a sample evidence description.');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { showToast } = useToast();
 
   const handleSubmit = async () => {
     if (!name.trim()) {
-      Alert.alert('Validation Error', 'Please enter a name');
+      showToast({ type: 'error', title: 'Validation Error', message: 'Please enter a name' });
       return;
     }
     setIsSubmitting(true);
     await new Promise((resolve) => setTimeout(resolve, 1000));
     setIsSubmitting(false);
-    Alert.alert('Success', 'Evidence updated successfully', [
-      { text: 'OK', onPress: () => router.push(`/admin/evidence/${orgId}/${id}`) },
-    ]);
+    showToast({ type: 'success', title: 'Evidence updated successfully' });
+    router.push(`/admin/evidence/${orgId}/${id}`);
   };
 
   const handleDelete = () => {

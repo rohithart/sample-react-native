@@ -18,7 +18,7 @@ import { resolveId } from '@/utils/resolve-ref';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 
 import React, { useState } from 'react';
-import { ActivityIndicator, Alert, Pressable, ScrollView, Text, View } from 'react-native';
+import { ActivityIndicator, Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { EntityType } from '@/enums';
@@ -26,6 +26,7 @@ import { convertToLocalDateTimeString } from '@/utils/date';
 import { HStack } from '@/components/ui/hstack';
 import { FlagButton } from '@/components/details/flag';
 import { VStack } from '@/components/ui/vstack';
+import { useToast } from '@/context/toast-context';
 
 const I = ENTITY_ICONS;
 
@@ -43,6 +44,7 @@ export default function QuoteDetailScreen() {
   const [showImages, setShowImages] = useState(false);
   const [showTimeline, setShowTimeline] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
+  const { showToast } = useToast();
 
   const { data: item, isLoading: isLoadingItem, refetch, isRefetching } = useQuote(id || '');
   const updateStatus = useUpdateQuoteStatus(orgId || '');
@@ -55,6 +57,7 @@ export default function QuoteDetailScreen() {
     await new Promise((r) => setTimeout(r, 800));
     setIsProcessing(false);
     setConfirmationType(null);
+    showToast({ type: 'success', title: 'Success', message: 'Quote deleted successfully' });
     router.push(`/admin/quotes/${orgId}`);
   };
 
@@ -63,7 +66,7 @@ export default function QuoteDetailScreen() {
     await new Promise((r) => setTimeout(r, 800));
     setIsProcessing(false);
     setConfirmationType(null);
-    Alert.alert('Success', 'Quote archived successfully');
+    showToast({ type: 'success', title: 'Success', message: 'Quote archived successfully' });
   };
 
   const actions: ActionItem[] = [

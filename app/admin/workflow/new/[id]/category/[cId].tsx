@@ -3,8 +3,9 @@ import { PageHeader } from '@/components/ui/page-header';
 import { FormField } from '@/components/ui/form-field';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { ScrollView, Text, Pressable, Alert, View } from 'react-native';
+import { ScrollView, Text, Pressable, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useToast } from '@/context/toast-context';
 
 export default function Screen() {
   const { id, cId } = useLocalSearchParams<{ id: string; cId: string }>();
@@ -13,18 +14,18 @@ export default function Screen() {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { showToast } = useToast();
 
   const handleSubmit = async () => {
     if (!name.trim()) {
-      Alert.alert('Validation Error', 'Please enter a name');
+      showToast({ type: 'error', title: 'Validation Error', message: 'Please enter a name' });
       return;
     }
     setIsSubmitting(true);
     await new Promise((resolve) => setTimeout(resolve, 1000));
     setIsSubmitting(false);
-    Alert.alert('Success', 'New Workflow created successfully', [
-      { text: 'OK', onPress: () => router.back() },
-    ]);
+    showToast({ type: 'success', title: 'Success', message: 'New Workflow created successfully' });
+    router.back();
   };
 
   return (

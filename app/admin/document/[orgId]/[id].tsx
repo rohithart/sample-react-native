@@ -4,7 +4,7 @@ import { LinkedField, HtmlContent, AuditInfo } from '@/components/details';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 
 import React, { useState } from 'react';
-import { ActivityIndicator, ScrollView, Text, View, Pressable, Alert } from 'react-native';
+import { ActivityIndicator, ScrollView, Text, View, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ActionBottomSheet } from '@/components/sheets/action-bottom-sheet';
 import { ActionItem } from '@/types/actionItem';
@@ -22,6 +22,7 @@ import { EntityType } from '@/enums';
 import { onShare } from '@/utils/share';
 import { HStack } from '@/components/ui/hstack';
 import { FlagButton } from '@/components/details/flag';
+import { useToast } from '@/context/toast-context';
 
 const I = ENTITY_ICONS;
 
@@ -40,6 +41,7 @@ export default function DocumentDetailScreen() {
   const [showTimeline, setShowTimeline] = useState(false);
   const flagFn = useFlagDocument(orgId || '');    
   const unflagFn = useUnflagDocument(orgId || '');
+  const { showToast } = useToast();
 
   const { data: item, isLoading: isLoadingItem, refetch, isRefetching } = useDocument(id || '');
   const refreshControl = useRefreshControl(refetch, isRefetching);
@@ -49,6 +51,7 @@ export default function DocumentDetailScreen() {
     await new Promise((r) => setTimeout(r, 800));
     setIsProcessing(false);
     setConfirmationType(null);
+    showToast({ type: 'success', title: 'Document deleted successfully' });
     router.push(`/admin/documents/${orgId}`);
   };
 
@@ -57,7 +60,7 @@ export default function DocumentDetailScreen() {
     await new Promise((r) => setTimeout(r, 800));
     setIsProcessing(false);
     setConfirmationType(null);
-    Alert.alert('Success', 'Document archived successfully');
+    showToast({ type: 'success', title: 'Document archived successfully' });
   };
 
   const actions: ActionItem[] = [

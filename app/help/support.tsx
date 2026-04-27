@@ -2,11 +2,12 @@ import { Button } from '@/components/ui/button';
 import { FormField } from '@/components/ui/form-field';
 import { PageHeader } from '@/components/ui/page-header';
 import { VStack } from '@/components/ui/vstack';
+import { useToast } from '@/context/toast-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useSendFeedback } from '@/services/email';
 import { Stack } from 'expo-router';
 import { useState } from 'react';
-import { Alert, ScrollView, Text } from 'react-native';
+import { ScrollView, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function ContactScreen() {
@@ -17,22 +18,23 @@ export default function ContactScreen() {
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
    const sendMutation = useSendFeedback();
+   const { showToast } = useToast();
 
   const handleSubmit = async () => {
 
     if (!subject.trim() || !message.trim() || !name.trim() || !email.trim()) {
-      Alert.alert('Validation Error', 'Please fill all required fields');
+      showToast({ type: 'error', title: 'Validation Error', message: 'Please fill all required fields' });
       return;
     }
 
     if(email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
-      Alert.alert('Validation Error', 'Please enter a valid email address');
+      showToast({ type: 'error', title: 'Validation Error', message: 'Please enter a valid email address' } );
       return;
     }
     setIsSubmitting(true);
     await sendMutation.mutateAsync({ subject, message, name, email } as any);
     setIsSubmitting(false);
-    Alert.alert('Success', 'Your message has been sent to DarthVader!');
+    showToast({ type: 'success', title: 'Success', message: 'Your message has been sent to DarthVader!' });
     setSubject('');
     setMessage('');
     setName('');

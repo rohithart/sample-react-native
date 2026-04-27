@@ -14,6 +14,7 @@ import { useOrganisationContext } from '@/context/organisation-context';
 import { useCategory } from '@/services/category';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { useToast } from '@/context/toast-context';
 
 const I = ENTITY_ICONS;
 
@@ -26,6 +27,7 @@ export default function CategoryDetailScreen() {
   const [confirmationType, setConfirmationType] = useState<'delete' | 'archive' | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [showAudit, setShowAudit] = useState(false);
+  const { showToast } = useToast();
 
   const { data: item, isLoading: isLoadingItem, refetch, isRefetching } = useCategory(id || '');
   const refreshControl = useRefreshControl(refetch, isRefetching);
@@ -35,6 +37,7 @@ export default function CategoryDetailScreen() {
     await new Promise((r) => setTimeout(r, 800));
     setIsProcessing(false);
     setConfirmationType(null);
+    showToast({ type: 'success', title: 'Category deleted successfully' });
     router.push(`/admin/categories/${orgId}`);
   };
 
@@ -43,7 +46,7 @@ export default function CategoryDetailScreen() {
     await new Promise((r) => setTimeout(r, 800));
     setIsProcessing(false);
     setConfirmationType(null);
-    Alert.alert('Success', 'Category archived successfully');
+    showToast({ type: 'success', title: 'Category archived successfully' });
   };
 
   const actions: ActionItem[] = [
