@@ -37,6 +37,7 @@ export default function BookingTypeDetailScreen() {
     await new Promise((r) => setTimeout(r, 800));
     setIsProcessing(false);
     setConfirmationType(null);
+    showToast({ type: 'success', title: 'Booking Type deleted successfully' });
     router.push(`/admin/booking-types/${orgId}`);
   };
 

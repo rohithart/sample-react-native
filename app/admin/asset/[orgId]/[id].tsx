@@ -53,6 +53,7 @@ export default function AssetDetailScreen() {
     await new Promise((r) => setTimeout(r, 800));
     setIsProcessing(false);
     setConfirmationType(null);
+    showToast({ type: 'success', title: 'Asset deleted successfully' });
     router.push(`/admin/assets/${orgId}`);
   };
 

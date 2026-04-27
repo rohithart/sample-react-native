@@ -40,6 +40,7 @@ export default function BookingDetailScreen() {
     await new Promise((r) => setTimeout(r, 800));
     setIsProcessing(false);
     setConfirmationType(null);
+    showToast({ type: 'success', title: 'Booking deleted successfully' });
     router.push(`/admin/bookings/${orgId}`);
   };
 

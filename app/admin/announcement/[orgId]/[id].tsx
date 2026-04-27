@@ -39,6 +39,7 @@ export default function AnnouncementDetailScreen() {
     await new Promise((r) => setTimeout(r, 800));
     setIsProcessing(false);
     setConfirmationType(null);
+    showToast({ type: 'success', title: 'Announcement deleted successfully' });
     router.push(`/admin/announcements/${orgId}`);
   };
 
