@@ -4,19 +4,14 @@ import { FormField } from '@/components/ui/form-field';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 
 import React, { useState } from 'react';
-import { ScrollView, Text, Pressable, Alert } from 'react-native';
-import { useOrganisationContext } from '@/context/organisation-context';
+import { ScrollView, Text, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { useToast } from '@/context/toast-context';
-
-const I = ENTITY_ICONS;
 
 export default function EditMeetingScreen() {
   const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
   const router = useRouter();
   const colors = useThemeColors();
-  const { isAdmin } = useOrganisationContext();
   const [name, setName] = useState('Sample Meeting');
   const [description, setDescription] = useState('This is a sample meeting description.');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -32,26 +27,6 @@ export default function EditMeetingScreen() {
     setIsSubmitting(false);
     showToast({ type: 'success', title: 'Success', message: 'Meeting updated successfully' });
     router.push(`/admin/meeting/${orgId}/${id}`);
-  };
-
-  const handleDelete = () => {
-    Alert.alert(
-      'Delete Meeting',
-      'This action cannot be reversed. The meeting will be permanently deleted.',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Delete',
-          style: 'destructive',
-          onPress: async () => {
-            setIsSubmitting(true);
-            await new Promise((resolve) => setTimeout(resolve, 500));
-            setIsSubmitting(false);
-            router.push(`/admin/meetings/${orgId}`);
-          },
-        },
-      ]
-    );
   };
 
   return (
@@ -96,32 +71,6 @@ export default function EditMeetingScreen() {
             {isSubmitting ? 'Saving...' : 'Save Changes'}
           </Text>
         </Pressable>
-
-        {isAdmin && (
-
-        <Pressable
-          onPress={handleDelete}
-          disabled={isSubmitting}
-          style={({ pressed }) => ({
-            backgroundColor: colors.danger + '20',
-            borderWidth: 1,
-            borderColor: colors.danger,
-            paddingVertical: 12,
-            borderRadius: 8,
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: 8,
-            opacity: pressed || isSubmitting ? 0.7 : 1,
-          })}
-        >
-          <I.trash size={18} color={colors.danger} />
-          <Text style={{ fontSize: 16, fontWeight: '600', color: colors.danger }}>
-            Delete Meeting
-          </Text>
-        </Pressable>
-
-        )}
       </ScrollView>
     </SafeAreaView>
   );
