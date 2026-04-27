@@ -1,10 +1,13 @@
+import { DashboardCard } from '@/components/cards/dashboard-card';
 import { HtmlContent } from '@/components/details';
 import { AdminNavigationDrawer } from '@/components/drawer/admin-navigation-drawer';
+import { SectionHeader } from '@/components/section-header';
 import { Button } from '@/components/ui/button';
 import { HStack } from '@/components/ui/hstack';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { useOrganisationContext } from '@/context/organisation-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
+import { useAdminDashboard } from '@/services/dashboard';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -22,6 +25,7 @@ export default function AdminDashboard() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const drawerAnim = useRef(new Animated.Value(-300)).current;
   const { card, text, isDark } = useThemeColors();
+  const {data: dashboard} = useAdminDashboard(id || '');
 
   useEffect(() => { if (id) hydrateFromOrgId(id); }, [id, hydrateFromOrgId]);
 
@@ -35,7 +39,7 @@ export default function AdminDashboard() {
     }).start();
   }, [isDrawerOpen, drawerAnim]);
 
-  const { bg: bgColor, text: textColor, sub: secondaryText, primary, secondary, border, card: cardBg, success, danger } = colors;
+  const { bg: bgColor, text: textColor, sub: secondaryText, primary, secondary, border, card: cardBg, success, danger, warning } = colors;
 
   const org = organisation;
 
@@ -198,6 +202,70 @@ export default function AdminDashboard() {
               </View>
             </View>
           )}
+
+          <View>
+            <SectionHeader title="Organisation activity" />
+
+            <DashboardCard 
+              title="Workflows" 
+              icon={I.booking} 
+              labels={['Progress', 'Pending', 'Assigned to you']}
+              values= {[dashboard?.workflows?.progress || 0, dashboard?.workflows?.pending || 0, dashboard?.workflows?.assigned || 0]}
+              textColors={[success, warning, primary]}
+              backgroundColors={[success + '15', warning + '15', primary + '15']}
+              route={`/admin/workflows/${id}`}
+            />
+
+            <DashboardCard 
+              title="Tasks" 
+              icon={I.booking} 
+              labels={['Progress', 'Pending', 'Assigned to you']}
+              values= {[dashboard?.tasks?.progress || 0, dashboard?.tasks?.pending || 0, dashboard?.tasks?.assigned || 0]}
+              textColors={[success, warning, primary]}
+              backgroundColors={[success + '15', warning + '15', primary + '15']}
+              route={`/admin/tasks/${id}`}
+            />
+
+            <DashboardCard 
+              title="Quotes" 
+              icon={I.booking} 
+              labels={[ 'Pending']}
+              values= {[dashboard?.quotes?.pending || 0]}
+              textColors={[warning]}
+              backgroundColors={[ warning + '15']}
+              route={`/admin/quotes/${id}`}
+            />
+
+            <DashboardCard 
+              title="Invoices" 
+              icon={I.booking} 
+              labels={['Overdue',  'Pending', 'Paid']}
+              values= {[dashboard?.invoices?.overdue || 0, dashboard?.invoices?.pending || 0, dashboard?.invoices?.paid || 0]}
+              textColors={[success, warning, primary]}
+              backgroundColors={[success + '15', warning + '15', primary + '15']}
+              route={`/admin/invoices/${id}`}
+            />
+            
+            <DashboardCard 
+              title="Bookings" 
+              icon={I.booking} 
+              labels={['Approved', 'Pending', 'Rejected']}
+              values= {[dashboard?.bookings?.approved || 0, dashboard?.bookings?.pending || 0, dashboard?.bookings?.rejected || 0]}
+              textColors={[success, primary, danger]}
+              backgroundColors={[success + '15', primary + '15', danger + '15']}
+              route={`/admin/bookings/${id}`}
+            />
+            
+            <DashboardCard 
+              title="Requests" 
+              icon={I.userRequest} 
+              labels={['Approved', 'Pending', 'Rejected']}
+              values= {[dashboard?.requests?.approved || 0, dashboard?.requests?.pending || 0, dashboard?.requests?.rejected || 0]}
+              textColors={[success, primary, danger]}
+              backgroundColors={[success + '15', primary + '15', danger + '15']}
+              route={`/admin/user-requests/${id}`}
+            />
+          </View>
         </ScrollView>
       )}
     </View>

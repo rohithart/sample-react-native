@@ -2,6 +2,7 @@ import { DashboardCard } from '@/components/cards/dashboard-card';
 import { HtmlContent } from '@/components/details/html-content';
 import { UserNavigationDrawer } from '@/components/drawer/user-navigation-drawer';
 import { Matrix } from '@/components/matrix';
+import { SectionHeader } from '@/components/section-header';
 import { Button } from '@/components/ui/button';
 import { HStack } from '@/components/ui/hstack';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
@@ -40,12 +41,6 @@ export default function UserDashboard() {
   }, [isDrawerOpen, drawerAnim]);
 
   const { bg: bgColor, text: textColor, sub: secondaryText, primary, secondary, border, card: cardBg, success, danger } = colors;
-
-  const SectionHeader = ({ title }: { title: string }) => (
-    <Text style={{ fontSize: 13, fontWeight: '800', color: secondaryText, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8, marginLeft: 4 }}>
-      {title}
-    </Text>
-  );
 
   const org = organisation;
 
