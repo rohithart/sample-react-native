@@ -1,7 +1,6 @@
 import { useThemeColors } from '@/hooks/use-theme-colors';
-import { useRouter } from 'expo-router';
-
-import { Pressable, Text, View } from 'react-native';
+import { useRouter, usePathname } from 'expo-router';
+import { Pressable, Text, View, Linking } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 
@@ -10,6 +9,12 @@ const I = ENTITY_ICONS;
 export default function NotFoundScreen() {
   const colors = useThemeColors();
   const router = useRouter();
+  const pathname = usePathname();
+
+  const handleOpenInBrowser = () => {
+    const webUrl = `https://app.darthvader.com/${pathname}`;
+    Linking.openURL(webUrl);
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
@@ -17,20 +22,31 @@ export default function NotFoundScreen() {
         <I.alertCircle size={64} color={colors.sub} strokeWidth={1.5} />
         <Text style={{ fontSize: 28, fontWeight: '700', color: colors.text }}>Page Not Found</Text>
         <Text style={{ fontSize: 15, color: colors.sub, textAlign: 'center', lineHeight: 22 }}>
-          The page you're looking for doesn't exist or the URL may be incorrect.
+          The page you&apos;re looking for doesn&apos;t exist or may only be available on the web.
         </Text>
-        <Pressable
-          onPress={() => router.replace('/home')}
-          style={{
-            marginTop: 8,
-            backgroundColor: colors.primary,
-            paddingHorizontal: 24,
-            paddingVertical: 12,
-            borderRadius: 10,
-          }}
-        >
-          <Text style={{ color: '#fff', fontSize: 15, fontWeight: '600' }}>Go to Organisations</Text>
-        </Pressable>
+
+        <View style={{ gap: 12, width: '100%', alignItems: 'center', marginTop: 8 }}>
+          <Pressable
+            onPress={() => router.replace('/home')}
+            style={{
+              backgroundColor: colors.primary,
+              paddingHorizontal: 24,
+              paddingVertical: 12,
+              borderRadius: 10,
+              width: '100%',
+            }}
+          >
+            <Text style={{ color: colors.primary, fontSize: 15, fontWeight: '600'}}>
+              Go to Organisations
+            </Text>
+          </Pressable>
+
+          <Pressable onPress={handleOpenInBrowser} style={{ paddingVertical: 8 }}>
+            <Text style={{ color: colors.secondary, fontSize: 15, fontWeight: '500' }}>
+              Try opening in browser
+            </Text>
+          </Pressable>
+        </View>
       </View>
     </SafeAreaView>
   );
