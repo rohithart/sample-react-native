@@ -11,7 +11,7 @@ import { useAdminDashboard } from '@/services/dashboard';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Animated, Image, Pressable, Text as RNText, ScrollView, View } from 'react-native';
+import { ActivityIndicator, Animated, Image, Pressable, Text, ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const I = ENTITY_ICONS;
@@ -72,7 +72,7 @@ export default function AdminDashboard() {
       {isLoadingAccess ? (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
           <ActivityIndicator size="large" color={primary} />
-          <RNText style={{ color: secondaryText, fontSize: 14, marginTop: 10 }}>Loading organisation...</RNText>
+          <Text style={{ color: secondaryText, fontSize: 14, marginTop: 10 }}>Loading organisation...</Text>
         </View>
       ) : (
         <ScrollView
@@ -93,13 +93,13 @@ export default function AdminDashboard() {
                   </View>
                 )}
                 <View style={{ flex: 1 }}>
-                  <RNText style={{ fontSize: 18, fontWeight: '700', color: textColor }} numberOfLines={1}>
+                  <Text style={{ fontSize: 18, fontWeight: '700', color: textColor }} numberOfLines={1}>
                     {org?.name || 'Organisation'}
-                  </RNText>
+                  </Text>
                   {org?.address ? (
                     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
                       <I.mapPin size={13} color={secondaryText} />
-                      <RNText style={{ fontSize: 12, color: secondaryText }} numberOfLines={1}>{org.address}</RNText>
+                      <Text style={{ fontSize: 12, color: secondaryText }} numberOfLines={1}>{org.address}</Text>
                     </View>
                   ) : null}
                 </View>
@@ -107,9 +107,9 @@ export default function AdminDashboard() {
                   paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8,
                   backgroundColor: org?.isActive ? success + '15' : danger + '15',
                 }}>
-                  <RNText style={{ fontSize: 11, fontWeight: '600', color: org?.isActive ? success : danger }}>
+                  <Text style={{ fontSize: 11, fontWeight: '600', color: org?.isActive ? success : danger }}>
                     {org?.isActive ? 'Active' : 'Inactive'}
-                  </RNText>
+                  </Text>
                 </View>
               </View>
               <View
@@ -144,8 +144,8 @@ export default function AdminDashboard() {
                 <HStack space="lg" style={{ justifyContent: 'space-between', paddingHorizontal: 14, paddingVertical: 12 }}>
                   <HStack space="md" style={{ flex: 1 }}>
                     <View style={{ flex: 1 }}>
-                      <RNText style={{ fontSize: 13, fontWeight: '600', color: secondary }}>Switch to User Mode</RNText>
-                      <RNText style={{ fontSize: 11, color: secondaryText, marginTop: 2 }}>View as regular user</RNText>
+                      <Text style={{ fontSize: 13, fontWeight: '600', color: secondary }}>Switch to User Mode</Text>
+                      <Text style={{ fontSize: 11, color: secondaryText, marginTop: 2 }}>View as regular user</Text>
                     </View>
                   </HStack>
                   <View style={{ alignItems: 'center', justifyContent: 'center' }}>
@@ -160,13 +160,13 @@ export default function AdminDashboard() {
                 {org?.timezone ? (
                   <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
                     <I.globe size={13} color={secondaryText} />
-                    <RNText style={{ fontSize: 12, color: secondaryText }}>{org.timezone}</RNText>
+                    <Text style={{ fontSize: 12, color: secondaryText }}>{org.timezone}</Text>
                   </View>
                 ) : null}
                 {org?.identifier ? (
                   <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
                     <I.shield size={13} color={secondaryText} />
-                    <RNText style={{ fontSize: 12, color: secondaryText }}>{org.identifier}</RNText>
+                    <Text style={{ fontSize: 12, color: secondaryText }}>{org.identifier}</Text>
                   </View>
                 ) : null}
               </View>
@@ -175,7 +175,7 @@ export default function AdminDashboard() {
 
           {orgAccess && (
             <View style={{ gap: 8 }}>
-              <SectionHeader title="Enabled Modules" />
+              <SectionHeader title="Enabled Modules" style={undefined} />
               <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>
                 {(['workflow', 'vendor', 'communication', 'asset', 'finance', 'analytics', 'user', 'ai'] as const).map((mod) => {
                   const enabled = (orgAccess as any)[mod] !== false;
@@ -185,12 +185,12 @@ export default function AdminDashboard() {
                       backgroundColor: enabled ? primary + '12' : secondaryText + '10',
                       borderWidth: 1, borderColor: enabled ? primary + '30' : 'transparent',
                     }}>
-                      <RNText style={{
+                      <Text style={{
                         fontSize: 11, fontWeight: '600', textTransform: 'capitalize',
                         color: enabled ? primary : secondaryText,
                       }}>
                         {mod}
-                      </RNText>
+                      </Text>
                     </View>
                   );
                 })}
@@ -199,7 +199,7 @@ export default function AdminDashboard() {
           )}
 
           <View>
-            <SectionHeader title="Organisation activity" />
+            <SectionHeader title="Organisation activity" style={undefined} />
 
             <DashboardCard 
               title="Workflows" 

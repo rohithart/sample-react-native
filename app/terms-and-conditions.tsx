@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Stack, useRouter } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
 import { useEffect, useState } from 'react';
-import { Pressable, Text as RNText, ScrollView, View } from 'react-native';
+import { Pressable, Text, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const I = ENTITY_ICONS;
@@ -45,7 +45,7 @@ export default function TermsAndConditionsScreen() {
         showsVerticalScrollIndicator={false}
       >
         <View style={{ alignItems: 'center', marginBottom: 32 }}>
-          <RNText
+          <Text
             style={{
               fontSize: 32,
               fontWeight: '800',
@@ -55,8 +55,8 @@ export default function TermsAndConditionsScreen() {
             }}
           >
             Terms & Conditions
-          </RNText>
-          <RNText
+          </Text>
+          <Text
             style={{
               fontSize: 14,
               color: textSecondary,
@@ -65,7 +65,7 @@ export default function TermsAndConditionsScreen() {
             }}
           >
             Please review and accept our terms to continue
-          </RNText>
+          </Text>
         </View>
 
         <View style={{ gap: 16, marginBottom: 32 }}>
@@ -148,9 +148,9 @@ export default function TermsAndConditionsScreen() {
             )}
           </View>
           <View style={{ flex: 1 }}>
-            <RNText style={{ fontSize: 14, color: text, lineHeight: 20 }}>
+            <Text style={{ fontSize: 14, color: text, lineHeight: 20 }}>
               I agree to all{' '}
-              <RNText
+              <Text
                 style={{
                   color: primary,
                   fontWeight: '700',
@@ -159,8 +159,8 @@ export default function TermsAndConditionsScreen() {
                 onPress={handleOpenTerms}
               >
                 terms and conditions
-              </RNText>
-            </RNText>
+              </Text>
+            </Text>
           </View>
         </Pressable>
       </ScrollView>
@@ -195,7 +195,7 @@ export default function TermsAndConditionsScreen() {
             transform: [{ scale: pressed ? 0.98 : 1 }],
           })}
         >
-          <RNText
+          <Text
             style={{
               fontSize: 15,
               fontWeight: '700',
@@ -204,7 +204,7 @@ export default function TermsAndConditionsScreen() {
             }}
           >
             {isAgreed ? 'Proceed to App' : 'Agree to Continue'}
-          </RNText>
+          </Text>
         </Pressable>
       </View>
     </SafeAreaView>
@@ -245,7 +245,7 @@ function TermSection({
         gap: 8,
       }}
     >
-      <RNText
+      <Text
         style={{
           fontSize: 15,
           fontWeight: '700',
@@ -254,8 +254,8 @@ function TermSection({
         }}
       >
         {title}
-      </RNText>
-      <RNText
+      </Text>
+      <Text
         style={{
           fontSize: 14,
           color: text,
@@ -263,7 +263,7 @@ function TermSection({
         }}
       >
         {content}
-      </RNText>
+      </Text>
     </View>
   );
 }
