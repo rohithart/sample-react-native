@@ -14,6 +14,7 @@ import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { EntityComments } from '@/components/entity/entity-comments';
 import { EntityType } from '@/enums';
 import { VStack } from '@/components/ui/vstack';
+import { SectionHeader } from '@/components/section-header';
 
 const I = ENTITY_ICONS;
 
@@ -63,9 +64,7 @@ export default function UserRequestDetailScreen() {
           )}
 
           <View style={{ backgroundColor: colors.card, borderRadius: 24, padding: 16, borderWidth: 1, borderColor: colors.border }}>
-            <Text style={{ fontSize: 13, fontWeight: '800', color: colors.sub, marginBottom: 4, textTransform: 'uppercase', letterSpacing: 1 }}>
-              More information
-            </Text>
+            <SectionHeader title="More information" style={{ fontSize: 10, fontWeight: '700', marginBottom: 0 }} />
             <VStack space="lg">
               <DetailField label="Approved" value={item.isApproved ? 'Yes' : 'No'} />
               <DetailField label="Approved By" value={item.approvedBy} />

@@ -2,6 +2,7 @@ import { HStack } from '@/components/ui/hstack';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import React from 'react';
 import { GestureResponderEvent, Pressable, Text, View } from 'react-native';
+import { SectionHeader } from '../section-header';
 
 export function DrawerItem({
   icon,
@@ -63,25 +64,12 @@ export function DrawerItem({
 }
 
 export function DrawerSectionHeading({ title }: { title: string }) {
-  const colors = useThemeColors();
   return (
     <View style={{ 
       paddingHorizontal: 14, 
       padding: 8, 
     }}>
-      <Text
-        numberOfLines={1}
-        style={{
-          fontSize: 12,
-          fontWeight: '800',
-          letterSpacing: 1.2,
-          textTransform: 'uppercase',
-          color: colors.sub,
-          opacity: 0.8,
-        }}
-      >
-        {title}
-      </Text>
+      <SectionHeader title={title} />
     </View>
   );
 }

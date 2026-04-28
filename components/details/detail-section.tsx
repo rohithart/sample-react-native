@@ -1,7 +1,6 @@
 import { VStack } from '@/components/ui/vstack';
-import { useThemeColors } from '@/hooks/use-theme-colors';
 import React from 'react';
-import { Text } from 'react-native';
+import { SectionHeader } from '../section-header';
 
 interface DetailSectionProps {
   title: string;
@@ -9,22 +8,9 @@ interface DetailSectionProps {
 }
 
 export function DetailSection({ title, children }: DetailSectionProps) {
-  const { sub } = useThemeColors();
-
   return (
     <VStack space="sm">
-      <Text
-        style={{
-          fontSize: 12,
-          fontWeight: '600',
-          color: sub,
-          letterSpacing: 0.5,
-          textTransform: 'uppercase',
-          paddingHorizontal: 2,
-        }}
-      >
-        {title}
-      </Text>
+      <SectionHeader title={title} style={{ fontSize: 10, fontWeight: '700' }} />
       {children}
     </VStack>
   );

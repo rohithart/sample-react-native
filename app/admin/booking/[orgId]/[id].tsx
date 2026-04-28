@@ -18,6 +18,7 @@ import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { convertToLocalDateString, convertToTimeString } from '@/utils/date';
 import { VStack } from '@/components/ui/vstack';
 import { useToast } from '@/context/toast-context';
+import { SectionHeader } from '@/components/section-header';
 
 const I = ENTITY_ICONS;
 
@@ -109,16 +110,12 @@ export default function BookingDetailScreen() {
           )}
 
           <View style={{ backgroundColor: colors.card, borderRadius: 24, padding: 16, borderWidth: 1, borderColor: colors.border }}>
-            <Text style={{ fontSize: 13, fontWeight: '800', color: colors.sub, marginBottom: 4, textTransform: 'uppercase', letterSpacing: 1 }}>
-              Classification
-            </Text>
+            <SectionHeader title="Classification" style={{ fontSize: 10, fontWeight: '700', marginBottom: 0 }} />
             <LinkedField label="Booking Type" icon="bookingType" value={item.bookingType?.title} route={`/admin/booking-type/${orgId}/${resolveId(item.bookingType)}`} />
           </View>
 
           <View style={{ backgroundColor: colors.card, borderRadius: 24, padding: 16, borderWidth: 1, borderColor: colors.border }}>
-            <Text style={{ fontSize: 13, fontWeight: '800', color: colors.sub, marginBottom: 4, textTransform: 'uppercase', letterSpacing: 1 }}>
-              Booking information
-            </Text>
+            <SectionHeader title="Booking information" style={{ fontSize: 10, fontWeight: '700', marginBottom: 0 }} />
             <VStack space="lg">
               <DetailField label="From" value={convertToLocalDateString(item.bookingDateFrom)} />
               <DetailField label="Time From" value={convertToTimeString(item.bookingTimeFrom)} />
@@ -129,9 +126,7 @@ export default function BookingDetailScreen() {
           </View>
 
           <View style={{ backgroundColor: colors.card, borderRadius: 24, padding: 16, borderWidth: 1, borderColor: colors.border }}>
-            <Text style={{ fontSize: 13, fontWeight: '800', color: colors.sub, marginBottom: 4, textTransform: 'uppercase', letterSpacing: 1 }}>
-              More information
-            </Text>
+            <SectionHeader title="More information" style={{ fontSize: 10, fontWeight: '700', marginBottom: 0 }} />
             <VStack space="lg">
               <DetailField label="Approved" value={item.isApproved ? 'Yes' : 'No'} />
               <DetailField label="Approved By" value={item.approvedBy} />

@@ -3,6 +3,7 @@ import { useDisplaySettings } from '@/context/display-settings-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useRouter } from 'expo-router';
 import { Pressable, Text, View } from 'react-native';
+import { SectionHeader } from './section-header';
 
 export function DisplaySettingsIndicator() {
   const router = useRouter();
@@ -30,9 +31,7 @@ export function DisplaySettingsIndicator() {
       >
         <HStack style={{ alignItems: 'center', justifyContent: 'space-between' }}>
           <HStack space="xs" style={{ alignItems: 'center', flex: 1 }}>
-            <Text style={{ color: sub, fontSize: 11, fontWeight: '700', marginRight: 4, textTransform: 'uppercase' }}>
-              Filters:
-            </Text>
+            <SectionHeader title="Filters" style={{ fontSize: 10, fontWeight: '700', marginBottom: 0 }} />
 
             <View style={{
               paddingVertical: 3,

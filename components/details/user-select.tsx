@@ -15,6 +15,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { UserAvatar } from '../user-avatar'; // Assuming you have this
 import { UserRole } from '@/types';
+import { SectionHeader } from '../section-header';
 
 const I = ENTITY_ICONS;
 
@@ -92,9 +93,7 @@ export function UserSelect({ users, selectedId, onSelect, isLoading, disabled }:
           </View>
 
           <VStack style={{ flex: 1 }}>
-            <Text style={{ fontSize: 10, fontWeight: '700', color: sub, textTransform: 'uppercase', letterSpacing: 0.5 }}>
-              Assignee
-            </Text>
+            <SectionHeader title="Assignee" style={{ fontSize: 10, fontWeight: '700' }} />
             <Text style={{ fontSize: 15, fontWeight: '700', color: selected ? text : sub }} numberOfLines={1}>
               {displayName || 'Unassigned'}
             </Text>

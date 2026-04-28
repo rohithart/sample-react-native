@@ -5,6 +5,7 @@ import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useRouter } from 'expo-router';
 import React from 'react';
 import { Pressable, Text, View } from 'react-native';
+import { SectionHeader } from '../section-header';
 
 const I = ENTITY_ICONS;
 
@@ -48,15 +49,7 @@ export function LinkedField({ label, value, icon, route }: LinkedFieldProps) {
       </View>
       
       <VStack style={{ flex: 1 }}>
-        <Text style={{ 
-          fontSize: 10, 
-          fontWeight: '700', 
-          color: sub, 
-          textTransform: 'uppercase', 
-          letterSpacing: 0.5 
-        }}>
-          {label}
-        </Text>
+        <SectionHeader title={label} style={{ fontSize: 10, fontWeight: '700' }} />
         <Text style={{ 
           fontSize: 15, 
           fontWeight: '700', 

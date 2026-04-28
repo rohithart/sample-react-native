@@ -17,6 +17,7 @@ import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { Box } from '@/components/ui/box';
 import { VStack } from '@/components/ui/vstack';
 import { useToast } from '@/context/toast-context';
+import { SectionHeader } from '@/components/section-header';
 
 const I = ENTITY_ICONS;
 
@@ -125,9 +126,7 @@ export default function UserDetailScreen() {
           </Box>
 
           <View style={{ backgroundColor: colors.card, borderRadius: 24, padding: 16, borderWidth: 1, borderColor: colors.border }}>
-            <Text style={{ fontSize: 13, fontWeight: '800', color: colors.sub, marginBottom: 4, textTransform: 'uppercase', letterSpacing: 1 }}>
-              User information
-            </Text>
+            <SectionHeader title="User information" style={{ fontSize: 10, fontWeight: '700', marginBottom: 0 }} />
             <VStack space="lg">
                <DetailField label="Name" value={item.user?.name} />
               <DetailField label="Email" value={item.user?.email} />
@@ -137,9 +136,7 @@ export default function UserDetailScreen() {
           </View>
 
           <View style={{ backgroundColor: colors.card, borderRadius: 24, padding: 16, borderWidth: 1, borderColor: colors.border }}>
-            <Text style={{ fontSize: 13, fontWeight: '800', color: colors.sub, marginBottom: 4, textTransform: 'uppercase', letterSpacing: 1 }}>
-              Role
-            </Text>
+            <SectionHeader title="Role" style={{ fontSize: 10, fontWeight: '700', marginBottom: 0 }} />
             <VStack space="lg">
               <DetailField label="Role" value={item.role} />
               {isAdmin && (

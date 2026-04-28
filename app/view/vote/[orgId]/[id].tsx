@@ -14,6 +14,7 @@ import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { convertToLocalDateTimeString } from '@/utils/date';
 import { VStack } from '@/components/ui/vstack';
 import { useToast } from '@/context/toast-context';
+import { SectionHeader } from '@/components/section-header';
 
 const I = ENTITY_ICONS;
 
@@ -74,18 +75,14 @@ export default function VoteDetailScreen() {
       >
         <View style={{ padding: 16, gap: 20 }}>
           <View style={{ backgroundColor: colors.card, borderRadius: 24, padding: 16, borderWidth: 1, borderColor: colors.border }}>
-            <Text style={{ fontSize: 13, fontWeight: '800', color: colors.sub, marginBottom: 4, textTransform: 'uppercase', letterSpacing: 1 }}>
-              Classification
-            </Text>
+            <SectionHeader title="Classification" style={{ fontSize: 10, fontWeight: '700', marginBottom: 0 }} />
             <VStack space="lg">
               <DetailField label="Group" value={item.group?.title ?? 'N/A'} />
               <DetailField label="All Users" value={item.allUsers ? 'Yes' : 'No'} />
             </VStack>
           </View>
           <View style={{ backgroundColor: colors.card, borderRadius: 24, padding: 16, borderWidth: 1, borderColor: colors.border }}>
-            <Text style={{ fontSize: 13, fontWeight: '800', color: colors.sub, marginBottom: 4, textTransform: 'uppercase', letterSpacing: 1 }}>
-              Vote Status
-            </Text>
+            <SectionHeader title="Vote status" style={{ fontSize: 10, fontWeight: '700', marginBottom: 0 }} />
             <VStack space="lg">
               <DetailField label="Status" value={item.closed ? 'Closed' : 'Open'} />
               <DetailField label="End Date" value={convertToLocalDateTimeString(item.endDate)} />

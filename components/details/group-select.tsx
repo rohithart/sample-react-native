@@ -14,6 +14,7 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { SectionHeader } from '../section-header';
 
 const I = ENTITY_ICONS;
 
@@ -84,9 +85,7 @@ export function GroupSelect({ groups, selectedId, onSelect, isLoading, disabled 
           </View>
 
           <VStack style={{ flex: 1 }}>
-            <Text style={{ fontSize: 10, fontWeight: '700', color: sub, textTransform: 'uppercase', letterSpacing: 0.5 }}>
-              Assigned Group
-            </Text>
+            <SectionHeader title="Assigned Group" style={{ fontSize: 10, fontWeight: '700' }} />
             <Text style={{ fontSize: 15, fontWeight: '700', color: selected ? text : sub }} numberOfLines={1}>
               {displayName || 'Select Group'}
             </Text>

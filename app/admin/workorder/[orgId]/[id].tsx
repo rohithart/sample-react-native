@@ -27,6 +27,7 @@ import { HStack } from '@/components/ui/hstack';
 import { FlagButton } from '@/components/details/flag';
 import { VStack } from '@/components/ui/vstack';
 import { useToast } from '@/context/toast-context';
+import { SectionHeader } from '@/components/section-header';
 
 const I = ENTITY_ICONS;
 
@@ -153,9 +154,7 @@ export default function WorkOrderDetailScreen() {
           )}
 
           <View style={{ backgroundColor: colors.card, borderRadius: 24, padding: 16, borderWidth: 1, borderColor: colors.border }}>
-            <Text style={{ fontSize: 13, fontWeight: '800', color: colors.sub, marginBottom: 4, textTransform: 'uppercase', letterSpacing: 1 }}>
-              Classification
-            </Text>
+            <SectionHeader title="Classification" style={{ fontSize: 10, fontWeight: '700', marginBottom: 0 }} />
             <VStack space="lg">
               <LinkedField label="Workflow" icon="workflow" value={item.workflow?.title} route={`/admin/workflow/${orgId}/${resolveId(item.workflow)}`} />
               <LinkedField label="Quote" icon="quote" value={item.quote?.title} route={`/admin/quote/${orgId}/${resolveId(item.quote)}`} />
@@ -164,9 +163,7 @@ export default function WorkOrderDetailScreen() {
           </View>
 
           <View style={{ backgroundColor: colors.card, borderRadius: 24, padding: 16, borderWidth: 1, borderColor: colors.border }}>
-            <Text style={{ fontSize: 13, fontWeight: '800', color: colors.sub, marginBottom: 4, textTransform: 'uppercase', letterSpacing: 1 }}>
-              More information
-            </Text>
+            <SectionHeader title="More information" style={{ fontSize: 10, fontWeight: '700', marginBottom: 0 }} />
             <VStack space="lg">
               <DetailField label="Start Date" value={convertToLocalDateTimeString(item.startDate)} />
               <DetailField label="End Date" value={convertToLocalDateTimeString(item.endDate)} />

@@ -12,6 +12,7 @@ import { useAnnouncement } from '@/services/announcement';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { VStack } from '@/components/ui/vstack';
+import { SectionHeader } from '@/components/section-header';
 
 const I = ENTITY_ICONS;
 
@@ -59,9 +60,7 @@ export default function AnnouncementDetailScreen() {
           )}
 
           <View style={{ backgroundColor: colors.card, borderRadius: 24, padding: 16, borderWidth: 1, borderColor: colors.border }}>
-            <Text style={{ fontSize: 13, fontWeight: '800', color: colors.sub, marginBottom: 4, textTransform: 'uppercase', letterSpacing: 1 }}>
-              Other information
-            </Text>
+            <SectionHeader title="Other information" style={{ fontSize: 10, fontWeight: '700', marginBottom: 0 }} />
             <VStack space="lg">
               <DetailField label="Group" value={item.group?.title ?? 'N/A'} />
               <DetailField label="All Users" value={item.allUsers ? 'Yes' : 'No'} />

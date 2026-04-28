@@ -3,6 +3,7 @@ import { useThemeColors } from '@/hooks/use-theme-colors';
 import React, { useState } from 'react';
 import { Pressable, ScrollView, Text, View, useWindowDimensions } from 'react-native';
 import RenderHtml from 'react-native-render-html';
+import { SectionHeader } from '../section-header';
 
 const COLLAPSED_HEIGHT = 160;
 
@@ -38,9 +39,7 @@ export function HtmlContent({ label, html, maxHeight = COLLAPSED_HEIGHT }: HtmlC
       }}
     >
       {label ? (
-        <Text style={{ fontSize: 12, fontWeight: '600', color: sub, textTransform: 'uppercase', letterSpacing: 0.5 }}>
-          {label}
-        </Text>
+        <SectionHeader title={label} style={{ fontSize: 10, fontWeight: '700' }} />
       ) : null}
 
       <View style={showScroll ? { maxHeight, overflow: 'hidden' } : undefined}>

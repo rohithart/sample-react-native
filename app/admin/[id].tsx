@@ -154,9 +154,6 @@ export default function AdminDashboard() {
                 </HStack>
               </Pressable>
             </View>
-
-             
-
               {org?.description ? <HtmlContent label="Description" html={org.description} /> : null}
 
               <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12 }}>
@@ -178,9 +175,7 @@ export default function AdminDashboard() {
 
           {orgAccess && (
             <View style={{ gap: 8 }}>
-              <RNText style={{ fontSize: 12, fontWeight: '600', letterSpacing: 0.6, textTransform: 'uppercase', color: secondaryText }}>
-                Enabled Modules
-              </RNText>
+              <SectionHeader title="Enabled Modules" />
               <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>
                 {(['workflow', 'vendor', 'communication', 'asset', 'finance', 'analytics', 'user', 'ai'] as const).map((mod) => {
                   const enabled = (orgAccess as any)[mod] !== false;

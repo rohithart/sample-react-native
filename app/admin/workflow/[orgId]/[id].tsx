@@ -30,6 +30,7 @@ import { VStack } from '@/components/ui/vstack';
 import { FlagButton } from '@/components/details/flag';
 import { PrioritySelect } from '@/components/details/priority';
 import { useToast } from '@/context/toast-context';
+import { SectionHeader } from '@/components/section-header';
 
 const I = ENTITY_ICONS;
 
@@ -178,9 +179,7 @@ export default function WorkflowDetailScreen() {
             )}
 
             <View style={{ backgroundColor: colors.card, padding: 16, borderRadius: 24, borderWidth: 1, borderColor: colors.border }}>
-              <Text style={{ fontSize: 13, fontWeight: '800', color: colors.sub, marginBottom: 12, textTransform: 'uppercase', letterSpacing: 1 }}>
-                Assignment
-              </Text>
+              <SectionHeader title="Assignment" style={{ fontSize: 10, fontWeight: '700', marginBottom: 0 }} />
               <VStack space="lg">
                 <UserSelect
                   users={assignableUsers}
@@ -200,9 +199,7 @@ export default function WorkflowDetailScreen() {
             </View>
 
             <View style={{ backgroundColor: colors.card, borderRadius: 24, padding: 16, borderWidth: 1, borderColor: colors.border }}>
-              <Text style={{ fontSize: 13, fontWeight: '800', color: colors.sub, marginBottom: 4, textTransform: 'uppercase', letterSpacing: 1 }}>
-                Classification
-              </Text>
+              <SectionHeader title="Classification" style={{ fontSize: 10, fontWeight: '700', marginBottom: 0 }} />
               <LinkedField 
                 label="Category" 
                 icon="category" 

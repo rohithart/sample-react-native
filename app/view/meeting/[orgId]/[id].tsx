@@ -13,6 +13,7 @@ import { useRefreshControl } from '@/hooks/use-refresh-control';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { convertToLocalDateString } from '@/utils/date';
 import { VStack } from '@/components/ui/vstack';
+import { SectionHeader } from '@/components/section-header';
 
 const I = ENTITY_ICONS;
 
@@ -66,9 +67,7 @@ export default function MeetingDetailScreen() {
           )}
 
           <View style={{ backgroundColor: colors.card, borderRadius: 24, padding: 16, borderWidth: 1, borderColor: colors.border }}>
-            <Text style={{ fontSize: 13, fontWeight: '800', color: colors.sub, marginBottom: 4, textTransform: 'uppercase', letterSpacing: 1 }}>
-              Classification
-            </Text>
+            <SectionHeader title="Classification" style={{ fontSize: 10, fontWeight: '700', marginBottom: 0 }} />
             <VStack space="lg">
               <DetailField label="Group" value={item.group?.title ?? 'N/A'} />
               <DetailField label="All Users" value={item.allUsers ? 'Yes' : 'No'} />
@@ -76,9 +75,7 @@ export default function MeetingDetailScreen() {
           </View>
 
           <View style={{ backgroundColor: colors.card, borderRadius: 24, padding: 16, borderWidth: 1, borderColor: colors.border }}>
-            <Text style={{ fontSize: 13, fontWeight: '800', color: colors.sub, marginBottom: 4, textTransform: 'uppercase', letterSpacing: 1 }}>
-              Role
-            </Text>
+            <SectionHeader title="Role" style={{ fontSize: 10, fontWeight: '700', marginBottom: 0 }} />
             <VStack space="lg">
               <DetailField label="Date" value={convertToLocalDateString(item.meetingDate)} />
               <DetailField label="Time" value={item.meetingTime.toString()} />

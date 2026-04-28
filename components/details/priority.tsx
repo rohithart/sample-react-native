@@ -3,6 +3,7 @@ import { Modal, Pressable, Text, View, SafeAreaView } from 'react-native';
 import { HStack } from '../ui/hstack';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { useThemeColors } from '@/hooks/use-theme-colors';
+import { SectionHeader } from '../section-header';
 
 const I = ENTITY_ICONS;
 
@@ -37,16 +38,7 @@ export function PrioritySelect({ priority, onSelect, disabled }: any) {
           opacity: disabled ? 0.5 : pressed ? 0.8 : 1,
         })}
       >
-        <Text style={{ 
-          fontSize: 10, 
-          color: colors.sub, 
-          fontWeight: '800', 
-          textTransform: 'uppercase',
-          letterSpacing: 0.5,
-          marginBottom: 4
-        }}>
-          Priority
-        </Text>
+        <SectionHeader title="Priority" style={{ fontSize: 10, fontWeight: '700' }} />
         
         <HStack space="xs" style={{ alignItems: 'center' }}>
           <View style={{ 

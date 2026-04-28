@@ -3,6 +3,7 @@ import { Alert, Pressable, Text, View, Modal, TextInput, KeyboardAvoidingView, P
 import { HStack } from '../ui/hstack';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { useThemeColors } from '@/hooks/use-theme-colors';
+import { SectionHeader } from '../section-header';
 
 const I = ENTITY_ICONS;
 
@@ -42,9 +43,7 @@ export function FlagButton({ item, flagFn, unflagFn }: any) {
           opacity: pressed ? 0.8 : 1,
         })}
       >
-        <Text style={{ fontSize: 10, color: item.isFlagged ? colors.danger : colors.sub, fontWeight: '800', textTransform: 'uppercase', marginBottom: 4 }}>
-          Flag
-        </Text>
+        <SectionHeader title="Flag" style={{ fontSize: 10, fontWeight: '700', color: item.isFlagged ? colors.danger : colors.sub }} />
         <HStack space="xs" style={{ alignItems: 'center' }}>
           <I.flag size={14} color={item.isFlagged ? colors.danger : colors.sub}  />
           <Text numberOfLines={1} style={{ fontSize: 13, fontWeight: '700', color: item.isFlagged ? colors.danger : colors.text, flex: 1 }}>

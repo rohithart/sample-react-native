@@ -14,6 +14,7 @@ import { convertToLocalDateString } from '@/utils/date';
 import { VStack } from '@/components/ui/vstack';
 import { useReminder, useUpcomingReminders } from '@/services/reminder'; 
 import { HStack } from '@/components/ui/hstack';
+import { SectionHeader } from '@/components/section-header';
 
 const I = ENTITY_ICONS;
 
@@ -80,14 +81,7 @@ export default function ReminderDetailsScreen() {
                 width: 10, height: 10, borderRadius: 5, 
                 backgroundColor: item.isActive ? colors.success : colors.danger 
               }} />
-              <Text style={{ 
-                fontSize: 14, 
-                fontWeight: '700', 
-                color: item.isActive ? colors.success : colors.danger,
-                textTransform: 'uppercase'
-              }}>
-                {item.isActive ? 'Active Reminder' : 'Inactive / Paused'}
-              </Text>
+              <SectionHeader title={item.isActive ? 'Active Reminder' : 'Inactive / Paused'} style={{ fontSize: 10, fontWeight: '700', marginBottom: 0, color: item.isActive ? colors.success : colors.danger, }} />
             </View>
 
             {item.description && (
@@ -97,16 +91,7 @@ export default function ReminderDetailsScreen() {
             )}
 
             <View style={{ backgroundColor: colors.card, borderRadius: 24, padding: 16, borderWidth: 1, borderColor: colors.border }}>
-              <Text style={{ 
-                fontSize: 12, 
-                fontWeight: '800', 
-                color: colors.sub, 
-                marginBottom: 12, 
-                textTransform: 'uppercase', 
-                letterSpacing: 1 
-              }}>
-                Schedule & Frequency
-              </Text>
+              <SectionHeader title="Schedule & Frequency" style={{ fontSize: 10, fontWeight: '700', marginBottom: 0 }} />
               
               <VStack space="lg">
                 <DetailField 
@@ -128,10 +113,7 @@ export default function ReminderDetailsScreen() {
 
             {nextOccurrences && nextOccurrences?.length > 0 && (
               <View style={{ backgroundColor: colors.card, borderRadius: 24, padding: 16, borderWidth: 1, borderColor: colors.border }}>
-                <Text style={{ fontSize: 12, fontWeight: '800', color: colors.sub, marginBottom: 16, textTransform: 'uppercase', letterSpacing: 1 }}>
-                  Upcoming Schedule
-                </Text>
-                
+                <SectionHeader title="Upcoming Schedule" style={{ fontSize: 10, fontWeight: '700', marginBottom: 0 }} />
                 <VStack space="md">
                   {nextOccurrences?.map((date, idx) => (
                     <HStack key={idx} space="md" style={{ alignItems: 'center' }}>

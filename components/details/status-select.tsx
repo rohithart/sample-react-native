@@ -6,6 +6,7 @@ import React, { useMemo, useState } from 'react';
 import { Modal, Pressable, Text, View, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { SectionHeader } from '../section-header';
 
 const I = ENTITY_ICONS;
 
@@ -63,9 +64,7 @@ export function StatusSelect({ statuses, selectedValue, onSelect, disabled }: St
           </View>
 
           <VStack style={{ flex: 1 }}>
-            <Text style={{ fontSize: 10, fontWeight: '700', color: sub, textTransform: 'uppercase', letterSpacing: 0.5 }}>
-              Current Status
-            </Text>
+            <SectionHeader title="Current Status" style={{ fontSize: 10, fontWeight: '700' }} />
             <Text style={{ fontSize: 15, fontWeight: '700', color: selected ? text : sub }} numberOfLines={1}>
               {selected?.label || 'Set Status'}
             </Text>
