@@ -70,7 +70,7 @@ export function UserNavigationDrawer({
       <DrawerSectionHeading title="General" />
       <DrawerItem icon={<I.event size={16} color={c} />} label="Organisation events" onPress={() => go(`/view/events/${orgId}`)} />
       <DrawerItem icon={<I.information size={16} color={c} />} label="Other information" onPress={() => go(`/view/informations/${orgId}`)} />
-      <DrawerItem icon={<I.help size={16} color={c} />} label="Help" onPress={() => go('/view/help')} />
+      <DrawerItem icon={<I.help size={16} color={c} />} label="Help" onPress={() => go(`/view/help/${orgId}`)} />
 
       <DrawerDivider />
       <DrawerSectionHeading title='Contact organisation' />

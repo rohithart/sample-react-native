@@ -1,16 +1,16 @@
 import { PageHeader } from '@/components/ui/page-header';
 import { useThemeColors } from '@/hooks/use-theme-colors';
-import { getHelpData, type HelpItem } from '@/utils/help-data';
-import { Stack, useRouter } from 'expo-router';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { useAdminHelp } from '@/services/status';
+import { Stack, useLocalSearchParams } from 'expo-router';
+import { ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Screen() {
+  const { id } = useLocalSearchParams<{ id: string }>();
   const colors = useThemeColors();
-  const router = useRouter();
-  const helpData = getHelpData('admin');
+  const {data: helpData} = useAdminHelp(id || '');
 
-  const renderHelpItem = (item: HelpItem, index: number) => (
+  const renderHelpItem = (item: any, index: number) => (
     <View key={index} style={{ marginBottom: 24 }}>
       <Text style={{ fontSize: 18, fontWeight: '700', color: colors.text, marginBottom: 8 }}>
         {item.heading}
@@ -26,7 +26,7 @@ export default function Screen() {
       <Stack.Screen options={{ headerShown: false }} />
       <PageHeader icon="help" title="Help" />
       <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: 20, gap: 16 }}>
-        {helpData.map(renderHelpItem)}
+        {helpData?.data?.map((item: any) => renderHelpItem(item, item.heading))}
       </ScrollView>
     </SafeAreaView>
   );

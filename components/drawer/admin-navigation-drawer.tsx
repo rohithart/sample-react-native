@@ -132,7 +132,7 @@ export function AdminNavigationDrawer({
       <DrawerItem icon={<I.event size={16} color={c} />} label="All events" onPress={() => go(`/admin/events/${orgId}`)} />
       <DrawerItem icon={<I.eventType size={16} color={c} />} label="Event types" onPress={() => go(`/admin/event-types/${orgId}`)} indent />
       <DrawerItem icon={<I.information size={16} color={c} />} label="Other information" onPress={() => go(`/admin/informations/${orgId}`)} />
-      <DrawerItem icon={<I.help size={16} color={c} />} label="Help" onPress={() => go('/admin/help')} />
+      <DrawerItem icon={<I.help size={16} color={c} />} label="Help" onPress={() => go(`/admin/help/${orgId}`)} />
 
       <DrawerDivider />
       <DrawerSectionHeading title="Contact DarthVader" />
