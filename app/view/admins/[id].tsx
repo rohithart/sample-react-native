@@ -1,7 +1,6 @@
 import { AdminCard } from '@/components/cards/admin-card';
 import { useThemeColors } from '@/hooks/use-theme-colors';
-import { api } from '@/services/api-client';
-import { useQuery } from '@tanstack/react-query';
+import { useGetAllAdmins } from '@/services/user';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React from 'react';
 import { ActivityIndicator, FlatList, Pressable, Text, View } from 'react-native';
@@ -11,11 +10,7 @@ export default function AdminsListScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const colors = useThemeColors();
   const router = useRouter();
-  const { data: admins, isLoading, refetch, isRefetching } = useQuery({
-    queryKey: ['admins', id],
-    queryFn: () => api.get(`/api/user/admins/${id}`),
-    enabled: !!id,
-  });
+  const { data: admins, isLoading } = useGetAllAdmins(id || '')
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>

@@ -57,3 +57,7 @@ export function useUpdateUserProfile(orgId: string) {
   const qc = useQueryClient();
   return useMutation({ mutationFn: ({ id, data }: { id: string; data: Partial<User> }) => userApi.updateProfile(id, data), onSuccess: (_, { id }) => { qc.invalidateQueries({ queryKey: userKeys.all(orgId) }); qc.invalidateQueries({ queryKey: userKeys.detail(id) }); } });
 }
+
+export function useGetAllAdmins(orgId: string) {
+  return useQuery({ queryKey: userKeys.admins(orgId), queryFn: () => userApi.getAllAdmins(orgId), enabled: !!orgId });
+}
