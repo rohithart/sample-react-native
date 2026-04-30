@@ -1,9 +1,6 @@
-import { ENTITY_ICONS } from "@/constants/entity-icons";
 import { useThemeColors } from "@/hooks/use-theme-colors";
 import { useCallback } from "react";
 import { Linking, Pressable, Text, View, Image } from 'react-native';
-
-const I = ENTITY_ICONS;
 
 export function AdminCard({ admin }: { admin: any }) {
   const colors = useThemeColors();

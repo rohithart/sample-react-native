@@ -26,7 +26,14 @@ export default function SplashScreen() {
   const floatAnim = useRef(new Animated.Value(0)).current;
   const { bg, text, sub: textSecondary, primary } = colors;
   const { showToast } = useToast();
-  const alertsQuery = Platform.OS === 'android' ? useAlertsAndroid() : useAlertsiOS();
+
+  const useAlerts = () => {
+    const androidAlerts = useAlertsAndroid();
+    const iosAlerts = useAlertsiOS();
+
+    return Platform.OS === 'android' ? androidAlerts : iosAlerts;
+  };
+  const alertsQuery = useAlerts();
   const healthQuery = useHealth();
 
   useEffect(() => {

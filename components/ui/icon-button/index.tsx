@@ -29,7 +29,6 @@ export function IconButton({
 
   const bgColor = colorMap[color];
   const containerBg = colors.card;
-  const textColor = colors.text;
 
   return (
     <Pressable

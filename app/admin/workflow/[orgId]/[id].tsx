@@ -20,7 +20,7 @@ import { resolveId } from '@/utils/resolve-ref';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 
 import React, { useState } from 'react';
-import { ActivityIndicator, Pressable, ScrollView, Text, View } from 'react-native';
+import { ActivityIndicator, Pressable, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { EntityType } from '@/enums';

@@ -14,7 +14,7 @@ interface HtmlContentProps {
 }
 
 export function HtmlContent({ label, html, maxHeight = COLLAPSED_HEIGHT }: HtmlContentProps) {
-  const { card, text, sub, border, primary } = useThemeColors();
+  const { card, text, border, primary } = useThemeColors();
   const [expanded, setExpanded] = useState(false);
   const [contentHeight, setContentHeight] = useState(0);
   const I = ENTITY_ICONS;

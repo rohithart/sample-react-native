@@ -9,7 +9,7 @@ import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useCreateBooking } from '@/services/booking';
 import { useBookingTypes } from '@/services/booking-type';
 import { convertToLocalDateTimeString } from '@/utils/date';
-import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
+import { Stack, useLocalSearchParams } from 'expo-router';
 import React, { useState } from 'react';
 import { Pressable, ScrollView, Switch, Text } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -19,7 +19,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function AddBookingScreen() {
   const { id: orgId } = useLocalSearchParams<{ id: string }>();
-  const router = useRouter();
   const colors = useThemeColors();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');

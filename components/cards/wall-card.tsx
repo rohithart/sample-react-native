@@ -10,13 +10,9 @@ import { useDeleteWall, useLikeWall } from '@/services/wall';
 import { Wall } from '@/types';
 import { convertToLocalDateTimeString } from '@/utils/date';
 import React, { useCallback, useState } from 'react';
-import { ActivityIndicator, Alert, FlatList, Pressable, Text, TextInput, View, LayoutAnimation, Platform, UIManager } from 'react-native';
+import { ActivityIndicator, Alert, FlatList, Pressable, Text, TextInput, View, LayoutAnimation } from 'react-native';
 import { CommentCard } from './comment-card';
 import { HStack } from '../ui/hstack';
-
-if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
-  UIManager.setLayoutAnimationEnabledExperimental(true);
-}
 
 const I = ENTITY_ICONS;
 

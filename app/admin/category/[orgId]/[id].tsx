@@ -4,7 +4,7 @@ import { HtmlContent, AuditInfo } from '@/components/details';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 
 import React, { useState } from 'react';
-import { ActivityIndicator, ScrollView, Text, View, Pressable, Alert } from 'react-native';
+import { ActivityIndicator, ScrollView, Text, View, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ActionBottomSheet } from '@/components/sheets/action-bottom-sheet';
 import { ActionItem } from '@/types/actionItem';

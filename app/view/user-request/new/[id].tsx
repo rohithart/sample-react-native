@@ -1,7 +1,7 @@
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { PageHeader } from '@/components/ui/page-header';
 import { FormField } from '@/components/ui/form-field';
-import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
+import { Stack, useLocalSearchParams } from 'expo-router';
 import React, { useState } from 'react';
 import { ScrollView, Text, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -13,7 +13,6 @@ import { useToast } from '@/context/toast-context';
 
 export default function AddRequestScreen() {
   const { id: orgId } = useLocalSearchParams<{ id: string }>();
-  const router = useRouter();
   const colors = useThemeColors();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');

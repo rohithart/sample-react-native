@@ -6,7 +6,7 @@ import type { Timeline } from '@/types';
 
 import React from 'react';
 import { ActivityIndicator, FlatList, Modal, Pressable, Text, View } from 'react-native';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { EntityType } from '@/enums';
 import { convertToLocalDateTimeString } from '@/utils/date';
@@ -25,7 +25,6 @@ const LINE_WIDTH = 2;
 
 export function EntityTimeline({ isVisible, onClose, entity, entityId }: EntityTimelineProps) {
   const colors = useThemeColors();
-  const { bottom } = useSafeAreaInsets();
   const { data: entries, isLoading } = useTimeline(entity, entityId);
 
   const renderItem = ({ item, index }: { item: Timeline; index: number }) => {

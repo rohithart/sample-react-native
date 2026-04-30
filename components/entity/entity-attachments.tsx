@@ -7,7 +7,7 @@ import type { Attachment } from '@/types';
 
 import React, { useCallback, useState } from 'react';
 import { ActivityIndicator, Alert, FlatList, Linking, Modal, Pressable, Text, TextInput, View } from 'react-native';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { EntityType } from '@/enums';
 import { convertToLocalDateTimeString } from '@/utils/date';
@@ -44,7 +44,6 @@ function formatSize(bytes: string | number | undefined): string | null {
 
 export function EntityAttachments({ isVisible, onClose, entity, entityId, orgId }: EntityAttachmentsProps) {
   const colors = useThemeColors();
-  const { bottom } = useSafeAreaInsets();
   const { isAdmin } = useOrganisationContext();
   const { data: attachments, isLoading } = useAttachments(entity, entityId);
   const createMutation = useCreateAttachment(orgId, entity, entityId);

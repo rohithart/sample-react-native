@@ -7,7 +7,6 @@ import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import React from 'react';
 import { ActivityIndicator, FlatList, Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useBookingTypes } from '@/services/booking-type';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { useReminders } from '@/services/reminder';

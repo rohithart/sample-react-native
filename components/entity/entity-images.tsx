@@ -6,7 +6,7 @@ import type { AppImage } from '@/types';
 
 import React, { useCallback, useState } from 'react';
 import { ActivityIndicator, Alert, Dimensions, FlatList, Image, Modal, Pressable, Text, TextInput, View } from 'react-native';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { EntityType } from '@/enums';
 import { convertToLocalDateString } from '@/utils/date';
@@ -28,7 +28,6 @@ const THUMB_SIZE = (SCREEN_WIDTH - PADDING * 2 - GAP * 2) / 3;
 
 export function EntityImages({ isVisible, onClose, entity, entityId, orgId }: EntityImagesProps) {
   const colors = useThemeColors();
-  const { bottom } = useSafeAreaInsets();
   const { isAdmin } = useOrganisationContext();
   const { data: images, isLoading } = useImages(entity, entityId);
   const createMutation = useCreateImage(orgId, entity, entityId);
