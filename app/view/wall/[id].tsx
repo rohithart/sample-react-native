@@ -1,88 +1,21 @@
-import { WallCard } from '@/components/cards/wall-card';
-import { FormField } from '@/components/ui/form-field';
-import { HStack } from '@/components/ui/hstack';
-import { useToast } from '@/context/toast-context';
+import { PageHeader } from '@/components/ui/page-header';
+import WallPage from '@/components/wall/wall';
 import { useThemeColors } from '@/hooks/use-theme-colors';
-import { useCreateWall, useWalls } from '@/services/wall';
-import { useLocalSearchParams, useRouter } from 'expo-router';
-import React, { useCallback, useState } from 'react';
-import { ActivityIndicator, FlatList, Pressable, Text, TextInput, View } from 'react-native';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Stack } from 'expo-router';
+import React from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function WallScreen() {
-  const { id: orgId } = useLocalSearchParams<{ id: string }>();
   const colors = useThemeColors();
-  const router = useRouter();
-  const { bottom } = useSafeAreaInsets();
-  const { data: walls, isLoading, refetch, isRefetching } = useWalls(orgId ?? '');
-  const createWall = useCreateWall(orgId ?? '');
-  const { showToast } = useToast();
-  const [newPost, setNewPost] = useState('');
-
-  const handleAddPost = useCallback(() => {
-    if (!newPost.trim()) return;
-    createWall.mutate({ message: newPost.trim() }, {
-      onSuccess: () => {
-        setNewPost('');
-        showToast({ type: 'success', title: 'Posted!' });
-      },
-    });
-  }, [newPost, createWall, showToast]);
-
-  const isLiked = useCallback((id: string) => {
-    const wall = walls?.find((w) => w._id === id);
-    return wall?.likedByUsers?.length ? wall?.likedByUsers?.length > 0 : false;
-  }, [walls]);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
-      <View style={{ flexDirection: 'row', alignItems: 'center', padding: 16, borderBottomWidth: 1, borderColor: colors.border, backgroundColor: colors.card }}>
-        <Pressable onPress={() => router.back()} style={{ padding: 4, marginRight: 12 }}>
-          <Text style={{ fontSize: 24, color: colors.text }}>‹</Text>
-        </Pressable>
-        <Text style={{ fontSize: 18, fontWeight: '700', color: colors.text }}>Wall</Text>
-      </View>
+      <Stack.Screen options={{ headerShown: false }} />
+      <PageHeader icon="wall"
+        title="Wall"
+      />
 
-      <HStack space="md" className='items-center' style={{ padding: 14, backgroundColor: colors.card, margin: 10, borderRadius: 12, marginBottom: 0 }}>
-        <TextInput
-          value={newPost}
-          onChangeText={setNewPost}
-          placeholder="What's on your mind?"
-          placeholderTextColor={colors.sub}
-          style={{ flex: 1, backgroundColor: colors.inputBg, borderWidth: 1, borderColor: colors.inputBorder, borderRadius: 10, paddingHorizontal: 12, paddingVertical: 8, color: colors.text, fontSize: 14, maxHeight: 100 }}
-          multiline
-          numberOfLines={5}
-        />
-
-        <Pressable
-          onPress={handleAddPost}
-          style={{ alignSelf: 'flex-end', backgroundColor: colors.primary, borderRadius: 8, paddingHorizontal: 18, paddingVertical: 8 }}
-          disabled={!newPost.trim() || createWall.isPending}
-        >
-          <Text style={{ color: '#fff', fontWeight: '700', fontSize: 15 }}>Post</Text>
-        </Pressable>
-      </HStack>
-
-      {isLoading ? (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <ActivityIndicator size="large" color={colors.primary} />
-          <Text style={{ color: colors.sub, fontSize: 14, marginTop: 10 }}>Loading...</Text>
-        </View>
-      ) : (
-        <FlatList
-          data={walls ?? []}
-          renderItem={({ item }) => (
-            <WallCard wall={item} orgId={orgId ?? ''} onRefresh={refetch} isLiked={isLiked} />
-          )}
-          keyExtractor={item => item._id}
-          scrollIndicatorInsets={{ right: 1 }}
-          ListEmptyComponent={
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingTop: 60 }}>
-              <Text style={{ color: colors.sub, fontSize: 15 }}>No posts yet</Text>
-            </View>
-          }
-        />
-      )}
+      <WallPage />
     </SafeAreaView>
   );
 }

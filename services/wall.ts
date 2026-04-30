@@ -33,3 +33,7 @@ export function useLikeWall(orgId: string) {
   const qc = useQueryClient();
   return useMutation({ mutationFn: (id: string) => wallApi.like(orgId, id), onSuccess: () => qc.invalidateQueries({ queryKey: wallKeys.all(orgId) }) });
 }
+
+export function useGetWallsForUser(orgId: string, userId: string) {
+  return useQuery({ queryKey: ['wall', orgId, userId] as const, queryFn: () => wallApi.getAllForUser(orgId, userId), enabled: !!orgId && !!userId });
+}
