@@ -76,7 +76,7 @@ export function UserNavigationDrawer({
       <DrawerSectionHeading title='Contact organisation' />
       <DrawerItem icon={<I.zap size={16} color={secondary} />} label="Report Issue" onPress={() => go('/help/report')} />
       <DrawerItem icon={<I.mail size={16} color={secondary} />} label="Contact Admin" onPress={() => go('/help/contact')} />
-      <DrawerSectionHeading title="DarthVader" />
+      <DrawerSectionHeading title="Contact DarthVader" />
       <DrawerItem icon={<I.support size={16} color={secondary} />} label="Support" onPress={() => go('/help/support')} />
       <DrawerDivider />
     </NavigationDrawer>
