@@ -7,7 +7,7 @@ import { ScrollView, Text, Pressable, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useToast } from '@/context/toast-context';
 
-export default function Screen() {
+export default function NewAssetFromTypeScreen() {
   const { id, tId } = useLocalSearchParams<{ id: string; tId: string }>();
   const router = useRouter();
   const colors = useThemeColors();

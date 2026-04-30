@@ -4,7 +4,7 @@ import { Stack, useLocalSearchParams } from 'expo-router';
 import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-export default function Screen() {
+export default function EditOrganisationScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const colors = useThemeColors();
 

@@ -7,7 +7,7 @@ import { ScrollView, Text, Pressable, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useToast } from '@/context/toast-context';
 
-export default function Screen() {
+export default function NewLedgerFromInvoiceScreen() {
   const { id, oId } = useLocalSearchParams<{ id: string; oId: string }>();
   const router = useRouter();
   const colors = useThemeColors();
