@@ -11,10 +11,12 @@ import { PageHeader } from '@/components/ui/page-header';
 import { Pressable } from '@/components/ui/pressable';
 import { ScrollView } from '@/components/ui/scroll-view';
 import { ENTITY_ICONS, type EntityIconKey } from '@/constants/entity-icons';
+import { useOrganisation } from '@/context/organisation-context';
+import { useToast } from '@/context/toast-context';
 import type { EntityType } from '@/enums';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { type ActionItem } from '@/types/actionItem';
-import { Stack } from 'expo-router';
+import { Stack, useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -25,9 +27,16 @@ interface DetailScreenShellProps {
   title: string;
   isLoading: boolean;
   item?: any;
-  actions: ActionItem[];
   refreshControl?: any;
   children: React.ReactNode;
+  /** Route for the edit page. If set, enables admin actions (edit/archive/delete) gated by isAdmin. */
+  editRoute?: string;
+  /** Route to navigate after delete. Required if editRoute is set. */
+  deleteRedirectRoute?: string;
+  /** Entity display name for toast messages (e.g. "Workflow"). */
+  entityName?: string;
+  /** Extra custom actions (pdf, share, etc.) inserted between archive and features. */
+  extraActions?: ActionItem[];
   /** For entity sub-features (attachments, comments, etc.) */
   entityType?: EntityType;
   entityId?: string;
@@ -40,15 +49,21 @@ export function DetailScreenShell({
   title,
   isLoading,
   item,
-  actions,
   refreshControl,
   children,
+  editRoute,
+  deleteRedirectRoute,
+  entityName,
+  extraActions = [],
   entityType,
   entityId,
   orgId,
   features = [],
 }: DetailScreenShellProps) {
   const colors = useThemeColors();
+  const router = useRouter();
+  const { showToast } = useToast();
+  const { isAdmin } = useOrganisation();
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [confirmationType, setConfirmationType] = useState<'delete' | 'archive' | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -59,9 +74,37 @@ export function DetailScreenShell({
   const [showTimeline, setShowTimeline] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
 
-  // Inject the feature and audit toggles into actions
-  const augmentedActions: ActionItem[] = [
-    ...actions,
+  const handleDelete = async () => {
+    setIsProcessing(true);
+    await new Promise((r) => setTimeout(r, 800));
+    setIsProcessing(false);
+    setConfirmationType(null);
+    showToast({ type: 'success', title: 'Success', message: `${entityName} deleted successfully` });
+    if (deleteRedirectRoute) router.push(deleteRedirectRoute as any);
+  };
+
+  const handleArchive = async () => {
+    setIsProcessing(true);
+    await new Promise((r) => setTimeout(r, 800));
+    setIsProcessing(false);
+    setConfirmationType(null);
+    showToast({ type: 'success', title: 'Success', message: `${entityName} archived successfully` });
+  };
+
+  const actions: ActionItem[] = [
+    // Admin: Edit
+    ...(editRoute && isAdmin ? [{
+      id: 'edit', label: 'Edit', icon: <I.edit size={24} color={colors.primary} />,
+      onPress: () => router.push(editRoute as any), color: 'primary' as const,
+    }] : []),
+    // Admin: Archive
+    ...(editRoute && isAdmin ? [{
+      id: 'archive', label: 'Archive', icon: <I.archiveRestore size={24} color={colors.warning} />,
+      onPress: () => setConfirmationType('archive'), color: 'warning' as const,
+    }] : []),
+    // Extra actions (pdf, share, etc.)
+    ...extraActions,
+    // Features
     ...(features.includes('attachments') ? [{
       id: 'attachments', label: 'Attachments', icon: <I.attachment size={24} color={colors.primary} />, onPress: () => setShowAttachments(true), color: 'primary' as const,
     }] : []),
@@ -76,6 +119,13 @@ export function DetailScreenShell({
     }] : []),
     ...(features.includes('history') ? [{
       id: 'history', label: 'History', icon: <I.history size={24} color={colors.secondary} />, onPress: () => setShowHistory(true), color: 'primary' as const,
+    }] : []),
+    // Audit (always)
+    { id: 'audit', label: 'Audit Info', icon: <I.information size={24} color={colors.secondary} />, onPress: () => setShowAudit(true), color: 'primary' as const },
+    // Admin: Delete
+    ...(editRoute && isAdmin ? [{
+      id: 'delete', label: 'Delete', icon: <I.trash size={24} color={colors.danger} />,
+      onPress: () => setConfirmationType('delete'), color: 'danger' as const,
     }] : []),
   ];
 
@@ -104,9 +154,13 @@ export function DetailScreenShell({
         </ScrollView>
       )}
 
-      <ActionBottomSheet isVisible={isBottomSheetOpen} onClose={() => setIsBottomSheetOpen(false)} actions={augmentedActions} />
-      <ConfirmationDialog isOpen={confirmationType === 'delete'} onClose={() => setConfirmationType(null)} onConfirm={() => {}} type="delete" isLoading={isProcessing} />
-      <ConfirmationDialog isOpen={confirmationType === 'archive'} onClose={() => setConfirmationType(null)} onConfirm={() => {}} type="archive" isLoading={isProcessing} />
+      <ActionBottomSheet isVisible={isBottomSheetOpen} onClose={() => setIsBottomSheetOpen(false)} actions={actions} />
+      {editRoute && (
+        <>
+          <ConfirmationDialog isOpen={confirmationType === 'delete'} onClose={() => setConfirmationType(null)} onConfirm={handleDelete} type="delete" isLoading={isProcessing} />
+          <ConfirmationDialog isOpen={confirmationType === 'archive'} onClose={() => setConfirmationType(null)} onConfirm={handleArchive} type="archive" isLoading={isProcessing} />
+        </>
+      )}
       <AuditInfo isVisible={showAudit} onClose={() => setShowAudit(false)} createdBy={item?.createdBy} updatedBy={item?.updatedBy} createdAt={item?.createdAt} updatedAt={item?.updatedAt} />
       {features.includes('attachments') && entityType && (
         <EntityAttachments isVisible={showAttachments} onClose={() => setShowAttachments(false)} entity={entityType} entityId={entityId || ''} orgId={orgId || ''} />

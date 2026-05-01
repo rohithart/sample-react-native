@@ -3,16 +3,17 @@ import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useComments, useCreateComment, useDeleteComment } from '@/services/comment';
 import type { Comment } from '@/types';
 
-import React, { useCallback, useState } from 'react';
-import { ActivityIndicator, Alert, FlatList, Modal, TextInput } from 'react-native';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ENTITY_ICONS } from '@/constants/entity-icons';
-import { EntityType } from '@/enums';
-import { CommentCard } from '../cards/comment-card';
+import { FullScreenModal } from '@/components/ui/full-screen-modal';
 import { LoadingState } from '@/components/ui/loading-state';
 import { Pressable } from '@/components/ui/pressable';
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
+import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { EntityType } from '@/enums';
+import React, { useCallback, useState } from 'react';
+import { ActivityIndicator, Alert, FlatList, TextInput } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { CommentCard } from '../cards/comment-card';
 
 const I = ENTITY_ICONS;
 
@@ -51,56 +52,38 @@ export function EntityComments({ isVisible, onClose, entity, entityId, orgId }: 
     );
   };
 
-  if (!isVisible) return null;
-
   return (
-    <Modal transparent animationType="slide" visible={isVisible} onRequestClose={onClose}>
-      <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
-        <HStack className="items-center justify-between" style={{ paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: colors.border }}>
-          <HStack space="sm" className="items-center">
-            <Text style={{ fontSize: 17, fontWeight: '700', color: colors.text }}>Comments</Text>
-            {comments?.length ? (
-              <View style={{ backgroundColor: colors.primary + '15', borderRadius: 10, paddingHorizontal: 8, paddingVertical: 2 }}>
-                <Text style={{ fontSize: 12, fontWeight: '600', color: colors.primary }}>{comments.length}</Text>
-              </View>
-            ) : null}
-          </HStack>
-          <Pressable onPress={onClose} style={{ padding: 4 }}>
-            <I.close size={22} color={colors.sub} />
-          </Pressable>
-        </HStack>
+    <FullScreenModal visible={isVisible} onClose={onClose} title="Comments" count={comments?.length}>
+      {isLoading ? (
+        <LoadingState message="Loading comments..." />
+      ) : !comments?.length ? (
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 32 }}>
+          <I.comment size={48} color={colors.sub} strokeWidth={1.2} />
+          <Text style={{ color: colors.sub, fontSize: 15, marginTop: 12, textAlign: 'center' }}>No comments yet</Text>
+        </View>
+      ) : (
+        <FlatList
+          data={comments}
+          keyExtractor={(i) => i._id}
+          renderItem={renderItem}
+          contentContainerStyle={{ padding: 20, gap: 16 }}
+          showsVerticalScrollIndicator={false}
+        />
+      )}
 
-        {isLoading ? (
-          <LoadingState message="Loading comments..." />
-        ) : !comments?.length ? (
-          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 32 }}>
-            <I.comment size={48} color={colors.sub} strokeWidth={1.2} />
-            <Text style={{ color: colors.sub, fontSize: 15, marginTop: 12, textAlign: 'center' }}>No comments yet</Text>
-          </View>
-        ) : (
-          <FlatList
-            data={comments}
-            keyExtractor={(i) => i._id}
-            renderItem={renderItem}
-            contentContainerStyle={{ padding: 20, gap: 16 }}
-            showsVerticalScrollIndicator={false}
-          />
-        )}
-
-        <HStack space="sm" style={{ paddingHorizontal: 16, paddingVertical: 10, borderTopWidth: 1, borderTopColor: colors.border, paddingBottom: bottom + 10, backgroundColor: colors.bg }}>
-          <TextInput
-            value={content}
-            onChangeText={setContent}
-            placeholder="Write a comment..."
-            placeholderTextColor={colors.sub}
-            multiline
-            style={{ flex: 1, backgroundColor: colors.inputBg, borderWidth: 1, borderColor: colors.inputBorder, borderRadius: 10, paddingHorizontal: 12, paddingVertical: 8, color: colors.text, fontSize: 14, maxHeight: 100 }}
-          />
-          <Pressable onPress={handleSend} disabled={createMutation.isPending || !content.trim()} style={{ backgroundColor: colors.primary, borderRadius: 10, width: 42, alignItems: 'center', justifyContent: 'center', opacity: !content.trim() ? 0.5 : 1 }}>
-            {createMutation.isPending ? <ActivityIndicator size="small" color="#fff" /> : <I.send size={18} color="#fff" />}
-          </Pressable>
-        </HStack>
-      </SafeAreaView>
-    </Modal>
+      <HStack space="sm" style={{ paddingHorizontal: 16, paddingVertical: 10, borderTopWidth: 1, borderTopColor: colors.border, paddingBottom: bottom + 10, backgroundColor: colors.bg }}>
+        <TextInput
+          value={content}
+          onChangeText={setContent}
+          placeholder="Write a comment..."
+          placeholderTextColor={colors.sub}
+          multiline
+          style={{ flex: 1, backgroundColor: colors.inputBg, borderWidth: 1, borderColor: colors.inputBorder, borderRadius: 10, paddingHorizontal: 12, paddingVertical: 8, color: colors.text, fontSize: 14, maxHeight: 100 }}
+        />
+        <Pressable onPress={handleSend} disabled={createMutation.isPending || !content.trim()} style={{ backgroundColor: colors.primary, borderRadius: 10, width: 42, alignItems: 'center', justifyContent: 'center', opacity: !content.trim() ? 0.5 : 1 }}>
+          {createMutation.isPending ? <ActivityIndicator size="small" color="#fff" /> : <I.send size={18} color="#fff" />}
+        </Pressable>
+      </HStack>
+    </FullScreenModal>
   );
 }

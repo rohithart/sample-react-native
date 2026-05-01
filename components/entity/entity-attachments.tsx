@@ -5,17 +5,17 @@ import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useAttachments, useCreateAttachment, useDeleteAttachment } from '@/services/attachment';
 import type { Attachment } from '@/types';
 
-import React, { useCallback, useState } from 'react';
-import { ActivityIndicator, Alert, FlatList, Linking, Modal, TextInput } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { ENTITY_ICONS } from '@/constants/entity-icons';
-import { EntityType } from '@/enums';
-import { convertToLocalDateTimeString } from '@/utils/date';
-import { useToast } from '@/context/toast-context';
+import { FullScreenModal } from '@/components/ui/full-screen-modal';
 import { LoadingState } from '@/components/ui/loading-state';
 import { Pressable } from '@/components/ui/pressable';
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
+import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { useToast } from '@/context/toast-context';
+import { EntityType } from '@/enums';
+import { convertToLocalDateTimeString } from '@/utils/date';
+import React, { useCallback, useState } from 'react';
+import { ActivityIndicator, Alert, FlatList, Linking, TextInput } from 'react-native';
 
 const I = ENTITY_ICONS;
 
@@ -151,55 +151,45 @@ export function EntityAttachments({ isVisible, onClose, entity, entityId, orgId 
 
   if (!isVisible) return null;
 
+  const addButton = isAdmin ? (
+    <Pressable onPress={() => setShowAdd(!showAdd)} style={{ padding: 4 }}>
+      <I.plus size={22} color={colors.primary} />
+    </Pressable>
+  ) : undefined;
+
   return (
-    <Modal transparent animationType="slide" visible={isVisible} onRequestClose={onClose}>
-      <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
-        <HStack className="items-center justify-between" style={{ paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: colors.border }}>
-          <Text style={{ fontSize: 17, fontWeight: '700', color: colors.text }}>Attachments</Text>
-          <HStack space="md" className="items-center">
-            {isAdmin && (
-              <Pressable onPress={() => setShowAdd(!showAdd)} style={{ padding: 4 }}>
-                <I.plus size={22} color={colors.primary} />
-              </Pressable>
-            )}
-            <Pressable onPress={onClose} style={{ padding: 4 }}>
-              <I.close size={22} color={colors.sub} />
-            </Pressable>
-          </HStack>
-        </HStack>
-
-        {showAdd && (
-          <HStack space="sm" style={{ paddingHorizontal: 16, paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: colors.border }}>
-            <TextInput
-              value={name}
-              onChangeText={setName}
-              placeholder="Attachment name..."
-              placeholderTextColor={colors.sub}
-              style={{ flex: 1, backgroundColor: colors.inputBg, borderWidth: 1, borderColor: colors.inputBorder, borderRadius: 8, paddingHorizontal: 12, paddingVertical: 8, color: colors.text, fontSize: 14 }}
-            />
-            <Pressable onPress={handleAdd} disabled={createMutation.isPending} style={{ backgroundColor: colors.primary, borderRadius: 8, paddingHorizontal: 16, justifyContent: 'center' }}>
-              {createMutation.isPending ? <ActivityIndicator size="small" color="#fff" /> : <Text style={{ color: '#fff', fontWeight: '600', fontSize: 14 }}>Add</Text>}
-            </Pressable>
-          </HStack>
-        )}
-
-        {isLoading ? (
-          <LoadingState message="Loading attachments..." />
-        ) : !attachments?.length ? (
-          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 32 }}>
-            <I.fileText size={48} color={colors.sub} strokeWidth={1.2} />
-            <Text style={{ color: colors.sub, fontSize: 15, marginTop: 12, textAlign: 'center' }}>No attachments yet</Text>
-          </View>
-        ) : (
-          <FlatList
-            data={attachments}
-            keyExtractor={(i) => i._id}
-            renderItem={renderItem}
-            contentContainerStyle={{ padding: 20, gap: 16 }}
-            showsVerticalScrollIndicator={false}
+    <FullScreenModal visible={isVisible} onClose={onClose} title="Attachments" headerRight={addButton}>
+      {showAdd && (
+        <HStack space="sm" style={{ paddingHorizontal: 16, paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: colors.border }}>
+          <TextInput
+            value={name}
+            onChangeText={setName}
+            placeholder="Attachment name..."
+            placeholderTextColor={colors.sub}
+            style={{ flex: 1, backgroundColor: colors.inputBg, borderWidth: 1, borderColor: colors.inputBorder, borderRadius: 8, paddingHorizontal: 12, paddingVertical: 8, color: colors.text, fontSize: 14 }}
           />
-        )}
-      </SafeAreaView>
-    </Modal>
+          <Pressable onPress={handleAdd} disabled={createMutation.isPending} style={{ backgroundColor: colors.primary, borderRadius: 8, paddingHorizontal: 16, justifyContent: 'center' }}>
+            {createMutation.isPending ? <ActivityIndicator size="small" color="#fff" /> : <Text style={{ color: '#fff', fontWeight: '600', fontSize: 14 }}>Add</Text>}
+          </Pressable>
+        </HStack>
+      )}
+
+      {isLoading ? (
+        <LoadingState message="Loading attachments..." />
+      ) : !attachments?.length ? (
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 32 }}>
+          <I.fileText size={48} color={colors.sub} strokeWidth={1.2} />
+          <Text style={{ color: colors.sub, fontSize: 15, marginTop: 12, textAlign: 'center' }}>No attachments yet</Text>
+        </View>
+      ) : (
+        <FlatList
+          data={attachments}
+          keyExtractor={(i) => i._id}
+          renderItem={renderItem}
+          contentContainerStyle={{ padding: 20, gap: 16 }}
+          showsVerticalScrollIndicator={false}
+        />
+      )}
+    </FullScreenModal>
   );
 }

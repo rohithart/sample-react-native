@@ -1,118 +1,37 @@
-import { useThemeColors } from '@/hooks/use-theme-colors';
-import { PageHeader } from '@/components/ui/page-header';
-import { DetailField, DetailSection, AuditInfo } from '@/components/details';
-import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-
-import React, { useState } from 'react';
-
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { ActionBottomSheet } from '@/components/sheets/action-bottom-sheet';
-import { ActionItem } from '@/types/actionItem';
-import { ConfirmationDialog } from '@/components/dialogs/confirmation-dialog';
-import { useOrganisation } from '@/context/organisation-context';
-
+import { DetailScreenShell } from '@/components/ui/detail-screen-shell';
 import { useFinancialYear } from '@/services/financial-year';
+import { useLocalSearchParams } from 'expo-router';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
-import { ENTITY_ICONS } from '@/constants/entity-icons';
-import { convertToLocalDateTimeString } from '@/utils/date';
-import { useToast } from '@/context/toast-context';
-import { LoadingState } from '@/components/ui/loading-state';
-import { Pressable } from '@/components/ui/pressable';
-import { ScrollView } from '@/components/ui/scroll-view';
-
-const I = ENTITY_ICONS;
+import { useThemeColors } from '@/hooks/use-theme-colors';
+import React from 'react';
+import { DetailField, DetailSection } from '@/components/details';
+import { View } from '@/components/ui/view';
+import { convertToLocalDateString } from '@/utils/date';
 
 export default function FinancialYearDetailScreen() {
   const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
-  const router = useRouter();
   const colors = useThemeColors();
-  const { isAdmin } = useOrganisation();
-  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
-  const [confirmationType, setConfirmationType] = useState<'delete' | 'archive' | null>(null);
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [showAudit, setShowAudit] = useState(false);
-  const { showToast } = useToast();
-
-  const { data: item, isLoading: isLoadingItem, refetch, isRefetching } = useFinancialYear(id || '');
+  const { data: item, isLoading, refetch, isRefetching } = useFinancialYear(id || '');
   const refreshControl = useRefreshControl(refetch, isRefetching);
 
-  const handleDelete = async () => {
-    setIsProcessing(true);
-    await new Promise((r) => setTimeout(r, 800));
-    setIsProcessing(false);
-    setConfirmationType(null);
-    showToast({ type: 'success', title: 'Financial Year deleted successfully' });
-    router.push(`/admin/financial-years/${orgId}`);
-  };
-
-  const handleArchive = async () => {
-    setIsProcessing(true);
-    await new Promise((r) => setTimeout(r, 800));
-    setIsProcessing(false);
-    setConfirmationType(null);
-    showToast({ type: 'success', title: 'Success', message: 'Financial Year archived successfully' });
-  };
-
-  const actions: ActionItem[] = [
-    ...(isAdmin ? [{
-      id: 'edit',
-      label: 'Edit',
-      icon: <I.edit size={24} color={colors.primary} />,
-      onPress: () => router.push(`/admin/fy/${orgId}/${id}/edit`),
-      color: 'primary' as const,
-    }] : []),
-    ...(isAdmin ? [{
-      id: 'archive',
-      label: 'Archive',
-      icon: <I.archiveRestore size={24} color={colors.warning} />,
-      onPress: () => setConfirmationType('archive'),
-      color: 'warning' as const,
-    }] : []),
-
-    { id: 'audit', label: 'Audit Info', icon: <I.information size={24} color={colors.secondary} />, onPress: () => setShowAudit(true), color: 'primary' as const },
-
-    ...(isAdmin ? [{
-      id: 'delete',
-      label: 'Delete',
-      icon: <I.trash size={24} color={colors.danger} />,
-      onPress: () => setConfirmationType('delete'),
-      color: 'danger' as const,
-    }] : []),
-  ];
-
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
-      <Stack.Screen options={{ headerShown: false }} />
-      <PageHeader icon="financialYear"
-        title={'Financial Year'}
-        rightAction={
-          <Pressable onPress={() => setIsBottomSheetOpen(true)} style={{ padding: 8, backgroundColor: colors.primary + '10', borderRadius: 12 }}>
-            <I.moreVertical size={20} color={colors.primary} />
-          </Pressable>
-        }
-      />
-
-      {isLoadingItem || !item ? (
-        <LoadingState />
-      ) : (
-      <ScrollView
-        refreshControl={refreshControl}
-        contentContainerStyle={{ padding: 20, gap: 16 }}
-        showsVerticalScrollIndicator={false}
-      >
-        <DetailSection title="Period">
-          <DetailField label="From" value={convertToLocalDateTimeString(item.from)} />
-          <DetailField label="To" value={convertToLocalDateTimeString(item.to)} />
-          <DetailField label="Current" value={item.isCurrent ? 'Yes' : 'No'} />
-        </DetailSection>
-      </ScrollView>
-      )}
-
-      <ActionBottomSheet isVisible={isBottomSheetOpen} onClose={() => setIsBottomSheetOpen(false)} actions={actions} />
-      <ConfirmationDialog isOpen={confirmationType === 'delete'} onClose={() => setConfirmationType(null)} onConfirm={handleDelete} type="delete" isLoading={isProcessing} />
-      <ConfirmationDialog isOpen={confirmationType === 'archive'} onClose={() => setConfirmationType(null)} onConfirm={handleArchive} type="archive" isLoading={isProcessing} />
-      <AuditInfo isVisible={showAudit} onClose={() => setShowAudit(false)} createdBy={item?.createdBy} updatedBy={item?.updatedBy} createdAt={item?.createdAt} updatedAt={item?.updatedAt} />
-
-    </SafeAreaView>
+    <DetailScreenShell
+      icon="financialYear"
+      title={item?.title || 'Financial Year' || 'Loading...'}
+      isLoading={isLoading}
+      item={item}
+      refreshControl={refreshControl}
+      editRoute={`/admin/fy/${orgId}/${id}/edit`}
+      deleteRedirectRoute={`/admin/financial-years/${orgId}`}
+      entityName="Financial Year"
+    >
+      <View style={{ padding: 20, gap: 16 }}>
+          <DetailSection title="Period">
+            <DetailField label="From" value={convertToLocalDateString(item.from)} />
+            <DetailField label="To" value={convertToLocalDateString(item.to)} />
+            <DetailField label="Current" value={item.isCurrent ? 'Yes' : 'No'} />
+          </DetailSection>
+        </View>
+    </DetailScreenShell>
   );
 }

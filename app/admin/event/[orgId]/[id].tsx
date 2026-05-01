@@ -1,150 +1,61 @@
-import { useThemeColors } from '@/hooks/use-theme-colors';
-import { PageHeader } from '@/components/ui/page-header';
-import { DetailField, LinkedField, HtmlContent, AuditInfo } from '@/components/details';
-import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-
-import React, { useState } from 'react';
-
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { ActionBottomSheet } from '@/components/sheets/action-bottom-sheet';
-import { ActionItem } from '@/types/actionItem';
-import { ConfirmationDialog } from '@/components/dialogs/confirmation-dialog';
-import { useOrganisation } from '@/context/organisation-context';
-
+import { DetailScreenShell } from '@/components/ui/detail-screen-shell';
 import { useEvent } from '@/services/event';
+import { useLocalSearchParams } from 'expo-router';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
-import { resolveId } from '@/utils/resolve-ref';
+import { useThemeColors } from '@/hooks/use-theme-colors';
+import React from 'react';
+import { EntityType } from '@/enums';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
-import { convertToLocalDateString, convertToTimeString } from '@/utils/date';
-import { onShare } from '@/utils/share';
+import { DetailField, HtmlContent, LinkedField } from '@/components/details';
 import { VStack } from '@/components/ui/vstack';
-import { useToast } from '@/context/toast-context';
 import { SectionHeader } from '@/components/section-header';
-import { LoadingState } from '@/components/ui/loading-state';
-import { Pressable } from '@/components/ui/pressable';
-import { ScrollView } from '@/components/ui/scroll-view';
 import { View } from '@/components/ui/view';
+import { convertToLocalDateString } from '@/utils/date';
+import { resolveId } from '@/utils/resolve-ref';
+import { onShare } from '@/utils/share';
 
 const I = ENTITY_ICONS;
 
 export default function EventDetailScreen() {
   const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
-  const router = useRouter();
   const colors = useThemeColors();
-  const { isAdmin } = useOrganisation();
-  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
-  const [confirmationType, setConfirmationType] = useState<'delete' | 'archive' | null>(null);
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [showAudit, setShowAudit] = useState(false);
-  const { showToast } = useToast();
-
-  const { data: item, isLoading: isLoadingItem, refetch, isRefetching } = useEvent(id || '');
+  const { data: item, isLoading, refetch, isRefetching } = useEvent(id || '');
   const refreshControl = useRefreshControl(refetch, isRefetching);
 
-  const handleDelete = async () => {
-    setIsProcessing(true);
-    await new Promise((r) => setTimeout(r, 800));
-    setIsProcessing(false);
-    setConfirmationType(null);
-    showToast({ type: 'success', title: 'Event deleted successfully' });
-    router.push(`/admin/events/${orgId}`);
-  };
-
-  const handleArchive = async () => {
-    setIsProcessing(true);
-    await new Promise((r) => setTimeout(r, 800));
-    setIsProcessing(false);
-    setConfirmationType(null);
-    showToast({ type: 'success', title: 'Event archived successfully' });
-  };
-
-  const actions: ActionItem[] = [
-    ...(isAdmin ? [{
-      id: 'edit',
-      label: 'Edit',
-      icon: <I.edit size={24} color={colors.primary} />,
-      onPress: () => router.push(`/admin/event/${orgId}/${id}/edit`),
-      color: 'primary' as const,
-    }] : []),
-    ...(isAdmin ? [{
-      id: 'archive',
-      label: 'Archive',
-      icon: <I.archiveRestore size={24} color={colors.warning} />,
-      onPress: () => setConfirmationType('archive'),
-      color: 'warning' as const,
-    }] : []),
-
-    { id: 'audit', label: 'Audit Info', icon: <I.information size={24} color={colors.secondary} />, onPress: () => setShowAudit(true), color: 'primary' as const },
-    {
-      id: 'share',
-      label: 'Share',
-      icon: <I.share size={24} color={colors.success} />,
-      onPress: () => onShare(`Event on DarthVader: ${item?.title}` , `/view/event/${orgId}/${id}`),
-      color: 'success' as const,
-    },
-    ...(isAdmin ? [{
-      id: 'delete',
-      label: 'Delete',
-      icon: <I.trash size={24} color={colors.danger} />,
-      onPress: () => setConfirmationType('delete'),
-      color: 'danger' as const,
-    }] : []),
-  ];
-
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
-      <Stack.Screen options={{ headerShown: false }} />
-      <PageHeader icon="event"
-        title={item?.title || 'Loading...'}
-        rightAction={
-          <Pressable onPress={() => setIsBottomSheetOpen(true)} style={{ padding: 8, backgroundColor: colors.primary + '10', borderRadius: 12 }}>
-            <I.moreVertical size={20} color={colors.primary} />
-          </Pressable>
-        }
-      />
-
-      {isLoadingItem || !item ? (
-        <LoadingState />
-      ) : (
-      <ScrollView
-        refreshControl={refreshControl}
-        contentContainerStyle={{ paddingBottom: 40 }}
-        showsVerticalScrollIndicator={false}
-      >
-        <View style={{ padding: 16, gap: 20 }}>
+    <DetailScreenShell
+      icon="event"
+      title={item?.title || 'Loading...'}
+      isLoading={isLoading}
+      item={item}
+      refreshControl={refreshControl}
+      editRoute={`/admin/event/${orgId}/${id}/edit`}
+      deleteRedirectRoute={`/admin/events/${orgId}`}
+      entityName="Event"
+      extraActions={[{ id: 'share', label: 'Share', icon: <I.share size={24} color={colors.success} />, onPress: () => onShare(`Event on DarthVader: ${item?.title}`, `/view/event/${orgId}/${id}`), color: 'success' as const }]}
+      features={['attachments', 'comments', 'images', 'timeline', 'history']}
+      entityType={EntityType.EVENT}
+      entityId={id || ''}
+      orgId={orgId || ''}
+    >
+      <View style={{ padding: 16, gap: 20 }}>
           {item.description && (
             <View style={{ backgroundColor: colors.card, padding: 16, borderRadius: 20, borderWidth: 1, borderColor: colors.border }}>
               <HtmlContent label="Description" html={item.description} />
             </View>
           )}
-
           <View style={{ backgroundColor: colors.card, borderRadius: 24, padding: 16, borderWidth: 1, borderColor: colors.border }}>
             <SectionHeader title="Classification" style={{ fontSize: 10, fontWeight: '700', marginBottom: 0 }} />
             <LinkedField label="Event Type" icon="eventType" value={item.eventType?.title} route={`/admin/event-type/${orgId}/${resolveId(item.eventType)}`} />
           </View>
-
           <View style={{ backgroundColor: colors.card, borderRadius: 24, padding: 16, borderWidth: 1, borderColor: colors.border }}>
-            <SectionHeader title="More information" style={{ fontSize: 10, fontWeight: '700', marginBottom: 0 }} />
+            <SectionHeader title="Schedule" style={{ fontSize: 10, fontWeight: '700', marginBottom: 0 }} />
             <VStack space="lg">
               <DetailField label="From" value={convertToLocalDateString(item.eventDateFrom)} />
-              <DetailField label="Time From" value={convertToTimeString(item.eventTimeFrom)} />
-              <DetailField label="To" value={convertToLocalDateString (item.eventDateTo)} />
-              <DetailField label="Time To" value={convertToTimeString(item.eventTimeTo)} />
-              <DetailField label="Full Day" value={item.isFullDay ? 'Yes' : 'No'} />
-              <DetailField label="Recurring" value={item.isRecurring ? 'Yes' : 'No'} />
-              <DetailField label="Frequency" value={item.frequency} />
-              <DetailField label="Interval" value={item.interval ? String(item.interval) : null} />
+              <DetailField label="To" value={convertToLocalDateString(item.eventDateTo)} />
             </VStack>
           </View>
         </View>
-      </ScrollView>
-      )}
-
-      <ActionBottomSheet isVisible={isBottomSheetOpen} onClose={() => setIsBottomSheetOpen(false)} actions={actions} />
-      <ConfirmationDialog isOpen={confirmationType === 'delete'} onClose={() => setConfirmationType(null)} onConfirm={handleDelete} type="delete" isLoading={isProcessing} />
-      <ConfirmationDialog isOpen={confirmationType === 'archive'} onClose={() => setConfirmationType(null)} onConfirm={handleArchive} type="archive" isLoading={isProcessing} />
-      <AuditInfo isVisible={showAudit} onClose={() => setShowAudit(false)} createdBy={item?.createdBy} updatedBy={item?.updatedBy} createdAt={item?.createdAt} updatedAt={item?.updatedAt} />
-
-    </SafeAreaView>
+    </DetailScreenShell>
   );
 }

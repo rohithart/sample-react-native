@@ -4,16 +4,15 @@ import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useHistory } from '@/services/history';
 import type { HistoryChanges, History as HistoryType } from '@/types';
 
-import React from 'react';
-import { FlatList, Modal } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { FullScreenModal } from '@/components/ui/full-screen-modal';
+import { LoadingState } from '@/components/ui/loading-state';
+import { Text } from '@/components/ui/text';
+import { View } from '@/components/ui/view';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { EntityType } from '@/enums';
 import { convertToLocalDateTimeString } from '@/utils/date';
-import { LoadingState } from '@/components/ui/loading-state';
-import { Pressable } from '@/components/ui/pressable';
-import { Text } from '@/components/ui/text';
-import { View } from '@/components/ui/view';
+import React from 'react';
+import { FlatList } from 'react-native';
 
 const I = ENTITY_ICONS;
 
@@ -62,35 +61,24 @@ export function EntityHistory({ isVisible, onClose, entity, entityId }: EntityHi
     </VStack>
   );
 
-  if (!isVisible) return null;
-
   return (
-    <Modal transparent animationType="slide" visible={isVisible} onRequestClose={onClose}>
-      <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
-        <HStack className="items-center justify-between" style={{ paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: colors.border }}>
-          <Text style={{ fontSize: 17, fontWeight: '700', color: colors.text }}>History</Text>
-          <Pressable onPress={onClose} style={{ padding: 4 }}>
-            <I.close size={22} color={colors.sub} />
-          </Pressable>
-        </HStack>
-
-        {isLoading ? (
-          <LoadingState message="Loading history..." />
-        ) : !entries?.length ? (
-          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 32 }}>
-            <I.history size={48} color={colors.sub} strokeWidth={1.2} />
-            <Text style={{ color: colors.sub, fontSize: 15, marginTop: 12, textAlign: 'center' }}>No history entries yet</Text>
-          </View>
-        ) : (
-          <FlatList
-            data={entries}
-            keyExtractor={(i) => i._id}
-            renderItem={renderItem}
-            contentContainerStyle={{ padding: 20, gap: 16 }}
-            showsVerticalScrollIndicator={false}
-          />
-        )}
-      </SafeAreaView>
-    </Modal>
+    <FullScreenModal visible={isVisible} onClose={onClose} title="History">
+      {isLoading ? (
+        <LoadingState message="Loading history..." />
+      ) : !entries?.length ? (
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 32 }}>
+          <I.history size={48} color={colors.sub} strokeWidth={1.2} />
+          <Text style={{ color: colors.sub, fontSize: 15, marginTop: 12, textAlign: 'center' }}>No history entries yet</Text>
+        </View>
+      ) : (
+        <FlatList
+          data={entries}
+          keyExtractor={(i) => i._id}
+          renderItem={renderItem}
+          contentContainerStyle={{ padding: 20, gap: 16 }}
+          showsVerticalScrollIndicator={false}
+        />
+      )}
+    </FullScreenModal>
   );
 }

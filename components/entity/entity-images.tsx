@@ -4,17 +4,18 @@ import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useCreateImage, useDeleteImage, useImages } from '@/services/image';
 import type { AppImage } from '@/types';
 
-import React, { useCallback, useState } from 'react';
-import { ActivityIndicator, Alert, Dimensions, FlatList, Modal, TextInput } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { FullScreenModal } from '@/components/ui/full-screen-modal';
+import { Image } from '@/components/ui/image';
+import { LoadingState } from '@/components/ui/loading-state';
+import { Pressable } from '@/components/ui/pressable';
+import { Text } from '@/components/ui/text';
+import { View } from '@/components/ui/view';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { EntityType } from '@/enums';
 import { convertToLocalDateString } from '@/utils/date';
-import { LoadingState } from '@/components/ui/loading-state';
-import { Pressable } from '@/components/ui/pressable';
-import { Image } from '@/components/ui/image';
-import { Text } from '@/components/ui/text';
-import { View } from '@/components/ui/view';
+import React, { useCallback, useState } from 'react';
+import { ActivityIndicator, Alert, Dimensions, FlatList, Modal, TextInput } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const I = ENTITY_ICONS;
 
@@ -76,56 +77,46 @@ export function EntityImages({ isVisible, onClose, entity, entityId, orgId }: En
 
   if (!isVisible) return null;
 
+  const addButton = isAdmin ? (
+    <Pressable onPress={() => setShowAdd(!showAdd)} style={{ padding: 4 }}>
+      <I.plus size={22} color={colors.primary} />
+    </Pressable>
+  ) : undefined;
+
   return (
-    <Modal transparent animationType="slide" visible={isVisible} onRequestClose={onClose}>
-      <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
-        <HStack className="items-center justify-between" style={{ paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: colors.border }}>
-          <Text style={{ fontSize: 17, fontWeight: '700', color: colors.text }}>Images</Text>
-          <HStack space="md" className="items-center">
-            {isAdmin && (
-              <Pressable onPress={() => setShowAdd(!showAdd)} style={{ padding: 4 }}>
-                <I.plus size={22} color={colors.primary} />
-              </Pressable>
-            )}
-            <Pressable onPress={onClose} style={{ padding: 4 }}>
-              <I.close size={22} color={colors.sub} />
-            </Pressable>
-          </HStack>
-        </HStack>
-
-        {showAdd && (
-          <HStack space="sm" style={{ paddingHorizontal: 16, paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: colors.border }}>
-            <TextInput
-              value={url}
-              onChangeText={setUrl}
-              placeholder="Image URL..."
-              placeholderTextColor={colors.sub}
-              style={{ flex: 1, backgroundColor: colors.inputBg, borderWidth: 1, borderColor: colors.inputBorder, borderRadius: 8, paddingHorizontal: 12, paddingVertical: 8, color: colors.text, fontSize: 14 }}
-            />
-            <Pressable onPress={handleAdd} disabled={createMutation.isPending} style={{ backgroundColor: colors.primary, borderRadius: 8, paddingHorizontal: 16, justifyContent: 'center' }}>
-              {createMutation.isPending ? <ActivityIndicator size="small" color="#fff" /> : <Text style={{ color: '#fff', fontWeight: '600', fontSize: 14 }}>Add</Text>}
-            </Pressable>
-          </HStack>
-        )}
-
-        {isLoading ? (
-          <LoadingState message="Loading images..." />
-        ) : !images?.length ? (
-          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 32 }}>
-            <I.gallery size={48} color={colors.sub} strokeWidth={1.2} />
-            <Text style={{ color: colors.sub, fontSize: 15, marginTop: 12, textAlign: 'center' }}>No images yet</Text>
-          </View>
-        ) : (
-          <FlatList
-            data={images}
-            keyExtractor={(i) => i._id}
-            renderItem={renderThumb}
-            numColumns={3}
-            columnWrapperStyle={{ gap: GAP }}
-            showsVerticalScrollIndicator={false}
+    <FullScreenModal visible={isVisible} onClose={onClose} title="Images" headerRight={addButton}>
+      {showAdd && (
+        <HStack space="sm" style={{ paddingHorizontal: 16, paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: colors.border }}>
+          <TextInput
+            value={url}
+            onChangeText={setUrl}
+            placeholder="Image URL..."
+            placeholderTextColor={colors.sub}
+            style={{ flex: 1, backgroundColor: colors.inputBg, borderWidth: 1, borderColor: colors.inputBorder, borderRadius: 8, paddingHorizontal: 12, paddingVertical: 8, color: colors.text, fontSize: 14 }}
           />
-        )}
-      </SafeAreaView>
+          <Pressable onPress={handleAdd} disabled={createMutation.isPending} style={{ backgroundColor: colors.primary, borderRadius: 8, paddingHorizontal: 16, justifyContent: 'center' }}>
+            {createMutation.isPending ? <ActivityIndicator size="small" color="#fff" /> : <Text style={{ color: '#fff', fontWeight: '600', fontSize: 14 }}>Add</Text>}
+          </Pressable>
+        </HStack>
+      )}
+
+      {isLoading ? (
+        <LoadingState message="Loading images..." />
+      ) : !images?.length ? (
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 32 }}>
+          <I.gallery size={48} color={colors.sub} strokeWidth={1.2} />
+          <Text style={{ color: colors.sub, fontSize: 15, marginTop: 12, textAlign: 'center' }}>No images yet</Text>
+        </View>
+      ) : (
+        <FlatList
+          data={images}
+          keyExtractor={(i) => i._id}
+          renderItem={renderThumb}
+          numColumns={3}
+          columnWrapperStyle={{ gap: GAP }}
+          showsVerticalScrollIndicator={false}
+        />
+      )}
 
       {viewerImage && (
         <Modal transparent animationType="fade" visible={!!viewerImage} onRequestClose={() => setViewerIndex(null)}>
@@ -180,6 +171,6 @@ export function EntityImages({ isVisible, onClose, entity, entityId, orgId }: En
           </View>
         </Modal>
       )}
-    </Modal>
+    </FullScreenModal>
   );
 }

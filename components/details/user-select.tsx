@@ -1,16 +1,15 @@
+import { BottomSheetSelect } from '@/components/ui/bottom-sheet-select';
 import { HStack } from '@/components/ui/hstack';
-import { VStack } from '@/components/ui/vstack';
-import { ENTITY_ICONS } from '@/constants/entity-icons';
-import { useThemeColors } from '@/hooks/use-theme-colors';
-import React, { useMemo, useState } from 'react';
-import { ActivityIndicator, FlatList, Modal, TextInput } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { UserAvatar } from '../user-avatar'; // Assuming you have this
-import { UserRole } from '@/types';
-import { SectionHeader } from '../section-header';
 import { Pressable } from '@/components/ui/pressable';
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
+import { VStack } from '@/components/ui/vstack';
+import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { useThemeColors } from '@/hooks/use-theme-colors';
+import { UserRole } from '@/types';
+import React, { useCallback, useMemo, useState } from 'react';
+import { SectionHeader } from '../section-header';
+import { UserAvatar } from '../user-avatar';
 
 const I = ENTITY_ICONS;
 
@@ -36,23 +35,41 @@ function getUserEmail(u: UserRole): string {
   return '';
 }
 
+const filterUser = (u: UserRole, query: string) =>
+  getUserDisplay(u).toLowerCase().includes(query) ||
+  getUserEmail(u).toLowerCase().includes(query);
+
+const extractKey = (u: UserRole) => u._id;
+
 export function UserSelect({ users, selectedId, onSelect, isLoading, disabled }: UserSelectProps) {
   const { card, text, sub, border, primary, bg } = useThemeColors();
   const [isOpen, setIsOpen] = useState(false);
-  const [search, setSearch] = useState('');
 
   const selected = useMemo(
     () => users.find((u) => u._id === selectedId),
     [users, selectedId]
   );
 
-  const filtered = useMemo(() => {
-    if (!search.trim()) return users;
-    const q = search.toLowerCase();
-    return users.filter((u) => getUserDisplay(u).toLowerCase().includes(q) || getUserEmail(u).toLowerCase().includes(q));
-  }, [users, search]);
-
   const displayName = selected ? getUserDisplay(selected) : null;
+
+  const renderItem = useCallback((u: UserRole, isSelected: boolean) => (
+    <HStack space="md" style={{ alignItems: 'center', marginBottom: 4 }}>
+      <UserAvatar userRole={u} />
+      <VStack style={{ flex: 1, marginLeft: 12 }}>
+        <Text style={{ fontSize: 15, fontWeight: isSelected ? '700' : '600', color: text }}>
+          {getUserDisplay(u)}
+        </Text>
+        <Text style={{ fontSize: 12, color: sub }} numberOfLines={1}>
+          {getUserEmail(u)}
+        </Text>
+      </VStack>
+      {isSelected && (
+        <View style={{ backgroundColor: primary, borderRadius: 12, padding: 4 }}>
+          <I.check size={14} color="#fff" />
+        </View>
+      )}
+    </HStack>
+  ), [primary, text, sub]);
 
   return (
     <>
@@ -100,103 +117,20 @@ export function UserSelect({ users, selectedId, onSelect, isLoading, disabled }:
         </HStack>
       </Pressable>
 
-      <Modal transparent animationType="fade" visible={isOpen} onRequestClose={() => setIsOpen(false)}>
-        <Pressable 
-          style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.4)', justifyContent: 'flex-end' }} 
-          onPress={() => setIsOpen(false)}
-        >
-          <SafeAreaView edges={['bottom']} style={{ backgroundColor: card, borderTopLeftRadius: 24, borderTopRightRadius: 24, maxHeight: '85%' }}>
-            <View style={{ alignItems: 'center', paddingVertical: 12 }}>
-              <View style={{ width: 40, height: 4, borderRadius: 2, backgroundColor: border }} />
-            </View>
-
-            <View style={{ paddingHorizontal: 20, marginBottom: 12 }}>
-              <Text style={{ fontSize: 18, fontWeight: '800', color: text }}>Select Assignee</Text>
-              
-              <HStack space="sm" style={{ 
-                marginTop: 12, 
-                paddingHorizontal: 12, 
-                paddingVertical: 10, 
-                backgroundColor: bg, 
-                borderRadius: 12, 
-                borderWidth: 1, 
-                borderColor: border,
-                alignItems: 'center' 
-              }}>
-                <I.search size={18} color={sub} />
-                <TextInput
-                  placeholder="Search by name or email..."
-                  placeholderTextColor={sub}
-                  value={search}
-                  onChangeText={setSearch}
-                  style={{ flex: 1, fontSize: 15, color: text, paddingVertical: 0 }}
-                  autoFocus={false}
-                />
-                {search.length > 0 && (
-                  <Pressable onPress={() => setSearch('')}>
-                    <I.close size={16} color={sub} />
-                  </Pressable>
-                )}
-              </HStack>
-            </View>
-
-            {isLoading ? (
-              <View style={{ padding: 40, alignItems: 'center' }}>
-                <ActivityIndicator color={primary} />
-              </View>
-            ) : (
-              <FlatList
-                data={filtered}
-                keyExtractor={(item) => item._id}
-                contentContainerStyle={{ paddingHorizontal: 12, paddingBottom: 20 }}
-                renderItem={({ item: u }) => {
-                  const isSelected = u._id === selectedId;
-                  return (
-                    <Pressable
-                      onPress={() => {
-                        onSelect(u._id);
-                        setIsOpen(false);
-                        setSearch('');
-                      }}
-                      style={({ pressed }) => ({
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        padding: 10,
-                        marginBottom: 4,
-                        borderRadius: 12,
-                        backgroundColor: isSelected ? primary + '10' : pressed ? bg : 'transparent',
-                      })}
-                    >
-                      
-                      <HStack space="md" style={{ alignItems: 'center', marginBottom: 4 }}>
-                        <UserAvatar userRole={u} />
-                        <VStack style={{ flex: 1, marginLeft: 12 }}>
-                          <Text style={{ fontSize: 15, fontWeight: isSelected ? '700' : '600', color: text }}>
-                            {getUserDisplay(u)}
-                          </Text>
-                          <Text style={{ fontSize: 12, color: sub }} numberOfLines={1}>
-                            {getUserEmail(u)}
-                          </Text>
-                        </VStack>
-                        {isSelected && (
-                          <View style={{ backgroundColor: primary, borderRadius: 12, padding: 4 }}>
-                            <I.check size={14} color="#fff" />
-                          </View>
-                        )}
-                      </HStack>
-                    </Pressable>
-                  );
-                }}
-                ListEmptyComponent={
-                  <View style={{ padding: 40, alignItems: 'center' }}>
-                    <Text style={{ color: sub }}>No users found</Text>
-                  </View>
-                }
-              />
-            )}
-          </SafeAreaView>
-        </Pressable>
-      </Modal>
+      <BottomSheetSelect
+        visible={isOpen}
+        onClose={() => setIsOpen(false)}
+        title="Select Assignee"
+        searchPlaceholder="Search by name or email..."
+        emptyMessage="No users found"
+        data={users}
+        isLoading={isLoading}
+        selectedId={selectedId}
+        keyExtractor={extractKey}
+        onSelect={(u) => onSelect(u._id)}
+        renderItem={renderItem}
+        filterFn={filterUser}
+      />
     </>
   );
 }
