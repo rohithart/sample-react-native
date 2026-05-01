@@ -4,8 +4,8 @@ import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useHistory } from '@/services/history';
 import type { HistoryChanges, History as HistoryType } from '@/types';
 
-import { FullScreenModal } from '@/components/ui/full-screen-modal';
 import { LoadingList } from '@/components/skeleton';
+import { FullScreenModal } from '@/components/ui/full-screen-modal';
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
 import { ENTITY_ICONS } from '@/constants/entity-icons';

@@ -1,4 +1,6 @@
 import { AdminCard } from '@/components/cards/admin-card';
+import { LoadingList } from '@/components/skeleton';
+import { EmptyState } from '@/components/ui/empty-state';
 import { PageHeader } from '@/components/ui/page-header';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useGetAllAdmins } from '@/services/user';
@@ -6,8 +8,6 @@ import { Stack, useLocalSearchParams } from 'expo-router';
 import React from 'react';
 import { FlatList } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { LoadingList } from '@/components/skeleton';
-import { EmptyState } from '@/components/ui/empty-state';
 
 export default function AdminsListScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();

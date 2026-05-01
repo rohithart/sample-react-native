@@ -1,7 +1,7 @@
 import { EntityCard, type EntityCardConfig } from '@/components/cards/entity-card';
 import { DisplaySettingsIndicator } from '@/components/display-settings';
-import { EmptyState } from '@/components/ui/empty-state';
 import { LoadingList } from '@/components/skeleton';
+import { EmptyState } from '@/components/ui/empty-state';
 import { PageHeader } from '@/components/ui/page-header';
 import { Pressable } from '@/components/ui/pressable';
 import { ENTITY_ICONS, type EntityIconKey } from '@/constants/entity-icons';

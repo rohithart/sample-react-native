@@ -4,9 +4,9 @@ import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useCreateImage, useDeleteImage, useImages } from '@/services/image';
 import type { AppImage } from '@/types';
 
+import { LoadingList } from '@/components/skeleton';
 import { FullScreenModal } from '@/components/ui/full-screen-modal';
 import { Image } from '@/components/ui/image';
-import { LoadingList } from '@/components/skeleton';
 import { Pressable } from '@/components/ui/pressable';
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';

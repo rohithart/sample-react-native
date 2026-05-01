@@ -1,19 +1,19 @@
-import { useThemeColors } from '@/hooks/use-theme-colors';
-import { PageHeader } from '@/components/ui/page-header';
 import { AuditInfo } from '@/components/details';
+import { PageHeader } from '@/components/ui/page-header';
+import { useThemeColors } from '@/hooks/use-theme-colors';
 import { Stack, useLocalSearchParams } from 'expo-router';
 
 import React, { useState } from 'react';
 
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { ActionBottomSheet } from '@/components/sheets/action-bottom-sheet';
-import { ActionItem } from '@/types/actionItem';
-import { useGroup } from '@/services/group';
-import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { GroupChat } from '@/components/chat/group-chat';
+import { ActionBottomSheet } from '@/components/sheets/action-bottom-sheet';
 import { LoadingList } from '@/components/skeleton';
 import { Pressable } from '@/components/ui/pressable';
 import { View } from '@/components/ui/view';
+import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { useGroup } from '@/services/group';
+import { ActionItem } from '@/types/actionItem';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const I = ENTITY_ICONS;
 

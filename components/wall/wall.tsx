@@ -1,5 +1,9 @@
 import { WallCard } from '@/components/cards/wall-card';
+import { LoadingList } from '@/components/skeleton';
+import { EmptyState } from '@/components/ui/empty-state';
 import { HStack } from '@/components/ui/hstack';
+import { Pressable } from '@/components/ui/pressable';
+import { Text } from '@/components/ui/text';
 import { useToast } from '@/context/toast-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useCreateWall, useWalls } from '@/services/wall';
@@ -7,10 +11,6 @@ import { useLocalSearchParams } from 'expo-router';
 import React, { useCallback, useState } from 'react';
 import { FlatList, TextInput } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { LoadingList } from '@/components/skeleton';
-import { EmptyState } from '@/components/ui/empty-state';
-import { Pressable } from '@/components/ui/pressable';
-import { Text } from '@/components/ui/text';
 
 export default function WallPage() {
   const { id: orgId } = useLocalSearchParams<{ id: string }>();

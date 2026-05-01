@@ -1,25 +1,25 @@
-import { useThemeColors } from '@/hooks/use-theme-colors';
+import { AuditInfo, DetailField, DetailSection } from '@/components/details';
 import { PageHeader } from '@/components/ui/page-header';
-import { DetailField, DetailSection, AuditInfo } from '@/components/details';
+import { useThemeColors } from '@/hooks/use-theme-colors';
 import { Stack, useLocalSearchParams } from 'expo-router';
 
 import React, { useState } from 'react';
 
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { ActionBottomSheet } from '@/components/sheets/action-bottom-sheet';
-import { ActionItem } from '@/types/actionItem';
-import { useVote, useCastedVote, useCastVote } from '@/services/vote';
-import { useRefreshControl } from '@/hooks/use-refresh-control';
-import { ENTITY_ICONS } from '@/constants/entity-icons';
-import { convertToLocalDateTimeString } from '@/utils/date';
-import { VStack } from '@/components/ui/vstack';
-import { useToast } from '@/context/toast-context';
 import { SectionHeader } from '@/components/section-header';
+import { ActionBottomSheet } from '@/components/sheets/action-bottom-sheet';
 import { LoadingPage } from '@/components/skeleton';
 import { Pressable } from '@/components/ui/pressable';
 import { ScrollView } from '@/components/ui/scroll-view';
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
+import { VStack } from '@/components/ui/vstack';
+import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { useToast } from '@/context/toast-context';
+import { useRefreshControl } from '@/hooks/use-refresh-control';
+import { useCastedVote, useCastVote, useVote } from '@/services/vote';
+import { ActionItem } from '@/types/actionItem';
+import { convertToLocalDateTimeString } from '@/utils/date';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const I = ENTITY_ICONS;
 

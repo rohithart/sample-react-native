@@ -5,8 +5,8 @@ import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useAttachments, useCreateAttachment, useDeleteAttachment } from '@/services/attachment';
 import type { Attachment } from '@/types';
 
-import { FullScreenModal } from '@/components/ui/full-screen-modal';
 import { LoadingList } from '@/components/skeleton';
+import { FullScreenModal } from '@/components/ui/full-screen-modal';
 import { Pressable } from '@/components/ui/pressable';
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
