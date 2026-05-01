@@ -82,7 +82,7 @@ async function request<T>(
     throw error;
   }
 
-  if (res.status === 204) return undefined as T;
+  if (res.status === 204) return null as T;
 
   try {
     return await res.json();
