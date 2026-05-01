@@ -1,11 +1,12 @@
 import { Box } from '@/components/ui/box';
 import { Button } from '@/components/ui/button';
 import { Text } from '@/components/ui/text';
-import { useOrganisationContext } from '@/context/organisation-context';
+import { useOrganisation } from '@/context/organisation-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useRouter } from 'expo-router';
-import { Image } from 'react-native';
+
 import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { Image } from '@/components/ui/image';
 
 const I = ENTITY_ICONS;
 
@@ -16,7 +17,7 @@ interface AccountCardProps {
 export function AccountCard({ onPress }: AccountCardProps) {
   const colors = useThemeColors();
   const router = useRouter();
-  const { userRole } = useOrganisationContext();
+  const { userRole } = useOrganisation();
 
   const userName = userRole?.user?.name || 'John Doe';
   const userEmail = userRole?.user?.email || 'john@example.com';

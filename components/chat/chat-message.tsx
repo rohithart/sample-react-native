@@ -1,13 +1,14 @@
-import type { Message, UserRole } from '@/types';
-import { useToggleReaction, useDeleteMessage } from '@/services/message';
-import { useThemeColors } from '@/hooks/use-theme-colors';
-import React, { useState } from 'react';
-import { Alert, Modal, Pressable, Text, View, StyleSheet } from 'react-native';
-import { UserAvatar } from '../user-avatar';
-import { HStack } from '../ui/hstack';
+import { Pressable } from '@/components/ui/pressable';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { useThemeColors } from '@/hooks/use-theme-colors';
+import { useDeleteMessage, useToggleReaction } from '@/services/message';
+import type { Message, UserRole } from '@/types';
 import { convertToLocalDateTimeString } from '@/utils/date';
+import React, { useState } from 'react';
+import { Alert, Modal, Text, View } from 'react-native';
+import { HStack } from '../ui/hstack';
 import { VStack } from '../ui/vstack';
+import { UserAvatar } from '../user-avatar';
 
 interface ChatMessageProps {
   message: Message;
@@ -55,7 +56,7 @@ export function ChatMessage({ message, currentUser, conversationId, orgId }: Cha
     : [];
 
   return (
-    <View style={[styles.container, { alignItems: isMine ? 'flex-end' : 'flex-start' }]}>
+    <View style={{ marginVertical: 4, paddingHorizontal: 12, width: '100%', alignItems: isMine ? 'flex-end' : 'flex-start' }}>
       <HStack space="xs" style={{ alignItems: 'flex-end', maxWidth: '85%' }}>
         {!isMine && (
           <View style={{ marginBottom: 4 }}>
@@ -66,27 +67,26 @@ export function ChatMessage({ message, currentUser, conversationId, orgId }: Cha
         <View>
           <Pressable 
             onLongPress={() => setShowOptionModal(true)}
-            style={[
-              styles.bubble, 
-              { 
-                backgroundColor: isMine ? colors.primary : colors.card,
-                borderBottomRightRadius: isMine ? 4 : 20,
-                borderBottomLeftRadius: isMine ? 20 : 4,
-              }
-            ]}
+            style={{
+              paddingHorizontal: 12, paddingVertical: 8, borderRadius: 20, minWidth: 80,
+              shadowColor: '#000', shadowOpacity: 0.03, shadowRadius: 2, elevation: 1,
+              backgroundColor: isMine ? colors.primary : colors.card,
+              borderBottomRightRadius: isMine ? 4 : 20,
+              borderBottomLeftRadius: isMine ? 20 : 4,
+            }}
           >
             {message.isDeleted ? (
-              <Text style={[styles.deletedText, { color: isMine ? '#eee' : colors.sub }]}>
+              <Text style={{ fontSize: 14, fontStyle: 'italic', color: isMine ? '#eee' : colors.sub }}>
                 This message was deleted
               </Text>
             ) : (
-              <Text style={[styles.messageText, { color: isMine ? '#fff' : colors.text }]}>
+              <Text style={{ fontSize: 15, lineHeight: 20, color: isMine ? '#fff' : colors.text }}>
                 {message.content}
               </Text>
             )}
 
-            <View style={styles.metaRow}>
-              <Text style={[styles.timeText, { color: isMine ? 'rgba(255,255,255,0.7)' : colors.sub }]}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', marginTop: 2 }}>
+              <Text style={{ fontSize: 10, color: isMine ? 'rgba(255,255,255,0.7)' : colors.sub }}>
                 {convertToLocalDateTimeString(message.createdAt)}
                 {message.isEdited && ' • edited'}
               </Text>
@@ -100,17 +100,17 @@ export function ChatMessage({ message, currentUser, conversationId, orgId }: Cha
 
           {/* Floating Reactions */}
           {reactions.length > 0 && (
-            <HStack space="xs" style={[styles.reactionContainer, { alignSelf: isMine ? 'flex-end' : 'flex-start' }]}>
+            <HStack space="xs" style={{ marginTop: -8, marginHorizontal: 8, alignSelf: isMine ? 'flex-end' : 'flex-start' }}>
               {reactions.map(([emoji, users]) => (
                 <Pressable 
                   key={emoji} 
                   onPress={() => reactionMutation.mutate({ emoji, organisation: orgId })}
-                  style={[styles.reactionBadge, { backgroundColor: colors.bg, borderColor: colors.border }]}
+                  style={{ borderWidth: 1, paddingHorizontal: 6, paddingVertical: 2, borderRadius: 12, flexDirection: 'row', alignItems: 'center', backgroundColor: colors.bg, borderColor: colors.border }}
                 >
                   <Text style={{ fontSize: 11 }}>{emoji} {users.length}</Text>
                 </Pressable>
               ))}
-              <Pressable onPress={() => setShowEmojiPicker(true)} style={[styles.reactionBadge, { backgroundColor: colors.bg, borderColor: colors.border }]}>
+              <Pressable onPress={() => setShowEmojiPicker(true)} style={{ borderWidth: 1, paddingHorizontal: 6, paddingVertical: 2, borderRadius: 12, flexDirection: 'row', alignItems: 'center', backgroundColor: colors.bg, borderColor: colors.border }}>
                 <I.smilePlus size={12} color={colors.sub} />
               </Pressable>
             </HStack>
@@ -187,77 +187,3 @@ export function ChatMessage({ message, currentUser, conversationId, orgId }: Cha
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    marginVertical: 4,
-    paddingHorizontal: 12,
-    width: '100%',
-  },
-  bubble: {
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 20,
-    minWidth: 80,
-    shadowColor: '#000',
-    shadowOpacity: 0.03,
-    shadowRadius: 2,
-    elevation: 1,
-  },
-  messageText: {
-    fontSize: 15,
-    lineHeight: 20,
-  },
-  deletedText: {
-    fontSize: 14,
-    fontStyle: 'italic',
-  },
-  metaRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    marginTop: 2,
-  },
-  timeText: {
-    fontSize: 10,
-  },
-  reactionContainer: {
-    marginTop: -8, // Pulls reactions slightly onto the bubble
-    marginHorizontal: 8,
-  },
-  reactionBadge: {
-    borderWidth: 1,
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: 12,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.4)',
-    justifyContent: 'flex-end',
-  },
-  emojiSheet: {
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
-    padding: 24,
-    paddingBottom: 40,
-  },
-  modalTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginBottom: 16,
-    textAlign: 'center',
-  },
-  emojiGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-  },
-  emojiItem: {
-    width: '22%',
-    alignItems: 'center',
-    marginBottom: 15,
-  },
-});

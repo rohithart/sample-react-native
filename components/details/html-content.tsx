@@ -1,9 +1,11 @@
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import React, { useState } from 'react';
-import { Pressable, ScrollView, Text, View, useWindowDimensions } from 'react-native';
+import { Text, View, useWindowDimensions } from 'react-native';
 import RenderHtml from 'react-native-render-html';
 import { SectionHeader } from '../section-header';
+import { Pressable } from '@/components/ui/pressable';
+import { ScrollView } from '@/components/ui/scroll-view';
 
 const COLLAPSED_HEIGHT = 160;
 
@@ -18,7 +20,6 @@ export function HtmlContent({ label, html, maxHeight = COLLAPSED_HEIGHT }: HtmlC
   const [expanded, setExpanded] = useState(false);
   const [contentHeight, setContentHeight] = useState(0);
   const I = ENTITY_ICONS;
-
 
   if (!html) return null;
 

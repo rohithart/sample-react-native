@@ -2,7 +2,7 @@ import { convertToRelativeTime } from "@/utils/date";
 import { View, Pressable, ActivityIndicator, Text, Alert } from "react-native";
 import { HStack } from "../ui/hstack";
 import { UserAvatar } from "../user-avatar";
-import { useOrganisationContext } from "@/context/organisation-context";
+import { useOrganisation } from "@/context/organisation-context";
 import { useThemeColors } from "@/hooks/use-theme-colors";
 import { useReportComment } from "@/services/email";
 import type { Comment } from '@/types';
@@ -11,7 +11,7 @@ import { ENTITY_ICONS } from "@/constants/entity-icons";
 
 export const CommentCard = ({ item, handleDelete }: { item: Comment; handleDelete: (id: string) => void }) => {
   const colors = useThemeColors();
-  const { isAdmin } = useOrganisationContext();
+  const { isAdmin } = useOrganisation();
   const I = ENTITY_ICONS;
 
   const userRole = (item as any).user || (item as any).user?.user;

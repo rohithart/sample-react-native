@@ -8,6 +8,8 @@ import { ActivityIndicator, FlatList, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useCurrentUsersGroups } from '@/services/group';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
+import { LoadingState } from '@/components/ui/loading-state';
+import { EmptyState } from '@/components/ui/empty-state';
 
 export default function GroupsListScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -21,10 +23,7 @@ export default function GroupsListScreen() {
       <PageHeader icon="group" title="Groups" />
 
       {isLoading ? (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <ActivityIndicator size="large" color={colors.primary} />
-          <Text style={{ color: colors.sub, fontSize: 14, marginTop: 10 }}>Loading...</Text>
-        </View>
+        <LoadingState />
       ) : (
         <FlatList
           data={items ?? []}
@@ -38,11 +37,7 @@ export default function GroupsListScreen() {
           keyExtractor={(item) => item._id}
           refreshControl={refreshControl}
           scrollIndicatorInsets={{ right: 1 }}
-          ListEmptyComponent={
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingTop: 60 }}>
-              <Text style={{ color: colors.sub, fontSize: 15 }}>No groups found</Text>
-            </View>
-          }
+          ListEmptyComponent={<EmptyState message="No groups found" />}
         />
       )}
     </SafeAreaView>

@@ -4,11 +4,13 @@ import { useComments, useCreateComment, useDeleteComment } from '@/services/comm
 import type { Comment } from '@/types';
 
 import React, { useCallback, useState } from 'react';
-import { ActivityIndicator, Alert, FlatList, Modal, Pressable, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, Alert, FlatList, Modal, Text, TextInput, View } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { EntityType } from '@/enums';
 import { CommentCard } from '../cards/comment-card';
+import { LoadingState } from '@/components/ui/loading-state';
+import { Pressable } from '@/components/ui/pressable';
 
 const I = ENTITY_ICONS;
 
@@ -67,10 +69,7 @@ export function EntityComments({ isVisible, onClose, entity, entityId, orgId }: 
         </HStack>
 
         {isLoading ? (
-          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <ActivityIndicator size="large" color={colors.primary} />
-            <Text style={{ color: colors.sub, fontSize: 14, marginTop: 10 }}>Loading comments...</Text>
-          </View>
+          <LoadingState message="Loading comments..." />
         ) : !comments?.length ? (
           <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 32 }}>
             <I.comment size={48} color={colors.sub} strokeWidth={1.2} />

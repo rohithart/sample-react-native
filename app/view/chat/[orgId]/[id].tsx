@@ -4,13 +4,15 @@ import { AuditInfo } from '@/components/details';
 import { Stack, useLocalSearchParams } from 'expo-router';
 
 import React, { useState } from 'react';
-import { ActivityIndicator, Text, View, Pressable } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ActionBottomSheet } from '@/components/sheets/action-bottom-sheet';
 import { ActionItem } from '@/types/actionItem';
 import { useGroup } from '@/services/group';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { GroupChat } from '@/components/chat/group-chat';
+import { LoadingState } from '@/components/ui/loading-state';
+import { Pressable } from '@/components/ui/pressable';
 
 const I = ENTITY_ICONS;
 
@@ -39,10 +41,7 @@ export default function ChatScreen() {
       />
 
       {isLoadingItem || !item ? (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <ActivityIndicator size="large" color={colors.primary} />
-          <Text style={{ color: colors.sub, fontSize: 14, marginTop: 10 }}>Loading...</Text>
-        </View>
+        <LoadingState />
       ) : (
         <View style={{ flex: 1 }}>
           <GroupChat groupId={id || ''} orgId={orgId || ''} group={item} />

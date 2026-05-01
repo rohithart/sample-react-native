@@ -3,9 +3,11 @@ import { AccountCard } from '@/components/account-card';
 import { useAuth } from '@/context/auth-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useRouter } from 'expo-router';
-import { Alert, Animated, ScrollView, View, Pressable } from 'react-native';
+import { Alert, Animated, View } from 'react-native';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { DrawerItem } from './drawer-items';
+import { Pressable } from '@/components/ui/pressable';
+import { ScrollView } from '@/components/ui/scroll-view';
 
 const I = ENTITY_ICONS;
 

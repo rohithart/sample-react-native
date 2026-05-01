@@ -11,11 +11,12 @@ import { useBookingTypes } from '@/services/booking-type';
 import { convertToLocalDateTimeString } from '@/utils/date';
 import { Stack, useLocalSearchParams } from 'expo-router';
 import React, { useState } from 'react';
-import { Pressable, ScrollView, Switch, Text } from 'react-native';
+import { Switch, Text } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
+import { Pressable } from '@/components/ui/pressable';
+import { ScrollView } from '@/components/ui/scroll-view';
 
 export default function AddBookingScreen() {
   const { id: orgId } = useLocalSearchParams<{ id: string }>();
@@ -58,7 +59,6 @@ export default function AddBookingScreen() {
       setDropdownItems(bookingTypes.map((bt: any) => ({ label: bt.title, value: bt._id })));
     }
   }, [bookingTypes]);
-
 
   const handleSubmit = async () => {
     if (!title.trim() || !bookingType || !description.trim() || !fromDate || !toDate) {

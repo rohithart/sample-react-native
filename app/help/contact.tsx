@@ -2,18 +2,19 @@ import { Button } from '@/components/ui/button';
 import { FormField } from '@/components/ui/form-field';
 import { PageHeader } from '@/components/ui/page-header';
 import { VStack } from '@/components/ui/vstack';
-import { useOrganisationContext } from '@/context/organisation-context';
+import { useOrganisation } from '@/context/organisation-context';
 import { useToast } from '@/context/toast-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useSendContact } from '@/services/email';
 import { Stack, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
-import { ScrollView, Text } from 'react-native';
+import { Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { ScrollView } from '@/components/ui/scroll-view';
 
 export default function ContactScreen() {
   const { orgId } = useLocalSearchParams<{ orgId: string }>();
-  const { organisation } = useOrganisationContext();
+  const { organisation } = useOrganisation();
   const colors = useThemeColors();
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');

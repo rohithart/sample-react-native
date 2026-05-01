@@ -48,7 +48,8 @@ export function OrganisationProvider({ children }: { children: ReactNode }) {
       setOrganisation(organisation);
       setOrgAccess(access);
       setUserRole(roleData);
-    } catch {
+    } catch (error) {
+      console.error('[Organisation] Failed to select organisation:', error);
       setOrgAccess(null);
       setUserRole(null);
     } finally {
@@ -76,7 +77,8 @@ export function OrganisationProvider({ children }: { children: ReactNode }) {
       setOrganisation(org);
       setOrgAccess(access);
       setUserRole(roleData);
-    } catch {
+    } catch (error) {
+      console.error('[Organisation] Failed to hydrate from orgId:', error);
       setOrganisation(null);
       setOrgAccess(null);
       setUserRole(null);
@@ -104,8 +106,8 @@ export function OrganisationProvider({ children }: { children: ReactNode }) {
   return <OrganisationContext.Provider value={value}>{children}</OrganisationContext.Provider>;
 }
 
-export function useOrganisationContext() {
+export function useOrganisation() {
   const context = useContext(OrganisationContext);
-  if (!context) throw new Error('useOrganisationContext must be used within an OrganisationProvider');
+  if (!context) throw new Error('useOrganisation must be used within an OrganisationProvider');
   return context;
 }

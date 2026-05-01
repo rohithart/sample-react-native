@@ -1,5 +1,5 @@
 import { ENTITY_ICONS } from '@/constants/entity-icons';
-import { useOrganisationContext } from '@/context/organisation-context';
+import { useOrganisation } from '@/context/organisation-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useRouter } from 'expo-router';
 import React from 'react';
@@ -26,7 +26,7 @@ export function AdminNavigationDrawer({
 }: AdminNavigationDrawerProps) {
   const { primary: c, secondary } = useThemeColors();
   const router = useRouter();
-  const { hasAccess } = useOrganisationContext();
+  const { hasAccess } = useOrganisation();
   const I = ENTITY_ICONS;
 
   const go = (url: string) => { onClose(); router.push(url as any); };

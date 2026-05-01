@@ -4,8 +4,9 @@ import { ENTITY_ICONS, type EntityIconKey } from '@/constants/entity-icons';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useRouter } from 'expo-router';
 import React from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import { SectionHeader } from '../section-header';
+import { Pressable } from '@/components/ui/pressable';
 
 const I = ENTITY_ICONS;
 

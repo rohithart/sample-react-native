@@ -5,14 +5,17 @@ import { SectionHeader } from '@/components/section-header';
 import { Button } from '@/components/ui/button';
 import { HStack } from '@/components/ui/hstack';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
-import { useOrganisationContext } from '@/context/organisation-context';
+import { useOrganisation } from '@/context/organisation-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useAdminDashboard } from '@/services/dashboard';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Animated, Image, Pressable, Text, ScrollView, View } from 'react-native';
+import { ActivityIndicator, Animated, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Pressable } from '@/components/ui/pressable';
+import { ScrollView } from '@/components/ui/scroll-view';
+import { Image } from '@/components/ui/image';
 
 const I = ENTITY_ICONS;
 
@@ -21,7 +24,7 @@ export default function AdminDashboard() {
   const { top, bottom } = useSafeAreaInsets();
   const colors = useThemeColors();
   const router = useRouter();
-  const { organisation, orgAccess, isLoadingAccess, hydrateFromOrgId } = useOrganisationContext();
+  const { organisation, orgAccess, isLoadingAccess, hydrateFromOrgId } = useOrganisation();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const drawerAnim = useRef(new Animated.Value(-300)).current;
   const { card, text, isDark } = useThemeColors();

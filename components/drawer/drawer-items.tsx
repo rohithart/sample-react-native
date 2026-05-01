@@ -1,8 +1,9 @@
 import { HStack } from '@/components/ui/hstack';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import React from 'react';
-import { GestureResponderEvent, Pressable, Text, View } from 'react-native';
+import { GestureResponderEvent, Text, View } from 'react-native';
 import { SectionHeader } from '../section-header';
+import { Pressable } from '@/components/ui/pressable';
 
 export function DrawerItem({
   icon,

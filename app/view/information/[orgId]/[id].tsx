@@ -4,13 +4,16 @@ import { HtmlContent, AuditInfo } from '@/components/details';
 import { Stack, useLocalSearchParams } from 'expo-router';
 
 import React, { useState } from 'react';
-import { ActivityIndicator, ScrollView, Text, View, Pressable } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ActionBottomSheet } from '@/components/sheets/action-bottom-sheet';
 import { ActionItem } from '@/types/actionItem';
 import { useInformation } from '@/services/information';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { LoadingState } from '@/components/ui/loading-state';
+import { Pressable } from '@/components/ui/pressable';
+import { ScrollView } from '@/components/ui/scroll-view';
 
 const I = ENTITY_ICONS;
 
@@ -40,10 +43,7 @@ export default function InformationDetailScreen() {
       />
 
       {isLoadingItem || !item ? (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <ActivityIndicator size="large" color={colors.primary} />
-          <Text style={{ color: colors.sub, fontSize: 14, marginTop: 10 }}>Loading...</Text>
-        </View>
+        <LoadingState />
       ) : (
       <ScrollView
         refreshControl={refreshControl}

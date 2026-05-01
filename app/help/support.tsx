@@ -7,8 +7,9 @@ import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useSendFeedback } from '@/services/email';
 import { Stack } from 'expo-router';
 import { useState } from 'react';
-import { ScrollView, Text } from 'react-native';
+import { Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { ScrollView } from '@/components/ui/scroll-view';
 
 export default function ContactScreen() {
   const colors = useThemeColors();

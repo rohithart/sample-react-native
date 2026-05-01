@@ -1,14 +1,11 @@
 import { HStack } from '@/components/ui/hstack';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 
-import React from 'react';
-import {
-    Modal,
-    Pressable,
-    Text,
-    View,
-} from 'react-native';
+import { ModalWrapper } from '@/components/ui/modal-wrapper';
+import { Pressable } from '@/components/ui/pressable';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
+import React from 'react';
+import { Text } from 'react-native';
 
 const I = ENTITY_ICONS;
 
@@ -69,19 +66,7 @@ export function ConfirmationDialog({
   const actionColor = isDangerous ? danger : primary;
 
   return (
-    <Modal transparent animationType="fade" visible={isOpen} onRequestClose={onClose}>
-      <Pressable
-        style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
-        onPress={onClose}
-      >
-        <View
-          style={{
-            flex: 1,
-            alignItems: 'center',
-            justifyContent: 'center',
-            paddingHorizontal: 16,
-          }}
-        >
+    <ModalWrapper visible={isOpen} onClose={onClose}>
           <Pressable
             style={{
               backgroundColor: bg,
@@ -176,8 +161,6 @@ export function ConfirmationDialog({
               </Pressable>
             </HStack>
           </Pressable>
-        </View>
-      </Pressable>
-    </Modal>
+    </ModalWrapper>
   );
 }

@@ -6,7 +6,8 @@ import { resolveId } from '@/utils/resolve-ref';
 import { useRouter } from 'expo-router';
 
 import React from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
+import { Pressable } from '@/components/ui/pressable';
 
 const I = ENTITY_ICONS;
 

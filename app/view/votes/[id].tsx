@@ -8,6 +8,8 @@ import { ActivityIndicator, FlatList, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useVotesForUser } from '@/services/vote';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
+import { LoadingState } from '@/components/ui/loading-state';
+import { EmptyState } from '@/components/ui/empty-state';
 
 export default function VotesListScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -21,10 +23,7 @@ export default function VotesListScreen() {
       <PageHeader icon="vote" title="Votes" />
 
       {isLoading ? (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <ActivityIndicator size="large" color={colors.primary} />
-          <Text style={{ color: colors.sub, fontSize: 14, marginTop: 10 }}>Loading...</Text>
-        </View>
+        <LoadingState />
       ) : (
         <FlatList
           data={items ?? []}
@@ -38,11 +37,7 @@ export default function VotesListScreen() {
           keyExtractor={(item) => item._id}
           refreshControl={refreshControl}
           scrollIndicatorInsets={{ right: 1 }}
-          ListEmptyComponent={
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingTop: 60 }}>
-              <Text style={{ color: colors.sub, fontSize: 15 }}>No votes found</Text>
-            </View>
-          }
+          ListEmptyComponent={<EmptyState message="No votes found" />}
         />
       )}
     </SafeAreaView>

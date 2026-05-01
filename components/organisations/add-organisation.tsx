@@ -4,7 +4,8 @@ import { useToast } from '@/context/toast-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useCreateOrganisation } from '@/services/organisations';
 import { useState } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, TextInput, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, TextInput, View } from 'react-native';
+import { ScrollView } from '@/components/ui/scroll-view';
 
 export function AddOrganisation({ onSuccess }: { onSuccess?: () => void }) {
   const colors = useThemeColors();

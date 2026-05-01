@@ -1,20 +1,21 @@
 import { ORGANISATION_CONFIG } from '@/components/cards/card-configs';
 import { EntityCard } from '@/components/cards/entity-card';
 import { LoadingList } from '@/components/skeleton';
-import { useOrganisationContext } from '@/context/organisation-context';
+import { useOrganisation } from '@/context/organisation-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useOrganisations } from '@/services/organisations';
 import { useRouter } from 'expo-router';
 
-import { ScrollView, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { ScrollView } from '@/components/ui/scroll-view';
 
 const I = ENTITY_ICONS;
 
 export function OrganisationsList() {
   const colors = useThemeColors();
   const { data: organisations, isPending, isError } = useOrganisations();
-  const { selectOrganisation } = useOrganisationContext();
+  const { selectOrganisation } = useOrganisation();
   const router = useRouter();
 
   if (isPending) {

@@ -1,15 +1,18 @@
 import { HStack } from '@/components/ui/hstack';
-import { useOrganisationContext } from '@/context/organisation-context';
+import { useOrganisation } from '@/context/organisation-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useCreateImage, useDeleteImage, useImages } from '@/services/image';
 import type { AppImage } from '@/types';
 
 import React, { useCallback, useState } from 'react';
-import { ActivityIndicator, Alert, Dimensions, FlatList, Image, Modal, Pressable, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, Alert, Dimensions, FlatList, Modal, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { EntityType } from '@/enums';
 import { convertToLocalDateString } from '@/utils/date';
+import { LoadingState } from '@/components/ui/loading-state';
+import { Pressable } from '@/components/ui/pressable';
+import { Image } from '@/components/ui/image';
 
 const I = ENTITY_ICONS;
 
@@ -28,7 +31,7 @@ const THUMB_SIZE = (SCREEN_WIDTH - PADDING * 2 - GAP * 2) / 3;
 
 export function EntityImages({ isVisible, onClose, entity, entityId, orgId }: EntityImagesProps) {
   const colors = useThemeColors();
-  const { isAdmin } = useOrganisationContext();
+  const { isAdmin } = useOrganisation();
   const { data: images, isLoading } = useImages(entity, entityId);
   const createMutation = useCreateImage(orgId, entity, entityId);
   const deleteMutation = useDeleteImage(entity, entityId);
@@ -104,10 +107,7 @@ export function EntityImages({ isVisible, onClose, entity, entityId, orgId }: En
         )}
 
         {isLoading ? (
-          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <ActivityIndicator size="large" color={colors.primary} />
-            <Text style={{ color: colors.sub, fontSize: 14, marginTop: 10 }}>Loading images...</Text>
-          </View>
+          <LoadingState message="Loading images..." />
         ) : !images?.length ? (
           <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 32 }}>
             <I.gallery size={48} color={colors.sub} strokeWidth={1.2} />

@@ -5,11 +5,14 @@ import { ADMIN_CONFIGS } from '@/components/cards/card-configs';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 
 import React from 'react';
-import { ActivityIndicator, FlatList, Pressable, Text, View } from 'react-native';
+import { ActivityIndicator, FlatList, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useCategorys } from '@/services/category';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { LoadingState } from '@/components/ui/loading-state';
+import { EmptyState } from '@/components/ui/empty-state';
+import { Pressable } from '@/components/ui/pressable';
 
 const I = ENTITY_ICONS;
 
@@ -40,10 +43,7 @@ export default function CategoriesListScreen() {
       />
 
       {isLoading ? (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <ActivityIndicator size="large" color={colors.primary} />
-          <Text style={{ color: colors.sub, fontSize: 14, marginTop: 10 }}>Loading...</Text>
-        </View>
+        <LoadingState />
       ) : (
         <FlatList
           data={items ?? []}
@@ -57,11 +57,7 @@ export default function CategoriesListScreen() {
           keyExtractor={(item) => item._id}
           refreshControl={refreshControl}
           scrollIndicatorInsets={{ right: 1 }}
-          ListEmptyComponent={
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingTop: 60 }}>
-              <Text style={{ color: colors.sub, fontSize: 15 }}>No categories found</Text>
-            </View>
-          }
+          ListEmptyComponent={<EmptyState message="No categories found" />}
         />
       )}
     </SafeAreaView>

@@ -1,18 +1,21 @@
 import React from 'react';
-import { ScrollView, Image, Pressable, View } from 'react-native';
+import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Stack } from 'expo-router';
 import { Text } from '@/components/ui/text';
-import { useOrganisationContext } from '@/context/organisation-context';
+import { useOrganisation } from '@/context/organisation-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { PageHeader } from '@/components/ui/page-header';
+import { Pressable } from '@/components/ui/pressable';
+import { ScrollView } from '@/components/ui/scroll-view';
+import { Image } from '@/components/ui/image';
 
 const I = ENTITY_ICONS;
 
 export default function ProfileScreen() {
   const colors = useThemeColors();
-  const { userRole, organisation, isAdmin, canAccessAdmin } = useOrganisationContext();
+  const { userRole, organisation, isAdmin, canAccessAdmin } = useOrganisation();
 
   const InfoRow = ({ icon: Icon, label, value, isLast = false }: any) => (
     <View style={{ 

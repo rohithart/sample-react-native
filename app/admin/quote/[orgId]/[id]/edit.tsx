@@ -4,9 +4,12 @@ import { FormField } from '@/components/ui/form-field';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 
 import React, { useState } from 'react';
-import { ScrollView, Text, Pressable } from 'react-native';
+
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useToast } from '@/context/toast-context';
+
+import { ScrollView } from '@/components/ui/scroll-view';
+import { SubmitButton } from '@/components/ui/submit-button';
 
 export default function EditQuoteScreen() {
   const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
@@ -55,22 +58,7 @@ export default function EditQuoteScreen() {
           numberOfLines={4}
         />
 
-        <Pressable
-          onPress={handleSubmit}
-          disabled={isSubmitting}
-          style={({ pressed }) => ({
-            backgroundColor: colors.primary,
-            paddingVertical: 12,
-            borderRadius: 8,
-            alignItems: 'center',
-            opacity: pressed || isSubmitting ? 0.7 : 1,
-            marginTop: 8,
-          })}
-        >
-          <Text style={{ fontSize: 16, fontWeight: '600', color: '#ffffff' }}>
-            {isSubmitting ? 'Saving...' : 'Save Changes'}
-          </Text>
-        </Pressable>
+        <SubmitButton onPress={handleSubmit} isSubmitting={isSubmitting} label="Save Changes" submittingLabel="Saving..." />
       </ScrollView>
     </SafeAreaView>
   );

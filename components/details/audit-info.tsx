@@ -2,10 +2,12 @@ import { HStack } from '@/components/ui/hstack';
 import { VStack } from '@/components/ui/vstack';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 
-import React from 'react';
-import { Modal, Pressable, Text, View } from 'react-native';
+import { ModalWrapper } from '@/components/ui/modal-wrapper';
+import { Pressable } from '@/components/ui/pressable';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { convertToLocalDateString } from '@/utils/date';
+import React from 'react';
+import { Text, View } from 'react-native';
 
 const I = ENTITY_ICONS;
 
@@ -43,11 +45,7 @@ export function AuditInfo({ isVisible, onClose, createdBy, updatedBy, createdAt,
   ];
 
   return (
-    <Modal transparent animationType="fade" visible={isVisible} onRequestClose={onClose}>
-      <Pressable
-        style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', alignItems: 'center' }}
-        onPress={onClose}
-      >
+    <ModalWrapper visible={isVisible} onClose={onClose}>
         <Pressable
           style={{
             width: '85%',
@@ -107,7 +105,6 @@ export function AuditInfo({ isVisible, onClose, createdBy, updatedBy, createdAt,
             ))}
           </VStack>
         </Pressable>
-      </Pressable>
-    </Modal>
+    </ModalWrapper>
   );
 }

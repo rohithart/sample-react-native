@@ -4,14 +4,14 @@ import { EntityTimeline } from '@/components/entity/entity-timeline';
 import { ActionBottomSheet } from '@/components/sheets/action-bottom-sheet';
 import { ActionItem } from '@/types/actionItem';
 import { PageHeader } from '@/components/ui/page-header';
-import { useOrganisationContext } from '@/context/organisation-context';
+import { useOrganisation } from '@/context/organisation-context';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useAllCastedVotes, useVote } from '@/services/vote';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 
 import React, { useMemo, useState } from 'react';
-import { ActivityIndicator, Pressable, ScrollView, Text, View } from 'react-native';
+import { ActivityIndicator, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { EntityType } from '@/enums';
@@ -20,6 +20,9 @@ import { VStack } from '@/components/ui/vstack';
 import { resolveId } from '@/utils/resolve-ref';
 import { useToast } from '@/context/toast-context';
 import { SectionHeader } from '@/components/section-header';
+import { LoadingState } from '@/components/ui/loading-state';
+import { Pressable } from '@/components/ui/pressable';
+import { ScrollView } from '@/components/ui/scroll-view';
 
 const I = ENTITY_ICONS;
 
@@ -27,7 +30,7 @@ export default function VoteDetailScreen() {
   const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
   const router = useRouter();
   const colors = useThemeColors();
-  const { isAdmin } = useOrganisationContext();
+  const { isAdmin } = useOrganisation();
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [confirmationType, setConfirmationType] = useState<'delete' | 'archive' | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -117,10 +120,7 @@ export default function VoteDetailScreen() {
       />
 
       {isLoadingItem || !item ? (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <ActivityIndicator size="large" color={colors.primary} />
-          <Text style={{ color: colors.sub, fontSize: 14, marginTop: 10 }}>Loading...</Text>
-        </View>
+        <LoadingState />
       ) : (
       <ScrollView
         refreshControl={refreshControl}

@@ -1,17 +1,19 @@
 import { HStack } from '@/components/ui/hstack';
 import { VStack } from '@/components/ui/vstack';
-import { useOrganisationContext } from '@/context/organisation-context';
+import { useOrganisation } from '@/context/organisation-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useAttachments, useCreateAttachment, useDeleteAttachment } from '@/services/attachment';
 import type { Attachment } from '@/types';
 
 import React, { useCallback, useState } from 'react';
-import { ActivityIndicator, Alert, FlatList, Linking, Modal, Pressable, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, Alert, FlatList, Linking, Modal, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { EntityType } from '@/enums';
 import { convertToLocalDateTimeString } from '@/utils/date';
 import { useToast } from '@/context/toast-context';
+import { LoadingState } from '@/components/ui/loading-state';
+import { Pressable } from '@/components/ui/pressable';
 
 const I = ENTITY_ICONS;
 
@@ -44,7 +46,7 @@ function formatSize(bytes: string | number | undefined): string | null {
 
 export function EntityAttachments({ isVisible, onClose, entity, entityId, orgId }: EntityAttachmentsProps) {
   const colors = useThemeColors();
-  const { isAdmin } = useOrganisationContext();
+  const { isAdmin } = useOrganisation();
   const { data: attachments, isLoading } = useAttachments(entity, entityId);
   const createMutation = useCreateAttachment(orgId, entity, entityId);
   const deleteMutation = useDeleteAttachment(entity, entityId);
@@ -180,10 +182,7 @@ export function EntityAttachments({ isVisible, onClose, entity, entityId, orgId 
         )}
 
         {isLoading ? (
-          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <ActivityIndicator size="large" color={colors.primary} />
-            <Text style={{ color: colors.sub, fontSize: 14, marginTop: 10 }}>Loading attachments...</Text>
-          </View>
+          <LoadingState message="Loading attachments..." />
         ) : !attachments?.length ? (
           <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 32 }}>
             <I.fileText size={48} color={colors.sub} strokeWidth={1.2} />

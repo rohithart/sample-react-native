@@ -1,4 +1,4 @@
-import { useOrganisationContext } from '@/context/organisation-context';
+import { useOrganisation } from '@/context/organisation-context';
 import { useToast } from '@/context/toast-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { Redirect, Stack, useGlobalSearchParams } from 'expo-router';
@@ -7,7 +7,7 @@ import { ActivityIndicator, Text, View } from 'react-native';
 
 export default function AdminLayout() {
   const params = useGlobalSearchParams<{ orgId?: string; id?: string }>();
-  const { organisation, isLoadingAccess, canAccessAdmin, hydrateFromOrgId } = useOrganisationContext();
+  const { organisation, isLoadingAccess, canAccessAdmin, hydrateFromOrgId } = useOrganisation();
   const { showToast } = useToast();
   const colors = useThemeColors();
   const [hydrationAttempted, setHydrationAttempted] = useState(!!organisation);

@@ -5,11 +5,13 @@ import { useTimeline } from '@/services/timeline';
 import type { Timeline } from '@/types';
 
 import React from 'react';
-import { ActivityIndicator, FlatList, Modal, Pressable, Text, View } from 'react-native';
+import { ActivityIndicator, FlatList, Modal, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { EntityType } from '@/enums';
 import { convertToLocalDateTimeString } from '@/utils/date';
+import { LoadingState } from '@/components/ui/loading-state';
+import { Pressable } from '@/components/ui/pressable';
 
 const I = ENTITY_ICONS;
 
@@ -108,10 +110,7 @@ export function EntityTimeline({ isVisible, onClose, entity, entityId }: EntityT
         </HStack>
 
         {isLoading ? (
-          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <ActivityIndicator size="large" color={colors.primary} />
-            <Text style={{ color: colors.sub, fontSize: 14, marginTop: 10 }}>Loading timeline...</Text>
-          </View>
+          <LoadingState message="Loading timeline..." />
         ) : !entries?.length ? (
           <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 32 }}>
             <I.clock size={48} color={colors.sub} strokeWidth={1.2} />

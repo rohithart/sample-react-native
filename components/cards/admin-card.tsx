@@ -1,6 +1,8 @@
 import { useThemeColors } from "@/hooks/use-theme-colors";
 import { useCallback } from "react";
-import { Linking, Pressable, Text, View, Image } from 'react-native';
+import { Linking, Text, View } from 'react-native';
+import { Pressable } from '@/components/ui/pressable';
+import { Image } from '@/components/ui/image';
 
 export function AdminCard({ admin }: { admin: any }) {
   const colors = useThemeColors();

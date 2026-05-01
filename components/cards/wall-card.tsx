@@ -1,6 +1,6 @@
 import { UserAvatar } from '@/components/user-avatar';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
-import { useOrganisationContext } from '@/context/organisation-context';
+import { useOrganisation } from '@/context/organisation-context';
 import { useToast } from '@/context/toast-context';
 import { EntityType } from '@/enums';
 import { useThemeColors } from '@/hooks/use-theme-colors';
@@ -10,9 +10,10 @@ import { useDeleteWall, useLikeWall } from '@/services/wall';
 import { Wall } from '@/types';
 import { convertToLocalDateTimeString } from '@/utils/date';
 import React, { useCallback, useState } from 'react';
-import { ActivityIndicator, Alert, FlatList, Pressable, Text, TextInput, View, LayoutAnimation } from 'react-native';
+import { ActivityIndicator, Alert, FlatList, Text, TextInput, View, LayoutAnimation } from 'react-native';
 import { CommentCard } from './comment-card';
 import { HStack } from '../ui/hstack';
+import { Pressable } from '@/components/ui/pressable';
 
 const I = ENTITY_ICONS;
 
@@ -23,7 +24,7 @@ export function WallCard({ wall, orgId, onRefresh, isLiked }: { wall: Wall; orgI
   const [posting, setPosting] = useState(false);
   const [deleting, setDeleting] = useState(false);
   
-  const { isAdmin } = useOrganisationContext();
+  const { isAdmin } = useOrganisation();
   const { showToast } = useToast();
 
   const likeMutation = useLikeWall(orgId);

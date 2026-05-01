@@ -1,13 +1,6 @@
 import { Stack } from 'expo-router';
 import { useCallback } from 'react';
-import {
-  Alert,
-  Pressable,
-  Text,
-  ScrollView,
-  Switch,
-  View,
-} from 'react-native';
+import { Alert, Text, Switch, View } from 'react-native';
 
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { useDisplaySettings } from '@/context/display-settings-context';
@@ -15,7 +8,8 @@ import { useTheme } from '@/context/theme-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { PageHeader } from '@/components/ui/page-header';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
+import { Pressable } from '@/components/ui/pressable';
+import { ScrollView } from '@/components/ui/scroll-view';
 
 export default function SettingsScreen() {
   const { isDark, toggleDarkMode } = useTheme();

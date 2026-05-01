@@ -1,7 +1,8 @@
 import React, { useCallback, useState } from 'react';
-import { Pressable } from 'react-native';
+
 import { UserInfoModal } from '@/components/user-info-modal';
 import { UserDisplay } from './user';
+import { Pressable } from '@/components/ui/pressable';
 
 interface UserAvatarProps {
   userRole: any;

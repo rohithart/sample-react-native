@@ -6,7 +6,9 @@ import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useRouter } from 'expo-router';
 
 import React from 'react';
-import { Image, Pressable, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
+import { Pressable } from '@/components/ui/pressable';
+import { Image } from '@/components/ui/image';
 
 const I = ENTITY_ICONS;
 

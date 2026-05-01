@@ -2,8 +2,9 @@ import { PageHeader } from '@/components/ui/page-header';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useUserHelp } from '@/services/status';
 import { Stack, useLocalSearchParams } from 'expo-router';
-import { ScrollView, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { ScrollView } from '@/components/ui/scroll-view';
 
 export default function UserHelpScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();

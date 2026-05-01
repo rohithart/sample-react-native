@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, ScrollView, Image } from 'react-native';
+import { Modal } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Box } from '@/components/ui/box';
 import { Button, ButtonText } from '@/components/ui/button';
@@ -10,6 +10,8 @@ import { useThemeColors } from '@/hooks/use-theme-colors';
 import type { UserRole } from '@/types';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { Role } from '@/enums';
+import { ScrollView } from '@/components/ui/scroll-view';
+import { Image } from '@/components/ui/image';
 
 const I = ENTITY_ICONS;
 

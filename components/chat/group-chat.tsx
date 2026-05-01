@@ -1,12 +1,13 @@
 import type { Group, Message } from '@/types';
 import { useConversationForGroup, useCreateConversation } from '@/services/conversation';
 import { useMessages, useSendMessage } from '@/services/message';
-import { useOrganisationContext } from '@/context/organisation-context';
+import { useOrganisation } from '@/context/organisation-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { ChatMessage } from '@/components/chat/chat-message';
 import React, { useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, FlatList, KeyboardAvoidingView, Platform, Pressable, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, FlatList, KeyboardAvoidingView, Platform, Text, TextInput, View } from 'react-native';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { Pressable } from '@/components/ui/pressable';
 
 interface GroupChatProps {
   orgId: string;
@@ -17,7 +18,7 @@ interface GroupChatProps {
 export function GroupChat({ orgId, groupId, group }: GroupChatProps) {
   const I = ENTITY_ICONS;
   const colors = useThemeColors();
-  const { userRole } = useOrganisationContext();
+  const { userRole } = useOrganisation();
   const [newMessage, setNewMessage] = useState('');
   const listRef = useRef<FlatList<Message>>(null);
 
