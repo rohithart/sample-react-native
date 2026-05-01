@@ -48,10 +48,9 @@
     "plugins": [
       "expo-router",
       [
-        "@sentry/react-native/expo",
+        "react-native-auth0",
         {
-          "organization": "your-sentry-org",
-          "project": "darthvader"
+          "domain": "your-tenant.auth0.com"
         }
       ],
       [
