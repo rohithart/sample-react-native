@@ -1,6 +1,6 @@
+import * as Sentry from '@sentry/react-native';
 import React, { Component } from 'react';
 import { Pressable, Text, View } from 'react-native';
-import * as Sentry from '@sentry/react-native';
 
 type Props = { children: React.ReactNode };
 type State = { hasError: boolean; error?: Error };
