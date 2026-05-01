@@ -14,7 +14,7 @@
         "applinks:app.propordo.com",
         "applinks:app.propordo.com"
       ],
-      "bundleIdentifier": "com.grocstock.propordo"
+      "bundleIdentifier": "com.stirrupweb.propordo"
     },
     "android": {
       "adaptiveIcon": {
@@ -57,7 +57,7 @@
           ]
         }
       ],
-      "package": "com.grocstock.propordo"
+      "package": "com.stirrupweb.propordo"
     },
     "web": {
       "output": "static",

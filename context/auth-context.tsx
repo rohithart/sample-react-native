@@ -1,7 +1,11 @@
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react';
-import { Auth0Provider, useAuth0 } from 'react-native-auth0';
+import { Auth0Provider, useAuth0 } from 'mobile-auth0';
 import { setAccessToken as setApiAccessToken } from '@/services/api-client';
 import { router } from 'expo-router';
+import { initializeFirebase } from '@/services/firebase';
+import { useCreateToken } from '@/services/token';
+import { getOrCreateDeviceId } from '@/utils/device-id';
+import Device from 'expo-device';
 
 const AUTH0_DOMAIN = process.env.EXPO_PUBLIC_AUTH0_DOMAIN ?? '';
 const AUTH0_CLIENT_ID = process.env.EXPO_PUBLIC_AUTH0_CLIENT_ID ?? '';
@@ -22,6 +26,7 @@ function AuthProviderInner({ children }: { children: ReactNode }) {
   const { user, isLoading: auth0Loading, authorize, clearSession, getCredentials } = useAuth0();
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [tokenLoading, setTokenLoading] = useState(true);
+  const createTokenMutation = useCreateToken();
 
   useEffect(() => {
     if (auth0Loading) return;
@@ -53,10 +58,29 @@ function AuthProviderInner({ children }: { children: ReactNode }) {
       setAccessToken(token);
       setApiAccessToken(token);
       setAccessToken(creds?.accessToken ?? null);
+
+      // Initialize Firebase and save the token with device info
+      const fcmToken = await initializeFirebase();
+      if (fcmToken && user) {
+        try {
+          const deviceId = await getOrCreateDeviceId();
+          const userAgent = `${Device.manufacturer || 'Unknown'} ${Device.modelName || 'Unknown'} (${Device.osName} ${Device.osVersion})`;
+          
+          createTokenMutation.mutate({
+            email: user.email ?? '',
+            deviceId,
+            token: fcmToken,
+            platform: 'mobile',
+            userAgent,
+          } as any);
+        } catch (deviceError) {
+          console.error('Error gathering device info:', deviceError);
+        }
+      }
     } catch {
       router.push('/');
     }
-  }, [authorize, getCredentials]);
+  }, [authorize, getCredentials, user, createTokenMutation]);
 
   const logoutFn = useCallback(async () => {
     try {

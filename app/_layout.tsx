@@ -17,6 +17,7 @@ import { OrganisationProvider } from '@/context/organisation-context';
 import { ThemeProvider, useTheme } from '@/context/theme-context';
 import { ToastProvider } from '@/context/toast-context';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
+import { useNotificationListener } from '@/hooks/use-notification-listener';
 
 Sentry.init({
   dsn: process.env.EXPO_PUBLIC_SENTRY_DSN ?? '',
@@ -39,6 +40,7 @@ const asyncStoragePersister = createAsyncStoragePersister({
 
 function RootLayoutContent() {
   const { isDark } = useTheme();
+  useNotificationListener();
 
   return (
     <ToastProvider isDark={isDark}>
