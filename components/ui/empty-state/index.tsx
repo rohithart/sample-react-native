@@ -1,7 +1,7 @@
+import { Text } from '@/components/ui/text';
+import { View } from '@/components/ui/view';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import React from 'react';
-import { View } from 'react-native';
-import { Text } from '@/components/ui/text';
 
 interface EmptyStateProps {
   message: string;

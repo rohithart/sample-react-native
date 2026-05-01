@@ -1,9 +1,11 @@
 import { HStack } from '@/components/ui/hstack';
+import { Pressable } from '@/components/ui/pressable';
+import { Text } from '@/components/ui/text';
+import { View } from '@/components/ui/view';
 import { ENTITY_ICONS, type EntityIconKey } from '@/constants/entity-icons';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useRouter } from 'expo-router';
 import React from 'react';
-import { Pressable, Text, View, } from 'react-native';
 
 const I = ENTITY_ICONS;
 

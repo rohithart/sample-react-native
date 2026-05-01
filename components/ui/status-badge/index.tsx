@@ -1,7 +1,8 @@
-import React from 'react';
-import { Text, View } from 'react-native';
-import { useThemeColors } from '@/hooks/use-theme-colors';
+import { Text } from '@/components/ui/text';
+import { View } from '@/components/ui/view';
 import { statusColors } from '@/constants/status';
+import { useThemeColors } from '@/hooks/use-theme-colors';
+import React from 'react';
 
 interface StatusBadgeProps {
   status: string;

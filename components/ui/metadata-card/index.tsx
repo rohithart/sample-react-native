@@ -1,8 +1,8 @@
 import { HStack } from '@/components/ui/hstack';
+import { Text } from '@/components/ui/text';
 import { VStack } from '@/components/ui/vstack';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import React from 'react';
-import { Text } from 'react-native';
 
 interface MetadataRow {
   label: string;

@@ -1,7 +1,8 @@
 import { HStack } from '@/components/ui/hstack';
+import { ScrollView } from '@/components/ui/scroll-view';
+import { View } from '@/components/ui/view';
 import { VStack } from '@/components/ui/vstack';
 import { useThemeColors } from '@/hooks/use-theme-colors';
-import { ScrollView, View } from 'react-native';
 import { LoadingImage } from './loading-image';
 import { Shimmer } from './shimmer';
 

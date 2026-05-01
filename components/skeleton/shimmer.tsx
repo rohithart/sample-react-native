@@ -1,6 +1,7 @@
+import { View } from '@/components/ui/view';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useEffect, useRef, useState } from 'react';
-import { Animated, StyleSheet, View } from 'react-native';
+import { Animated, StyleSheet } from 'react-native';
 import Svg, { Defs, Rect, Stop, LinearGradient as SvgGradient } from 'react-native-svg';
 
 interface ShimmerProps {

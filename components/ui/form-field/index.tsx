@@ -1,7 +1,8 @@
+import { Text } from '@/components/ui/text';
 import { VStack } from '@/components/ui/vstack';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import React from 'react';
-import { Text, TextInput, TextInputProps } from 'react-native';
+import { TextInput, TextInputProps } from 'react-native';
 
 interface FormFieldProps extends TextInputProps {
   label: string;

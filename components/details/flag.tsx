@@ -1,16 +1,22 @@
-import React, { useState } from 'react';
-import { Alert, Modal, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
-import { HStack } from '../ui/hstack';
-import { ENTITY_ICONS } from '@/constants/entity-icons';
-import { useThemeColors } from '@/hooks/use-theme-colors';
-import { SectionHeader } from '../section-header';
 import { Pressable } from '@/components/ui/pressable';
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
+import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { useThemeColors } from '@/hooks/use-theme-colors';
+import React, { useState } from 'react';
+import { Alert, KeyboardAvoidingView, Modal, Platform, TextInput } from 'react-native';
+import { SectionHeader } from '../section-header';
+import { HStack } from '../ui/hstack';
 
 const I = ENTITY_ICONS;
 
-export function FlagButton({ item, flagFn, unflagFn }: any) {
+interface FlagButtonProps {
+  item: { isFlagged: boolean; flagComment?: string };
+  flagFn: (comment: string) => void;
+  unflagFn: () => void;
+}
+
+export function FlagButton({ item, flagFn, unflagFn }: FlagButtonProps) {
   const colors = useThemeColors();
   const [showModal, setShowModal] = useState(false);
   const [comment, setComment] = useState('');

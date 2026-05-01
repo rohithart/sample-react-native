@@ -1,6 +1,6 @@
-import React from 'react';
-import { Text } from 'react-native';
+import { Text } from '@/components/ui/text';
 import { useThemeColors } from '@/hooks/use-theme-colors';
+import React from 'react';
 
 interface SectionHeadingProps {
   title: string;

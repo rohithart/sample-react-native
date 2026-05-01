@@ -57,7 +57,7 @@ async function request<T>(
   };
 
   const url = `${BASE_URL}${path}`;
-  console.log('[api] request', { url, method: options.method ?? 'GET', token: !!token });
+  if (__DEV__) console.log('[api] request', { url, method: options.method ?? 'GET', token: !!token });
 
   if (token) {
     (headers as Record<string, string>)['Authorization'] = `Bearer ${token}`;

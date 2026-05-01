@@ -1,9 +1,10 @@
 import { HStack } from '@/components/ui/hstack';
+import { Pressable } from '@/components/ui/pressable';
 import { StatusBadge } from '@/components/ui/status-badge';
+import { Text } from '@/components/ui/text';
 import { VStack } from '@/components/ui/vstack';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import React from 'react';
-import { Pressable, Text } from 'react-native';
 
 interface ListItemCardProps {
   title: string;

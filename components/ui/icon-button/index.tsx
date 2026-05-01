@@ -1,7 +1,9 @@
+import { Pressable } from '@/components/ui/pressable';
+import { Text } from '@/components/ui/text';
+import { View } from '@/components/ui/view';
 import { VStack } from '@/components/ui/vstack';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import React from 'react';
-import { Pressable, Text, View } from 'react-native';
 
 interface IconButtonProps {
   icon: React.ReactNode;

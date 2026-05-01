@@ -1,4 +1,4 @@
-import { ScrollView } from 'react-native';
+import { ScrollView } from '@/components/ui/scroll-view';
 import { LoadingCard } from './loading-card';
 
 interface LoadingListProps {

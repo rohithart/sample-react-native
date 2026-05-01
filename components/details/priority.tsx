@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { Modal, SafeAreaView } from 'react-native';
-import { HStack } from '../ui/hstack';
-import { ENTITY_ICONS } from '@/constants/entity-icons';
-import { useThemeColors } from '@/hooks/use-theme-colors';
-import { SectionHeader } from '../section-header';
 import { Pressable } from '@/components/ui/pressable';
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
+import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { useThemeColors } from '@/hooks/use-theme-colors';
+import React, { useState } from 'react';
+import { Modal, SafeAreaView } from 'react-native';
+import { SectionHeader } from '../section-header';
+import { HStack } from '../ui/hstack';
 
 const I = ENTITY_ICONS;
 
@@ -16,7 +16,13 @@ const PRIORITIES = [
   { value: 'HIGH', label: 'High', color: '#ef4444' },
 ];
 
-export function PrioritySelect({ priority, onSelect, disabled }: any) {
+interface PrioritySelectProps {
+  priority: string;
+  onSelect: (value: string) => void;
+  disabled?: boolean;
+}
+
+export function PrioritySelect({ priority, onSelect, disabled }: PrioritySelectProps) {
   const colors = useThemeColors();
   const [isOpen, setIsOpen] = useState(false);
 

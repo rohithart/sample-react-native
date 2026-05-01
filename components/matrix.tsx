@@ -1,7 +1,7 @@
-import { View } from "react-native";
+import { View } from '@/components/ui/view';
+import { ActionItem } from "@/types/actionItem";
 import { HStack } from "./ui/hstack";
 import { IconButton } from "./ui/icon-button";
-import { ActionItem } from "@/types/actionItem";
 
 interface MatrixProps {
   index: number;
