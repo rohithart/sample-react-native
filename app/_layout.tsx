@@ -3,6 +3,7 @@ import { DarkTheme, DefaultTheme, ThemeProvider as NavThemeProvider } from '@rea
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister';
 import { QueryClient } from '@tanstack/react-query';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
+import * as Sentry from '@sentry/react-native';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
@@ -16,6 +17,13 @@ import { OrganisationProvider } from '@/context/organisation-context';
 import { ThemeProvider, useTheme } from '@/context/theme-context';
 import { ToastProvider } from '@/context/toast-context';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
+
+Sentry.init({
+  dsn: process.env.EXPO_PUBLIC_SENTRY_DSN ?? '',
+  enabled: !__DEV__,
+  tracesSampleRate: 0.2,
+  sendDefaultPii: false,
+});
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -51,7 +59,7 @@ function RootLayoutContent() {
   );
 }
 
-export default function RootLayout() {
+export default Sentry.wrap(function RootLayout() {
   return (
     <ErrorBoundary>
       <KeyboardProvider>

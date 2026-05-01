@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Pressable, Text, View } from 'react-native';
+import * as Sentry from '@sentry/react-native';
 
 type Props = { children: React.ReactNode };
 type State = { hasError: boolean; error?: Error };
@@ -13,6 +14,9 @@ export class ErrorBoundary extends Component<Props, State> {
 
   componentDidCatch(error: Error, info: React.ErrorInfo) {
     console.error('[ErrorBoundary]', error, info.componentStack);
+    if (!__DEV__) {
+      Sentry.captureException(error, { contexts: { react: { componentStack: info.componentStack ?? '' } } });
+    }
   }
 
   handleReset = () => this.setState({ hasError: false, error: undefined });

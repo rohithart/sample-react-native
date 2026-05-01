@@ -1,4 +1,5 @@
 import { ToastConfig } from '@/types/toast';
+import * as Sentry from '@sentry/react-native';
 
 const BASE_URL = process.env.EXPO_PUBLIC_API_URL ?? '';
 
@@ -81,6 +82,9 @@ async function request<T>(
       if (body) message = body;
     }
     const error = new ApiError(res.status, message);
+    if (!__DEV__ && res.status >= 500) {
+      Sentry.captureException(error, { tags: { api_path: path, status: res.status } });
+    }
     showApiToast(res.status, message);
     throw error;
   }
