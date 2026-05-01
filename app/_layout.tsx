@@ -8,10 +8,11 @@ import '../global.css';
 import { ErrorBoundary } from '@/components/error-boundary';
 import { GluestackUIProvider } from '@/components/ui/gluestack-ui-provider';
 import { AuthProvider } from '@/context/auth-context';
+import { DisplaySettingsProvider } from '@/context/display-settings-context';
 import { OrganisationProvider } from '@/context/organisation-context';
 import { ThemeProvider, useTheme } from '@/context/theme-context';
 import { ToastProvider } from '@/context/toast-context';
-import { DisplaySettingsProvider } from '@/context/display-settings-context';
+import { KeyboardProvider } from 'react-native-keyboard-controller';
 
 const queryClient = new QueryClient();
 
@@ -39,19 +40,21 @@ function RootLayoutContent() {
 export default function RootLayout() {
   return (
     <ErrorBoundary>
-      <QueryClientProvider client={queryClient}>
-        <ThemeProvider>
-          <GluestackUIProvider mode="system">
-            <AuthProvider>
-              <OrganisationProvider>
-                <DisplaySettingsProvider>
-                <RootLayoutContent />
-                </DisplaySettingsProvider>
-              </OrganisationProvider>
-            </AuthProvider>
-          </GluestackUIProvider>
-        </ThemeProvider>
-      </QueryClientProvider>
+      <KeyboardProvider>
+        <QueryClientProvider client={queryClient}>
+          <ThemeProvider>
+            <GluestackUIProvider mode="system">
+              <AuthProvider>
+                <OrganisationProvider>
+                  <DisplaySettingsProvider>
+                  <RootLayoutContent />
+                  </DisplaySettingsProvider>
+                </OrganisationProvider>
+              </AuthProvider>
+            </GluestackUIProvider>
+          </ThemeProvider>
+        </QueryClientProvider>
+      </KeyboardProvider>
     </ErrorBoundary>
   );
 }

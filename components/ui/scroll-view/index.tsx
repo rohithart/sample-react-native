@@ -1,12 +1,12 @@
 import React from 'react';
-import { ScrollView as RNScrollView } from 'react-native';
 import type { ScrollViewProps } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 
 type IScrollViewProps = ScrollViewProps & { className?: string };
 
-const ScrollView = React.forwardRef<React.ComponentRef<typeof RNScrollView>, IScrollViewProps>(
+const ScrollView = React.forwardRef<React.ComponentRef<typeof KeyboardAwareScrollView>, IScrollViewProps>(
   function ScrollView({ className, ...props }, ref) {
-    return <RNScrollView ref={ref} className={className} {...props} />;
+    return <KeyboardAwareScrollView ref={ref} className={className} bottomOffset={20} {...props} />;
   }
 );
 
