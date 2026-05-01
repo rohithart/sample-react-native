@@ -36,7 +36,7 @@ export default function TermsAndConditionsScreen() {
   const handleProceed = async () => {
     if (isAgreed) {
       await AsyncStorage.setItem(TERMS_AND_CONDITIONS_KEY, 'true');
-      router.replace('/home');
+      router.replace('/login');
     }
   };
 

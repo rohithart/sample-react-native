@@ -1,20 +1,18 @@
 import { AnimatedFeatureCard } from '@/components/cards/animated-card';
+import { ScrollView } from '@/components/ui/scroll-view';
+import { Text } from '@/components/ui/text';
+import { View } from '@/components/ui/view';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
-import { TERMS_AND_CONDITIONS_KEY } from '@/constants/memory';
 import { useToast } from '@/context/toast-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useAlertsAndroid, useAlertsiOS } from '@/services/alert';
 import { useHealth } from '@/services/health';
 import { Alert } from '@/types';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import Constants from 'expo-constants';
 import { Stack, useRouter } from 'expo-router';
 import { useEffect, useRef } from 'react';
 import { Animated, BackHandler, Easing, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ScrollView } from '@/components/ui/scroll-view';
-import { Text } from '@/components/ui/text';
-import { View } from '@/components/ui/view';
 
 export default function SplashScreen() {
   const colors = useThemeColors();
@@ -174,16 +172,9 @@ export default function SplashScreen() {
   }, [healthQuery.data, healthQuery.isError, showToast]);
 
   useEffect(() => {
-    let timer: number;
-    AsyncStorage.getItem(TERMS_AND_CONDITIONS_KEY).then((value) => {
-      timer = setTimeout(() => {
-        if (value === 'true') {
-          router.replace('/home');
-        } else {
-          router.replace('/terms-and-conditions');
-        }
-      }, 3000);
-    });
+    const timer = setTimeout(() => {
+      router.replace('/login');
+    }, 3000);
     return () => clearTimeout(timer);
   }, [router]);
 

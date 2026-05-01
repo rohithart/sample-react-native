@@ -1,5 +1,4 @@
 import { ToastConfig } from '@/types/toast';
-import { Platform } from 'react-native';
 
 const BASE_URL = process.env.EXPO_PUBLIC_API_URL ?? '';
 
@@ -29,10 +28,14 @@ function showApiToast(status: number, message: string) {
   toastHandler({ type: 'error', title, message, duration: 4500 });
 }
 
+let _accessToken: string | null = null;
+
+export function setAccessToken(token: string | null) {
+  _accessToken = token;
+}
+
 async function getToken(): Promise<string | null> {
-  if (Platform.OS === 'web') return null;
-  return 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IldVZmlDMzZ1QmJHN2tXQUE5QU1GWiJ9.eyJodHRwczovL3Byb3BvcmRvLmNvbS9lbWFpbCI6InJvaGl0aGFydEB5YWhvby5jb20iLCJodHRwczovL3Byb3BvcmRvLmNvbS9yb2xlIjpbIlN1cGVyQWRtaW4iXSwiaHR0cHM6Ly9wcm9wb3Jkby5jb20vbWV0YV9kYXRhIjp7fSwiaXNzIjoiaHR0cHM6Ly9hdXRoLnByb3BvcmRvLmNvbS8iLCJzdWIiOiJhdXRoMHw2OTJlOTVlZTVlZTJhZDE0MjZkM2EyYWMiLCJhdWQiOlsiaHR0cHM6Ly9wcm9wb3Jkby5hdS5hdXRoMC5jb20vYXBpL3YyLyIsImh0dHBzOi8vcHJvcG9yZG8uYXUuYXV0aDAuY29tL3VzZXJpbmZvIl0sImlhdCI6MTc3Njc1ODUyMiwiZXhwIjoxNzc2ODQ0OTIyLCJzY29wZSI6Im9wZW5pZCBwcm9maWxlIGVtYWlsIG9mZmxpbmVfYWNjZXNzIiwiYXpwIjoiM1hnYWpwcXV1UmJ3d0YyeFp5UW9HREcxSUxQU1lITnMifQ.XnJT3lVb2fS9SMXM1BBcu_n-HlLo8cHkaUHpPa-hzgDt3QKrVZX9xI9jX9bl9cAtMy35utw3d9vAsVmb45r1tlju_NgCcB-ADArvC7fSP3pmi0IirdDu0U7Se8ZihywPqtliQm7DGW7bA5Ot1A3UHDclb1lfn4Pr8oU_8vHQWEI41uCvcQbVQDByEUg-YSdUIbGYBygarYGTwq_bfnroNMNKHiHJ2AbFXnuWOQn73-XAsFSP6lg0wXr1RDK0MNQkevqoyDiBnyh4nUrXEWSTPSOPlM2-gQ9bBgCeYa8qSzUVjGisHpMQNguWFOtup-IfcfujYFAtScHCGLJAOQHGRw';
-  // return SecureStore.getItemAsync('auth_token');
+  return _accessToken;
 }
 
 export class ApiError extends Error {

@@ -1,75 +1,84 @@
-import React, { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
-import * as SecureStore from 'expo-secure-store';
-import { Platform } from 'react-native';
+import React, { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react';
+import { Auth0Provider, useAuth0 } from 'react-native-auth0';
 
-type Role = 'admin' | 'user';
+const AUTH0_DOMAIN = process.env.EXPO_PUBLIC_AUTH0_DOMAIN ?? '';
+const AUTH0_CLIENT_ID = process.env.EXPO_PUBLIC_AUTH0_CLIENT_ID ?? '';
+const AUTH0_AUDIENCE = process.env.EXPO_PUBLIC_AUTH0_AUDIENCE ?? '';
 
 type AuthContextType = {
   isLoggedIn: boolean;
   isLoading: boolean;
-  role: Role;
-  login: (role: Role) => Promise<void>;
+  user: any;
+  accessToken: string | null;
+  login: () => Promise<void>;
   logout: () => Promise<void>;
-  toggleRole: () => void;
-};
-
-const TOKEN_KEY = 'auth_token';
-const ROLE_KEY = 'auth_role';
-
-const storage = {
-  get: (key: string) =>
-    Platform.OS !== 'web' ? SecureStore.getItemAsync(key) : Promise.resolve(null),
-  set: (key: string, value: string) =>
-    Platform.OS !== 'web' ? SecureStore.setItemAsync(key, value) : Promise.resolve(),
-  remove: (key: string) =>
-    Platform.OS !== 'web' ? SecureStore.deleteItemAsync(key) : Promise.resolve(),
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export function AuthProvider({ children }: { children: ReactNode }) {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [role, setRole] = useState<Role>('user');
+function AuthProviderInner({ children }: { children: ReactNode }) {
+  const { user, isLoading: auth0Loading, authorize, clearSession, getCredentials } = useAuth0();
+  const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [tokenLoading, setTokenLoading] = useState(true);
 
   useEffect(() => {
-    (async () => {
-      try {
-        const [token, savedRole] = await Promise.all([
-          storage.get(TOKEN_KEY),
-          storage.get(ROLE_KEY),
-        ]);
-        if (token) {
-          setIsLoggedIn(true);
-          setRole((savedRole as Role) ?? 'user');
-        }
-      } finally {
-        setIsLoading(false);
-      }
-    })();
-  }, []);
+    if (auth0Loading) return;
+    if (user) {
+      getCredentials()
+        .then((creds) => setAccessToken(creds?.accessToken ?? null))
+        .catch(() => setAccessToken(null))
+        .finally(() => setTokenLoading(false));
+    } else {
+      setAccessToken(null);
+      setTokenLoading(false);
+    }
+  }, [user, auth0Loading, getCredentials]);
 
-  const login = async (newRole: Role) => {
-    await Promise.all([
-      storage.set(TOKEN_KEY, `mock_token_${Date.now()}`),
-      storage.set(ROLE_KEY, newRole),
-    ]);
-    setIsLoggedIn(true);
-    setRole(newRole);
-  };
+  useEffect(() => {
+    setAccessToken(accessToken);
+  }, [accessToken]);
 
-  const logout = async () => {
-    await Promise.all([storage.remove(TOKEN_KEY), storage.remove(ROLE_KEY)]);
-    setIsLoggedIn(false);
-    setRole('user');
-  };
+  const login = useCallback(async () => {
+    try {
+      await authorize({ audience: AUTH0_AUDIENCE, scope: 'openid profile email offline_access' });
+      const creds = await getCredentials();
+      setAccessToken(creds?.accessToken ?? null);
+    } catch {
+      // User cancelled or auth failed
+    }
+  }, [authorize, getCredentials]);
 
-  const toggleRole = () => setRole((prev) => (prev === 'admin' ? 'user' : 'admin'));
+  const logoutFn = useCallback(async () => {
+    try {
+      await clearSession();
+    } catch {
+      // Logout failed
+    } finally {
+      setAccessToken(null);
+    }
+  }, [clearSession]);
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, isLoading, role, login, logout, toggleRole }}>
+    <AuthContext.Provider
+      value={{
+        isLoggedIn: !!user,
+        isLoading: auth0Loading || tokenLoading,
+        user: user ?? null,
+        accessToken,
+        login,
+        logout: logoutFn,
+      }}
+    >
       {children}
     </AuthContext.Provider>
+  );
+}
+
+export function AuthProvider({ children }: { children: ReactNode }) {
+  return (
+    <Auth0Provider domain={AUTH0_DOMAIN} clientId={AUTH0_CLIENT_ID}>
+      <AuthProviderInner>{children}</AuthProviderInner>
+    </Auth0Provider>
   );
 }
 
