@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function LoginScreen() {
-  const { isLoggedIn, isLoading, login } = useAuth();
+  const { isLoggedIn, isLoading, login, accessToken } = useAuth();
   const router = useRouter();
   const params = useLocalSearchParams<{ redirect?: string }>();
   const colors = useThemeColors();
@@ -16,22 +16,20 @@ export default function LoginScreen() {
   useEffect(() => {
     if (isLoading) return;
 
-    if (isLoggedIn) {
+    if (isLoggedIn && accessToken) {
       const destination = params.redirect || '/home';
       router.replace(destination as any);
       return;
     }
 
-    // Not logged in — check T&C first, then trigger Auth0
     AsyncStorage.getItem(TERMS_AND_CONDITIONS_KEY).then((value) => {
       if (value !== 'true') {
         router.replace('/terms-and-conditions');
         return;
       }
-      // T&C accepted, trigger Auth0 login
       login();
     });
-  }, [isLoading, isLoggedIn, login, router, params.redirect]);
+  }, [isLoading, isLoggedIn, accessToken, login, router, params.redirect]);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
