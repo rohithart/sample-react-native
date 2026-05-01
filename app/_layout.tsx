@@ -79,4 +79,4 @@ export default Sentry.wrap(function RootLayout() {
       </KeyboardProvider>
     </ErrorBoundary>
   );
-}
+});
