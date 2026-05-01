@@ -1,5 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react';
 import { Auth0Provider, useAuth0 } from 'react-native-auth0';
+import { setAccessToken as setApiAccessToken } from '@/services/api-client';
+import { router } from 'expo-router';
 
 const AUTH0_DOMAIN = process.env.EXPO_PUBLIC_AUTH0_DOMAIN ?? '';
 const AUTH0_CLIENT_ID = process.env.EXPO_PUBLIC_AUTH0_CLIENT_ID ?? '';
@@ -25,26 +27,34 @@ function AuthProviderInner({ children }: { children: ReactNode }) {
     if (auth0Loading) return;
     if (user) {
       getCredentials()
-        .then((creds: { accessToken?: string } | undefined) => setAccessToken(creds?.accessToken ?? null))
-        .catch(() => setAccessToken(null))
+        .then((creds: { accessToken?: string } | undefined) => {
+          const token = creds?.accessToken ?? null;
+          setAccessToken(token);
+          setApiAccessToken(token);
+        })
+        .catch(() => {
+          setAccessToken(null);
+          setApiAccessToken(null);
+        })
         .finally(() => setTokenLoading(false));
     } else {
       setAccessToken(null);
+      setApiAccessToken(null);
       setTokenLoading(false);
+      router.push('/');
     }
   }, [user, auth0Loading, getCredentials]);
-
-  useEffect(() => {
-    setAccessToken(accessToken);
-  }, [accessToken]);
 
   const login = useCallback(async () => {
     try {
       await authorize({ audience: AUTH0_AUDIENCE, scope: 'openid profile email offline_access' });
       const creds = await getCredentials();
+      const token = creds?.accessToken ?? null;
+      setAccessToken(token);
+      setApiAccessToken(token);
       setAccessToken(creds?.accessToken ?? null);
     } catch {
-      // User cancelled or auth failed
+      router.push('/');
     }
   }, [authorize, getCredentials]);
 
@@ -52,7 +62,7 @@ function AuthProviderInner({ children }: { children: ReactNode }) {
     try {
       await clearSession();
     } catch {
-      // Logout failed
+      setApiAccessToken(null); 
     } finally {
       setAccessToken(null);
     }

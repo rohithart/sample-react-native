@@ -1,18 +1,20 @@
 {
   "expo": {
-    "name": "DarthVader",
-    "slug": "darthvader",
+    "name": "propordo",
+    "slug": "propordo",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "darthvader",
+    "scheme": "propordo",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
       "associatedDomains": [
-        "applinks:app.darthvader.com"
-      ]
+        "applinks:app.propordo.com",
+        "applinks:app.propordo.com"
+      ],
+      "bundleIdentifier": "com.grocstock.propordo"
     },
     "android": {
       "adaptiveIcon": {
@@ -30,7 +32,7 @@
           "data": [
             {
               "scheme": "https",
-              "host": "app.darthvader.com",
+              "host": "app.propordo.com",
               "pathPrefix": "/"
             }
           ],
@@ -45,7 +47,7 @@
           "data": [
             {
               "scheme": "https",
-              "host": "app.darthvader.com",
+              "host": "app.propordo.com",
               "pathPrefix": "/"
             }
           ],
@@ -55,7 +57,7 @@
           ]
         }
       ],
-      "package": "com.anonymous.darthvader"
+      "package": "com.grocstock.propordo"
     },
     "web": {
       "output": "static",
@@ -66,7 +68,7 @@
       [
         "react-native-auth0",
         {
-          "domain": "your-tenant.auth0.com"
+          "domain": "auth.propordo.com"
         }
       ],
       [
@@ -88,8 +90,8 @@
         "@sentry/react-native/expo",
         {
           "url": "https://sentry.io/",
-          "project": "darthvader-mobile",
-          "organization": "darthvader-pvt-ltd"
+          "project": "propordo-mobile",
+          "organization": "propordo-pvt-ltd"
         }
       ]
     ],
