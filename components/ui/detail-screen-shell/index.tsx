@@ -6,7 +6,7 @@ import { EntityHistory } from '@/components/entity/entity-history';
 import { EntityImages } from '@/components/entity/entity-images';
 import { EntityTimeline } from '@/components/entity/entity-timeline';
 import { ActionBottomSheet } from '@/components/sheets/action-bottom-sheet';
-import { LoadingState } from '@/components/ui/loading-state';
+import { LoadingPage } from '@/components/skeleton';
 import { PageHeader } from '@/components/ui/page-header';
 import { Pressable } from '@/components/ui/pressable';
 import { ScrollView } from '@/components/ui/scroll-view';
@@ -143,7 +143,7 @@ export function DetailScreenShell({
       />
 
       {isLoading || !item ? (
-        <LoadingState />
+        <LoadingPage />
       ) : (
         <ScrollView
           refreshControl={refreshControl}

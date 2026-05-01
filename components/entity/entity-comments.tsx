@@ -4,7 +4,7 @@ import { useComments, useCreateComment, useDeleteComment } from '@/services/comm
 import type { Comment } from '@/types';
 
 import { FullScreenModal } from '@/components/ui/full-screen-modal';
-import { LoadingState } from '@/components/ui/loading-state';
+import { LoadingList } from '@/components/skeleton';
 import { Pressable } from '@/components/ui/pressable';
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
@@ -55,7 +55,7 @@ export function EntityComments({ isVisible, onClose, entity, entityId, orgId }: 
   return (
     <FullScreenModal visible={isVisible} onClose={onClose} title="Comments" count={comments?.length}>
       {isLoading ? (
-        <LoadingState message="Loading comments..." />
+        <LoadingList count={3} />
       ) : !comments?.length ? (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 32 }}>
           <I.comment size={48} color={colors.sub} strokeWidth={1.2} />

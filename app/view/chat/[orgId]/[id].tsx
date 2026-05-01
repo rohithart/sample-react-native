@@ -11,7 +11,7 @@ import { ActionItem } from '@/types/actionItem';
 import { useGroup } from '@/services/group';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { GroupChat } from '@/components/chat/group-chat';
-import { LoadingState } from '@/components/ui/loading-state';
+import { LoadingList } from '@/components/skeleton';
 import { Pressable } from '@/components/ui/pressable';
 import { View } from '@/components/ui/view';
 
@@ -42,7 +42,7 @@ export default function ChatScreen() {
       />
 
       {isLoadingItem || !item ? (
-        <LoadingState />
+        <LoadingList />
       ) : (
         <View style={{ flex: 1 }}>
           <GroupChat groupId={id || ''} orgId={orgId || ''} group={item} />

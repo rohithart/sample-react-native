@@ -6,7 +6,7 @@ import type { AppImage } from '@/types';
 
 import { FullScreenModal } from '@/components/ui/full-screen-modal';
 import { Image } from '@/components/ui/image';
-import { LoadingState } from '@/components/ui/loading-state';
+import { LoadingList } from '@/components/skeleton';
 import { Pressable } from '@/components/ui/pressable';
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
@@ -101,7 +101,7 @@ export function EntityImages({ isVisible, onClose, entity, entityId, orgId }: En
       )}
 
       {isLoading ? (
-        <LoadingState message="Loading images..." />
+        <LoadingList count={3} />
       ) : !images?.length ? (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 32 }}>
           <I.gallery size={48} color={colors.sub} strokeWidth={1.2} />

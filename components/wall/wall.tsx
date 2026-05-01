@@ -7,7 +7,7 @@ import { useLocalSearchParams } from 'expo-router';
 import React, { useCallback, useState } from 'react';
 import { FlatList, TextInput } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { LoadingState } from '@/components/ui/loading-state';
+import { LoadingList } from '@/components/skeleton';
 import { EmptyState } from '@/components/ui/empty-state';
 import { Pressable } from '@/components/ui/pressable';
 import { Text } from '@/components/ui/text';
@@ -58,7 +58,7 @@ export default function WallPage() {
       </HStack>
 
       {isLoading ? (
-        <LoadingState />
+        <LoadingList />
       ) : (
         <FlatList
           data={walls ?? []}

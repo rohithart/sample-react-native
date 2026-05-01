@@ -6,7 +6,7 @@ import { Stack, useLocalSearchParams } from 'expo-router';
 import React from 'react';
 import { FlatList } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { LoadingState } from '@/components/ui/loading-state';
+import { LoadingList } from '@/components/skeleton';
 import { EmptyState } from '@/components/ui/empty-state';
 
 export default function AdminsListScreen() {
@@ -21,7 +21,7 @@ export default function AdminsListScreen() {
         title="Your Admins"
       />
       {isLoading ? (
-        <LoadingState />
+        <LoadingList />
       ) : (
         <FlatList
           data={Array.isArray(admins) ? admins : []}

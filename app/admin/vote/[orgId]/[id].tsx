@@ -20,7 +20,7 @@ import { VStack } from '@/components/ui/vstack';
 import { resolveId } from '@/utils/resolve-ref';
 import { useToast } from '@/context/toast-context';
 import { SectionHeader } from '@/components/section-header';
-import { LoadingState } from '@/components/ui/loading-state';
+import { LoadingPage } from '@/components/skeleton';
 import { Pressable } from '@/components/ui/pressable';
 import { ScrollView } from '@/components/ui/scroll-view';
 import { Text } from '@/components/ui/text';
@@ -122,7 +122,7 @@ export default function VoteDetailScreen() {
       />
 
       {isLoadingItem || !item ? (
-        <LoadingState />
+        <LoadingPage />
       ) : (
       <ScrollView
         refreshControl={refreshControl}

@@ -5,7 +5,7 @@ import { useHistory } from '@/services/history';
 import type { HistoryChanges, History as HistoryType } from '@/types';
 
 import { FullScreenModal } from '@/components/ui/full-screen-modal';
-import { LoadingState } from '@/components/ui/loading-state';
+import { LoadingList } from '@/components/skeleton';
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
@@ -64,7 +64,7 @@ export function EntityHistory({ isVisible, onClose, entity, entityId }: EntityHi
   return (
     <FullScreenModal visible={isVisible} onClose={onClose} title="History">
       {isLoading ? (
-        <LoadingState message="Loading history..." />
+        <LoadingList count={4} />
       ) : !entries?.length ? (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 32 }}>
           <I.history size={48} color={colors.sub} strokeWidth={1.2} />

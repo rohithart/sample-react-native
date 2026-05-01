@@ -6,7 +6,7 @@ import { useAttachments, useCreateAttachment, useDeleteAttachment } from '@/serv
 import type { Attachment } from '@/types';
 
 import { FullScreenModal } from '@/components/ui/full-screen-modal';
-import { LoadingState } from '@/components/ui/loading-state';
+import { LoadingList } from '@/components/skeleton';
 import { Pressable } from '@/components/ui/pressable';
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
@@ -175,7 +175,7 @@ export function EntityAttachments({ isVisible, onClose, entity, entityId, orgId 
       )}
 
       {isLoading ? (
-        <LoadingState message="Loading attachments..." />
+        <LoadingList count={3} />
       ) : !attachments?.length ? (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 32 }}>
           <I.fileText size={48} color={colors.sub} strokeWidth={1.2} />

@@ -1,7 +1,7 @@
 import { EntityCard, type EntityCardConfig } from '@/components/cards/entity-card';
 import { DisplaySettingsIndicator } from '@/components/display-settings';
 import { EmptyState } from '@/components/ui/empty-state';
-import { LoadingState } from '@/components/ui/loading-state';
+import { LoadingList } from '@/components/skeleton';
 import { PageHeader } from '@/components/ui/page-header';
 import { Pressable } from '@/components/ui/pressable';
 import { ENTITY_ICONS, type EntityIconKey } from '@/constants/entity-icons';
@@ -73,7 +73,7 @@ export function ListScreen({
       {hasArchive && <DisplaySettingsIndicator />}
 
       {isLoading ? (
-        <LoadingState />
+        <LoadingList />
       ) : (
         <FlatList
           data={items}
