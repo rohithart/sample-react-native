@@ -24,6 +24,7 @@ export default function BudgetDetailScreen() {
       deleteRedirectRoute={`/admin/budgets/${orgId}`}
       entityName="Budget"
     >
+      {(item) => (
       <View style={{ padding: 20, gap: 16 }}>
           {item.description ? <HtmlContent label="Description" html={item.description} /> : null}
           <DetailSection title="Budget">
@@ -31,6 +32,7 @@ export default function BudgetDetailScreen() {
             <DetailField label="Approved" value={item.isApproved ? 'Yes' : 'No'} />
           </DetailSection>
         </View>
-    </DetailScreenShell>
+          )}
+</DetailScreenShell>
   );
 }

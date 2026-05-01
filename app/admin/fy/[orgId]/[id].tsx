@@ -25,6 +25,7 @@ export default function FinancialYearDetailScreen() {
       deleteRedirectRoute={`/admin/financial-years/${orgId}`}
       entityName="Financial Year"
     >
+      {(item) => (
       <View style={{ padding: 20, gap: 16 }}>
           <DetailSection title="Period">
             <DetailField label="From" value={convertToLocalDateString(item.from)} />
@@ -32,6 +33,7 @@ export default function FinancialYearDetailScreen() {
             <DetailField label="Current" value={item.isCurrent ? 'Yes' : 'No'} />
           </DetailSection>
         </View>
-    </DetailScreenShell>
+          )}
+</DetailScreenShell>
   );
 }

@@ -38,6 +38,7 @@ export default function MeetingDetailScreen() {
       entityId={id || ''}
       orgId={orgId || ''}
     >
+      {(item) => (
       <View style={{ padding: 16, gap: 20 }}>
           {item.details && (
             <View style={{ backgroundColor: colors.card, padding: 16, borderRadius: 20, borderWidth: 1, borderColor: colors.border }}>
@@ -67,6 +68,7 @@ export default function MeetingDetailScreen() {
             </VStack>
           </View>
         </View>
-    </DetailScreenShell>
+          )}
+</DetailScreenShell>
   );
 }

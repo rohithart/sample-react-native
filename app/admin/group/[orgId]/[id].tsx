@@ -24,6 +24,7 @@ export default function GroupDetailScreen() {
       deleteRedirectRoute={`/admin/groups/${orgId}`}
       entityName="Group"
     >
+      {(item) => (
       <View style={{ padding: 16, gap: 20 }}>
           {item.description && (
             <View style={{ backgroundColor: colors.card, padding: 16, borderRadius: 20, borderWidth: 1, borderColor: colors.border }}>
@@ -31,6 +32,7 @@ export default function GroupDetailScreen() {
             </View>
           )}
         </View>
-    </DetailScreenShell>
+          )}
+</DetailScreenShell>
   );
 }

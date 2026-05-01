@@ -24,6 +24,7 @@ export default function ChartofAccountDetailScreen() {
       deleteRedirectRoute={`/admin/chart-of-accounts/${orgId}`}
       entityName="Chart of Account"
     >
+      {(item) => (
       <View style={{ padding: 20, gap: 16 }}>
           {item.description ? <HtmlContent label="Description" html={item.description} /> : null}
           <DetailSection title="Account">
@@ -31,6 +32,7 @@ export default function ChartofAccountDetailScreen() {
             <DetailField label="Account Type" value={item.accountType} />
           </DetailSection>
         </View>
-    </DetailScreenShell>
+          )}
+</DetailScreenShell>
   );
 }

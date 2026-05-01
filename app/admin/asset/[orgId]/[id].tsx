@@ -36,6 +36,7 @@ export default function AssetDetailScreen() {
       entityId={id || ''}
       orgId={orgId || ''}
     >
+      {(item) => (
       <View style={{ padding: 16, gap: 20 }}>
           {item.description && (
             <View style={{ backgroundColor: colors.card, padding: 16, borderRadius: 20, borderWidth: 1, borderColor: colors.border }}>
@@ -47,6 +48,7 @@ export default function AssetDetailScreen() {
             <LinkedField label="Asset Type" icon="assetType" value={item.assetType?.title} route={`/admin/asset-type/${orgId}/${resolveId(item.assetType)}`} />
           </View>
         </View>
-    </DetailScreenShell>
+          )}
+</DetailScreenShell>
   );
 }

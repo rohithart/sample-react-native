@@ -27,6 +27,7 @@ export default function UserDetailScreen() {
       deleteRedirectRoute={`/admin/users/${orgId}`}
       entityName="User"
     >
+      {(item) => (
       <View style={{ padding: 16, gap: 20 }}>
           {item.user?.image && (
             <View style={{ alignItems: 'center', padding: 16 }}>
@@ -42,6 +43,7 @@ export default function UserDetailScreen() {
             </VStack>
           </View>
         </View>
-    </DetailScreenShell>
+          )}
+</DetailScreenShell>
   );
 }

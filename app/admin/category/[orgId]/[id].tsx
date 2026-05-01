@@ -24,9 +24,11 @@ export default function CategoryDetailScreen() {
       deleteRedirectRoute={`/admin/categories/${orgId}`}
       entityName="Category"
     >
+      {(item) => (
       <View style={{ padding: 20, gap: 16 }}>
           {item.description ? <HtmlContent label="Description" html={item.description} /> : null}
         </View>
-    </DetailScreenShell>
+          )}
+</DetailScreenShell>
   );
 }

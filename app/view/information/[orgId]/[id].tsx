@@ -21,6 +21,7 @@ export default function InformationDetailScreen() {
       item={item}
       refreshControl={refreshControl}
     >
+      {(item) => (
       <View style={{ padding: 16, gap: 20 }}>
           {item.description && (
             <View style={{ backgroundColor: colors.card, padding: 16, borderRadius: 20, borderWidth: 1, borderColor: colors.border }}>
@@ -28,6 +29,7 @@ export default function InformationDetailScreen() {
             </View>
           )}
         </View>
-    </DetailScreenShell>
+          )}
+</DetailScreenShell>
   );
 }

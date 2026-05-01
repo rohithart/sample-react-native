@@ -28,7 +28,7 @@ interface DetailScreenShellProps {
   isLoading: boolean;
   item?: any;
   refreshControl?: any;
-  children: React.ReactNode;
+  children: React.ReactNode | ((item: any) => React.ReactNode);
   /** Route for the edit page. If set, enables admin actions (edit/archive/delete) gated by isAdmin. */
   editRoute?: string;
   /** Route to navigate after delete. Required if editRoute is set. */
@@ -150,7 +150,7 @@ export function DetailScreenShell({
           contentContainerStyle={{ paddingBottom: 40 }}
           showsVerticalScrollIndicator={false}
         >
-          {children}
+          {typeof children === 'function' ? children(item) : children}
         </ScrollView>
       )}
 

@@ -29,6 +29,7 @@ export default function VendorDetailScreen() {
       entityId={id || ''}
       orgId={orgId || ''}
     >
+      {(item) => (
       <View style={{ padding: 20, gap: 16 }}>
           <DetailSection title="Contact">
             <DetailField label="Email" value={item.email} />
@@ -42,6 +43,7 @@ export default function VendorDetailScreen() {
             <DetailField label="Archived" value={item.archived ? 'Yes' : 'No'} />
           </DetailSection>
         </View>
-    </DetailScreenShell>
+          )}
+</DetailScreenShell>
   );
 }

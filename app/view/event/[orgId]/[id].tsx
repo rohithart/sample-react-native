@@ -24,6 +24,7 @@ export default function EventDetailScreen() {
       item={item}
       refreshControl={refreshControl}
     >
+      {(item) => (
       <View style={{ padding: 16, gap: 20 }}>
           {item.description && (
             <View style={{ backgroundColor: colors.card, padding: 16, borderRadius: 20, borderWidth: 1, borderColor: colors.border }}>
@@ -38,6 +39,7 @@ export default function EventDetailScreen() {
             </VStack>
           </View>
         </View>
-    </DetailScreenShell>
+          )}
+</DetailScreenShell>
   );
 }
