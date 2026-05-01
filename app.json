@@ -83,7 +83,15 @@
       ],
       "expo-secure-store",
       "expo-web-browser",
-      "@sentry/react-native"
+      "@sentry/react-native",
+      [
+        "@sentry/react-native/expo",
+        {
+          "url": "https://sentry.io/",
+          "project": "darthvader-mobile",
+          "organization": "darthvader-pvt-ltd"
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,
