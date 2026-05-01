@@ -25,7 +25,7 @@ function AuthProviderInner({ children }: { children: ReactNode }) {
     if (auth0Loading) return;
     if (user) {
       getCredentials()
-        .then((creds) => setAccessToken(creds?.accessToken ?? null))
+        .then((creds: { accessToken?: string } | undefined) => setAccessToken(creds?.accessToken ?? null))
         .catch(() => setAccessToken(null))
         .finally(() => setTokenLoading(false));
     } else {
