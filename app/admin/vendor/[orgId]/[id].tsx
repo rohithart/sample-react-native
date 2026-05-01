@@ -11,7 +11,7 @@ import { View } from '@/components/ui/view';
 export default function VendorDetailScreen() {
   const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
   const colors = useThemeColors();
-  const { data: item, isLoading, refetch, isRefetching } = useVendor(id || '');
+  const { data: item, isLoading, refetch, isRefetching, dataUpdatedAt} = useVendor(id || '');
   const refreshControl = useRefreshControl(refetch, isRefetching);
 
   return (
@@ -19,6 +19,7 @@ export default function VendorDetailScreen() {
       icon="vendor"
       title={item?.name || 'Loading...'}
       isLoading={isLoading}
+      dataUpdatedAt={dataUpdatedAt}
       item={item}
       refreshControl={refreshControl}
       editRoute={`/admin/vendor/${orgId}/${id}/edit`}

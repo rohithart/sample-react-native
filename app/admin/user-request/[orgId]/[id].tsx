@@ -12,7 +12,7 @@ import { View } from '@/components/ui/view';
 export default function UserRequestDetailScreen() {
   const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
   const colors = useThemeColors();
-  const { data: item, isLoading, refetch, isRefetching } = useUserRequest(id || '');
+  const { data: item, isLoading, refetch, isRefetching, dataUpdatedAt} = useUserRequest(id || '');
   const refreshControl = useRefreshControl(refetch, isRefetching);
 
   return (
@@ -20,6 +20,7 @@ export default function UserRequestDetailScreen() {
       icon="userRequest"
       title={item?.title || 'Loading...'}
       isLoading={isLoading}
+      dataUpdatedAt={dataUpdatedAt}
       item={item}
       refreshControl={refreshControl}
       editRoute={`/admin/user-request/${orgId}/${id}/edit`}

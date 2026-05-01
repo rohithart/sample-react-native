@@ -10,7 +10,7 @@ import { View } from '@/components/ui/view';
 export default function EventTypeDetailScreen() {
   const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
   const colors = useThemeColors();
-  const { data: item, isLoading, refetch, isRefetching } = useEventType(id || '');
+  const { data: item, isLoading, refetch, isRefetching, dataUpdatedAt} = useEventType(id || '');
   const refreshControl = useRefreshControl(refetch, isRefetching);
 
   return (
@@ -18,6 +18,7 @@ export default function EventTypeDetailScreen() {
       icon="eventType"
       title={item?.title || 'Loading...'}
       isLoading={isLoading}
+      dataUpdatedAt={dataUpdatedAt}
       item={item}
       refreshControl={refreshControl}
       editRoute={`/admin/event-type/${orgId}/${id}/edit`}

@@ -13,7 +13,7 @@ import { convertToLocalDateString } from '@/utils/date';
 export default function EventDetailScreen() {
   const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
   const colors = useThemeColors();
-  const { data: item, isLoading, refetch, isRefetching } = useEvent(id || '');
+  const { data: item, isLoading, refetch, isRefetching, dataUpdatedAt} = useEvent(id || '');
   const refreshControl = useRefreshControl(refetch, isRefetching);
 
   return (
@@ -21,6 +21,7 @@ export default function EventDetailScreen() {
       icon="event"
       title={item?.title || 'Loading...'}
       isLoading={isLoading}
+      dataUpdatedAt={dataUpdatedAt}
       item={item}
       refreshControl={refreshControl}
     >

@@ -10,7 +10,7 @@ import { View } from '@/components/ui/view';
 export default function CategoryDetailScreen() {
   const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
   const colors = useThemeColors();
-  const { data: item, isLoading, refetch, isRefetching } = useCategory(id || '');
+  const { data: item, isLoading, refetch, isRefetching, dataUpdatedAt} = useCategory(id || '');
   const refreshControl = useRefreshControl(refetch, isRefetching);
 
   return (
@@ -18,6 +18,7 @@ export default function CategoryDetailScreen() {
       icon="category"
       title={item?.title || 'Loading...'}
       isLoading={isLoading}
+      dataUpdatedAt={dataUpdatedAt}
       item={item}
       refreshControl={refreshControl}
       editRoute={`/admin/category/${orgId}/${id}/edit`}

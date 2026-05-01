@@ -16,7 +16,7 @@ export const convertToLocalDateString = (dateString: string | Date | undefined) 
   });   
 };
 
-export const convertToRelativeTime = (d: string) => {
+export const convertToRelativeTime = (d: string | number) => {
   const date = new Date(d);
   const now = new Date();
   const diffMs = now.getTime() - date.getTime();

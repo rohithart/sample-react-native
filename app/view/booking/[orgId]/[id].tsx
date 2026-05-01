@@ -14,7 +14,7 @@ import { convertToLocalDateString, convertToTimeString } from '@/utils/date';
 export default function BookingDetailScreen() {
   const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
   const colors = useThemeColors();
-  const { data: item, isLoading, refetch, isRefetching } = useBooking(id || '');
+  const { data: item, isLoading, refetch, isRefetching, dataUpdatedAt} = useBooking(id || '');
   const refreshControl = useRefreshControl(refetch, isRefetching);
 
   return (
@@ -22,6 +22,7 @@ export default function BookingDetailScreen() {
       icon="booking"
       title={item?.title || 'Loading...'}
       isLoading={isLoading}
+      dataUpdatedAt={dataUpdatedAt}
       item={item}
       refreshControl={refreshControl}
       features={['comments']}

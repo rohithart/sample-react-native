@@ -16,6 +16,7 @@ import { useToast } from '@/context/toast-context';
 import type { EntityType } from '@/enums';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { type ActionItem } from '@/types/actionItem';
+import { convertToRelativeTime } from '@/utils/date';
 import { Stack, useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -42,6 +43,8 @@ interface DetailScreenShellProps {
   entityId?: string;
   orgId?: string;
   features?: ('attachments' | 'comments' | 'images' | 'timeline' | 'history')[];
+  /** Timestamp (ms) from React Query's dataUpdatedAt for "Updated X ago" display. */
+  dataUpdatedAt?: number;
 }
 
 export function DetailScreenShell({
@@ -59,6 +62,7 @@ export function DetailScreenShell({
   entityId,
   orgId,
   features = [],
+  dataUpdatedAt,
 }: DetailScreenShellProps) {
   const colors = useThemeColors();
   const router = useRouter();
@@ -135,6 +139,7 @@ export function DetailScreenShell({
       <PageHeader
         icon={icon}
         title={title}
+        subtitle={dataUpdatedAt ? `Updated ${convertToRelativeTime(dataUpdatedAt)}` : undefined}
         rightAction={
           <Pressable onPress={() => setIsBottomSheetOpen(true)} style={{ padding: 8, backgroundColor: colors.primary + '10', borderRadius: 12 }}>
             <I.moreVertical size={20} color={colors.primary} />

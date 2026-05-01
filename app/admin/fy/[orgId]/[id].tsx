@@ -11,7 +11,7 @@ import { convertToLocalDateString } from '@/utils/date';
 export default function FinancialYearDetailScreen() {
   const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
   const colors = useThemeColors();
-  const { data: item, isLoading, refetch, isRefetching } = useFinancialYear(id || '');
+  const { data: item, isLoading, refetch, isRefetching, dataUpdatedAt} = useFinancialYear(id || '');
   const refreshControl = useRefreshControl(refetch, isRefetching);
 
   return (
@@ -19,6 +19,7 @@ export default function FinancialYearDetailScreen() {
       icon="financialYear"
       title={item?.title || 'Financial Year' || 'Loading...'}
       isLoading={isLoading}
+      dataUpdatedAt={dataUpdatedAt}
       item={item}
       refreshControl={refreshControl}
       editRoute={`/admin/fy/${orgId}/${id}/edit`}

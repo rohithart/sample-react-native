@@ -8,6 +8,7 @@ import { ENTITY_ICONS, type EntityIconKey } from '@/constants/entity-icons';
 import { useDisplaySettings } from '@/context/display-settings-context';
 import { useRefreshControl } from '@/hooks/use-refresh-control';
 import { useThemeColors } from '@/hooks/use-theme-colors';
+import { convertToRelativeTime } from '@/utils/date';
 import type { UseQueryResult } from '@tanstack/react-query';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import React from 'react';
@@ -51,6 +52,7 @@ export function ListScreen({
   const refetching = showArchived ? archivedQuery?.isRefetching ?? false : primaryQuery.isRefetching;
   const refetchFn = showArchived ? archivedQuery?.refetch ?? primaryQuery.refetch : primaryQuery.refetch;
   const refreshControl = useRefreshControl(refetchFn, refetching);
+  const dataUpdatedAt = showArchived ? archivedQuery?.dataUpdatedAt : primaryQuery.dataUpdatedAt;
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
@@ -58,6 +60,7 @@ export function ListScreen({
       <PageHeader
         icon={icon}
         title={title}
+        subtitle={dataUpdatedAt ? `Updated ${convertToRelativeTime(dataUpdatedAt)}` : undefined}
         rightAction={
           addRoute ? (
             <Pressable

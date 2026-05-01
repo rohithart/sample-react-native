@@ -10,7 +10,7 @@ import { View } from '@/components/ui/view';
 export default function InformationDetailScreen() {
   const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
   const colors = useThemeColors();
-  const { data: item, isLoading, refetch, isRefetching } = useInformation(id || '');
+  const { data: item, isLoading, refetch, isRefetching, dataUpdatedAt} = useInformation(id || '');
   const refreshControl = useRefreshControl(refetch, isRefetching);
 
   return (
@@ -18,6 +18,7 @@ export default function InformationDetailScreen() {
       icon="information"
       title={item?.title || 'Loading...'}
       isLoading={isLoading}
+      dataUpdatedAt={dataUpdatedAt}
       item={item}
       refreshControl={refreshControl}
     >

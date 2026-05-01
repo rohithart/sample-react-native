@@ -11,14 +11,15 @@ const I = ENTITY_ICONS;
 
 interface PageHeaderProps {
   title: string;
+  subtitle?: string;
   rightAction?: React.ReactNode;
   onBack?: () => void;
   icon?: EntityIconKey;
 }
 
-export function PageHeader({ title, rightAction, onBack, icon }: PageHeaderProps) {
+export function PageHeader({ title, subtitle, rightAction, onBack, icon }: PageHeaderProps) {
   const router = useRouter();
-  const { card, text, border, primary } = useThemeColors();
+  const { card, text, sub, border, primary } = useThemeColors();
   const IconComponent = icon ? ENTITY_ICONS[icon] : null;
 
   return (
@@ -68,17 +69,24 @@ export function PageHeader({ title, rightAction, onBack, icon }: PageHeaderProps
                 <IconComponent size={18} color={primary} />
               </View>
             )}
-            <Text
-              style={{ 
-                fontSize: 18, 
-                fontWeight: '700', 
-                color: text, 
-                letterSpacing: -0.5,
-              }}
-              numberOfLines={1}
-            >
-              {title}
-            </Text>
+            <View style={{ flex: 1 }}>
+              <Text
+                style={{ 
+                  fontSize: 18, 
+                  fontWeight: '700', 
+                  color: text, 
+                  letterSpacing: -0.5,
+                }}
+                numberOfLines={1}
+              >
+                {title}
+              </Text>
+              {subtitle && (
+                <Text style={{ fontSize: 11, color: sub, marginTop: 1 }} numberOfLines={1}>
+                  {subtitle}
+                </Text>
+              )}
+            </View>
           </HStack>
         </HStack>
 

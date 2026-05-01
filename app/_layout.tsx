@@ -1,5 +1,8 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DarkTheme, DefaultTheme, ThemeProvider as NavThemeProvider } from '@react-navigation/native';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister';
+import { QueryClient } from '@tanstack/react-query';
+import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
@@ -14,7 +17,17 @@ import { ThemeProvider, useTheme } from '@/context/theme-context';
 import { ToastProvider } from '@/context/toast-context';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      gcTime: 1000 * 60 * 60 * 24, // 24 hours
+    },
+  },
+});
+
+const asyncStoragePersister = createAsyncStoragePersister({
+  storage: AsyncStorage,
+});
 
 function RootLayoutContent() {
   const { isDark } = useTheme();
@@ -41,7 +54,7 @@ export default function RootLayout() {
   return (
     <ErrorBoundary>
       <KeyboardProvider>
-        <QueryClientProvider client={queryClient}>
+        <PersistQueryClientProvider client={queryClient} persistOptions={{ persister: asyncStoragePersister }}>
           <ThemeProvider>
             <GluestackUIProvider mode="system">
               <AuthProvider>
@@ -53,7 +66,7 @@ export default function RootLayout() {
               </AuthProvider>
             </GluestackUIProvider>
           </ThemeProvider>
-        </QueryClientProvider>
+        </PersistQueryClientProvider>
       </KeyboardProvider>
     </ErrorBoundary>
   );

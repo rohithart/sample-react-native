@@ -17,7 +17,7 @@ const I = ENTITY_ICONS;
 export default function AssetDetailScreen() {
   const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
   const colors = useThemeColors();
-  const { data: item, isLoading, refetch, isRefetching } = useAsset(id || '');
+  const { data: item, isLoading, refetch, isRefetching, dataUpdatedAt} = useAsset(id || '');
   const refreshControl = useRefreshControl(refetch, isRefetching);
 
   return (
@@ -25,6 +25,7 @@ export default function AssetDetailScreen() {
       icon="asset"
       title={item?.title || 'Loading...'}
       isLoading={isLoading}
+      dataUpdatedAt={dataUpdatedAt}
       item={item}
       refreshControl={refreshControl}
       editRoute={`/admin/asset/${orgId}/${id}/edit`}

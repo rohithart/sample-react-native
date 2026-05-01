@@ -19,7 +19,7 @@ const I = ENTITY_ICONS;
 export default function MeetingDetailScreen() {
   const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
   const colors = useThemeColors();
-  const { data: item, isLoading, refetch, isRefetching } = useMeeting(id || '');
+  const { data: item, isLoading, refetch, isRefetching, dataUpdatedAt} = useMeeting(id || '');
   const refreshControl = useRefreshControl(refetch, isRefetching);
 
   return (
@@ -27,6 +27,7 @@ export default function MeetingDetailScreen() {
       icon="meeting"
       title={item?.title || 'Loading...'}
       isLoading={isLoading}
+      dataUpdatedAt={dataUpdatedAt}
       item={item}
       refreshControl={refreshControl}
       editRoute={`/admin/meeting/${orgId}/${id}/edit`}

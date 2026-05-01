@@ -12,7 +12,7 @@ import { View } from '@/components/ui/view';
 export default function AnnouncementDetailScreen() {
   const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
   const colors = useThemeColors();
-  const { data: item, isLoading, refetch, isRefetching } = useAnnouncement(id || '');
+  const { data: item, isLoading, refetch, isRefetching, dataUpdatedAt} = useAnnouncement(id || '');
   const refreshControl = useRefreshControl(refetch, isRefetching);
 
   return (
@@ -20,6 +20,7 @@ export default function AnnouncementDetailScreen() {
       icon="announcement"
       title={item?.title || 'Loading...'}
       isLoading={isLoading}
+      dataUpdatedAt={dataUpdatedAt}
       item={item}
       refreshControl={refreshControl}
     >

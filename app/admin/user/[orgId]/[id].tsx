@@ -13,7 +13,7 @@ import { View } from '@/components/ui/view';
 export default function UserDetailScreen() {
   const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
   const colors = useThemeColors();
-  const { data: item, isLoading, refetch, isRefetching } = useUser(id || '');
+  const { data: item, isLoading, refetch, isRefetching, dataUpdatedAt} = useUser(id || '');
   const refreshControl = useRefreshControl(refetch, isRefetching);
 
   return (
@@ -21,6 +21,7 @@ export default function UserDetailScreen() {
       icon="user"
       title={item?.user?.name || item?.user?.email || 'User' || 'Loading...'}
       isLoading={isLoading}
+      dataUpdatedAt={dataUpdatedAt}
       item={item}
       refreshControl={refreshControl}
       editRoute={`/admin/user/${orgId}/${id}/edit`}

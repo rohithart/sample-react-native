@@ -10,7 +10,7 @@ import { View } from '@/components/ui/view';
 export default function ChartofAccountDetailScreen() {
   const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
   const colors = useThemeColors();
-  const { data: item, isLoading, refetch, isRefetching } = useChartOfAccount(id || '');
+  const { data: item, isLoading, refetch, isRefetching, dataUpdatedAt} = useChartOfAccount(id || '');
   const refreshControl = useRefreshControl(refetch, isRefetching);
 
   return (
@@ -18,6 +18,7 @@ export default function ChartofAccountDetailScreen() {
       icon="chartOfAccount"
       title={item?.title || 'Loading...'}
       isLoading={isLoading}
+      dataUpdatedAt={dataUpdatedAt}
       item={item}
       refreshControl={refreshControl}
       editRoute={`/admin/coa/${orgId}/${id}/edit`}

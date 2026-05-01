@@ -10,7 +10,7 @@ import { View } from '@/components/ui/view';
 export default function BookingTypeDetailScreen() {
   const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
   const colors = useThemeColors();
-  const { data: item, isLoading, refetch, isRefetching } = useBookingType(id || '');
+  const { data: item, isLoading, refetch, isRefetching, dataUpdatedAt} = useBookingType(id || '');
   const refreshControl = useRefreshControl(refetch, isRefetching);
 
   return (
@@ -18,6 +18,7 @@ export default function BookingTypeDetailScreen() {
       icon="bookingType"
       title={item?.title || 'Loading...'}
       isLoading={isLoading}
+      dataUpdatedAt={dataUpdatedAt}
       item={item}
       refreshControl={refreshControl}
       editRoute={`/admin/booking-type/${orgId}/${id}/edit`}

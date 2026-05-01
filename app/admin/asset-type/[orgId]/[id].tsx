@@ -10,7 +10,7 @@ import { View } from '@/components/ui/view';
 export default function AssetTypeDetailScreen() {
   const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
   const colors = useThemeColors();
-  const { data: item, isLoading, refetch, isRefetching } = useAssetType(id || '');
+  const { data: item, isLoading, refetch, isRefetching, dataUpdatedAt} = useAssetType(id || '');
   const refreshControl = useRefreshControl(refetch, isRefetching);
 
   return (
@@ -18,6 +18,7 @@ export default function AssetTypeDetailScreen() {
       icon="assetType"
       title={item?.title || 'Loading...'}
       isLoading={isLoading}
+      dataUpdatedAt={dataUpdatedAt}
       item={item}
       refreshControl={refreshControl}
       editRoute={`/admin/asset-type/${orgId}/${id}/edit`}

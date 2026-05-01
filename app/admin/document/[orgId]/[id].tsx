@@ -19,7 +19,7 @@ const I = ENTITY_ICONS;
 export default function DocumentDetailScreen() {
   const { orgId, id } = useLocalSearchParams<{ orgId: string; id: string }>();
   const colors = useThemeColors();
-  const { data: item, isLoading, refetch, isRefetching } = useDocument(id || '');
+  const { data: item, isLoading, refetch, isRefetching, dataUpdatedAt} = useDocument(id || '');
   const refreshControl = useRefreshControl(refetch, isRefetching);
 
   return (
@@ -27,6 +27,7 @@ export default function DocumentDetailScreen() {
       icon="file"
       title={item?.title || 'Loading...'}
       isLoading={isLoading}
+      dataUpdatedAt={dataUpdatedAt}
       item={item}
       refreshControl={refreshControl}
       editRoute={`/admin/document/${orgId}/${id}/edit`}
