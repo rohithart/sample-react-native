@@ -11,7 +11,7 @@ import { useAllCastedVotes, useVote } from '@/services/vote';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 
 import React, { useMemo, useState } from 'react';
-import { ActivityIndicator, Text, View } from 'react-native';
+
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { EntityType } from '@/enums';
@@ -23,6 +23,8 @@ import { SectionHeader } from '@/components/section-header';
 import { LoadingState } from '@/components/ui/loading-state';
 import { Pressable } from '@/components/ui/pressable';
 import { ScrollView } from '@/components/ui/scroll-view';
+import { Text } from '@/components/ui/text';
+import { View } from '@/components/ui/view';
 
 const I = ENTITY_ICONS;
 

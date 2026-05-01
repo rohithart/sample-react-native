@@ -1,7 +1,7 @@
 import { HStack } from '@/components/ui/hstack';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import React from 'react';
-import { Text } from 'react-native';
+import { Text } from '@/components/ui/text';
 
 interface DetailFieldProps {
   label: string;

@@ -1,10 +1,11 @@
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { ActionItem } from '@/types/actionItem';
 import React, { useState } from 'react';
-import { Animated, Modal, View } from 'react-native';
+import { Animated, Modal } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Matrix } from '../matrix';
 import { Pressable } from '@/components/ui/pressable';
+import { View } from '@/components/ui/view';
 
 interface ActionBottomSheetProps {
   isVisible: boolean;

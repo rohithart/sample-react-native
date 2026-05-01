@@ -6,9 +6,10 @@ import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useOrganisations } from '@/services/organisations';
 import { useRouter } from 'expo-router';
 
-import { Text, View } from 'react-native';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { ScrollView } from '@/components/ui/scroll-view';
+import { Text } from '@/components/ui/text';
+import { View } from '@/components/ui/view';
 
 const I = ENTITY_ICONS;
 

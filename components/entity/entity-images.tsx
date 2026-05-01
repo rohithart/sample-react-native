@@ -5,7 +5,7 @@ import { useCreateImage, useDeleteImage, useImages } from '@/services/image';
 import type { AppImage } from '@/types';
 
 import React, { useCallback, useState } from 'react';
-import { ActivityIndicator, Alert, Dimensions, FlatList, Modal, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, Alert, Dimensions, FlatList, Modal, TextInput } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { EntityType } from '@/enums';
@@ -13,6 +13,8 @@ import { convertToLocalDateString } from '@/utils/date';
 import { LoadingState } from '@/components/ui/loading-state';
 import { Pressable } from '@/components/ui/pressable';
 import { Image } from '@/components/ui/image';
+import { Text } from '@/components/ui/text';
+import { View } from '@/components/ui/view';
 
 const I = ENTITY_ICONS;
 

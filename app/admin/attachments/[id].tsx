@@ -1,8 +1,10 @@
 import { PageHeader } from '@/components/ui/page-header';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { Stack, useLocalSearchParams } from 'expo-router';
-import { Text, View } from 'react-native';
+
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Text } from '@/components/ui/text';
+import { View } from '@/components/ui/view';
 
 export default function AllAttachmentsScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();

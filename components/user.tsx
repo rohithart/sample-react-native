@@ -1,8 +1,10 @@
 import React, {  } from 'react';
-import { Text, View } from 'react-native';
+
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { Box } from 'lucide-react-native';
 import { Image } from '@/components/ui/image';
+import { Text } from '@/components/ui/text';
+import { View } from '@/components/ui/view';
 
 interface UserDisplayProps {
   userRole: any;

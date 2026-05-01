@@ -3,7 +3,9 @@ import { useToast } from '@/context/toast-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { Redirect, Stack, useGlobalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, Text, View } from 'react-native';
+import { ActivityIndicator } from 'react-native';
+import { Text } from '@/components/ui/text';
+import { View } from '@/components/ui/view';
 
 export default function ViewLayout() {
   const params = useGlobalSearchParams<{ orgId?: string; id?: string }>();

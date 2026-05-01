@@ -3,12 +3,14 @@ import { VStack } from '@/components/ui/vstack';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import React, { useMemo, useState } from 'react';
-import { ActivityIndicator, FlatList, Modal, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, FlatList, Modal, TextInput } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { UserAvatar } from '../user-avatar'; // Assuming you have this
 import { UserRole } from '@/types';
 import { SectionHeader } from '../section-header';
 import { Pressable } from '@/components/ui/pressable';
+import { Text } from '@/components/ui/text';
+import { View } from '@/components/ui/view';
 
 const I = ENTITY_ICONS;
 

@@ -10,10 +10,12 @@ import { useDeleteWall, useLikeWall } from '@/services/wall';
 import { Wall } from '@/types';
 import { convertToLocalDateTimeString } from '@/utils/date';
 import React, { useCallback, useState } from 'react';
-import { ActivityIndicator, Alert, FlatList, Text, TextInput, View, LayoutAnimation } from 'react-native';
+import { ActivityIndicator, Alert, FlatList, TextInput, LayoutAnimation } from 'react-native';
 import { CommentCard } from './comment-card';
 import { HStack } from '../ui/hstack';
 import { Pressable } from '@/components/ui/pressable';
+import { Text } from '@/components/ui/text';
+import { View } from '@/components/ui/view';
 
 const I = ENTITY_ICONS;
 

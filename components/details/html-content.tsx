@@ -1,11 +1,13 @@
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import React, { useState } from 'react';
-import { Text, View, useWindowDimensions } from 'react-native';
+import { useWindowDimensions } from 'react-native';
 import RenderHtml from 'react-native-render-html';
 import { SectionHeader } from '../section-header';
 import { Pressable } from '@/components/ui/pressable';
 import { ScrollView } from '@/components/ui/scroll-view';
+import { Text } from '@/components/ui/text';
+import { View } from '@/components/ui/view';
 
 const COLLAPSED_HEIGHT = 160;
 

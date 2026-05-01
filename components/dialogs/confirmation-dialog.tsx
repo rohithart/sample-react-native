@@ -5,7 +5,7 @@ import { ModalWrapper } from '@/components/ui/modal-wrapper';
 import { Pressable } from '@/components/ui/pressable';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import React from 'react';
-import { Text } from 'react-native';
+import { Text } from '@/components/ui/text';
 
 const I = ENTITY_ICONS;
 

@@ -1,5 +1,5 @@
 import { useThemeColors } from '@/hooks/use-theme-colors';
-import { Text} from 'react-native';
+import { Text } from '@/components/ui/text';
 
 export const SectionHeader = ({ title, style }: { title: string, style: any }) => {
   const colors = useThemeColors();

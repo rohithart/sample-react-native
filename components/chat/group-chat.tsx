@@ -5,9 +5,11 @@ import { useOrganisation } from '@/context/organisation-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { ChatMessage } from '@/components/chat/chat-message';
 import React, { useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, FlatList, KeyboardAvoidingView, Platform, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, FlatList, KeyboardAvoidingView, Platform, TextInput } from 'react-native';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { Pressable } from '@/components/ui/pressable';
+import { Text } from '@/components/ui/text';
+import { View } from '@/components/ui/view';
 
 interface GroupChatProps {
   orgId: string;

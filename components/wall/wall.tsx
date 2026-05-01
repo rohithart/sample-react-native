@@ -5,11 +5,12 @@ import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useCreateWall, useWalls } from '@/services/wall';
 import { useLocalSearchParams } from 'expo-router';
 import React, { useCallback, useState } from 'react';
-import { ActivityIndicator, FlatList, Text, TextInput, View } from 'react-native';
+import { FlatList, TextInput } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LoadingState } from '@/components/ui/loading-state';
 import { EmptyState } from '@/components/ui/empty-state';
 import { Pressable } from '@/components/ui/pressable';
+import { Text } from '@/components/ui/text';
 
 export default function WallPage() {
   const { id: orgId } = useLocalSearchParams<{ id: string }>();

@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { Alert, Text, View, Modal, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
+import { Alert, Modal, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
 import { HStack } from '../ui/hstack';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { SectionHeader } from '../section-header';
 import { Pressable } from '@/components/ui/pressable';
+import { Text } from '@/components/ui/text';
+import { View } from '@/components/ui/view';
 
 const I = ENTITY_ICONS;
 

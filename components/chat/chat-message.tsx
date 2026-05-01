@@ -5,10 +5,12 @@ import { useDeleteMessage, useToggleReaction } from '@/services/message';
 import type { Message, UserRole } from '@/types';
 import { convertToLocalDateTimeString } from '@/utils/date';
 import React, { useState } from 'react';
-import { Alert, Modal, Text, View } from 'react-native';
+import { Alert, Modal } from 'react-native';
 import { HStack } from '../ui/hstack';
 import { VStack } from '../ui/vstack';
 import { UserAvatar } from '../user-avatar';
+import { Text } from '@/components/ui/text';
+import { View } from '@/components/ui/view';
 
 interface ChatMessageProps {
   message: Message;

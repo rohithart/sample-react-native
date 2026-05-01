@@ -3,12 +3,14 @@ import { VStack } from '@/components/ui/vstack';
 import type { StatusOption } from '@/constants/status';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import React, { useMemo, useState } from 'react';
-import { Modal, Text, View } from 'react-native';
+import { Modal } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { SectionHeader } from '../section-header';
 import { Pressable } from '@/components/ui/pressable';
 import { ScrollView } from '@/components/ui/scroll-view';
+import { Text } from '@/components/ui/text';
+import { View } from '@/components/ui/view';
 
 const I = ENTITY_ICONS;
 

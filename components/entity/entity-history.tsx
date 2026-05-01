@@ -5,13 +5,15 @@ import { useHistory } from '@/services/history';
 import type { HistoryChanges, History as HistoryType } from '@/types';
 
 import React from 'react';
-import { ActivityIndicator, FlatList, Modal, Text, View } from 'react-native';
+import { FlatList, Modal } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { EntityType } from '@/enums';
 import { convertToLocalDateTimeString } from '@/utils/date';
 import { LoadingState } from '@/components/ui/loading-state';
 import { Pressable } from '@/components/ui/pressable';
+import { Text } from '@/components/ui/text';
+import { View } from '@/components/ui/view';
 
 const I = ENTITY_ICONS;
 

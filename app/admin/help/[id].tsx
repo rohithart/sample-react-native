@@ -2,9 +2,11 @@ import { PageHeader } from '@/components/ui/page-header';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useAdminHelp } from '@/services/status';
 import { Stack, useLocalSearchParams } from 'expo-router';
-import { Text, View } from 'react-native';
+
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from '@/components/ui/scroll-view';
+import { Text } from '@/components/ui/text';
+import { View } from '@/components/ui/view';
 
 export default function AdminHelpScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();

@@ -4,7 +4,9 @@ import { useThemeColors } from '@/hooks/use-theme-colors';
 import { router } from 'expo-router';
 
 import React, {  } from 'react';
-import { Text, View } from 'react-native';
+
+import { Text } from '@/components/ui/text';
+import { View } from '@/components/ui/view';
 
 const I = ENTITY_ICONS;
 

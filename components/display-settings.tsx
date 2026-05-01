@@ -2,9 +2,11 @@ import { HStack } from '@/components/ui/hstack';
 import { useDisplaySettings } from '@/context/display-settings-context';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useRouter } from 'expo-router';
-import { Text, View } from 'react-native';
+
 import { SectionHeader } from './section-header';
 import { Pressable } from '@/components/ui/pressable';
+import { Text } from '@/components/ui/text';
+import { View } from '@/components/ui/view';
 
 export function DisplaySettingsIndicator() {
   const router = useRouter();

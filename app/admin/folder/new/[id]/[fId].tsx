@@ -1,24 +1,16 @@
-import { PageHeader } from '@/components/ui/page-header';
-import { useThemeColors } from '@/hooks/use-theme-colors';
-import { Stack, useLocalSearchParams } from 'expo-router';
-import { Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { FormScreen } from '@/components/ui/form-screen';
+import { useLocalSearchParams } from 'expo-router';
 
-export default function NewFolderScreen() {
-  const { id } = useLocalSearchParams<{ id: string }>();
-  const colors = useThemeColors();
+export default function NestedFolderScreen() {
+  const { fId } = useLocalSearchParams<{ fId: string }>();
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
-      <Stack.Screen options={{ headerShown: false }} />
-      <PageHeader icon="document"
-        title="New Folder"
-      />
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-        <Text style={{ fontSize: 48 }}>🚧</Text>
-        <Text style={{ fontSize: 20, fontWeight: '700', color: colors.text }}>New Folder in Parent</Text>
-        <Text style={{ fontSize: 14, color: colors.sub }}>Org ${id}</Text>
-      </View>
-    </SafeAreaView>
+    <FormScreen
+      icon="document"
+      title="New Folder"
+      submitLabel="Create"
+      successMessage="Folder created successfully"
+      contextInfo={`Context: Parent Folder: ${fId}`}
+    />
   );
 }

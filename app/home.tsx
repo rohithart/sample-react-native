@@ -7,11 +7,12 @@ import { useThemeColors } from '@/hooks/use-theme-colors';
 import { Stack, useFocusEffect } from 'expo-router';
 
 import { useCallback, useRef, useState } from 'react';
-import { Alert, Animated, BackHandler, View } from 'react-native';
+import { Alert, Animated, BackHandler } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { HomeNavigationDrawer } from '@/components/drawer/home-navigation-drawer';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
+import { View } from '@/components/ui/view';
 
 const I = ENTITY_ICONS;
 

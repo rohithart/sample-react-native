@@ -7,7 +7,9 @@ import { Pressable } from '@/components/ui/pressable';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { convertToLocalDateString } from '@/utils/date';
 import React from 'react';
-import { Text, View } from 'react-native';
+
+import { Text } from '@/components/ui/text';
+import { View } from '@/components/ui/view';
 
 const I = ENTITY_ICONS;
 

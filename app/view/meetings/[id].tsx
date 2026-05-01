@@ -1,45 +1,15 @@
-import { useThemeColors } from '@/hooks/use-theme-colors';
-import { PageHeader } from '@/components/ui/page-header';
-import { EntityCard } from '@/components/cards/entity-card';
 import { VIEW_CONFIGS } from '@/components/cards/card-configs';
-import { Stack, useLocalSearchParams } from 'expo-router';
-import React from 'react';
-import { ActivityIndicator, FlatList, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useMeetingsForUser } from '@/services/meeting';
-import { useRefreshControl } from '@/hooks/use-refresh-control';
-import { LoadingState } from '@/components/ui/loading-state';
-import { EmptyState } from '@/components/ui/empty-state';
+import { ListScreen } from '@/components/ui/list-screen';
+import { useMeetings } from '@/services/meeting';
 
 export default function MeetingsListScreen() {
-  const { id } = useLocalSearchParams<{ id: string }>();
-  const colors = useThemeColors();
-  const { data: items, isLoading, refetch, isRefetching } = useMeetingsForUser(id);
-  const refreshControl = useRefreshControl(refetch, isRefetching);
-
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
-      <Stack.Screen options={{ headerShown: false }} />
-      <PageHeader icon="meeting" title="Meetings" />
-
-      {isLoading ? (
-        <LoadingState />
-      ) : (
-        <FlatList
-          data={items ?? []}
-          renderItem={({ item }) => (
-            <EntityCard
-              item={item}
-              config={VIEW_CONFIGS.meeting}
-              orgId={id}
-            />
-          )}
-          keyExtractor={(item) => item._id}
-          refreshControl={refreshControl}
-          scrollIndicatorInsets={{ right: 1 }}
-          ListEmptyComponent={<EmptyState message="No meetings found" />}
-        />
-      )}
-    </SafeAreaView>
+    <ListScreen
+      icon="meeting"
+      title="Meetings"
+      config={VIEW_CONFIGS.meeting}
+      useData={useMeetings}
+      emptyMessage="No meetings found"
+    />
   );
 }

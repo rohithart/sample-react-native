@@ -1,9 +1,11 @@
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useRouter, usePathname } from 'expo-router';
-import { Text, View, Linking } from 'react-native';
+import { Linking } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { Pressable } from '@/components/ui/pressable';
+import { Text } from '@/components/ui/text';
+import { View } from '@/components/ui/view';
 
 const I = ENTITY_ICONS;
 

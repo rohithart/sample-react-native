@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Stack } from 'expo-router';
 import { Text } from '@/components/ui/text';
@@ -10,6 +10,7 @@ import { PageHeader } from '@/components/ui/page-header';
 import { Pressable } from '@/components/ui/pressable';
 import { ScrollView } from '@/components/ui/scroll-view';
 import { Image } from '@/components/ui/image';
+import { View } from '@/components/ui/view';
 
 const I = ENTITY_ICONS;
 

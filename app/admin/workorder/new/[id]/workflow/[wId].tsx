@@ -3,12 +3,14 @@ import { PageHeader } from '@/components/ui/page-header';
 import { FormField } from '@/components/ui/form-field';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { Text, View } from 'react-native';
+
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useToast } from '@/context/toast-context';
 
 import { ScrollView } from '@/components/ui/scroll-view';
 import { SubmitButton } from '@/components/ui/submit-button';
+import { Text } from '@/components/ui/text';
+import { View } from '@/components/ui/view';
 
 export default function NewWorkOrderScreen() {
   const { id, wId } = useLocalSearchParams<{ id: string; wId: string }>();

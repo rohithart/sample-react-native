@@ -4,13 +4,15 @@ import { useComments, useCreateComment, useDeleteComment } from '@/services/comm
 import type { Comment } from '@/types';
 
 import React, { useCallback, useState } from 'react';
-import { ActivityIndicator, Alert, FlatList, Modal, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, Alert, FlatList, Modal, TextInput } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ENTITY_ICONS } from '@/constants/entity-icons';
 import { EntityType } from '@/enums';
 import { CommentCard } from '../cards/comment-card';
 import { LoadingState } from '@/components/ui/loading-state';
 import { Pressable } from '@/components/ui/pressable';
+import { Text } from '@/components/ui/text';
+import { View } from '@/components/ui/view';
 
 const I = ENTITY_ICONS;
 
